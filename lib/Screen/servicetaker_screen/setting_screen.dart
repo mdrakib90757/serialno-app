@@ -12,10 +12,14 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return
        Scaffold(
-         body:  Center(
-          child: Text("Setting Screen"),
+         body:  Column(
+           children: [
+             Center(
+              child: Text("Setting Screen"),
 
-             ),
+                 ),
+           ],
+         ),
        );
   }
 }

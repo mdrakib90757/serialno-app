@@ -8,13 +8,17 @@ import 'package:http/http.dart' as http;
 
 class ProfileProvider with ChangeNotifier{
 
+
+  String? _token;
+  String? get token=>_token;
+
   bool _isLoading=false;
   bool get isLoading=>_isLoading;
-  
+
 
 Future<bool>updateProfile({
   required String name,
-  required String loginName,
+  required String? loginName,
   required String mobileNo,
   required String email,
   required String gender,
@@ -22,8 +26,11 @@ Future<bool>updateProfile({
 })async{
   _isLoading = true;
   notifyListeners();
+
   final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString('token'); // তোমার login এর পর save করা টোকেন
+  final token = prefs.getString('accessToken');
+
+  print("token${token}");
 
   final url = Uri.parse('https://serialno-api.somee.com/api/me/profile');
   try {
@@ -31,23 +38,36 @@ Future<bool>updateProfile({
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlOTRkZDQxZS1jNGU1LTRjNWUtOTFiYS03NjMwZjBmNDZkYzAiLCJuYW1lIjoidXNlci1iYXBweWIiLCJ1c2VyVHlwZSI6IkNvbXBhbnkiLCJsb2dpbk5hbWUiOiJVc2VyLVJha2liICIsImVtYWlsIjoidXNlci1iYXBweWJAZ21haWwuY29tIiwibW9iaWxlTm8iOiIwMTYwMTcxMTI2MCIsImV4cCI6MTc1MjI0MDI5NywiaXNzIjoiaHR0cDovL2hybnNvZnQuY29tIiwiYXVkIjoiaHR0cDovL2hybnNvZnQuY29tIn0._Rh9cKrysyiPg5x2HchQIEAPcB2rvwW5JzRiygTiXxs',
+        'Authorization': "Bearer ${token}"
       },
       body: jsonEncode({
         "name": name,
-        "loginName": loginName,
+        "loginName":loginName,
         "mobileNo": mobileNo,
         "email": email,
         "gender": gender,
         "dateOfBirth": dateOfBirth, // null দিলে null পাঠাবে
       }),
     );
+print(jsonEncode({""
+    "name": name,
+  "loginName":loginName,
+  "mobileNo": mobileNo,
+  "email": email,
+  "gender": gender,
+  "dateOfBirth": dateOfBirth, }));
 
     _isLoading = false;
     notifyListeners();
 
+    print(response.body);
+    print("token${_token}");
+    print("token1${token}");
+
     if (response.statusCode == 200 || response.statusCode == 201) {
+
       debugPrint("✅ Profile POST Success: ${response.body}");
+
       return true;
     } else {
       debugPrint("❌ Profile POST Failed: ${response.statusCode}");
@@ -60,7 +80,11 @@ Future<bool>updateProfile({
     debugPrint("❌ Error: $e");
     return false;
   }
+
+
 }
+
+
 }
 
 

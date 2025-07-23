@@ -1,11 +1,50 @@
-
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart'as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../model/profile_user_model.dart';
 import '../model/user_model.dart';
+import '../utils/config/api_config.dart';
 
 class AuthService {
+
+
+
+
+  // নতুন ফাংশন যোগ করুন
+  Future<profile_UserModel> fetchUserProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('accessToken');
+
+    if (token == null) {
+      throw Exception('Token not found. Please log in.');
+    }
+
+    final response = await http.get(
+      Uri.parse(ApiConfig.getprofile_endpoint), // আপনার প্রোফাইল এপিআই ইউআরএল
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    print("📡 Fetching Profile From: ${ApiConfig.getprofile_endpoint}");
+    print("📦 Profile Response: ${response.statusCode} - ${response.body}");
+
+    if (response.statusCode == 200) {
+      // API রেসপন্স {"error": false, "data": {...}} এই ফরম্যাটে না এলে সরাসরি ডিকোড করুন
+      final jsonMap = json.decode(response.body);
+      return profile_UserModel.fromJson(jsonMap);
+    } else {
+      throw Exception('Failed to load user profile. Status code: ${response.statusCode}');
+    }
+  }
+
+
+
+
+
   String ApiUrl = "https://serialno-api.somee.com/api/serial-no/register-service-center";
   Future<Map<String, dynamic>?> registerServiceCenter({
     required String name,
@@ -84,26 +123,6 @@ class AuthService {
 
 
 
-  Future<Map<String, dynamic>> getProfile(String token) async {
-    final uri = Uri.parse("https://serialno-api.somee.com/api/me/profile"); // আপনার প্রোফাইল এপিআই
-    try {
-      final response = await http.get(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        throw Exception('Failed to load profile. Status: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error fetching profile: $e');
-    }
-  }
 
 
 
@@ -168,17 +187,19 @@ class AuthService {
 
 //BusinessType
 class BusinessTypeService {
-   final String url = "https://serialno-api.somee.com/api/business-types";
+   //final String url = "https://serialno-api.somee.com/api/business-types";
 
    Future<List<Businesstype>> getBusinessTypes() async {
     try {
       final response = await http.get(
-        Uri.parse(url),
+        Uri.parse(ApiConfig.businessTypes_endpoint),
         headers: {'Content-Type': 'application/json'},
       );
-   print('Trying to fetch from:$url');
+
+   print('Trying to fetch from:$ApiConfig.businessTypes_endpoint');
       print('API Response Status: ${response.statusCode}'); // Debug log
       print('API Response Body: ${response.body}'); //
+
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         if (data.isEmpty) {

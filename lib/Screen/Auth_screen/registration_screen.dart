@@ -1,21 +1,25 @@
 
 
 
-import 'package:another_flushbar/flushbar.dart';
+
+
+
+
+
+
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serial_managementapp_project/Widgets/MyRadio%20Button.dart';
-import 'package:serial_managementapp_project/Widgets/custom_organizationn.dart';
-import 'package:serial_managementapp_project/Widgets/custom_textfield.dart';
-import 'package:serial_managementapp_project/model/user_model.dart';
-import 'package:serial_managementapp_project/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Widgets/MyRadio Button.dart';
+import '../../Widgets/custom_flushbar.dart';
 import '../../Widgets/custom_labeltext.dart';
-
-
+import '../../Widgets/custom_sanckbar.dart';
+import '../../Widgets/custom_textfield.dart';
 import '../../model/user_model.dart';
 import '../../providers/auth_providers.dart';
+import '../../services/auth_service.dart';
 import '../../utils/color.dart';
 import 'login_screen.dart';
 
@@ -31,19 +35,25 @@ enum UserType {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+
   final _formkey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   List<Businesstype> _businessTypes = [];
   Businesstype? _selectedBusinessType;
   bool _isLoadingBusinessTypes  = false;
   String? _businessTypeError;
+
    UserType? _SelectUserType=UserType.ServiceCenter;
+
    bool obscureIndex= true;
    bool obscureIndex1=true;
-  final List<String>genderList=["Male","Female","Other"];
+
+   final List<String>genderList=["Male","Female","Other"];
   String?_selectGenter;
   final TextEditingController _textEditingController = TextEditingController();
-   List<String> _history = [];
+
+  List<String> _saveItems = [];
+  static const String _storageKey = "organization_names";
 
 
 
@@ -81,15 +91,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     // TODO: implement initState
     super.initState();
     _loadBusinessTypes();
-    _loadHistory();
+    _loadSaveItems();
+
+
   }
 
 // BusinessType LoadIng
   Future<void>_loadBusinessTypes()async{
-setState(() {
-  _isLoadingBusinessTypes=true;
-  _businessTypeError=null;
-});
+// setState(() {
+//   _isLoadingBusinessTypes=true;
+//   _businessTypeError=null;
+// });
 try{
   final types = await BusinessTypeService().getBusinessTypes();
   setState(() {
@@ -112,32 +124,46 @@ try{
 
 
   //load  organization data
-  Future<void> _loadHistory()async{
+  Future<void> _loadSaveItems()async{
     final prefs=await SharedPreferences.getInstance();
     setState(() {
-      _history = prefs.getStringList("history",)??[];
+      _saveItems = prefs.getStringList(_storageKey,)??[];
     });
   }
 
 
   //save organization data
-  Future<void>_saveHistory()async{
-    final prefs=await SharedPreferences.getInstance();
-    await prefs.setStringList("history", _history);
+  Future<void>_saveNewItem(String newData)async{
+    if(newData.trim().isEmpty || _saveItems.contains(newData.trim())){
+      return;
+    }
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _saveItems.add(newData.trim());
+    });
+    await prefs.setStringList(_storageKey, _saveItems);
+
   }
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
+
     final authProvider= Provider.of<AuthProvider>(context);
+
     return Form(
       key: _formkey,
       autovalidateMode:_autovalidateMode ,
       child: Scaffold(
         body:Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 35),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment:MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                Row(
                  children: [
@@ -154,14 +180,25 @@ try{
                ),
                 SizedBox(height: 20,),
                //Custom Radio Button
-                
-                MyRadioButton(
-                  initialSelection: _SelectUserType,
-                  onChanged: (UserType? newValue) {
-                  setState(() {
-                    _SelectUserType =newValue;
-                  });
-                },),
+                CustomRadioGroup<UserType>(
+                    groupValue: _SelectUserType,
+                    items: [UserType.ServiceCenter,UserType.ServiceTaker],
+                    onChanged: (UserType? newValue) {
+                      setState(() {
+                        _SelectUserType = newValue;
+                      });
+                    },
+                    itemTitleBuilder: (value) {
+                      switch (value) {
+                        case UserType.ServiceCenter:
+                          return 'AS Service Center';
+                        case UserType.ServiceTaker:
+                          return 'AS Service Taker';
+                      }
+                    },
+                ),
+
+
 
                 //Service Center
                 Visibility(
@@ -278,81 +315,93 @@ try{
                               controller: phone
                           ),
 
-
-
                           SizedBox(height: 20,),
                           CustomLabeltext("Business Type"),
                           SizedBox(height: 12,),
-                         _businessTypes.isEmpty?Center(child: CircularProgressIndicator(
-                           color: AppColor().primariColor,
-                         )):
-                            DropdownButtonFormField<Businesstype?>(
-                              decoration: InputDecoration(
-                                hintText: "Business Type",
-                                hintStyle: TextStyle(
-                                    color: Colors.grey.shade100,
-                                    fontSize: 15
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: BorderSide(
-                                      color: Colors.grey.shade400,
-                                    )
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: BorderSide(
-                                      color: AppColor().primariColor,
-                                      width: 2
-                                    )
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: BorderSide(
-                                        color: Colors.red
-                                    )
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Colors.grey.shade300),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                      color: Colors.grey.shade400),
-                                ),
+                         DropdownSearch<Businesstype>(
+                           popupProps: PopupProps.menu(
+                             menuProps: MenuProps(
+                               backgroundColor: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                             ),
+                             constraints:BoxConstraints(
+                                 maxHeight: 170
+                             ),
+                           ),
 
-                              ),
-                              value: _selectedBusinessType,
-                              items: [ DropdownMenuItem<Businesstype?>(
-                                  value: null,
-                                  child: Text("Select")),
-                                ..._businessTypes.map((type) =>
-                                    DropdownMenuItem<Businesstype?>(
-                                        value: type,
-                                        child: Text(type.name)
-                                    ))
-                              ],
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedBusinessType = newValue;
-                                  // // অর্গানাইজেশন ফিল্ড শো/হাইড করার জন্য
-                                  // if(newValue?.name.toLowerCase() != "medical") {
-                                  //   Organization.clear();
-                                  // }
-                                });
-                              },
-                              validator: (value) {
-                                if (value == null)
-                                  return "Please select a business type";
-                                return null;
-                              },
-                            ),
+                           itemAsString: (Businesstype type)=>type.name,
+                           dropdownDecoratorProps: DropDownDecoratorProps(
+                             dropdownSearchDecoration: InputDecoration(
+                               hintText: "Select",
+                               contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                               suffixIcon: _isLoadingBusinessTypes ?
+                               Container(
+                                 padding: EdgeInsets.all(12),
+                                 child: SizedBox(
+                                   height: 20,
+                                   width: 20,
+                                   child: CircularProgressIndicator(
+                                     strokeWidth: 2.5,
+                                     color: AppColor().primariColor,
+                                   ),
+                                 ),
+                               ):null,
 
-                            SizedBox(height: 20,),
-                            if( _selectedBusinessType?.name.toLowerCase() ==
-                                "medical")...[
+                               enabled: !_isLoadingBusinessTypes,
+                               enabledBorder: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(5),
+                                   borderSide: BorderSide(
+                                     color: Colors.grey.shade400,
+                                   )
+                               ),
+                               focusedBorder: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(5),
+                                   borderSide: BorderSide(
+                                       color: AppColor().primariColor,
+                                       width: 2
+                                   )
+                               ),
+                               errorBorder: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(5),
+                                   borderSide: BorderSide(
+                                       color: Colors.red
+                                   )
+                               ),
+                               disabledBorder: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(5),
+                                 borderSide: BorderSide(
+                                     color: Colors.grey.shade300),
+                               ),
+                               border: OutlineInputBorder(
+                                 borderRadius: BorderRadius.circular(5),
+                                 borderSide: BorderSide(
+                                     color: Colors.grey.shade400),
+                               ),
+                             ),
+
+
+                           ),
+
+                           selectedItem: _selectedBusinessType,
+                           items:_businessTypes,
+                           onChanged: (newValue) {
+                             setState(() {
+                               _selectedBusinessType = newValue;
+
+                             });
+                           },
+                           validator: (value) {
+                             if (value == null)
+                               return "Please select a business type";
+                             return null;
+
+
+                           },
+                         ),
+
+                            SizedBox(height: 15,),
+                            if( _selectedBusinessType?.id ==
+                                1)...[
                               Text("Organization"
                                 , style: TextStyle(
                                     color: Colors.black,
@@ -360,25 +409,35 @@ try{
                                 ),),
                               SizedBox(height: 12,),
                               Autocomplete<String>(
-
+                               initialValue: TextEditingValue(text: Organization.text),
                                 optionsBuilder: (
                                     TextEditingValue textEditingValue) {
-                                  if (textEditingValue.text.isEmpty) {
-                                    return const Iterable<String>.empty();
+                                  if (textEditingValue.text .isEmpty) {
+                                    return _saveItems;
                                   }
-                                  return _history.where((String option) {
+                                  return _saveItems.where((String option) {
                                     return option.toLowerCase().contains(
                                         textEditingValue.text.toLowerCase());
                                   });
                                 },
                                 onSelected: (String selection) {
-                                  _textEditingController.text = selection;
-                                  Organization.text = selection;
+                                 // _textEditingController.text = selection;
+                                 setState(() {
+                                   Organization.text = selection;
+                                 });
+                                  //_saveNewItem(selection);
+                                  debugPrint('You just selected $selection');
+                                  FocusScope.of(context).unfocus();
                                 },
                                 fieldViewBuilder: (BuildContext context,
                                     TextEditingController fieldTextEditingController,
+
                                     FocusNode focusNode,
                                     VoidCallback onFieldSubmitted) {
+                                  if (Organization.text.isNotEmpty && fieldTextEditingController.text != Organization.text) {
+                                    fieldTextEditingController.text = Organization.text;
+                                  }
+
                                   return TextField(
 
                                     controller: fieldTextEditingController,
@@ -399,6 +458,7 @@ try{
                                       hintStyle: TextStyle(
                                         color: Colors.grey.shade400
                                       ),
+
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Colors.grey.shade400),
@@ -406,9 +466,24 @@ try{
                                       border: OutlineInputBorder(),
                                     ),
 
+                                    onSubmitted: (String value) {
+                                      final trimmerValue =value.trim();
+                                      if (trimmerValue.isNotEmpty) {
+                                        _saveNewItem(value);
+
+                                        fieldTextEditingController.clear();// নতুন আইটেম সেভ করা হচ্ছে
+
+                                        setState(() {
+                                          Organization.clear();
+                                          //Organization.text = value; // মূল কন্ট্রোলার আপডেট করা হচ্ছে
+                                        });
+                                      }
+                                      onFieldSubmitted();
+                                    },
+
 
                                     onChanged: (value) {
-                                      _textEditingController.text = value;
+                                     // _textEditingController.text = value;
                                       Organization.text = value;
                                     },
                                   );
@@ -418,26 +493,50 @@ try{
                                   return Align(
                                     alignment: Alignment.topLeft,
                                     child: Material(
-                                      elevation: 4,
-
+                                      elevation: 4.0,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8),
+                                        height: 150,
                                         width: MediaQuery
                                             .of(context)
                                             .size
-                                            .width * 0.9,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: options.length,
-                                          itemBuilder: (context, index) {
-                                            final option = options.elementAt(
-                                                index);
-                                            return ListTile(
-                                              title: Text(option),
-                                              onTap: () => onSelected(option),
-                                            );
+                                            .width *0.86,
+                                        constraints: BoxConstraints(
+                                          maxWidth: 600
+                                        ),
+                                        child: Scrollbar(
+                                                                                 thickness: 2,
+                                          controller: ScrollController(),
+                                          radius: Radius.circular(50),
+                                          scrollbarOrientation: ScrollbarOrientation.left,
+                                          thumbVisibility: true,
+                                          trackVisibility: true,
+                                          child: ListView.separated(
+                                            padding: EdgeInsets.zero,
+                                            //shrinkWrap: true,
+                                            itemCount: options.length,
+                                            itemBuilder: (context, index) {
+                                              final option = options.elementAt(
+                                                  index);
+                                              return InkWell(
+                                                onTap: () => onSelected(option),
+                                                child: ListTile(
+                                                  title: Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                    child: Text(option),
+                                                  ),
+                                                  hoverColor: Colors.grey.shade200,
+
+                                                ),
+                                              );
+                                            }, separatorBuilder: (BuildContext context, int index) {
+                                              return Divider(
+                                                height: 1,
+                                                thickness: 1,
+                                                color: Colors.grey.shade200,
+
+                                              );
                                           },
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -447,7 +546,7 @@ try{
 
                             ],
 
-                          SizedBox(height: 20,),
+                          SizedBox(height: 15,),
                           CustomLabeltext("Login Name"),
                           SizedBox(height: 12,),
                           CustomTextField(
@@ -546,39 +645,21 @@ try{
                               );
 
                               if (_textEditingController.text.isNotEmpty &&
-                                  !_history.contains(_textEditingController.text)) {
+                                  !
+                                  _saveItems.contains(_textEditingController.text)) {
                                 setState(() {
-                                  _history.add(_textEditingController.text);
+                                  _saveItems.add(_textEditingController.text);
                                 });
-                                await _saveHistory();
+                               // await _saveHistory();
                                 //_textEditingController.clear();
                               }
                               if (result ?["success"] == true) {
 
-                                await  Flushbar(
-                                  title: "Success",
-                                  mainButton: TextButton(
-                                    onPressed: () {
-                                      // Optional: Dismiss or any action
-                                    },
-                                    child: Text("OK", style: TextStyle(color: AppColor().primariColor)),
-                                  ),
-                                  icon: Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                  ),
-                                  borderColor: Colors.grey,
-                                  borderWidth: 1,
-                                  message: "Registration Successful",
-                                  messageColor: Colors.black,
-                                  duration: Duration(seconds: 2),
-                                  margin: EdgeInsets.all(20),
-                                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
-                                  borderRadius: BorderRadius.circular(8),
-                                  backgroundColor: Colors.white,
-                                  flushbarPosition: FlushbarPosition.TOP,
-                                  isDismissible: true,
-                                ).show(context);
+                                await CustomFlushbar.showSuccess(
+                                    context: context,
+                                    title: "Success",
+                                    message: "Registration Successful"
+                                );
                                 Navigator.pushReplacement(context,
                                     MaterialPageRoute(
                                       builder: (context) => LoginScreen(),));
@@ -587,46 +668,16 @@ try{
 
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                        content: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5)
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.dangerous_outlined,
-                                                      color: Colors.red,size: 40,),
-                                                    SizedBox(width: 10,),
-                                                    Text("Error",style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 18
-                                                    ),),
-                                                    IconButton(onPressed: () {
-                                                      
-                                                    }, icon: Icon(Icons.close,))
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10,),
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                                                  child: Text(result?['message'] ??
-                                                      'Registration Failed',style: TextStyle(
-                                                      color: Colors.black,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w400
-                                                  ),),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      backgroundColor: Colors.white,
-                                      behavior: SnackBarBehavior.floating,
-
-                                    ));
+                                        elevation: 0,
+                                        backgroundColor: Colors.transparent,
+                                        behavior: SnackBarBehavior.floating,
+                                        content:CustomSnackBarWidget(
+                                            title: "Error",
+                                            message: "${result?['message'] ??
+                                                'Registration Failed'}"
+                                        )
+                                    )
+                                );
                               }
                             }},
 
@@ -860,30 +911,11 @@ try{
                                 );
                                 if(result?["success"]==true){
 
-                                  await  Flushbar(
-                                    title: "Success",
-                                    mainButton: TextButton(
-                                      onPressed: () {
-                                        // Optional: Dismiss or any action
-                                      },
-                                      child: Text("OK", style: TextStyle(color: AppColor().primariColor)),
-                                    ),
-                                    icon: Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    ),
-                                    borderColor: Colors.grey,
-                                    borderWidth: 1,
-                                    message: "Registration Successful",
-                                    messageColor: Colors.black,
-                                    duration: Duration(seconds: 2),
-                                    margin: EdgeInsets.all(20),
-                                    padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
-                                    borderRadius: BorderRadius.circular(8),
-                                    backgroundColor: Colors.white,
-                                    flushbarPosition: FlushbarPosition.TOP,
-                                    isDismissible: true,
-                                  ).show(context);
+                                  await CustomFlushbar.showSuccess(
+                                      context: context,
+                                      title: "Success",
+                                      message: "Registration Successful"
+                                  );
 
                                     Navigator.pushReplacement(
                                       context,
@@ -894,46 +926,15 @@ try{
                                 }else{
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5)
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.dangerous_outlined,
-                                                      color: Colors.red,size: 40,),
-                                                    SizedBox(width: 10,),
-                                                    Text("Error",style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 20
-                                                    ),),
-                                                    Spacer(),
-                                                    IconButton(onPressed: () {
-
-                                                    }, icon: Icon(Icons.close,color: Colors.red,))
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10,),
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                                                  child: Text(result?['message'] ??
-                                                      'Registration Failed',style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.w400,
-                                                  ),),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        backgroundColor: Colors.white,
-                                        behavior: SnackBarBehavior.floating,
-                                      )
+                                          elevation: 0,
+                                          backgroundColor: Colors.transparent,
+                                          behavior: SnackBarBehavior.floating,
+                                         content:CustomSnackBarWidget(
+                                             title: "Error",
+                                             message: "${result?['message'] ??
+                                             'Registration Failed'}"
+                                         )
+                                    )
                                   );
                                 }
                                 },

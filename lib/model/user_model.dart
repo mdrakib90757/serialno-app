@@ -33,8 +33,8 @@ class User_Model {
 
   factory User_Model.fromJson(Map<String, dynamic>json){
     return User_Model(
-      businessTypeId: json["businessTypeId"], // ✅ এখানে Add করো
-      businessTypeName: json["businessTypeName"], // ✅ এখানে Add করো
+      businessTypeId: json["businessTypeId"],
+      businessTypeName: json["businessTypeName"],
       businessType: json["businessType"] != null
           ? Businesstype.fromJson(json["businessType"])
           : null,
@@ -51,10 +51,6 @@ class User_Model {
     );
   }
 
-
-
-
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
       'token': token,
@@ -68,8 +64,6 @@ class User_Model {
     }
     return data;
   }
-
-
 
   User_Model copyWith({
     Businesstype? businessType,
@@ -95,14 +89,6 @@ class User_Model {
 }
 
 
-
-
-
-
-
-
-
-
 class Company {
   final String id;
   final String name;
@@ -112,7 +98,7 @@ class Company {
   final String phone;
   final String createDate;
   final bool isActive;
-
+  final int businessTypeId;
   Company({
     required this.id,
     required this.name,
@@ -121,7 +107,8 @@ class Company {
     required this.email,
     required this.phone,
     required this.createDate,
-    required this.isActive
+    required this.isActive,
+    required this.businessTypeId,
 
   });
 
@@ -135,6 +122,8 @@ class Company {
       phone: json["phone"] ?? "",
       createDate: json["createDate"] ?? "",
       isActive: json["isActive"] ?? false,
+      businessTypeId: 0,
+
     );
   }
 

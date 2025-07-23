@@ -11,6 +11,7 @@ class _ServiceCenterSetiingScreenState extends State<ServiceCenterSetiingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Text("ServiceCenterSetiingScreen "),
       ),

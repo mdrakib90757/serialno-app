@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:serial_managementapp_project/Screen/servicetaker_screen/appointments_screen.dart';
-import 'package:serial_managementapp_project/Screen/servicetaker_screen/servicetaker_homescreen.dart';
-import 'package:serial_managementapp_project/Screen/servicetaker_screen/setting_screen.dart';
 
+import 'package:flutter/material.dart';
+
+import '../../Screen/servicetaker_screen/appointments_screen.dart';
+import '../../Screen/servicetaker_screen/servicetaker_homescreen.dart';
+import '../../Screen/servicetaker_screen/setting_screen.dart';
 import '../../utils/color.dart';
-import '../My_Appbar.dart';
+import '../my_Appbar.dart';
 
 class CustomServicetakerNavigationbar extends StatefulWidget {
   const CustomServicetakerNavigationbar({super.key});
@@ -14,6 +15,8 @@ class CustomServicetakerNavigationbar extends StatefulWidget {
 }
 
 class _CustomServicetakerNavigationbarState extends State<CustomServicetakerNavigationbar> {
+
+
   int _currentIndex=0;
   final List<Widget>_screen=[
   ServicetakerHomescreen(),
@@ -22,6 +25,7 @@ class _CustomServicetakerNavigationbarState extends State<CustomServicetakerNavi
   ];
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: MyAppbar(
         onLogotap: () {
@@ -48,6 +52,7 @@ class _CustomServicetakerNavigationbarState extends State<CustomServicetakerNavi
             ),
           ),
           child: BottomNavigationBar(
+            backgroundColor: Colors.white,
               currentIndex: _currentIndex,
               onTap: (index) {
                 setState(() {

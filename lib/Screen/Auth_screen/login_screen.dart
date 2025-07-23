@@ -1,18 +1,19 @@
-import 'package:another_flushbar/flushbar.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serial_managementapp_project/Screen/Auth_screen/forgot_screen.dart';
-import 'package:serial_managementapp_project/Screen/Auth_screen/registration_screen.dart';
-import 'package:serial_managementapp_project/Screen/servicetaker_screen/servicetaker_homescreen.dart';
-import 'package:serial_managementapp_project/Screen/servicecenter_screen/home_screen.dart';
-import 'package:serial_managementapp_project/Widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import 'package:serial_managementapp_project/Widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
-import 'package:serial_managementapp_project/Widgets/custom_textfield.dart';
-import 'package:serial_managementapp_project/providers/auth_providers.dart';
-import 'package:serial_managementapp_project/utils/color.dart';
+import 'package:serial_no_app/Screen/Auth_screen/registration_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import '../../Widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+import '../../Widgets/custom_flushbar.dart';
+import '../../Widgets/custom_sanckbar.dart';
+import '../../Widgets/custom_textfield.dart';
+import '../../providers/auth_providers.dart';
 import '../../services/auth_service.dart';
+import '../../utils/color.dart';
+import 'forgot_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -65,30 +66,11 @@ class _LoginScreenState extends State<LoginScreen> {
       await authProvider.loadUserFromToken();
       print("User Type After Login: $userType");
 
-    await  Flushbar(
+  await  CustomFlushbar.showSuccess(
+      context: context,
       title: "Success",
-      mainButton: TextButton(
-        onPressed: () {
-          // Optional: Dismiss or any action
-        },
-        child: Text("OK", style: TextStyle(color: AppColor().primariColor)),
-      ),
-      icon: Icon(
-        Icons.check_circle,
-        color: Colors.green,
-      ),
-      borderColor: Colors.grey,
-      borderWidth: 1,
-        message: "Login Successful",
-        messageColor: Colors.black,
-        duration: Duration(seconds: 2),
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 10),
-        borderRadius: BorderRadius.circular(8),
-        backgroundColor: Colors.white,
-        flushbarPosition: FlushbarPosition.TOP,
-      isDismissible: true,
-      ).show(context);
+      message: "Login Successful"
+  );
 
       if (userType == "company") {
         Navigator.pushReplacement(context,
@@ -100,7 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Unknown User Type${userType}',),
+          SnackBar(
+            content: Text('Unknown User Type${userType}',),
             backgroundColor:Colors.white,
             padding: EdgeInsets.all(20),
             behavior:SnackBarBehavior.floating,
@@ -108,48 +91,17 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         }
       }else if (authProvider.errorMessage != null) {
+
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.dangerous_outlined,
-                          color: Colors.red.shade400,size: 40,),
-                        SizedBox(width: 10,),
-                        Text("Error",style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20
-                        ),),
-                        Spacer(),
-                        IconButton(onPressed: () {
-
-                        }, icon: Icon(Icons.close,color: Colors.red.shade400,))
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Text(authProvider.errorMessage ??
-                          'Registration Failed',style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400
-                      ),),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            backgroundColor: Colors.white,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
             behavior: SnackBarBehavior.floating,
-
+            content:CustomSnackBarWidget(
+                title: "Error",
+                message: "${authProvider.errorMessage??
+                    "Login Failed"}"
+            )
           )
       );
     };

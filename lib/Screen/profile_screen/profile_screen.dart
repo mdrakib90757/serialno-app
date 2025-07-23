@@ -1,14 +1,17 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serial_managementapp_project/Screen/password_screen.dart';
-import 'package:serial_managementapp_project/Screen/profile_screen/profile_edit_screen.dart';
-import 'package:serial_managementapp_project/Widgets/My_Appbar.dart';
+import 'package:serial_no_app/Screen/profile_screen/password_screen.dart';
+import 'package:serial_no_app/Screen/profile_screen/profile_edit_screen.dart';
 
+import '../../Widgets/my_Appbar.dart';
 import '../../providers/auth_providers.dart';
-import '../../providers/profile_update_provider.dart';
+import '../../providers/getprofile_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
+
   const ProfileScreen({super.key});
 
   @override
@@ -20,6 +23,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final getupdateprofile=Provider.of<Getprofileprovider>(context);
+
     return Scaffold(
       appBar: MyAppbar(),
       body: Padding(
@@ -41,6 +46,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 10,),
                 GestureDetector(
                   onTap: () async {
+
+                   await getupdateprofile.fetchUserProfile();
+
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) => ProfileEditScreen(),));
 

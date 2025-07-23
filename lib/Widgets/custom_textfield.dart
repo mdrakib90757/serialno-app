@@ -1,5 +1,8 @@
+
+
 import 'package:flutter/material.dart';
-import 'package:serial_managementapp_project/utils/color.dart';
+
+import '../utils/color.dart';
 
 class CustomTextField extends StatefulWidget {
   final String? hintText;
@@ -15,6 +18,7 @@ class CustomTextField extends StatefulWidget {
   final bool? enabled;
   final Color? fillColor;
   final bool? filled;
+
   //final String? Function(String?)? validator;
 
   const CustomTextField({
@@ -29,7 +33,7 @@ class CustomTextField extends StatefulWidget {
      this.color,
     this.textStyle,
     this.enabled,
-    this.fillColor, this.filled,// this.validator,
+    this.fillColor, this.filled, // this.validator,
   });
 
   @override
@@ -74,7 +78,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderSide: BorderSide(color: Colors.grey.shade400),
         ),
         filled: widget.filled??false,
-        fillColor: widget.color!=null?Colors.white:Colors.red.shade50,
+        fillColor: widget.color!=null?
+        Colors.white:Colors.redAccent.withOpacity(0.1),
         prefixIcon: widget.prefixIcon != null
             ? Icon(widget.prefixIcon, color: Colors.grey.shade400)
             : null,

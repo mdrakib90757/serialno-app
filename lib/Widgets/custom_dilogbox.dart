@@ -1,19 +1,20 @@
 
 
 
-import 'dart:convert';
 
-import 'package:another_flushbar/flushbar.dart';
+
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serial_managementapp_project/model/user_model.dart' show User_Model;
 
-
-
+import '../model/user_model.dart';
 import '../providers/auth_providers.dart';
+import '../providers/getprofile_provider.dart';
 import '../providers/profile_update_provider.dart';
 import '../utils/color.dart';
+import 'custom_flushbar.dart';
 import 'custom_labeltext.dart';
+import 'custom_sanckbar.dart';
 import 'custom_textfield.dart';
 
 class CustomDilogbox extends StatefulWidget{
@@ -59,14 +60,13 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
     super.initState();
 
     final user = widget.user;
-
-    // ✅ User_Model থেকে
+    //  User_Model থেকে
     name.text = user.user.name;
     loginName.text = user.user.loginName;
     email.text = user.user.email;
     mobileNo.text = user.user.mobileNo;
 
-    // ✅ ServiceTaker থেকে gender ও dateOfBirth
+    //  ServiceTaker থেকে gender ও dateOfBirth
     final profileData = widget.serviceTaker?.serviceTaker?.profileData;
 
     if (profileData != null) {
@@ -84,6 +84,10 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
       Widget build(BuildContext context) {
         final authProvider = Provider.of<AuthProvider>(context, listen: false,);
         final UpdateProfile = Provider.of<ProfileProvider>(context, listen: false);
+        final getprofileprovider=Provider.of<Getprofileprovider>(context);
+        final profile=getprofileprovider.profileData;
+
+
         return Center(
           child: Dialog(
             backgroundColor: Colors.white,
@@ -160,36 +164,84 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                       SizedBox(height: 20,),
                       CustomLabeltext("Gender"),
                       SizedBox(height: 12,),
-                      DropdownButtonFormField<String>(
+                      DropdownSearch<String>(
+                        popupProps: PopupProps.menu(
+                          menuProps: MenuProps(
+                              backgroundColor: Colors.white,
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          constraints: BoxConstraints(
+                              maxHeight: 150
+                          ),
+
+                          emptyBuilder: (context, searchEntry) {
+                            return Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+
+                        dropdownDecoratorProps: DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            hintText: "Gender",
+                            hintStyle: TextStyle(
+                                color: Colors.grey.shade400
+                            ),
+                            suffixIcon: Icon(Icons.date_range_outlined),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade400,
+                                )
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                    color: AppColor().primariColor,
+                                    width: 2
+                                )
+                            ),
+                            errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                    color: Colors.red
+                                )
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(
+                                  color: Colors.grey.shade300),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide(
+                                  color: Colors.grey.shade400),
+                            ),
+
+                          ),
+                        ),
                         validator: (value) => value == null || value.isEmpty ? "Required" : null,
-                        autovalidateMode: _autovalidateMode,
+                        autoValidateMode: _autovalidateMode,
+                        items:genderList,
+                        //items: ['Google', 'Meta', 'Amazon', 'Netflix'],
+
                         onChanged: (newValue) {
                           setState(() {
                             _autovalidateMode = AutovalidateMode.always;
                             _selectGenter = newValue;
                           });
                         },
-                        decoration: InputDecoration(
-                          hintText: "Gender",
-                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 15),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                        ),
-                        value: _selectGenter,
-                        items: genderList.map((String value) {
-                          return DropdownMenuItem(value: value, child: Text(value));
-                        }).toList(),
                       ),
+
                       SizedBox(height: 20,),
                       CustomLabeltext("Date of Birth"),
                       SizedBox(height: 10,),
@@ -214,7 +266,7 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                                     // Header text color
                                     onSurface: Colors.black, // Body text color
                                   ),
-                                    dialogTheme: DialogTheme(
+                                    dialogTheme: DialogThemeData(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(16.0),
                                       )),
@@ -260,18 +312,51 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                               onPressed: () async {
 
                                 final success = await UpdateProfile.updateProfile(
-                                  name: "user-bappyb",
-                                  loginName: "User-Rakib",
-                                  mobileNo: "01601711260",
-                                  email: "user-bappyb@gmail.com",
-                                  gender: "Male",
-                                  dateOfBirth: null, // or "2025-07-11T02:43:26.322Z"
+                                  name: name.text,
+                                  loginName: loginName.text,
+                                  mobileNo: mobileNo.text,
+                                  email: email.text,
+                                  gender:_selectGenter??"",
+                                  dateOfBirth:dateOfBirth.text, // or "2025-07-11T02:43:26.322Z"
                                 );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(success ? ' Profile Updated' : ' Failed')));
 
-                              },child:  Text("Update",style: TextStyle(
+                                if(success){
+
+                                  await getprofileprovider.fetchUserProfile();
+
+                                 await CustomFlushbar.showSuccess(
+                                     context: context,
+                                     title: "Success",
+                                     message: "Profile update Successful"
+                                 );
+                                  Navigator.pop(context);
+
+                                }else{
+
+                                 ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(
+                                         content: CustomSnackBarWidget(
+                                             title: "Error",
+                                             message: "Profile Update Failed",
+                                           iconColor: Colors.red.shade400,
+                                           icon: Icons.dangerous_outlined,),
+                                           backgroundColor: Colors.transparent,
+                                           elevation: 0,
+                                           behavior: SnackBarBehavior.floating,
+                                           duration: Duration(seconds: 3),
+                                         )
+
+                                 );
+                                }
+
+
+                              },child: UpdateProfile.isLoading? Center(
+                              child: Text("Please Wait..",style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600
+                              ),),
+                            ): Text("Update",style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
                             ),),

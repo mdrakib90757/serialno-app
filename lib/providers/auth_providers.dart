@@ -1,12 +1,14 @@
+
+
+
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:serial_managementapp_project/model/user_model.dart';
-import 'package:serial_managementapp_project/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/user_model.dart';
+import '../services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier{
   final AuthService authService =AuthService();
@@ -45,6 +47,12 @@ class AuthProvider with ChangeNotifier{
     await prefs.setString('accessToken', token);
   }
 
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+  return await  prefs.getString('accessToken');
+
+  }
+
   //Remove  Token
   Future<void> removeToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -78,6 +86,7 @@ class AuthProvider with ChangeNotifier{
       );
 
       print('Full Response: $response');
+
       if (response["data"] == null || response["data"]["accessToken"] == null) {
         throw Exception("Invalid response: Missing access token.");
       }
@@ -167,6 +176,7 @@ class AuthProvider with ChangeNotifier{
           phone: decodedToken["mobileNo"] ?? "",
           createDate: "",
           isActive: true,
+          businessTypeId: 0,
         ),
         user: User(
           id: decodedToken["userId"] ?? "",
@@ -263,12 +273,7 @@ class AuthProvider with ChangeNotifier{
     if(result?["success"]==true){
       _userModel=result?["data"];
 
-      // final data = {
-      //   // ... অন্যান্য ডাটা
-      //   'businessTypeId': businessTypeId,
-      //   // organization শুধুমাত্র medical এর জন্য
-      //   if(businessTypeId == 1) 'organizationName': organizationName,
-      // };
+
 
     }
     _isLoding=false;

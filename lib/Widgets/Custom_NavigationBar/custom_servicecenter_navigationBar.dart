@@ -1,13 +1,12 @@
+
 import 'package:flutter/material.dart';
 
-import 'package:serial_managementapp_project/Screen/servicecenter_screen/_service_center_setting_screen.dart';
-import 'package:serial_managementapp_project/Screen/servicecenter_screen/home_screen.dart';
-import 'package:serial_managementapp_project/Screen/servicecenter_screen/servicecenter_screen.dart';
-import 'package:serial_managementapp_project/Screen/servicecenter_screen/servicetype_screen.dart';
-
-
+import '../../Screen/servicecenter_screen/_service_center_setting_screen.dart';
+import '../../Screen/servicecenter_screen/home_screen.dart';
+import '../../Screen/servicecenter_screen/servicecenter_screen.dart';
+import '../../Screen/servicecenter_screen/servicetype_screen.dart';
 import '../../utils/color.dart';
-import '../My_Appbar.dart';
+import '../my_Appbar.dart';
 
 class CustomServicecenterNavigationbar extends StatefulWidget {
   const CustomServicecenterNavigationbar({super.key});
@@ -27,7 +26,7 @@ class _CustomServicecenterNavigationbarState extends State<CustomServicecenterNa
   int _currentIndex=0;
   @override
   Widget build(BuildContext context) {
-    
+
     return  Scaffold(
       appBar: MyAppbar(
         onLogotap: () {
@@ -38,9 +37,9 @@ class _CustomServicecenterNavigationbarState extends State<CustomServicecenterNa
       ),
         body: _screen[_currentIndex],
         bottomNavigationBar:Container(
+
           height: 70,
           decoration: BoxDecoration(
-
             boxShadow: [
               BoxShadow(
                   color: Colors.black12,
@@ -54,6 +53,7 @@ class _CustomServicecenterNavigationbarState extends State<CustomServicecenterNa
             ),
           ),
           child: BottomNavigationBar(
+            backgroundColor: Colors.white,
               currentIndex: _currentIndex,
               onTap: (index) {
                 setState(() {

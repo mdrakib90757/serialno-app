@@ -1,104 +1,65 @@
 
+
+
 import 'package:flutter/material.dart';
 
-import '../Screen/Auth_screen/registration_screen.dart';
 import '../utils/color.dart';
 
-class MyRadioButton extends StatefulWidget {
-  final void Function(UserType?) onChanged;
-  final UserType? initialSelection;
-  const MyRadioButton({super.key, required this.onChanged, this.initialSelection});
+class CustomRadioGroup<T> extends StatelessWidget {
+  final T? groupValue;
 
-  @override
-  State<MyRadioButton> createState() => _MyRadioButtonState();
-}
+  final List<T> items;
 
 
+  final void Function(T?) onChanged;
+  final String Function(T) itemTitleBuilder;
 
+  const CustomRadioGroup({
+    Key? key,
+    required this.groupValue,
+    required this.items,
+    required this.onChanged,
+    required this.itemTitleBuilder,
+  }) : super(key: key);
 
-class _MyRadioButtonState extends State<MyRadioButton> {
-  UserType? _SelectUserType;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _SelectUserType=widget.initialSelection?? UserType.ServiceCenter;
-  }
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(vertical: 8.0,),
+      
       child: Row(
-        children: [
-          GestureDetector(
-
-            onTap: () {
-              setState(() {
-                _SelectUserType = UserType.ServiceCenter;
-              });
-              widget.onChanged(_SelectUserType);
-            },
-
-            child: Row(
-              children: [
-                Icon(
-                  _SelectUserType == UserType.ServiceCenter
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: _SelectUserType == UserType.ServiceCenter
-                      ? AppColor().primariColor
-                      : Colors.grey,
-                  size: 19,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  "AS Service Center",
-                  style: TextStyle(
-                      color: _SelectUserType == UserType.ServiceCenter
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: items.map((item) {
+          bool isSelected = (item == groupValue);
+          return GestureDetector(
+            onTap: () => onChanged(item),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                children: [
+                  Icon(
+                    isSelected
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                    color: isSelected ? AppColor().primariColor : Colors.grey,
+                    size: 19,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    itemTitleBuilder(item), // এখান থেকে টেক্সট আসবে
+                    style: TextStyle(
+                      color: isSelected
                           ? Colors.black.withOpacity(0.8)
                           : Colors.grey,
                       fontWeight: FontWeight.w500,
-                      fontSize: 15
+                      fontSize: 15,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: 10),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _SelectUserType = UserType.ServiceTaker;
-              });
-              widget.onChanged(_SelectUserType);
-            },
-            child: Row(
-              children: [
-                Icon(
-                  _SelectUserType == UserType.ServiceTaker
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: _SelectUserType == UserType.ServiceTaker
-                      ? AppColor().primariColor
-                      : Colors.grey,
-                  size: 19,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  "AS Service Taker",
-                  style: TextStyle(
-                      color: _SelectUserType == UserType.ServiceTaker
-                          ? Colors.black.withOpacity(0.8)
-                          : Colors.grey,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          );
+        }).toList(),
       ),
     );
   }
