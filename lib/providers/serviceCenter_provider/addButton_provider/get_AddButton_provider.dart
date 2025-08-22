@@ -1,17 +1,11 @@
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:serialno_app/api/serviceCenter_api/addButton_ServiceCenter_api/addButton_api.dart';
 import '../../../model/serviceCenter_model.dart';
 
-class GetAddButtonProvider with ChangeNotifier{
-
+class GetAddButtonProvider with ChangeNotifier {
   final AddButtonApi _addButtonApi = AddButtonApi();
 
-  String ? _token;
+  String? _token;
   String? get token => _token;
 
   List<ServiceCenterModel> _serviceCenterList = [];
@@ -27,7 +21,7 @@ class GetAddButtonProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void>fetchGetAddButton(String companyId)async{
+  Future<void> fetchGetAddButton(String companyId) async {
     _isLoading = true;
     notifyListeners();
 
@@ -39,16 +33,16 @@ class GetAddButtonProvider with ChangeNotifier{
     }
 
     debugPrint("🚀 Fetching service centers for company: $companyId");
-      _serviceCenterList = await _addButtonApi.GetAddButton(companyId);
+    _serviceCenterList = await _addButtonApi.GetAddButton(companyId);
 
     _isLoading = false;
     notifyListeners();
-
   }
-  void clearData(){
-    _serviceCenterList=[];
-    _token=null;
-    _isLoading=false;
+
+  void clearData() {
+    _serviceCenterList = [];
+    _token = null;
+    _isLoading = false;
 
     notifyListeners();
     print("GetAddButtonProvider cleared!");

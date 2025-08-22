@@ -1,4 +1,3 @@
-
 class RolesModel {
   bool? error;
   Null? errorMessage;

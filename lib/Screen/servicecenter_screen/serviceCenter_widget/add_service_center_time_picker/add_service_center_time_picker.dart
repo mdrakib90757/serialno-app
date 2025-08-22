@@ -1,10 +1,8 @@
-
 import 'package:day_night_time_picker/lib/daynight_timepicker.dart';
 import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:serialno_app/utils/color.dart';
-
 
 class CustomFieldWithTabs extends StatefulWidget {
   final TabController tabController;
@@ -39,9 +37,10 @@ class _CustomFieldWithTabsState extends State<CustomFieldWithTabs> {
 
   void _onTabTapped(int index) {
     Time initialTime = index == 0
-
-        ? (_startTime ?? Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute)) :
-    (_endTime ?? Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute));
+        ? (_startTime ??
+              Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute))
+        : (_endTime ??
+              Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute));
 
     Navigator.of(context).push(
       showPicker(
@@ -78,16 +77,17 @@ class _CustomFieldWithTabsState extends State<CustomFieldWithTabs> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final String startTimeText = _startTime != null
-        ? DateFormat('hh:mm a').format(
-        DateTime(2023, 1, 1, _startTime!.hour, _startTime!.minute))
+        ? DateFormat(
+            'hh:mm a',
+          ).format(DateTime(2023, 1, 1, _startTime!.hour, _startTime!.minute))
         : 'Start Time';
     final String endTimeText = _endTime != null
-        ? DateFormat('hh:mm a').format(
-        DateTime(2023, 1, 1, _endTime!.hour, _endTime!.minute))
+        ? DateFormat(
+            'hh:mm a',
+          ).format(DateTime(2023, 1, 1, _endTime!.hour, _endTime!.minute))
         : 'End time';
 
     return CompositedTransformTarget(

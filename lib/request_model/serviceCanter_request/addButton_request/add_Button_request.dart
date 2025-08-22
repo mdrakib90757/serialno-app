@@ -38,8 +38,6 @@ class AddButtonRequest {
       "daysOfAdvanceSerial": daysOfAdvanceSerial,
       "noOfReservedSerials": noOfReservedSerials,
       "serialNoPolicy": serialNoPolicy,
-
     };
-
   }
 }

@@ -4,8 +4,7 @@ import 'package:serialno_app/api/serviceCenter_api/addButton_serviceType/addbutt
 import 'package:serialno_app/request_model/serviceCanter_request/addButton_request/add_Button_request.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/addButton_serviceType_request/addButtonServiceType_request.dart';
 
-class AddButtonServiceTypeProvider with ChangeNotifier{
-
+class AddButtonServiceTypeProvider with ChangeNotifier {
   final AddButtonServiceType _addButtonServiceType = AddButtonServiceType();
 
   bool _isLoading = false;
@@ -14,23 +13,24 @@ class AddButtonServiceTypeProvider with ChangeNotifier{
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  Future<bool>addButtonServiceType(AddButtonServiceTypeRequest request,String companyId,)async{
+  Future<bool> addButtonServiceType(
+    AddButtonServiceTypeRequest request,
+    String companyId,
+  ) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-    try{
+    try {
       await _addButtonServiceType.addButton_serviceType(request, companyId);
       _isLoading = false;
       notifyListeners();
       return true;
-    }catch(e){
+    } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
       _isLoading = false;
       notifyListeners();
       return false;
     }
-
   }
-
 }

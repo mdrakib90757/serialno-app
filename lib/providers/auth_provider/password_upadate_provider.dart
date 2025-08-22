@@ -1,44 +1,36 @@
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:serialno_app/api/auth_api/password_api.dart';
 import 'package:serialno_app/request_model/auth_request/update_password_request.dart';
 
+class PasswordUpdateProvider with ChangeNotifier {
+  PasswordApi passwordApi = PasswordApi();
 
-class PasswordUpdateProvider with ChangeNotifier{
+  String? _token;
+  String? get Token => _token;
 
-PasswordApi passwordApi=PasswordApi();
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
 
-String? _token;
-String? get Token => _token;
+  bool isLoading = false;
 
-String ? _errorMessage;
-String ? get errorMessage=> _errorMessage;
-
-bool isLoading=false;
-
-
-  Future<bool>fetchUpdatePassword(UpdatePasswordRequest PasswordRequest)async{
-
+  Future<bool> fetchUpdatePassword(
+    UpdatePasswordRequest PasswordRequest,
+  ) async {
     isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-try{
-  await passwordApi.updatePassWord(PasswordRequest);
+    try {
+      await passwordApi.updatePassWord(PasswordRequest);
 
-  return true;
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
 
-}catch(e){
-  _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
-
-  return false;
-}
-finally{
-  isLoading= false;
-  notifyListeners();
-}
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
-
 }

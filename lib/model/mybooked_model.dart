@@ -18,30 +18,32 @@ class MybookedModel {
   String? comment;
   String? createdTime;
 
-  MybookedModel(
-      {this.user,
-        this.company,
-        this.serviceCenter,
-        this.serviceType,
-        this.id,
-        this.date,
-        this.serviceCenterId,
-        this.serviceTypeId,
-        this.userId,
-        this.forSelf,
-        this.name,
-        this.contactNo,
-        this.serialNo,
-        this.isPresent,
-        this.status,
-        this.statusTime,
-        this.comment,
-        this.createdTime});
+  MybookedModel({
+    this.user,
+    this.company,
+    this.serviceCenter,
+    this.serviceType,
+    this.id,
+    this.date,
+    this.serviceCenterId,
+    this.serviceTypeId,
+    this.userId,
+    this.forSelf,
+    this.name,
+    this.contactNo,
+    this.serialNo,
+    this.isPresent,
+    this.status,
+    this.statusTime,
+    this.comment,
+    this.createdTime,
+  });
 
   MybookedModel.fromJson(Map<String, dynamic> json) {
     user = json['user'];
-    company =
-    json['company'] != null ? new Company.fromJson(json['company']) : null;
+    company = json['company'] != null
+        ? new Company.fromJson(json['company'])
+        : null;
     serviceCenter = json['serviceCenter'] != null
         ? new ServiceCenter.fromJson(json['serviceCenter'])
         : null;
@@ -105,16 +107,17 @@ class Company {
   bool? isActive;
   int? businessTypeId;
 
-  Company(
-      {this.id,
-        this.name,
-        this.addressLine1,
-        this.addressLine2,
-        this.email,
-        this.phone,
-        this.createDate,
-        this.isActive,
-        this.businessTypeId});
+  Company({
+    this.id,
+    this.name,
+    this.addressLine1,
+    this.addressLine2,
+    this.email,
+    this.phone,
+    this.createDate,
+    this.isActive,
+    this.businessTypeId,
+  });
 
   Company.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -150,8 +153,13 @@ class ServiceCenter {
   String? email;
   String? companyId;
 
-  ServiceCenter(
-      {this.id, this.name, this.hotlineNo, this.email, this.companyId});
+  ServiceCenter({
+    this.id,
+    this.name,
+    this.hotlineNo,
+    this.email,
+    this.companyId,
+  });
 
   ServiceCenter.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -180,13 +188,14 @@ class ServiceType {
   String? companyId;
   String? serviceCenterId;
 
-  ServiceType(
-      {this.id,
-        this.name,
-        this.price,
-        this.defaultAllocatedTime,
-        this.companyId,
-        this.serviceCenterId});
+  ServiceType({
+    this.id,
+    this.name,
+    this.price,
+    this.defaultAllocatedTime,
+    this.companyId,
+    this.serviceCenterId,
+  });
 
   ServiceType.fromJson(Map<String, dynamic> json) {
     id = json['id'];

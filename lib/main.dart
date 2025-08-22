@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/api/serviceCenter_api/addButton_serviceType/addbutton_serviceType.dart';
@@ -40,8 +39,7 @@ import 'Screen/Auth_screen/login_screen.dart';
 import 'Widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
 import 'Widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('accessToken');
@@ -49,113 +47,120 @@ void main() async{
   String initialRoute;
 
   if (token == null) {
-    initialRoute =AppRouteNames.login;
+    initialRoute = AppRouteNames.login;
   } else if (userType == 'customer') {
     initialRoute = AppRouteNames.customerHome;
   } else {
-    initialRoute = AppRouteNames.companyHome;// default to company
+    initialRoute = AppRouteNames.companyHome; // default to company
   }
   final authProvider = AuthProvider();
 
-
   runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
 
-      MultiProvider(providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider(),),
+        ChangeNotifierProvider(create: (context) => ProfileProvider()),
+        ChangeNotifierProvider(create: (context) => Getprofileprovider()),
 
-        ChangeNotifierProvider(create: (context) => ProfileProvider(),),
-        ChangeNotifierProvider(create: (context) =>Getprofileprovider() ,),
+        ChangeNotifierProvider(create: (context) => PasswordUpdateProvider()),
 
-        ChangeNotifierProvider(create: (context) => PasswordUpdateProvider(),),
+        ChangeNotifierProvider(create: (context) => AddButtonProvider()),
+        ChangeNotifierProvider(create: (context) => GetAddButtonProvider()),
 
-        ChangeNotifierProvider(create: (context) => AddButtonProvider(),),
-        ChangeNotifierProvider(create: (context) => GetAddButtonProvider(),),
+        ChangeNotifierProvider(create: (context) => EditButtonProvider()),
+        ChangeNotifierProvider(create: (context) => GetEditButtonProvider()),
 
-        ChangeNotifierProvider(create: (context) => EditButtonProvider(),),
-        ChangeNotifierProvider(create: (context) => GetEditButtonProvider(),),
+        ChangeNotifierProvider(
+          create: (context) => GetAddButtonServiceType_Provider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AddButtonServiceTypeProvider(),
+        ),
 
+        ChangeNotifierProvider(
+          create: (context) => EditButtonServiceTypeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GetEditButtonServiceTypeProvider(),
+        ),
 
-        ChangeNotifierProvider(create: (context) => GetAddButtonServiceType_Provider(),),
-        ChangeNotifierProvider(create: (context) => AddButtonServiceTypeProvider(),),
+        ChangeNotifierProvider(create: (context) => NewSerialButtonProvider()),
+        ChangeNotifierProvider(
+          create: (context) => GetNewSerialButtonProvider(),
+        ),
 
-        ChangeNotifierProvider(create: (context) => EditButtonServiceTypeProvider(),),
-        ChangeNotifierProvider(create: (context) => GetEditButtonServiceTypeProvider(),),
-
-
-        ChangeNotifierProvider(create: (context) => NewSerialButtonProvider(),),
-        ChangeNotifierProvider(create: (context) => GetNewSerialButtonProvider(),),
-
-
-
-        ChangeNotifierProvider(create: (context) => getStatusUpdate_Provider(),),
-        ChangeNotifierProvider(create: (context) => statusUpdateButton_provder(),),
+        ChangeNotifierProvider(create: (context) => getStatusUpdate_Provider()),
+        ChangeNotifierProvider(
+          create: (context) => statusUpdateButton_provder(),
+        ),
 
         ///Next ButtonProvider
-        ChangeNotifierProvider(create: (context) => nextButtonProvider(),),
+        ChangeNotifierProvider(create: (context) => nextButtonProvider()),
 
         /// businessType provider optional
-        ChangeNotifierProvider(create: (context) => BusinessTypeProvider(),),
+        ChangeNotifierProvider(create: (context) => BusinessTypeProvider()),
 
+        ChangeNotifierProvider(create: (context) => CompanyDetailsProvider()),
 
-        ChangeNotifierProvider(create: (context) => CompanyDetailsProvider(),),
         ///
 
         ///Organization Provider
-        ChangeNotifierProvider(create: (context) => OrganizationProvider(),),
+        ChangeNotifierProvider(create: (context) => OrganizationProvider()),
 
         ///
-        ChangeNotifierProvider(create: (context) => serviceTypeSerialbook_Provider(),),
-
+        ChangeNotifierProvider(
+          create: (context) => serviceTypeSerialbook_Provider(),
+        ),
 
         ///
-        ChangeNotifierProvider(create:(context) => RolesProvider(),),
+        ChangeNotifierProvider(create: (context) => RolesProvider()),
 
-
-
-
-        ChangeNotifierProvider(create: (context) => bookSerialButton_provider(),),
-        ChangeNotifierProvider(create: (context) => GetBookSerialProvider(),),
+        ChangeNotifierProvider(
+          create: (context) => bookSerialButton_provider(),
+        ),
+        ChangeNotifierProvider(create: (context) => GetBookSerialProvider()),
 
         ///BusinessType Provider
-        ChangeNotifierProvider(create: (context) => ServiceCenterByTypeProvider(),),
+        ChangeNotifierProvider(
+          create: (context) => ServiceCenterByTypeProvider(),
+        ),
 
-
-        ChangeNotifierProvider(create: (context) => UpdateBookSerialProvider(),),
-        ChangeNotifierProvider(create: (context) => GetUpdate_bookSerialProvider(),),
-
+        ChangeNotifierProvider(create: (context) => UpdateBookSerialProvider()),
+        ChangeNotifierProvider(
+          create: (context) => GetUpdate_bookSerialProvider(),
+        ),
 
         ///CommentCancel Provider
-        ChangeNotifierProvider(create: (context) => CommentCancelButtonProvider(),),
-        ChangeNotifierProvider(create: (context) => GetCommentCancelButtonProvider(),),
-
+        ChangeNotifierProvider(
+          create: (context) => CommentCancelButtonProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GetCommentCancelButtonProvider(),
+        ),
       ],
-          child:  MyApp()));
+      child: MyApp(),
+    ),
+  );
 }
 
-
-
-
 class MyApp extends StatelessWidget {
-
- // final String initialRoute;
-  const MyApp({super.key,});
+  // final String initialRoute;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-      ),
-     // initialRoute:initialRoute,
+      theme: ThemeData(),
+      // initialRoute:initialRoute,
       routes: AppRouter.routes,
-
 
       home: AuthWrapper(),
     );
   }
 }
-
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
@@ -170,13 +175,14 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
-    _initializationFuture = Provider.of<AuthProvider>(context, listen: false).loadUserFromToken();
-
+    _initializationFuture = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    ).loadUserFromToken();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
       future: _initializationFuture,
       builder: (context, snapshot) {
@@ -185,7 +191,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-
 
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
 

@@ -1,4 +1,3 @@
-
 import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +15,6 @@ import 'package:serialno_app/utils/color.dart';
 import '../add_service_center_tab_button/add_service_center_tab_button.dart';
 import '../add_service_center_time_picker/add_service_center_time_picker.dart';
 
-
 class AddServiceCenterDialog extends StatefulWidget {
   const AddServiceCenterDialog({Key? key}) : super(key: key);
 
@@ -24,24 +22,31 @@ class AddServiceCenterDialog extends StatefulWidget {
   _AddServiceCenterDialogState createState() => _AddServiceCenterDialogState();
 }
 
-class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with SingleTickerProviderStateMixin {
+class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _hotLineController = TextEditingController();
-  final TextEditingController _customFieldTextController = TextEditingController();
-
+  final TextEditingController _customFieldTextController =
+      TextEditingController();
 
   final TextEditingController _weekdayController = TextEditingController();
-  final TextEditingController _advanceSerialController = TextEditingController();
+  final TextEditingController _advanceSerialController =
+      TextEditingController();
   final TextEditingController _serialNumberController = TextEditingController();
   final TextEditingController _reservedController = TextEditingController();
 
-
-  late  final TabController _tabControllerForDialog;
+  late final TabController _tabControllerForDialog;
   List<String> _selectedOffDays = [];
   final List<String> _availableDays = [
-    'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
+    'Saturday',
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
   ];
 
   Time? _dialogStartTime;
@@ -65,34 +70,54 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
   }
 
   Future<void> _saveServiceCenter() async {
-
     if (!_dialogFormKey.currentState!.validate()) {
       return;
     }
 
     final navigator = Navigator.of(context);
-    final companyId = Provider.of<Getprofileprovider>(context, listen: false).profileData?.currentCompany.id;
-    final addButtonProvider = Provider.of<AddButtonProvider>(context, listen: false);
-    final getAddButtonProvider = Provider.of<GetAddButtonProvider>(context, listen: false);
+    final companyId = Provider.of<Getprofileprovider>(
+      context,
+      listen: false,
+    ).profileData?.currentCompany.id;
+    final addButtonProvider = Provider.of<AddButtonProvider>(
+      context,
+      listen: false,
+    );
+    final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
+      context,
+      listen: false,
+    );
 
     if (companyId == null) {
       CustomFlushbar.showSuccess(
-          context: context,
-          title: "Success",
-          message: "Service Center Added Successful"
+        context: context,
+        title: "Success",
+        message: "Service Center Added Successful",
       );
       return;
     }
     DateTime? finalStartTime;
     if (_dialogStartTime != null) {
       final now = DateTime.now();
-      finalStartTime = DateTime(now.year, now.month, now.day, _dialogStartTime!.hour, _dialogStartTime!.minute);
+      finalStartTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        _dialogStartTime!.hour,
+        _dialogStartTime!.minute,
+      );
     }
 
     DateTime? finalEndTime;
     if (_dialogEndTime != null) {
       final now = DateTime.now();
-      finalEndTime = DateTime(now.year, now.month, now.day, _dialogEndTime!.hour, _dialogEndTime!.minute);
+      finalEndTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        _dialogEndTime!.hour,
+        _dialogEndTime!.minute,
+      );
     }
 
     AddButtonRequest buttonRequest = AddButtonRequest(
@@ -105,7 +130,7 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
       daysOfAdvanceSerial: _advanceSerialController.text,
       noOfReservedSerials: _reservedController.text,
       serialNoPolicy: _serialNumberController.text,
-      workingEndTime:finalEndTime,
+      workingEndTime: finalEndTime,
       workingStartTime: finalStartTime,
     );
 
@@ -114,29 +139,26 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
     if (success) {
       navigator.pop();
       await CustomFlushbar.showSuccess(
-          context: context,
-          title: "Success",
-          message: "Service Center Added Successfully"
+        context: context,
+        title: "Success",
+        message: "Service Center Added Successfully",
       );
       await getAddButtonProvider.fetchGetAddButton(companyId);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: CustomSnackBarWidget(
-              title: "Error",
-              message: addButtonProvider.errorMessage ?? "Failed to Add Service",
-              iconColor: Colors.red.shade400,
-              icon: Icons.dangerous_outlined,
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-          )
+        SnackBar(
+          content: CustomSnackBarWidget(
+            title: "Error",
+            message: addButtonProvider.errorMessage ?? "Failed to Add Service",
+            iconColor: Colors.red.shade400,
+            icon: Icons.dangerous_outlined,
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
       );
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +166,9 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-          side: BorderSide(color: AppColor().primariColor),
-          borderRadius: BorderRadius.circular(10)),
+        side: BorderSide(color: AppColor().primariColor),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Form(
@@ -158,50 +181,72 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Add Service Center", style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
-                    IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_sharp))
+                    const Text(
+                      "Add Service Center",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close_sharp),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 13),
                 const CustomLabeltext("Name"),
                 const SizedBox(height: 10),
-                CustomTextField(controller: _nameController, hintText: "Name", isPassword: false),
+                CustomTextField(
+                  controller: _nameController,
+                  hintText: "Name",
+                  isPassword: false,
+                ),
 
                 const SizedBox(height: 13),
                 const CustomLabeltext("Hotline No."),
                 const SizedBox(height: 8),
-                CustomTextField(controller: _hotLineController, hintText: "HotlineNo", isPassword: false),
+                CustomTextField(
+                  controller: _hotLineController,
+                  hintText: "HotlineNo",
+                  isPassword: false,
+                ),
 
                 const SizedBox(height: 13),
-                const Text("Email", style: TextStyle(color: Colors.black, fontSize: 16)),
+                const Text(
+                  "Email",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
                 const SizedBox(height: 8),
                 TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                color: Colors.grey.shade400
-            )
-          ),
-                  focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                color: AppColor().primariColor,width: 2)
-            ),
-                enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                color: Colors.grey.shade400
-            )
-            ),
-                  hintText: "Email",
-                hintStyle: TextStyle(
-                color: Colors.grey.shade400,
-                fontSize: 15
-            )
-              ),
-            ),
+                        color: AppColor().primariColor,
+                        width: 2,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    hintText: "Email",
+                    hintStyle: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
 
                 const SizedBox(height: 13),
-                const Text("Weekly off-days", style: TextStyle(color: Colors.black, fontSize: 16)),
+                const Text(
+                  "Weekly off-days",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
                 const SizedBox(height: 8),
                 WeeklyOff_daysDropdown(
                   availableDays: _availableDays,
@@ -212,30 +257,28 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
                   },
                 ),
 
+                SizedBox(height: 13),
+                CustomFieldWithTabs(
+                  onEndTimeChanged: (time) {
+                    setState(() {
+                      _dialogEndTime = time;
+                    });
+                  },
+                  onStartTimeChanged: (time) {
+                    setState(() {
+                      _dialogStartTime = time;
+                    });
+                  },
+                  tabController: _tabControllerForDialog,
+                  textController: _customFieldTextController,
+                ),
 
-                SizedBox(height: 13,),
-               CustomFieldWithTabs(
-                 onEndTimeChanged: (time){
-                   setState(() {
-                     _dialogEndTime = time;
-                   });
-                 },
-                   onStartTimeChanged: (time) {
-                     setState(() {
-                       _dialogStartTime = time;
-                     });
-                   },
-                   tabController: _tabControllerForDialog,
-                   textController: _customFieldTextController
-               ),
-
-
-                SizedBox(height: 13,),
-               const Text("Advance Serial", style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16
-                ),),
-                const SizedBox(height: 8,),
+                SizedBox(height: 13),
+                const Text(
+                  "Advance Serial",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   cursorColor: Colors.grey.shade400,
                   controller: _advanceSerialController,
@@ -243,34 +286,45 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade400)),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColor().primariColor, width: 2)),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade400)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColor().primariColor,
+                        width: 2,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
                     suffixIcon: Container(
                       width: 80,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade100,
-                        border: Border(left: BorderSide(color: Colors.grey.shade400)), // বাম দিকে বর্ডার
+                        border: Border(
+                          left: BorderSide(color: Colors.grey.shade400),
+                        ), // বাম দিকে বর্ডার
                       ),
                       child: const Center(child: Text("Day(s)")),
                     ),
                   ),
                 ),
 
-                SizedBox(height: 13,),
-                Text("Serial Number Policy", style: TextStyle(
-                color: Colors.black,
-                fontSize: 16
-            ),),
-                SizedBox(height: 8,),
-                CustomTab(tabbarController: _serialNumberController,),
+                SizedBox(height: 13),
+                Text(
+                  "Serial Number Policy",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                SizedBox(height: 8),
+                CustomTab(tabbarController: _serialNumberController),
 
-                SizedBox(height: 13,),
-                Text("Reserved Serials",style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16
-                ),),
-                SizedBox(height: 8,),
+                SizedBox(height: 13),
+                Text(
+                  "Reserved Serials",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                SizedBox(height: 8),
                 TextFormField(
                   cursorColor: Colors.grey.shade400,
                   controller: _reservedController,
@@ -278,22 +332,30 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade400)),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: AppColor().primariColor, width: 2)),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade400)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColor().primariColor,
+                        width: 2,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
                     prefixIcon: Container(
                       width: 80,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade100,
-                        border: Border(right: BorderSide(color: Colors.grey.shade400)), // ডান দিকে বর্ডার
+                        border: Border(
+                          right: BorderSide(color: Colors.grey.shade400),
+                        ), // ডান দিকে বর্ডার
                       ),
                       child: const Center(child: Text("First")),
                     ),
                   ),
                 ),
-
-
-
 
                 const SizedBox(height: 20),
                 Row(
@@ -302,25 +364,31 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog> with Si
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                          backgroundColor: AppColor().primariColor
+                        backgroundColor: AppColor().primariColor,
                       ),
-                      
+
                       onPressed: _saveServiceCenter,
-                      child: const Text("Save", style: TextStyle(color: Colors.white)),
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)
-                          ),
-                          backgroundColor: Colors.white
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        backgroundColor: Colors.white,
                       ),
                       onPressed: () => Navigator.pop(context),
-                      child: Text("Cancel", style: TextStyle(color: AppColor().primariColor)),
-                    )
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(color: AppColor().primariColor),
+                      ),
+                    ),
                   ],
                 ),
               ],

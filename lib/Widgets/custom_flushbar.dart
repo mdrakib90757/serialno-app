@@ -1,10 +1,7 @@
-
-
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 class CustomFlushbar {
-
   static Future<void> showSuccess({
     required BuildContext context,
     required String title,
@@ -32,10 +29,7 @@ class CustomFlushbar {
         },
         child: const Text(
           "OK",
-          style: TextStyle(
-            color: Colors.green,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
         ),
       ),
     ).show(context);

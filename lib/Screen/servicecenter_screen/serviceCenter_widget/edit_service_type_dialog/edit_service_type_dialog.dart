@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +14,7 @@ import '../../../../providers/serviceCenter_provider/editButtonServiceType_provi
 import '../../../../providers/serviceCenter_provider/editButtonServiceType_provider/getEditButtonServiceType_Provider.dart';
 import '../../../../request_model/serviceCanter_request/editButtonServiceType_request/editButtonServiceType_reqeust.dart';
 
-
 class EditServiceTypeDialog extends StatefulWidget {
-
   final serviceTypeModel serviceType_model;
   const EditServiceTypeDialog({super.key, required this.serviceType_model});
 
@@ -26,7 +23,6 @@ class EditServiceTypeDialog extends StatefulWidget {
 }
 
 class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
-
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   late TextEditingController nameController = TextEditingController();
   late TextEditingController priceController = TextEditingController();
@@ -37,8 +33,12 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
     // TODO: implement initState
     super.initState();
     nameController = TextEditingController(text: widget.serviceType_model.name);
-    priceController = TextEditingController(text: widget.serviceType_model.price.toString());
-    timeController = TextEditingController(text: widget.serviceType_model.defaultAllocatedTime.toString());
+    priceController = TextEditingController(
+      text: widget.serviceType_model.price.toString(),
+    );
+    timeController = TextEditingController(
+      text: widget.serviceType_model.defaultAllocatedTime.toString(),
+    );
   }
 
   @override
@@ -50,72 +50,75 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
     timeController.dispose();
   }
 
-
   Future<void> _saveEditServiceType() async {
     if (_dialogFormKey.currentState!.validate()) {
       //error Handel
       final navigator = Navigator.of(context);
-      final getAddButton_serviceType_Provider = Provider.of<
-          GetAddButtonServiceType_Provider>(context, listen: false);
+      final getAddButton_serviceType_Provider =
+          Provider.of<GetAddButtonServiceType_Provider>(context, listen: false);
       final editButton = Provider.of<EditButtonServiceTypeProvider>(
-          context, listen: false);
+        context,
+        listen: false,
+      );
       final getEditButton = Provider.of<GetEditButtonServiceTypeProvider>(
-          context, listen: false);
+        context,
+        listen: false,
+      );
 
-
-      final companyId = Provider
-          .of<Getprofileprovider>(context, listen: false)
-          .profileData
-          ?.currentCompany
-          .id;
+      final companyId = Provider.of<Getprofileprovider>(
+        context,
+        listen: false,
+      ).profileData?.currentCompany.id;
       if (companyId == null) {
         return;
       }
 
-      EditButtonServiceTypeRequest editButtonRequest = EditButtonServiceTypeRequest(
-          companyId: companyId,
-          id:widget.serviceType_model.id,
-          name: nameController.text,
-          price: priceController.text,
-          defaultAllocatedTime: timeController.text
-      );
+      EditButtonServiceTypeRequest editButtonRequest =
+          EditButtonServiceTypeRequest(
+            companyId: companyId,
+            id: widget.serviceType_model.id,
+            name: nameController.text,
+            price: priceController.text,
+            defaultAllocatedTime: timeController.text,
+          );
 
       final success = await editButton.editButtonServiceType(
-          editButtonRequest, companyId, widget.serviceType_model.id);
+        editButtonRequest,
+        companyId,
+        widget.serviceType_model.id,
+      );
       if (success) {
         navigator.pop();
 
         await CustomFlushbar.showSuccess(
-            context: context,
-            title: "Success",
-            message: "Edit ServiceType  Update Successful"
+          context: context,
+          title: "Success",
+          message: "Edit ServiceType  Update Successful",
         );
 
         if (companyId != null) {
           await getAddButton_serviceType_Provider.fetchGetAddButton_ServiceType(
-              companyId);
+            companyId,
+          );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: CustomSnackBarWidget(
-                title: "Error",
-                message: "Failed to Edit Service Center Update",
-                iconColor: Colors.red.shade400,
-                icon: Icons.dangerous_outlined,),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 3),
-            )
-
+          SnackBar(
+            content: CustomSnackBarWidget(
+              title: "Error",
+              message: "Failed to Edit Service Center Update",
+              iconColor: Colors.red.shade400,
+              icon: Icons.dangerous_outlined,
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 3),
+          ),
         );
       }
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -123,15 +126,16 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-          side: BorderSide(color: AppColor().primariColor),
-          borderRadius: BorderRadius.circular(10)),
+        side: BorderSide(color: AppColor().primariColor),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
           ),
           child: SingleChildScrollView(
             child: Form(
@@ -143,126 +147,121 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Edit Service Types", style: TextStyle(
+                      Text(
+                        "Edit Service Types",
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 20,
-                          fontWeight: FontWeight.bold
-                      ),),
-                      IconButton(onPressed: () {
-                        Navigator.pop(context);
-                      }, icon: Icon(Icons.close_sharp))
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.close_sharp),
+                      ),
                     ],
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(height: 20),
                   CustomLabeltext("Name"),
-                  SizedBox(height: 8,),
+                  SizedBox(height: 8),
                   CustomTextField(
-                      controller: nameController,
-                      hintText: "Name",
-                      isPassword: false
+                    controller: nameController,
+                    hintText: "Name",
+                    isPassword: false,
                   ),
 
-                  SizedBox(height: 20,),
+                  SizedBox(height: 20),
 
-                  Text("Service Price",style: TextStyle(
-                      fontSize: 15
-                  ),),
-                  SizedBox(height: 10,),
+                  Text("Service Price", style: TextStyle(fontSize: 15)),
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: priceController,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.grey.shade400
-                            )
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
                         ),
-                        focusedBorder:OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: AppColor().primariColor,width: 2
-                            )
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.grey.shade400
-                            )
-                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
 
-                        hintText: "Price in BDT",
-                        hintStyle: TextStyle(
-                            color: Colors.grey.shade400,
-                            fontSize: 14
-                        )
+                      hintText: "Price in BDT",
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: 14,
+                      ),
                     ),
-
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(height: 20),
 
-                  Text("Default Allocated",style: TextStyle(
-                      fontSize: 14
-                  ),),
-                  SizedBox(height: 10,),
+                  Text("Default Allocated", style: TextStyle(fontSize: 14)),
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: timeController,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.grey.shade400
-                            )
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
                         ),
-                        focusedBorder:OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: AppColor().primariColor,width: 2
-                            )
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.grey.shade400
-                            )
-                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
 
-                        hintText: "Time in menutes",
-                        hintStyle: TextStyle(
-                            color: Colors.grey.shade400,
-                            fontSize: 13
-                        )
+                      hintText: "Time in menutes",
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: 13,
+                      ),
                     ),
-
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 10),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor().primariColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)
-                              )
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor().primariColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          onPressed:
-                          _saveEditServiceType
-                           , child: Text("Save", style: TextStyle(
-                          color: Colors.white
-                      ),)),
-                      SizedBox(width: 10,),
+                        ),
+                        onPressed: _saveEditServiceType,
+                        child: Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(width: 10),
                       ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)
-                              )
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }, child: Text("Cancel", style: TextStyle(
-                          color: AppColor().primariColor
-                      ),))
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(color: AppColor().primariColor),
+                        ),
+                      ),
                     ],
-                  )
-
-
+                  ),
                 ],
               ),
             ),

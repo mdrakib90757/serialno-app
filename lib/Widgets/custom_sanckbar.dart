@@ -20,7 +20,7 @@ class CustomSnackBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.red.shade400)
+        border: Border.all(color: Colors.red.shade400),
       ),
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -33,9 +33,10 @@ class CustomSnackBarWidget extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const Spacer(),
               IconButton(
@@ -43,7 +44,7 @@ class CustomSnackBarWidget extends StatelessWidget {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 },
                 icon: Icon(Icons.close, color: iconColor),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 5),
@@ -52,7 +53,10 @@ class CustomSnackBarWidget extends StatelessWidget {
             child: Text(
               message,
               style: const TextStyle(
-                  fontSize: 16, color: Colors.black, fontWeight: FontWeight.w400),
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+              ),
               textAlign: TextAlign.center,
             ),
           ),

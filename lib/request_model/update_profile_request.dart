@@ -23,5 +23,4 @@ class UpdateProfileRequest {
       'dateOfBirth': dateOfBirth,
     };
   }
-
 }

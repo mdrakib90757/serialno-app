@@ -1,11 +1,9 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:serialno_app/services/customer_service/serviceTaker_homeScreen/bookSerial_button_service.dart';
 
-class bookSerialButton_provider with ChangeNotifier{
-
-  final BookSerialButtonService bookSerialButtonService = BookSerialButtonService();
+class bookSerialButton_provider with ChangeNotifier {
+  final BookSerialButtonService bookSerialButtonService =
+      BookSerialButtonService();
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -13,7 +11,7 @@ class bookSerialButton_provider with ChangeNotifier{
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<bool>fetchBookSerialButton({
+  Future<bool> fetchBookSerialButton({
     required String businessTypeId,
     required String serviceCenterId,
     required String serviceTypeId,
@@ -23,22 +21,21 @@ class bookSerialButton_provider with ChangeNotifier{
     required String name,
     required String? organizationId,
     required bool forSelf,
-
-})async {
+  }) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     final success = await bookSerialButtonService.bookSerialButton(
-        businessTypeId: businessTypeId,
-        serviceCenterId: serviceCenterId,
-        serviceTypeId: serviceTypeId,
-        serviceDate: serviceDate,
-        serviceTaker: serviceTaker,
-        contactNo: contactNo,
-        name: name,
-        organizationId: organizationId,
-        forSelf: forSelf
+      businessTypeId: businessTypeId,
+      serviceCenterId: serviceCenterId,
+      serviceTypeId: serviceTypeId,
+      serviceDate: serviceDate,
+      serviceTaker: serviceTaker,
+      contactNo: contactNo,
+      name: name,
+      organizationId: organizationId,
+      forSelf: forSelf,
     );
     _isLoading = false;
     if (!success) {
@@ -47,10 +44,5 @@ class bookSerialButton_provider with ChangeNotifier{
 
     notifyListeners();
     return success;
-
-
   }
-  }
-
-
-
+}

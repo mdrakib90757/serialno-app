@@ -1,19 +1,14 @@
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:serialno_app/api/serviceCenter_api/updateButton_serviceType/editButton_serviceType.dart';
 import 'package:serialno_app/model/service_type_model.dart';
 import '../../../api/serviceCenter_api/updateButton_serviceCanter/editButton_serviceCenter.dart';
 import '../../../model/serviceCenter_model.dart';
 
-class GetEditButtonServiceTypeProvider with ChangeNotifier{
+class GetEditButtonServiceTypeProvider with ChangeNotifier {
+  final EditButtonServiceTypeApi _editButtonServiceTypeApi =
+      EditButtonServiceTypeApi();
 
-  final EditButtonServiceTypeApi _editButtonServiceTypeApi = EditButtonServiceTypeApi();
-
-  String ? _token;
+  String? _token;
   String? get token => _token;
 
   List<serviceTypeModel> _serviceTypeList = [];
@@ -29,7 +24,7 @@ class GetEditButtonServiceTypeProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void>fetchGetEditButton(String companyId)async{
+  Future<void> fetchGetEditButton(String companyId) async {
     _isLoading = true;
     notifyListeners();
 
@@ -41,16 +36,18 @@ class GetEditButtonServiceTypeProvider with ChangeNotifier{
     }
 
     debugPrint("🚀 Fetching service centers for company: $companyId");
-    _serviceTypeList = await _editButtonServiceTypeApi.GetEditButtonServiceType(companyId);
+    _serviceTypeList = await _editButtonServiceTypeApi.GetEditButtonServiceType(
+      companyId,
+    );
 
     _isLoading = false;
     notifyListeners();
-
   }
-  void clearData(){
-    _serviceTypeList=[];
-    _token=null;
-    _isLoading=false;
+
+  void clearData() {
+    _serviceTypeList = [];
+    _token = null;
+    _isLoading = false;
 
     notifyListeners();
     print("GetEditButtonProvider cleared!");

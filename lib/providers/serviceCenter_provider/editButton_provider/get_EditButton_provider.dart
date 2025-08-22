@@ -1,17 +1,11 @@
-
-
-
-
-
 import 'package:flutter/material.dart';
 import '../../../api/serviceCenter_api/updateButton_serviceCanter/editButton_serviceCenter.dart';
 import '../../../model/serviceCenter_model.dart';
 
-class GetEditButtonProvider with ChangeNotifier{
-
+class GetEditButtonProvider with ChangeNotifier {
   final EditButtonApi _editButtonApi = EditButtonApi();
 
-  String ? _token;
+  String? _token;
   String? get token => _token;
 
   List<ServiceCenterModel> _serviceCenterList = [];
@@ -27,7 +21,7 @@ class GetEditButtonProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void>fetchGetEditButton(String companyId)async{
+  Future<void> fetchGetEditButton(String companyId) async {
     _isLoading = true;
     notifyListeners();
 
@@ -43,12 +37,12 @@ class GetEditButtonProvider with ChangeNotifier{
 
     _isLoading = false;
     notifyListeners();
-
   }
-  void clearData(){
-    _serviceCenterList=[];
-    _token=null;
-    _isLoading=false;
+
+  void clearData() {
+    _serviceCenterList = [];
+    _token = null;
+    _isLoading = false;
 
     notifyListeners();
     print("GetEditButtonProvider cleared!");

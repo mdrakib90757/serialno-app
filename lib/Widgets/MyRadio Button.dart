@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 
 import '../utils/color.dart';
@@ -9,7 +6,6 @@ class CustomRadioGroup<T> extends StatelessWidget {
   final T? groupValue;
 
   final List<T> items;
-
 
   final void Function(T?) onChanged;
   final String Function(T) itemTitleBuilder;
@@ -25,8 +21,8 @@ class CustomRadioGroup<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0,),
-      
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: items.map((item) {

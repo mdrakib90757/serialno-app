@@ -1,6 +1,3 @@
-
-
-
 enum UserType { ServiceCenter, ServiceTaker }
 
 //Register-service-center
@@ -15,47 +12,38 @@ class User_Model {
   final ServiceCenter? serviceCenter;
   final ServiceTaker? serviceTaker;
 
-
-  User_Model(  {
+  User_Model({
     this.serviceTaker,
     this.businessTypeName,
     this.businessTypeId,
     this.businessType,
-     this.token,
-     this.company,
+    this.token,
+    this.company,
     required this.user,
-     this.serviceCenter,
+    this.serviceCenter,
     String? accessToken,
     String? refreshToken,
-
   });
 
-
-  factory User_Model.fromJson(Map<String, dynamic>json){
+  factory User_Model.fromJson(Map<String, dynamic> json) {
     return User_Model(
       businessTypeId: json["businessTypeId"],
       businessTypeName: json["businessTypeName"],
       businessType: json["businessType"] != null
           ? Businesstype.fromJson(json["businessType"])
           : null,
-        company: Company.fromJson(json["company"],),
-        user: User.fromJSon(json["user"]),
-        serviceCenter: ServiceCenter.fromJSon(json["serviceCenter"]),
-      token:json["token"]??"",
-        serviceTaker: json["serviceTaker"] != null
-    ? ServiceTaker.fromJson(json["serviceTaker"])
-        : null,
-
-
-
+      company: Company.fromJson(json["company"]),
+      user: User.fromJSon(json["user"]),
+      serviceCenter: ServiceCenter.fromJSon(json["serviceCenter"]),
+      token: json["token"] ?? "",
+      serviceTaker: json["serviceTaker"] != null
+          ? ServiceTaker.fromJson(json["serviceTaker"])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {
-      'token': token,
-      'user': user,
-    };
+    final Map<String, dynamic> data = {'token': token, 'user': user};
     if (company != null) {
       data['company'] = company!.toJson();
     }
@@ -86,9 +74,7 @@ class User_Model {
       serviceTaker: serviceTaker ?? this.serviceTaker,
     );
   }
-
 }
-
 
 class Company {
   final String id;
@@ -110,10 +96,9 @@ class Company {
     required this.createDate,
     required this.isActive,
     required this.businessTypeId,
-
   });
 
-  factory Company.fromJson(Map<String, dynamic>json){
+  factory Company.fromJson(Map<String, dynamic> json) {
     return Company(
       id: json["id"] ?? "",
       name: json["name"] ?? "",
@@ -124,10 +109,8 @@ class Company {
       createDate: json["createDate"] ?? "",
       isActive: json["isActive"] ?? false,
       businessTypeId: 0,
-
     );
   }
-
 
   Map<String, dynamic> toJson() {
     return {
@@ -142,7 +125,6 @@ class Company {
     };
   }
 }
-
 
 class User {
   final String id;
@@ -164,28 +146,25 @@ class User {
     required this.registeredDate,
     required this.isActive,
     required this.userType,
-    this.profileData
-
+    this.profileData,
   });
 
-
-  factory User.fromJSon(Map<String, dynamic>json){
+  factory User.fromJSon(Map<String, dynamic> json) {
     final rawProfile = json["profileData"];
     return User(
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        mobileNo: json["mobileNo"],
-        loginName: json["loginName"],
-        registeredDate: json["registeredDate"],
-        isActive: json["isActive"],
-        userType: json['userType'],
+      id: json["id"],
+      name: json["name"],
+      email: json["email"],
+      mobileNo: json["mobileNo"],
+      loginName: json["loginName"],
+      registeredDate: json["registeredDate"],
+      isActive: json["isActive"],
+      userType: json['userType'],
       profileData: rawProfile is Map<String, dynamic>
           ? ProfileData.fromJson(rawProfile)
           : null,
     );
   }
-
 
   User copyWith({
     String? id,
@@ -210,11 +189,9 @@ class User {
       profileData: profileData ?? this.profileData,
     );
   }
-
 }
 
-
-class ServiceCenter{
+class ServiceCenter {
   final String id;
   final String name;
   final String hotlineNo;
@@ -227,17 +204,15 @@ class ServiceCenter{
     required this.hotlineNo,
     required this.companyId,
   });
-  factory ServiceCenter.fromJSon(Map<String,dynamic>json){
+  factory ServiceCenter.fromJSon(Map<String, dynamic> json) {
     return ServiceCenter(
-        id: json["id"]??"",
-        name: json["name"]??"",
-        email: json["email"]??"",
-      hotlineNo: json["hotlineNo"]??"",
-      companyId: json["companyId"]??"",
+      id: json["id"] ?? "",
+      name: json["name"] ?? "",
+      email: json["email"] ?? "",
+      hotlineNo: json["hotlineNo"] ?? "",
+      companyId: json["companyId"] ?? "",
     );
   }
-
-
 
   Map<String, dynamic> toJson() {
     return {
@@ -247,11 +222,10 @@ class ServiceCenter{
       'hotlineNo': hotlineNo,
       'companyId': companyId,
     };
+  }
+}
 
-}}
-
-
-class ServiceTaker{
+class ServiceTaker {
   final String? id;
   final String name;
   final String email;
@@ -267,16 +241,15 @@ class ServiceTaker{
     this.id,
     required this.name,
     required this.email,
-    required this.phone,  // Changed from mobileNo
-    required this .loginName,
-    required this. password,  // Added
+    required this.phone, // Changed from mobileNo
+    required this.loginName,
+    required this.password, // Added
     this.registeredDate,
     this.isActive,
     this.userType,
     this.profileData,
-
   });
-  factory ServiceTaker.fromJson(Map<String,dynamic>json){
+  factory ServiceTaker.fromJson(Map<String, dynamic> json) {
     final profileDataJson = json['profileData'];
     return ServiceTaker(
       id: json["id"],
@@ -288,51 +261,47 @@ class ServiceTaker{
       registeredDate: json["registeredDate"],
       isActive: json["isActive"],
       userType: json["userType"],
-      profileData:profileDataJson!=null?ProfileData.fromJson(json['profileData']):null,
+      profileData: profileDataJson != null
+          ? ProfileData.fromJson(json['profileData'])
+          : null,
     );
   }
 }
-class ProfileData{
+
+class ProfileData {
   final String? gender;
   final String? dateOfBirth;
   final String? photograph;
 
   ProfileData({
-     this.gender,
+    this.gender,
     required this.dateOfBirth,
-    required this.photograph
+    required this.photograph,
   });
 
-  factory ProfileData.fromJson(Map<String,dynamic>json){
+  factory ProfileData.fromJson(Map<String, dynamic> json) {
     return ProfileData(
       gender: json["gender"],
       dateOfBirth: json["dateOfBirth"],
-      photograph: json["photograph"]
+      photograph: json["photograph"],
     );
   }
-
 
   Map<String, dynamic> toJson() {
     return {
       "gender": gender,
       "dateOfBirth": dateOfBirth,
-      "photograph": photograph
+      "photograph": photograph,
     };
-  }}
-
-
-
+  }
+}
 
 class Businesstype {
   final int id;
   final String name;
   final dynamic config;
 
-  Businesstype({
-    required this.id,
-    required this.name,
-    this.config,
-  });
+  Businesstype({required this.id, required this.name, this.config});
 
   factory Businesstype.fromJson(Map<String, dynamic> json) {
     try {
@@ -346,22 +315,13 @@ class Businesstype {
     }
   }
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'config': config,
-    };
+    return {'id': id, 'name': name, 'config': config};
   }
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is Businesstype &&
-          runtimeType == other.runtimeType && id == other.id;
-
+      identical(this, other) ||
+      other is Businesstype &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
 }
-
-
-
-
-
-

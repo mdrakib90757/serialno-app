@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 
 import '../Screen/Auth_screen/login_screen.dart';
@@ -16,7 +13,9 @@ class AppRouteNames {
 class AppRouter {
   static final Map<String, WidgetBuilder> routes = {
     AppRouteNames.login: (context) => const LoginScreen(),
-    AppRouteNames.companyHome: (context) => const CustomServicecenterNavigationbar(),
-    AppRouteNames.customerHome: (context) => const CustomServicetakerNavigationbar(),
+    AppRouteNames.companyHome: (context) =>
+        const CustomServicecenterNavigationbar(),
+    AppRouteNames.customerHome: (context) =>
+        const CustomServicetakerNavigationbar(),
   };
 }

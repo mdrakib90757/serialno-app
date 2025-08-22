@@ -1,11 +1,5 @@
-
-
-
-
-
 //get method ProfileUserModel
-class profile_UserModel{
-
+class profile_UserModel {
   final List<UserCompany> userCompanies;
   final Company currentCompany;
   final String id;
@@ -30,65 +24,56 @@ class profile_UserModel{
     required this.isActive,
     required this.userType,
     this.profileData,
-});
+  });
 
-  factory profile_UserModel.fromJson(Map<String,dynamic>json){
+  factory profile_UserModel.fromJson(Map<String, dynamic> json) {
     return profile_UserModel(
-        userCompanies: json["userCompanies"] != null
-            ? (json["userCompanies"] as List)
-            .map((e) => UserCompany.fromJson(e))
-            .toList()
-            : [],
-        currentCompany: json["currentCompany"] != null
-            ? Company.fromJson(json["currentCompany"])
-            : Company(
-          id: '',
-          name: '',
-          addressLine1: '',
-          addressLine2: '',
-          email: '',
-          phone: '',
-          createDate: '',
-          isActive: false,
-          businessTypeId: 0,
-        ),
+      userCompanies: json["userCompanies"] != null
+          ? (json["userCompanies"] as List)
+                .map((e) => UserCompany.fromJson(e))
+                .toList()
+          : [],
+      currentCompany: json["currentCompany"] != null
+          ? Company.fromJson(json["currentCompany"])
+          : Company(
+              id: '',
+              name: '',
+              addressLine1: '',
+              addressLine2: '',
+              email: '',
+              phone: '',
+              createDate: '',
+              isActive: false,
+              businessTypeId: 0,
+            ),
 
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        mobileNo: json["mobileNo"],
-        loginName: json["loginName"],
-        registeredDate: json["registeredDate"],
-        isActive: json["isActive"],
-        userType: json["userType"],
-        profileData: json["profileData"] != null
-            ? ProfileData.fromJson(json["profileData"])
-            : null
-
-    );}
+      id: json["id"],
+      name: json["name"],
+      email: json["email"],
+      mobileNo: json["mobileNo"],
+      loginName: json["loginName"],
+      registeredDate: json["registeredDate"],
+      isActive: json["isActive"],
+      userType: json["userType"],
+      profileData: json["profileData"] != null
+          ? ProfileData.fromJson(json["profileData"])
+          : null,
+    );
+  }
 }
 
-class UserCompany{
+class UserCompany {
   final String companyId;
   final String roleId;
 
-  UserCompany( {
-    required this.companyId,
-    required this.roleId
+  UserCompany({required this.companyId, required this.roleId});
 
-});
-
-factory UserCompany.fromJson(Map<String,dynamic>json){
-  return UserCompany(
-      companyId: json["companyId"],
-      roleId: json["roleId"]
-  );}
-
-
+  factory UserCompany.fromJson(Map<String, dynamic> json) {
+    return UserCompany(companyId: json["companyId"], roleId: json["roleId"]);
+  }
 }
 
-
-class Company{
+class Company {
   final String id;
   final String name;
   final String addressLine1;
@@ -109,7 +94,7 @@ class Company{
     required this.createDate,
     required this.isActive,
     required this.businessTypeId,
-});
+  });
   factory Company.fromJson(Map<String, dynamic> json) {
     return Company(
       id: json["id"],
@@ -123,21 +108,14 @@ class Company{
       businessTypeId: json["businessTypeId"],
     );
   }
-
-
 }
-
 
 class ProfileData {
   final String? gender;
   final String? dateOfBirth;
   final String? photograph;
 
-  ProfileData({
-    this.gender,
-    this.dateOfBirth,
-    this.photograph,
-  });
+  ProfileData({this.gender, this.dateOfBirth, this.photograph});
 
   factory ProfileData.fromJson(Map<String, dynamic> json) {
     return ProfileData(
@@ -154,5 +132,4 @@ class ProfileData {
       "photograph": photograph,
     };
   }
-
 }

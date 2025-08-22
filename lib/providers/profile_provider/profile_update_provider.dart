@@ -4,7 +4,6 @@ import 'package:serialno_app/request_model/update_profile_request.dart';
 
 import '../../api/profile_api/profile_api.dart';
 
-
 class ProfileProvider with ChangeNotifier {
   final ProfileApi _profileApi = ProfileApi();
   bool _isLoading = false;
@@ -23,7 +22,6 @@ class ProfileProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
       return true;
-
     } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
       _isLoading = false;

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../utils/color.dart';
@@ -25,21 +23,21 @@ class CustomTextField extends StatefulWidget {
 
   const CustomTextField({
     super.key,
-     this.hintText,
+    this.hintText,
     required this.isPassword,
-     this.controller,
-     this.prefixIcon,
-    this.suffixIcon, this.focusNode,
+    this.controller,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.focusNode,
     this.textInputAction,
     this.onEditingComplete,
-     this.color,
+    this.color,
     this.textStyle,
     this.enabled,
     this.fillColor,
     this.filled,
     this.readOnly,
-    this.onTap
-
+    this.onTap,
   });
 
   @override
@@ -76,39 +74,42 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderSide: BorderSide(color: Colors.grey.shade400),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color:AppColor().primariColor,width: 2),
+          borderSide: BorderSide(color: AppColor().primariColor, width: 2),
         ),
-        enabled: widget.enabled??true,
+        enabled: widget.enabled ?? true,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),
         ),
-        filled: widget.filled??false,
-        fillColor: widget.color!=null?
-        Colors.white:Colors.redAccent.withOpacity(0.1),
+        filled: widget.filled ?? false,
+        fillColor: widget.color != null
+            ? Colors.white
+            : Colors.redAccent.withOpacity(0.1),
         prefixIcon: widget.prefixIcon != null
             ? Icon(widget.prefixIcon, color: Colors.grey.shade400)
             : null,
         hintText: widget.hintText,
-        hintStyle: TextStyle(color: widget.textStyle!=null?Colors.black :Colors.grey.shade400,
-        fontSize: 16
+        hintStyle: TextStyle(
+          color: widget.textStyle != null ? Colors.black : Colors.grey.shade400,
+          fontSize: 16,
         ),
 
-        suffixIcon: widget.suffixIcon!=null? widget.suffixIcon:
-        widget.isPassword
+        suffixIcon: widget.suffixIcon != null
+            ? widget.suffixIcon
+            : widget.isPassword
             ? IconButton(
-          onPressed: () {
-            setState(() {
-              obscureText = !obscureText;
-            });
-          },
-          icon: Icon(
-            obscureText ? Icons.visibility_off : Icons.visibility,
-            color: Colors.grey.shade400,
-          ),
-        ): null
+                onPressed: () {
+                  setState(() {
+                    obscureText = !obscureText;
+                  });
+                },
+                icon: Icon(
+                  obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey.shade400,
+                ),
+              )
+            : null,
       ),
-      cursorColor:  Colors.grey.shade500,
+      cursorColor: Colors.grey.shade500,
     );
   }
 }

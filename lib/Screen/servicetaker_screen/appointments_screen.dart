@@ -12,18 +12,12 @@ class AppointmentsScreen extends StatefulWidget {
   State<AppointmentsScreen> createState() => _AppointmentsScreenState();
 }
 
-class _AppointmentsScreenState extends State<AppointmentsScreen>  with
-SingleTickerProviderStateMixin {
-
-
-
+class _AppointmentsScreenState extends State<AppointmentsScreen>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-
-    });
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   @override
@@ -38,12 +32,10 @@ SingleTickerProviderStateMixin {
             child: TimelineTile(
               alignment: TimelineAlign.start,
 
-
               // লাইনের স্টাইল
               beforeLineStyle: LineStyle(
-                color:AppColor().primariColor,
+                color: AppColor().primariColor,
                 thickness: 1.5,
-
               ),
               afterLineStyle: LineStyle(
                 color: AppColor().primariColor.withOpacity(0.5),
@@ -58,20 +50,18 @@ SingleTickerProviderStateMixin {
                   decoration: BoxDecoration(
                     color: AppColor().primariColor,
                     shape: BoxShape.circle,
-                  ),),),
-
-
+                  ),
+                ),
+              ),
 
               endChild: Container(
-                constraints: const BoxConstraints(
-                  minHeight: 120,
-                ),
+                constraints: const BoxConstraints(minHeight: 120),
 
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.grey.shade300)
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,8 +74,13 @@ SingleTickerProviderStateMixin {
                     SizedBox(height: 4),
                     Text("Data"),
                     SizedBox(height: 8),
-                    Text("Data", style: TextStyle(color: Colors.grey.shade700,
-                        fontStyle: FontStyle.italic)),
+                    Text(
+                      "Data",
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -95,6 +90,4 @@ SingleTickerProviderStateMixin {
       ),
     );
   }
-
-  }
-
+}

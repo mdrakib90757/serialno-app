@@ -11,10 +11,7 @@ import '../../request_model/auth_request/login_request.dart';
 import '../../request_model/auth_request/register_requset.dart';
 import '../../request_model/auth_request/serviceTaker_register.dart'; // আপনার LoginRequest মডেল
 
-
-
 class AuthProvider with ChangeNotifier {
-
   final AuthApi _authApi = AuthApi();
   final ProfileApi _profileApi = ProfileApi();
 
@@ -22,8 +19,7 @@ class AuthProvider with ChangeNotifier {
   bool _isBusinessTypesLoading = false;
   String? _businessTypesError;
 
-
-//setter variable
+  //setter variable
   User_Model? _userModel;
   ServiceTaker? _serviceTaker;
   String? _userType;
@@ -32,8 +28,7 @@ class AuthProvider with ChangeNotifier {
   String? _accessToken;
   String? _refreshToken;
 
-
- //getter variable
+  //getter variable
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   User_Model? get userModel => _userModel;
@@ -42,22 +37,18 @@ class AuthProvider with ChangeNotifier {
   String? get accessToken => _accessToken;
   ProfileData? get userProfileData => _userModel?.user.profileData;
 
-
   List<Businesstype> get businessTypes => _businessTypes;
   bool get isBusinessTypesLoading => _isBusinessTypesLoading;
   String? get businessTypesError => _businessTypesError;
 
-
   /// Login a user using LoginRequest model. Returns true on success.
-  Future<bool> login({
-    required LoginRequest request,
-  }) async {
+  Future<bool> login({required LoginRequest request}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final response = await _authApi.login(request)as Map<String, dynamic>;
+      final response = await _authApi.login(request) as Map<String, dynamic>;
 
       if (response["data"] == null || response["data"]["accessToken"] == null) {
         throw Exception("Invalid response: Missing access token.");
@@ -73,20 +64,15 @@ class AuthProvider with ChangeNotifier {
       await _saveToken(_accessToken!);
       await loadUserFromToken();
       return true;
-
-
     } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
       print("Login Error: $_errorMessage");
       return false;
-
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
-
-
 
   /// Load user data from the token stored in SharedPreferences.
   Future<void> loadUserFromToken() async {
@@ -129,32 +115,30 @@ class AuthProvider with ChangeNotifier {
     print("User logged out and session cleared.");
   }
 
-
-
   /// Register a service center.
   Future<Map<String, dynamic>> registerServiceCenter({
-    required RegisterRequest request,})
-  async {
+    required RegisterRequest request,
+  }) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
     try {
       final result = await _authApi.register(request) as Map<String, dynamic>;
 
-
       if (result.containsKey("user") && result["user"] != null) {
-
         return {
           'success': true,
           'message': 'Registration Successful',
-          'data': result
+          'data': result,
         };
-
       } else {
-        throw Exception(result["message"] ?? result["errorMessage"] ?? "Registration failed due to an unknown server error.");
+        throw Exception(
+          result["message"] ??
+              result["errorMessage"] ??
+              "Registration failed due to an unknown server error.",
+        );
       }
-
-    } catch(e) {
+    } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
       return {'success': false, 'message': _errorMessage};
     } finally {
@@ -162,9 +146,6 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-
-
 
   /// Register a service taker.
   Future<Map<String, dynamic>> registerServiceTaker({
@@ -174,19 +155,19 @@ class AuthProvider with ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
-      final result = await _authApi.serviceTakerRegister(request)as Map<String, dynamic>;
+      final result =
+          await _authApi.serviceTakerRegister(request) as Map<String, dynamic>;
 
       if (result.containsKey("id") && result["id"] != null) {
         return {
           'success': true,
           'message': 'Registration Successful',
-          'data': result
+          'data': result,
         };
       } else {
         throw Exception(result["message"] ?? "Registration Failed.");
       }
-
-    } catch(e) {
+    } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
       return {'success': false, 'message': _errorMessage};
     } finally {
@@ -194,7 +175,6 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> updateUserProfile({
     required String newName,
@@ -222,8 +202,6 @@ class AuthProvider with ChangeNotifier {
       print("AuthProvider user model updated successfully!");
     }
   }
-
-
 
   /// Clears the current error message.
   void clearError() {
@@ -300,10 +278,6 @@ class AuthProvider with ChangeNotifier {
     );
   }
 
-
-
-
-
   // --- Token Management (Private) ---
 
   Future<void> _saveToken(String token) async {
@@ -321,7 +295,6 @@ class AuthProvider with ChangeNotifier {
     await prefs.remove('accessToken');
   }
 
-
   Future<void> fetchBusinessTypes() async {
     _isBusinessTypesLoading = true;
     _businessTypesError = null;
@@ -330,7 +303,6 @@ class AuthProvider with ChangeNotifier {
     try {
       _businessTypes = await _authApi.fetchBusinessType();
       print("Loaded Business Types: ${_businessTypes.length}");
-
     } catch (e) {
       _businessTypesError = "Failed to load business types: $e";
       print(_businessTypesError);
@@ -340,10 +312,3 @@ class AuthProvider with ChangeNotifier {
     }
   }
 }
-
-
-
-
-
-
-

@@ -10,16 +10,8 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
-    return
-       Scaffold(
-         body:  Column(
-           children: [
-             Center(
-              child: Text("Setting Screen"),
-
-                 ),
-           ],
-         ),
-       );
+    return Scaffold(
+      body: Column(children: [Center(child: Text("Setting Screen"))]),
+    );
   }
 }

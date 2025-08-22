@@ -1,5 +1,3 @@
-
-
 class SerialModel {
   final UserModel? user;
   final ServiceTypeModel? serviceType;
@@ -38,7 +36,9 @@ class SerialModel {
   factory SerialModel.fromJson(Map<String, dynamic> json) {
     return SerialModel(
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>?),
-      serviceType: ServiceTypeModel.fromJson(json['serviceType'] as Map<String, dynamic>?),
+      serviceType: ServiceTypeModel.fromJson(
+        json['serviceType'] as Map<String, dynamic>?,
+      ),
       id: json['id'] as String?,
       date: json['date'] as String?,
       serviceCenterId: json['serviceCenterId'] as String?,
@@ -56,19 +56,13 @@ class SerialModel {
   }
 }
 
-
 class UserModel {
   final String? id;
   final String? name;
   final String? email;
   final ProfileData? profileData;
 
-  UserModel({
-    this.id,
-    this.name,
-    this.email,
-    this.profileData,
-  });
+  UserModel({this.id, this.name, this.email, this.profileData});
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     if (json == null) return UserModel();
@@ -97,19 +91,13 @@ class ProfileData {
   }
 }
 
-
 class ServiceTypeModel {
   final String? id;
   final String? name;
   final num? price;
   final num? defaultAllocatedTime;
 
-  ServiceTypeModel({
-    this.id,
-    this.name,
-    this.price,
-    this.defaultAllocatedTime,
-  });
+  ServiceTypeModel({this.id, this.name, this.price, this.defaultAllocatedTime});
 
   factory ServiceTypeModel.fromJson(Map<String, dynamic>? json) {
     if (json == null) return ServiceTypeModel();

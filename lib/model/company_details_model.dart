@@ -20,27 +20,28 @@ class CompanyDetailsModel {
   Null? areaId;
   Null? logo;
 
-  CompanyDetailsModel(
-      {this.businessType,
-        this.division,
-        this.district,
-        this.thana,
-        this.area,
-        this.id,
-        this.name,
-        this.addressLine1,
-        this.addressLine2,
-        this.email,
-        this.phone,
-        this.createDate,
-        this.isActive,
-        this.businessTypeId,
-        this.location,
-        this.divisionId,
-        this.districtId,
-        this.thanaId,
-        this.areaId,
-        this.logo});
+  CompanyDetailsModel({
+    this.businessType,
+    this.division,
+    this.district,
+    this.thana,
+    this.area,
+    this.id,
+    this.name,
+    this.addressLine1,
+    this.addressLine2,
+    this.email,
+    this.phone,
+    this.createDate,
+    this.isActive,
+    this.businessTypeId,
+    this.location,
+    this.divisionId,
+    this.districtId,
+    this.thanaId,
+    this.areaId,
+    this.logo,
+  });
 
   CompanyDetailsModel.fromJson(Map<String, dynamic> json) {
     businessType = json['businessType'] != null

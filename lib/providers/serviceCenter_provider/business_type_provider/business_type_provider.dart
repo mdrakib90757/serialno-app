@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:serialno_app/api/auth_api/auth_api.dart';
 
@@ -7,12 +6,10 @@ import '../../../model/user_model.dart';
 class BusinessTypeProvider with ChangeNotifier {
   final AuthApi _authApi = AuthApi();
 
-
   List<Businesstype> businessTypes = [];
   bool isLoading = false;
 
   Future<void> fetchBusinessTypes() async {
-
     if (businessTypes.isNotEmpty) return;
 
     isLoading = true;

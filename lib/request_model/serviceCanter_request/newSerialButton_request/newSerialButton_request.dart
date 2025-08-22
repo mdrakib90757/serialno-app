@@ -1,11 +1,10 @@
-
-class NewSerialButtonRequest{
+class NewSerialButtonRequest {
   String? serviceCenterId;
   String? serviceTypeId;
   String? serviceDate;
   String? name;
   String? contactNo;
-  String?serviceCenterName;
+  String? serviceCenterName;
   bool? forSelf = false;
 
   NewSerialButtonRequest({
@@ -16,16 +15,16 @@ class NewSerialButtonRequest{
     this.contactNo,
     this.forSelf,
     this.serviceCenterName,
-});
+  });
 
-  Map<String,dynamic>toJson(){
-    return{
+  Map<String, dynamic> toJson() {
+    return {
       "serviceTypeId": serviceTypeId,
-      "serviceDate": serviceDate, // ISO 8601 format (e.g., "2025-07-21T17:40:14.462Z")
+      "serviceDate":
+          serviceDate, // ISO 8601 format (e.g., "2025-07-21T17:40:14.462Z")
       "name": name,
       "contactNo": contactNo,
-      "forSelf": forSelf
+      "forSelf": forSelf,
     };
   }
-
 }

@@ -1,14 +1,10 @@
-
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class AppColor{
-
-  final Color primariColor=Color(0xFF316984);
-  final Color scoenddaryColor=Color(0xFFE17C1F);
-
+class AppColor {
+  final Color primariColor = Color(0xFF316984);
+  final Color scoenddaryColor = Color(0xFFE17C1F);
 
   static Color getStatusColor(String? status) {
     switch (status?.toLowerCase()) {
@@ -27,9 +23,4 @@ class AppColor{
         return Colors.black;
     }
   }
-
-
-
-
 }
-

@@ -4,9 +4,10 @@ class AppException implements Exception {
 
   AppException([this._message, this._prefix]);
 
-  String getMessage(){
+  String getMessage() {
     return _message;
   }
+
   String toString() {
     return "$_prefix$_message";
   }
@@ -14,7 +15,7 @@ class AppException implements Exception {
 
 class FetchDataException extends AppException {
   FetchDataException([String? message])
-      : super(message, "Error During Communication: ");
+    : super(message, "Error During Communication: ");
 }
 
 class BadRequestException extends AppException {

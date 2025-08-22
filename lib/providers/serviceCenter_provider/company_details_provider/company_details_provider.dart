@@ -1,13 +1,9 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:serialno_app/api/serviceCenter_api/company_details_api/company_details_api.dart';
 import 'package:serialno_app/model/company_details_model.dart';
 
-class CompanyDetailsProvider with ChangeNotifier{
-
+class CompanyDetailsProvider with ChangeNotifier {
   final CompanyDetailsApi _companyDetailsApi = CompanyDetailsApi();
-
 
   CompanyDetailsModel? _companyDetails;
   bool _isLoading = false;
@@ -23,7 +19,7 @@ class CompanyDetailsProvider with ChangeNotifier{
     notifyListeners();
 
     try {
-      _companyDetails =await _companyDetailsApi.companyInfo(companyId);
+      _companyDetails = await _companyDetailsApi.companyInfo(companyId);
       debugPrint("✅ Company details loaded for: ${_companyDetails?.name}");
     } catch (e) {
       _errorMessage = e.toString();
@@ -33,5 +29,4 @@ class CompanyDetailsProvider with ChangeNotifier{
       notifyListeners();
     }
   }
-
 }

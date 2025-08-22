@@ -1,36 +1,32 @@
-
-
-class ServiceCenterModel{
-
+class ServiceCenterModel {
   final String id;
   final String? name;
   final String? hotlineNo;
   final String? email;
   final String? companyId;
   List<String>? weeklyOffDays;
-  DateTime? workingStartTime; // DateTime? ব্যবহার করা হয়েছে, কারণ এটি null হতে পারে
-  DateTime? workingEndTime;   // DateTime? ব্যবহার করা হয়েছে
+  DateTime?
+  workingStartTime; // DateTime? ব্যবহার করা হয়েছে, কারণ এটি null হতে পারে
+  DateTime? workingEndTime; // DateTime? ব্যবহার করা হয়েছে
   int? daysOfAdvanceSerial;
   int? noOfReservedSerials;
   String? serialNoPolicy;
 
   ServiceCenterModel({
-     required this.id,
+    required this.id,
     this.name,
     this.hotlineNo,
     this.email,
     this.companyId,
     this.workingStartTime,
     this.workingEndTime,
-   this.daysOfAdvanceSerial,
+    this.daysOfAdvanceSerial,
     this.noOfReservedSerials,
     this.serialNoPolicy,
-    this. weeklyOffDays,
+    this.weeklyOffDays,
+  });
 
-});
-
-
-  factory ServiceCenterModel.fromJson(Map<String,dynamic>json){
+  factory ServiceCenterModel.fromJson(Map<String, dynamic> json) {
     return ServiceCenterModel(
       id: json["id"],
       name: json["name"],
@@ -49,18 +45,16 @@ class ServiceCenterModel{
       daysOfAdvanceSerial: json["daysOfAdvanceSerial"],
       noOfReservedSerials: json["noOfReservedSerials"],
       serialNoPolicy: json["serialNoPolicy"],
-
-
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id":id,
-      "name":name,
-      "hotlineNo":hotlineNo,
-      "email":email,
-      "companyId":companyId,
+      "id": id,
+      "name": name,
+      "hotlineNo": hotlineNo,
+      "email": email,
+      "companyId": companyId,
       "weeklyOffDays": weeklyOffDays ?? [],
       "workingStartTime": workingStartTime?.toIso8601String(),
       "workingEndTime": workingEndTime?.toIso8601String(),
@@ -69,6 +63,4 @@ class ServiceCenterModel{
       "serialNoPolicy": serialNoPolicy,
     };
   }
-
-
 }

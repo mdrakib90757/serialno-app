@@ -76,21 +76,26 @@ class ApiClient {
       case 500:
       default:
         throw UnknownException(
-            'Error Occurred while Communication with Server with StatusCode : ${response.statusCode}');
+          'Error Occurred while Communication with Server with StatusCode : ${response.statusCode}',
+        );
     }
   }
 
   Uri createUri(String apiUrl, {Map<String, dynamic>? queryParameters}) =>
       Uri.https(_baseUrl, '/api$apiUrl', queryParameters);
 
-  Future<dynamic> get(String apiUrl,
-      {Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> get(
+    String apiUrl, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
     Map<String, String> headers = await _getHeaders();
 
     try {
       final http.Response response = await _getClient()
-          .get(createUri(apiUrl, queryParameters: queryParameters),
-          headers: headers)
+          .get(
+            createUri(apiUrl, queryParameters: queryParameters),
+            headers: headers,
+          )
           .timeout(timeout);
 
       return _returnResponse(response);
@@ -99,13 +104,19 @@ class ApiClient {
     }
   }
 
-  Future<dynamic> post(String apiUrl,
-      {String? body, Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> post(
+    String apiUrl, {
+    String? body,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     Map<String, String> headers = await _getHeaders();
     try {
       final http.Response response = await _getClient()
-          .post(createUri(apiUrl, queryParameters: queryParameters),
-          headers: headers, body: body)
+          .post(
+            createUri(apiUrl, queryParameters: queryParameters),
+            headers: headers,
+            body: body,
+          )
           .timeout(timeout);
 
       return _returnResponse(response);
@@ -114,8 +125,11 @@ class ApiClient {
     }
   }
 
-  Future<bool> postMultipart(String apiUrl, File file,
-      {String? filename}) async {
+  Future<bool> postMultipart(
+    String apiUrl,
+    File file, {
+    String? filename,
+  }) async {
     Map<String, String> headers = await _getHeaders();
     headers['Accept'] = '*/*';
     headers['Content-type'] = 'multipart/form-data';
@@ -123,8 +137,11 @@ class ApiClient {
     try {
       final request = await http.MultipartRequest('POST', createUri(apiUrl));
 
-      var multiPartFile = await http.MultipartFile.fromPath('file', file.path,
-          contentType: new MediaType('image', 'png'));
+      var multiPartFile = await http.MultipartFile.fromPath(
+        'file',
+        file.path,
+        contentType: new MediaType('image', 'png'),
+      );
       request.files.add(multiPartFile);
       request.headers.addAll(headers);
 
@@ -136,8 +153,11 @@ class ApiClient {
     return false;
   }
 
-  Future<bool> postMultipartAttachments(String apiUrl, List<File> files,
-      {String? filename}) async {
+  Future<bool> postMultipartAttachments(
+    String apiUrl,
+    List<File> files, {
+    String? filename,
+  }) async {
     Map<String, String> headers = await _getHeaders();
     headers['Accept'] = '*/*';
     headers['Content-type'] = 'multipart/form-data';
@@ -147,8 +167,10 @@ class ApiClient {
 
       for (int i = 0; i < files.length; i++) {
         var multiPartFile = await http.MultipartFile.fromPath(
-            'files', files[i].path,
-            contentType: new MediaType('image', 'png'));
+          'files',
+          files[i].path,
+          contentType: new MediaType('image', 'png'),
+        );
         request.files.add(multiPartFile);
       }
 
@@ -175,13 +197,19 @@ class ApiClient {
     }
   }
 
-  Future<dynamic> patch(String apiUrl,
-      {Map<String, dynamic>? queryParameters, String? body}) async {
+  Future<dynamic> patch(
+    String apiUrl, {
+    Map<String, dynamic>? queryParameters,
+    String? body,
+  }) async {
     Map<String, String> headers = await _getHeaders();
     try {
       final http.Response response = await _getClient()
-          .patch(createUri(apiUrl, queryParameters: queryParameters),
-          headers: headers, body: body)
+          .patch(
+            createUri(apiUrl, queryParameters: queryParameters),
+            headers: headers,
+            body: body,
+          )
           .timeout(timeout);
 
       return _returnResponse(response);

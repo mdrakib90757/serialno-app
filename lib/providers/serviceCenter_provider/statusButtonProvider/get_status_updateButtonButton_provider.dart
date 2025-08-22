@@ -3,8 +3,8 @@ import 'package:serialno_app/api/serviceCenter_api/statusButton_serviceCenter/st
 import 'package:serialno_app/model/serialService_model.dart';
 
 class getStatusUpdate_Provider with ChangeNotifier {
-
-  final StatusUpdateButtonService _statusUpdateButton=StatusUpdateButtonService();
+  final StatusUpdateButtonService _statusUpdateButton =
+      StatusUpdateButtonService();
   List<SerialModel> _serials = [];
   List<SerialModel> get serials => _serials;
 
@@ -20,20 +20,22 @@ class getStatusUpdate_Provider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _serials = await _statusUpdateButton.GetStatusButtonService(serviceCenterId, date);
-
-    }catch (e) {
+      _serials = await _statusUpdateButton.GetStatusButtonService(
+        serviceCenterId,
+        date,
+      );
+    } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
       _serials = [];
     }
     _isLoading = false;
     notifyListeners();
   }
+
   void clearData() {
     _serials = [];
     _isLoading = false;
     _errorMessage = null;
-
 
     notifyListeners();
     print("SerialListProvider cleared!");

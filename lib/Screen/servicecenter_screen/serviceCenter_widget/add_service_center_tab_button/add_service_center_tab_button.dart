@@ -23,14 +23,24 @@ class _CustomTabState extends State<CustomTab> {
       child: Row(
         children: [
           // "Combined" Button
-          _buildTabItem(0, 'Combined', const BorderRadius.only(
-            topLeft: Radius.circular(4.0), bottomLeft: Radius.circular(4.0),
-          )),
+          _buildTabItem(
+            0,
+            'Combined',
+            const BorderRadius.only(
+              topLeft: Radius.circular(4.0),
+              bottomLeft: Radius.circular(4.0),
+            ),
+          ),
           Container(width: 1, color: Colors.grey.shade400),
           // "Service type wise" Button
-          _buildTabItem(1, 'Service type wise', const BorderRadius.only(
-            topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0),
-          )),
+          _buildTabItem(
+            1,
+            'Service type wise',
+            const BorderRadius.only(
+              topRight: Radius.circular(4.0),
+              bottomRight: Radius.circular(4.0),
+            ),
+          ),
         ],
       ),
     );
@@ -54,9 +64,7 @@ class _CustomTabState extends State<CustomTab> {
           child: Center(
             child: Text(
               text,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black,
-              ),
+              style: TextStyle(color: isSelected ? Colors.white : Colors.black),
             ),
           ),
         ),

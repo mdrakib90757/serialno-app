@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 
 import '../../api/profile_api/profile_api.dart';
@@ -18,9 +17,7 @@ class Getprofileprovider with ChangeNotifier {
 
     try {
       _profileData = await _profileApi.fetchUserProfile();
-    } catch (e) {
-
-    }
+    } catch (e) {}
 
     _isLoading = false;
     notifyListeners();

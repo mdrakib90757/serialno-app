@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -51,16 +49,25 @@ class _WeeklyOff_daysDropdownState extends State<WeeklyOff_daysDropdown> {
                   child: Container(
                     color: Colors.white,
                     height: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 5,
+                    ),
                     child: Row(
                       children: [
                         if (isSelected)
-                          const Icon(Icons.check_box_outlined, color: Colors.blue)
+                          const Icon(
+                            Icons.check_box_outlined,
+                            color: Colors.blue,
+                          )
                         else
                           const Icon(Icons.check_box_outline_blank),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: Text(day, style: const TextStyle(fontSize: 14)),
+                          child: Text(
+                            day,
+                            style: const TextStyle(fontSize: 14),
+                          ),
                         ),
                       ],
                     ),
@@ -109,9 +116,7 @@ class _WeeklyOff_daysDropdownState extends State<WeeklyOff_daysDropdown> {
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
         ),
 
-        menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.zero,
-        ),
+        menuItemStyleData: const MenuItemStyleData(padding: EdgeInsets.zero),
       ),
     );
   }

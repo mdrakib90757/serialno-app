@@ -1,8 +1,3 @@
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:serialno_app/services/customer_service/serviceTaker_homeScreen/serviceCenter_bookSerial.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,11 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/serviceCenter_model.dart';
 import '../auth_provider/auth_providers.dart';
 
-class serviceCenter_serialBookProvider with ChangeNotifier{
+class serviceCenter_serialBookProvider with ChangeNotifier {
+  final Servicecenter_Bookserial_service _servicecenter_bookserial_service =
+      Servicecenter_Bookserial_service();
 
- final Servicecenter_Bookserial_service _servicecenter_bookserial_service = Servicecenter_Bookserial_service();
-
- String ? _token;
+  String? _token;
   String? get token => _token;
 
   List<ServiceCenterModel> _serviceCenterList = [];
@@ -30,20 +25,20 @@ class serviceCenter_serialBookProvider with ChangeNotifier{
     notifyListeners();
   }
 
-
   //get token
-  Future<void>getToken()async{
-    final prefs= await SharedPreferences.getInstance();
+  Future<void> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
 
-   // final token = await AuthProvider()._getToken();
+    // final token = await AuthProvider()._getToken();
 
-    _token=prefs.getString("accessToken");
+    _token = prefs.getString("accessToken");
     print("Get_Token ${token}");
-    debugPrint("✅ serviceCenter_serialBookProvider successfully read token: ${_token != null}");
-
+    debugPrint(
+      "✅ serviceCenter_serialBookProvider successfully read token: ${_token != null}",
+    );
   }
 
-  Future<void>fetchserviceCnter_serialbook(String companyId)async{
+  Future<void> fetchserviceCnter_serialbook(String companyId) async {
     _isLoading = true;
     notifyListeners();
 
@@ -57,21 +52,21 @@ class serviceCenter_serialBookProvider with ChangeNotifier{
     }
 
     debugPrint("🚀 Fetching service centers for company: $companyId");
-    _serviceCenterList = await _servicecenter_bookserial_service.ServiceCenter_bookserialService(companyId);
-
+    _serviceCenterList =
+        await _servicecenter_bookserial_service.ServiceCenter_bookserialService(
+          companyId,
+        );
 
     _isLoading = false;
     notifyListeners();
-
   }
 
-
-  void clearData(){
-    _serviceCenterList=[];
-    _token=null;
-    _isLoading=false;
+  void clearData() {
+    _serviceCenterList = [];
+    _token = null;
+    _isLoading = false;
 
     notifyListeners();
-  print("serviceCenter_serialBookProvider cleared!");
+    print("serviceCenter_serialBookProvider cleared!");
   }
 }
