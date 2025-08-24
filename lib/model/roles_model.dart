@@ -30,7 +30,7 @@ class RolesModel {
 class Data {
   String? id;
   String? name;
-  Null? companyId;
+  String? companyId;
 
   Data({this.id, this.name, this.companyId});
 

@@ -56,43 +56,37 @@ class _CustomServicecenterNavigationbarState
               _currentIndex = index;
             });
           },
-
-          elevation: 50,
-          selectedItemColor: AppColor().primariColor,
-          unselectedItemColor: Colors.grey.shade600,
           type: BottomNavigationBarType.fixed,
+          //backgroundColor: Colors.white,
+          selectedItemColor: AppColor().primariColor,
+          unselectedItemColor: Colors.grey[600],
+          showUnselectedLabels: true,
+          selectedFontSize: 12.0,
+          unselectedFontSize: 12.0,
+          elevation: 5.0,
+
 
           items: [
             BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/image/house-chimney (1).png",
-                height: 29,
-                width: 29,
-              ),
-              label: "Home",
+              icon: Icon(Icons.home_outlined,size: 33,),
+              activeIcon:Icon(Icons.home,size: 33,),
+
+              label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/image/building (1).png",
-                height: 29,
-                width: 29,
-              ),
+              icon: Icon(Icons.corporate_fare_outlined,size: 33,),
+              activeIcon:Icon(Icons.corporate_fare_rounded,size: 33,),
+
               label: "Service-Center",
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/image/network.png",
-                height: 29,
-                width: 29,
-              ),
+              icon: Icon(Icons.category_outlined,size: 33,),
+              activeIcon: Icon(Icons.category,size: 33,),
               label: "Service-Types",
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/image/setting.png",
-                height: 29,
-                width: 29,
-              ),
+              icon: Icon(Icons.settings_outlined,size: 33,),
+              activeIcon: Icon(Icons.settings,size: 33,),
               label: "Settings",
             ),
           ],

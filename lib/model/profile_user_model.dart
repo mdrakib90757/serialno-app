@@ -65,8 +65,9 @@ class profile_UserModel {
 class UserCompany {
   final String companyId;
   final String roleId;
+  final List<String>? serviceCenterIds;
 
-  UserCompany({required this.companyId, required this.roleId});
+  UserCompany({required this.companyId, required this.roleId, this.serviceCenterIds});
 
   factory UserCompany.fromJson(Map<String, dynamic> json) {
     return UserCompany(companyId: json["companyId"], roleId: json["roleId"]);

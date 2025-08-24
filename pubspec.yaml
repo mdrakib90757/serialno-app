@@ -49,6 +49,7 @@ dependencies:
   timeline_tile: ^2.0.0
   dropdown_button2: ^2.3.9
   day_night_time_picker: ^1.2.1+1
+  google_fonts: ^6.3.0
 
 dev_dependencies:
   flutter_test:

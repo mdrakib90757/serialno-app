@@ -27,6 +27,6 @@ class DateFormatter {
   }
 
   static String formatForApi(DateTime date) {
-    return DateFormat('yyyy-MM-dd').format(date);
+    return DateFormat('yyy-MM-dd').format(date);
   }
 }

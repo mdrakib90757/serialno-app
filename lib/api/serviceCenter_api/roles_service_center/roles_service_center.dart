@@ -2,10 +2,14 @@ import 'package:serialno_app/core/api_client.dart';
 import 'package:serialno_app/model/roles_model.dart';
 
 class RolesApi {
-  Future<RolesModel> RolesInfo() async {
+  Future<List<Data>> RolesInfo() async {
     try {
-      var response = await ApiClient().get("/roles");
-      return RolesModel.fromJson(response as Map<String, dynamic>);
+      var response = await ApiClient().get("/roles") as List;
+      List<Data> rolesList = response.map((item) {
+        return Data.fromJson(item as Map<String, dynamic>);
+      }).toList();
+
+      return rolesList;
     } catch (e) {
       print("Error fetching or parsing RolesInfo  - : $e");
       throw Exception('Failed to load company details');

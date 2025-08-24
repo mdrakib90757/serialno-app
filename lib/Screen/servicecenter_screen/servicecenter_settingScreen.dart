@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/setting_serviceCenterdialo/setting_serviceCenterdialo.dart';
+import 'package:serialno_app/model/AddUser_serviceCenterModel.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/business_type_provider/business_type_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/company_details_provider/company_details_provider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import 'package:serialno_app/utils/color.dart';
+
+import '../../model/roles_model.dart';
 
 class Servicecenter_Settingscreen extends StatefulWidget {
   const Servicecenter_Settingscreen({super.key});
@@ -16,6 +21,9 @@ class Servicecenter_Settingscreen extends StatefulWidget {
 
 class _Servicecenter_SettingscreenState
     extends State<Servicecenter_Settingscreen> {
+  Data? _selectedRole;
+  List<Data> rolesList = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -25,8 +33,8 @@ class _Servicecenter_SettingscreenState
         context,
         listen: false,
       );
-      final companyId = profileProvider.profileData?.currentCompany.id;
 
+      final companyId = profileProvider.profileData?.currentCompany.id;
       if (companyId != null && companyId.isNotEmpty) {
         debugPrint("🚀 Calling fetchDetails for Company ID: $companyId");
         Provider.of<CompanyDetailsProvider>(
@@ -37,6 +45,12 @@ class _Servicecenter_SettingscreenState
           context,
           listen: false,
         ).fetchBusinessTypes();
+
+        Provider.of<GetAdduserServiceCenterProvider>(
+          context,
+          listen: false,
+        ).fetchUsers(companyId);
+        Provider.of<RolesProvider>(context, listen: false).fetchRoles();
       } else {
         debugPrint("❌ initState: Company ID is null. Cannot fetch details.");
       }
@@ -45,6 +59,8 @@ class _Servicecenter_SettingscreenState
 
   @override
   Widget build(BuildContext context) {
+    final rolesProvider = Provider.of<RolesProvider>(context);
+    final getAdduser = Provider.of<GetAdduserServiceCenterProvider>(context);
     final businessType = Provider.of<BusinessTypeProvider>(context);
     final companyDetails = Provider.of<CompanyDetailsProvider>(context);
     if (companyDetails.isLoading || businessType.isLoading) {
@@ -215,67 +231,159 @@ class _Servicecenter_SettingscreenState
               ],
             ),
             SizedBox(height: 30),
+
             //add user Button
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () {
-                  _showDialogBox(context);
-                },
-                child: Container(
-                  height: 35,
-                  width: 100,
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColor().primariColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Service Man",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _showDialogBox(context);
+                      },
+                      child: Container(
+                        height: 35,
+                        width: 110,
+                        decoration: BoxDecoration(
+                          color: AppColor().primariColor,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 18,
+                              weight: 8,
+                            ),
+                            SizedBox(width: 5),
+                            Center(
+                              child: Text(
+                                "Add User",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.add, color: Colors.white, size: 18, weight: 8),
-                      SizedBox(width: 5),
-                      Center(
-                        child: Text(
-                          "Add User",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        "Name",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        "Role",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
+
+                      Text(
+                        "Active",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
+
+                      Text(
+                        "Action",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
+
             SizedBox(height: 10),
+
             Expanded(
-              child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.symmetric(vertical: 2),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+              child: Consumer<GetAdduserServiceCenterProvider>(
+                builder: (context, getAddUser_Provider, child) {
+                  if (getAddUser_Provider.isLoading &&
+                      getAddUser_Provider.users.isEmpty) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: AppColor().primariColor,
+                      ),
+                    );
+                  }
+
+                  final userList = getAddUser_Provider.users;
+                  if (userList.isEmpty) {
+                    return Center(child: Text("No users found."));
+                  }
+
+                  return ListView.builder(
+                    itemCount: userList.length,
+                    itemBuilder: (context, index) {
+                      final User = userList[index];
+
+                      final String? userRoleId = User.roleId;
+                      String roleName = 'N/A';
+
+                      print("--- Checking User: ${User.name} ---");
+                      print("User's Role ID: '$userRoleId'");
+
+                      if (userRoleId != null &&
+                          rolesProvider.roles.isNotEmpty) {
+                        try {
+                          final foundRole = rolesProvider.roles.firstWhere(
+                            (role) => role.id == userRoleId,
+                          );
+                          roleName = foundRole.name ?? 'N/A';
+                        } catch (e) {
+                          roleName = 'Unknown Role';
+                        }
+                      }
+
+                      return Container(
+                        padding: EdgeInsets.all(8),
+                        margin: EdgeInsets.symmetric(vertical: 2),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                        ),
+                        child: Row(
                           children: [
-                            Text(
-                              "1",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                              ),
-                            ),
-                            SizedBox(width: 8),
                             CircleAvatar(
                               radius: 18,
                               backgroundColor: Colors.grey.shade400,
@@ -285,42 +393,54 @@ class _Servicecenter_SettingscreenState
                               ),
                             ),
                             SizedBox(width: 8),
-                            Text("Rakip"),
-                            Spacer(),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Text(
-                                    "Edit",
-                                    style: TextStyle(
-                                      color: AppColor().scoenddaryColor,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(child: Text(User.name)),
+                                  SizedBox(width: 20),
+                                  Expanded(child: Text(roleName)),
+                                  Expanded(
+                                    child: Text(
+                                      User.isActive == true ? "Yes" : "No",
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: 10),
-                                Builder(
-                                  builder: (BuildContext context) {
-                                    return GestureDetector(
-                                      onTap: () {},
-                                      child: Text(
-                                        "Delete",
-                                        style: TextStyle(
-                                          color: AppColor().scoenddaryColor,
-                                          fontSize: 15,
+
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Text(
+                                          "Edit",
+                                          style: TextStyle(
+                                            color: AppColor().scoenddaryColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                      SizedBox(width: 10),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Text(
+                                          "Delete",
+                                          style: TextStyle(
+                                            color: AppColor().scoenddaryColor,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   );
                 },
               ),

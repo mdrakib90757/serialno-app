@@ -9,6 +9,7 @@ class GetNewSerialButtonProvider with ChangeNotifier {
   // List<SerialModel> _serials = [];
   // List<SerialModel> get serials => _serials;
 
+
   List<SerialModel> _allSerials = [];
 
   bool _isLoading = false;
@@ -22,6 +23,34 @@ class GetNewSerialButtonProvider with ChangeNotifier {
 
   List<SerialModel> get servedSerials =>
       _allSerials.where((serial) => serial.status == 'Served').toList();
+
+
+  int get totalQueueCount{
+    return queueSerials.length;
+  }
+
+  int get totalServedCount{
+    return servedSerials.length;
+  }
+
+  double get totalServedAmount{
+    if(servedSerials.isEmpty){
+      return 0.0;
+    }
+    return servedSerials.fold(0.0, (sum ,item){
+      return sum+(item.charge ?? 0.0);
+    });
+  }
+
+
+  SerialModel? get currentlyServingSerial{
+try{
+  return _allSerials.firstWhere((serial)=>serial.status?.toLowerCase()=="serving");
+}catch(e){
+  return null;
+}
+  }
+
 
   Future<void> fetchSerialsButton(String serviceCenterId, String date) async {
     _isLoading = true;

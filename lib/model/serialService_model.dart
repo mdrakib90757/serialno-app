@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class SerialModel {
   final UserModel? user;
   final ServiceTypeModel? serviceType;
@@ -9,6 +11,7 @@ class SerialModel {
   final bool? forSelf;
   final String? name;
   final String? contactNo;
+  final double? charge;
   final int? serialNo;
   final bool? isPresent;
   final String? status;
@@ -31,6 +34,7 @@ class SerialModel {
     this.status,
     this.statusTime,
     this.createdTime,
+    this.charge
   });
 
   factory SerialModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +56,7 @@ class SerialModel {
       status: json['status'] as String?,
       statusTime: json['statusTime'] as String?,
       createdTime: json['createdTime'] as String?,
+      charge: json["charge"]
     );
   }
 }

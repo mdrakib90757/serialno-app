@@ -1,14 +1,22 @@
+import 'dart:convert';
+
 import 'package:serialno_app/core/api_client.dart';
 import 'package:serialno_app/model/serialService_model.dart';
 
+import '../../../request_model/serviceCanter_request/next_button_request/next_button_request.dart';
+
 class NextButtonService {
-  Future<dynamic> nextButton({
-    required String serviceCenterId,
-    required String date,
-  }) async {
+  Future<dynamic> nextButton(
+     String serviceCenterId,
+  NextButtonRequest request,
+
+  ) async {
     try {
+      String body=jsonEncode(request.toJson());
       var response = await ApiClient().post(
-        "/serial-no/service-centers/$serviceCenterId/services/$date/next",
+        "/serial-no/service-centers/$serviceCenterId/services/next",
+        body: body
+
       );
 
       return response;

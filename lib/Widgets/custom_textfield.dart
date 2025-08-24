@@ -18,10 +18,12 @@ class CustomTextField extends StatefulWidget {
   final bool? filled;
   final bool? readOnly;
   final VoidCallback? onTap;
+  final bool showFocusBorder;
 
   //final String? Function(String?)? validator;
 
   const CustomTextField({
+    this.showFocusBorder = true,
     super.key,
     this.hintText,
     required this.isPassword,
@@ -56,6 +58,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+
+    final borderStyle = OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey.shade400),
+    );
+
     return TextFormField(
       controller: widget.controller,
       validator: (value) => value!.isEmpty ? "Required" : null,
@@ -73,9 +80,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColor().primariColor, width: 2),
-        ),
+        focusedBorder: widget.showFocusBorder
+      ? OutlineInputBorder(
+      borderSide: BorderSide(color: AppColor().primariColor, width: 2),
+    )
+        : borderStyle,
         enabled: widget.enabled ?? true,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),

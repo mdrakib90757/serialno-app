@@ -67,9 +67,9 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
           children: [
             Positioned.fill(
               child: GestureDetector(
-                onTap: _closePopup, // বাইরে ট্যাপ করলে পপ-আপ বন্ধ হবে
+                onTap: _closePopup,
                 child: Container(
-                  color: Colors.transparent, // এটিকে অদৃশ্য রাখে
+                  color: Colors.transparent,
                 ),
               ),
             ),

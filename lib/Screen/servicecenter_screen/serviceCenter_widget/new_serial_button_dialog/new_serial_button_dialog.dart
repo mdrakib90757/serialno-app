@@ -43,7 +43,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     _contactController = TextEditingController();
 
     _serviceDateDisplayController = TextEditingController(
-      text: DateFormat('dd MMM, yyyy').format(_selectedDate),
+      text: DateFormat('yyy-MM-dd').format(_selectedDate),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
@@ -92,7 +92,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
         _selectedDate = newDate;
 
         _serviceDateDisplayController.text = DateFormat(
-          'dd MMM, yyyy',
+          'yyy-MM-dd',
         ).format(_selectedDate);
       });
     }
@@ -116,19 +116,20 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     final serialProvider = Provider.of<NewSerialButtonProvider>(
       context,
       listen: false,
-    ); // আপনার সঠিক প্রোভাইডারের নাম দিন
+    );
 
     String dateForApiCreate = DateFormatter.formatForApi(_selectedDate);
     String serviceTypeId = _selectedServiceType!.id!;
     String serviceCenterId = widget.serviceCenterModel.id!;
 
     NewSerialButtonRequest buttonRequest = NewSerialButtonRequest(
+      serviceCenterId: serviceCenterId,
       serviceTypeId: serviceTypeId,
       serviceDate: dateForApiCreate,
       name: _nameController.text,
       contactNo: _contactController.text,
-      serviceCenterName: _serviceCenterController.text,
-      serviceCenterId: serviceCenterId,
+      forSelf: true,
+      isAdmin: true,
     );
 
     final success = await serialProvider.SerialButton(
@@ -249,10 +250,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   SizedBox(height: 8),
                   CustomTextField(
                     onTap: _selectDate,
-                    enabled: false,
-                    filled: true,
-                    fillColor: Colors.red.shade50,
-                    // hintText: "${today}",
+                    hintText: DateFormatter.formatForApi(_selectedDate),
                     textStyle: TextStyle(color: Colors.grey.shade400),
                     isPassword: false,
                     controller: _serviceDateDisplayController,
@@ -337,45 +335,6 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                           ),
                         ),
                         onPressed: _saveNewSerial,
-
-                        // () async {
-                        //   //Validator Logic
-                        //   if (_dialogFormKey.currentState
-                        //       ?.validate() ?? false) {
-                        //     if (_selectedServiceType ==
-                        //         null) {
-                        //       ScaffoldMessenger
-                        //           .of(context)
-                        //           .showSnackBar(const SnackBar(
-                        //           content: Text(
-                        //               "Please select a service type.")));
-                        //       return;
-                        //     }
-                        //   }
-                        //
-                        //
-                        //   String dateForApiCreate = DateFormatter.formatForApi(date);
-                        //   String serviceTypeId = _selectedServiceType!.id!;
-                        //   String serviceCenterId = serviceCenterModel!.id!;
-                        //
-                        //   NewSerialButtonRequest buttonRequest = NewSerialButtonRequest(
-                        //       serviceTypeId: serviceTypeId,
-                        //       serviceDate: dateForApiCreate,
-                        //       name: nameController.text,
-                        //       contactNo: contactController.text,
-                        //       serviceCenterName: servicecenterController.text,
-                        //       serviceCenterId: serviceCenterId
-                        //   );
-                        //
-                        //   final success = await serialProvider
-                        //       .SerialButton(
-                        //       buttonRequest, serviceCenterId);
-                        //   if (Navigator.canPop(context)) {
-                        //     Navigator.pop(context, success);
-                        //   } else {
-                        //       _autovalidateMode = AutovalidateMode.onUserInteraction;
-                        //   }
-                        // },
                         child: Text(
                           "Ok",
                           style: TextStyle(color: Colors.white),

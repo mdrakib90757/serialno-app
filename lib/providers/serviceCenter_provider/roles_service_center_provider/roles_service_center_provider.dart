@@ -6,11 +6,12 @@ import 'package:serialno_app/model/roles_model.dart';
 class RolesProvider with ChangeNotifier {
   final RolesApi _rolesApi = RolesApi();
 
-  RolesModel? _rolesModel;
+  List<Data> _rolesList = [];
   bool _isLoading = false;
   String? _errorMessage;
 
-  RolesModel? get roles => _rolesModel;
+  // ২. Getter-টিকেও পরিবর্তন করুন
+  List<Data> get roles => _rolesList;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -20,7 +21,7 @@ class RolesProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _rolesModel = await _rolesApi.RolesInfo();
+      _rolesList = await _rolesApi.RolesInfo();
     } catch (e) {
       _errorMessage = e.toString();
       debugPrint("❌ Failed to load Roles details: $_errorMessage");

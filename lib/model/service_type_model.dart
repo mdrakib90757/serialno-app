@@ -1,8 +1,8 @@
 class serviceTypeModel {
   final String id;
   final String? name;
-  num? price;
-  num? defaultAllocatedTime;
+  final double? price;
+  final int? defaultAllocatedTime;
   final String? companyId;
   final String? serviceCenterId;
 
@@ -17,10 +17,10 @@ class serviceTypeModel {
 
   factory serviceTypeModel.fromJson(Map<String, dynamic> json) {
     return serviceTypeModel(
-      id: json["id"] as String,
-      name: json["name"] as String?,
-      price: json["price"] as num?,
-      defaultAllocatedTime: json["defaultAllocatedTime"] as num?,
+      id: json["id"] ??"",
+      name: json["name"],
+      price: (json["price"] as num?)?.toDouble(),
+      defaultAllocatedTime: (json["defaultAllocatedTime"] as num?)?.toInt(),
       companyId: json["companyId"] as String?,
       serviceCenterId: json["serviceCenterId"] as String?,
     );

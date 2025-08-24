@@ -13,7 +13,7 @@ class CompanyDetailsModel {
   String? createDate;
   bool? isActive;
   int? businessTypeId;
-  Null? location;
+  String? location;
   int? divisionId;
   int? districtId;
   int? thanaId;

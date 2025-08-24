@@ -1,27 +1,26 @@
 import 'dart:async';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/custom_date_display/custom_date_display.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/new_serial_button_dialog/new_serial_button_dialog.dart';
 import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
-import 'package:serialno_app/providers/serviceCenter_provider/nextButton_provider/nextButton_provider.dart';
-import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton_request/newSerialButton_request.dart';
+import 'package:serialno_app/request_model/serviceCanter_request/next_button_request/next_button_request.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
 import '../../Widgets/custom_flushbar.dart';
-import '../../Widgets/custom_labeltext.dart';
 import '../../Widgets/custom_sanckbar.dart';
 import '../../Widgets/custom_tabbar.dart';
 import '../../Widgets/custom_textfield.dart';
+import '../../model/profile_user_model.dart';
 import '../../model/serialService_model.dart';
 import '../../model/serviceCenter_model.dart';
-import '../../model/service_type_model.dart';
-import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
 import '../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../../providers/serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
+import '../../providers/serviceCenter_provider/nextButton_provider/nextButton_provider.dart';
 import '../../utils/color.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -42,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
   final List<String> tabList = ["Queue", "Served "];
   int indexNo = 0;
   late TabController tabController;
+  final TextEditingController _dateController = TextEditingController();
 
   void _fetchDataForUI() {
     if (_selectedServiceCenter != null) {
@@ -71,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initialDataLoad();
     });
+    _dateController.text = DateFormatter.formatForApi(_selectedDate);
   }
 
   Future<void> _initialDataLoad() async {
@@ -109,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _updateTime() {
     final DateTime now = DateTime.now();
-    final String formatted = DateFormat('EEEE, dd MMMM,\nyyyy ').format(now);
+    final String formatted = DateFormat('EEEE, dd MMMM,yyyy ').format(now);
     setState(() {
       _FormatedDateTime = formatted;
     });
@@ -125,6 +126,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final serialProvider = Provider.of<GetNewSerialButtonProvider>(
+      context,
+      listen: false,
+    );
     final getProfile = Provider.of<Getprofileprovider>(context, listen: false);
     final profile = getProfile.profileData;
     final bool shouldShowAddButton =
@@ -133,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen>
       context,
       listen: false,
     );
+
     ServiceCenterModel? defaultSelectItem;
     if (getAddButtonProvider.serviceCenterList.isNotEmpty) {
       defaultSelectItem = getAddButtonProvider.serviceCenterList.first;
@@ -149,8 +155,39 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       );
     }
+
+    final List<ServiceCenterModel> allCompanyServiceCenters =
+        getAddButtonProvider.serviceCenterList;
+    final currentUserCompanyInfo = profile.userCompanies.firstWhere(
+      (uc) => uc.companyId == profile.currentCompany.id,
+      orElse: () =>
+          UserCompany(companyId: '', roleId: '', serviceCenterIds: []),
+    );
+    final List<String> assignedCenterIds =
+        currentUserCompanyInfo.serviceCenterIds ?? [];
+
+    final List<ServiceCenterModel> userAssignedServiceCenters =
+        allCompanyServiceCenters.where((center) {
+          if (currentUserCompanyInfo.roleId ==
+              "10000000-0000-0000-0000-000000000001") {
+            return true;
+          }
+          return assignedCenterIds.contains(center.id);
+        }).toList();
+
+    if (_selectedServiceCenter == null &&
+        userAssignedServiceCenters.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _selectedServiceCenter = userAssignedServiceCenters.first;
+          });
+          _fetchDataForUI();
+        }
+      });
+    }
+
     final company = profile.currentCompany;
-    final Timedate = _FormatedDateTime;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -161,24 +198,134 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             Text(
               company.name,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
+              style: GoogleFonts.acme(fontSize: 25), // TextStyle(fontSize: 25)
             ),
             SizedBox(height: 10),
+            CustomDateDisplay(),
+            SizedBox(height: 10),
+
+            if (shouldShowAddButton) ...[
+              Container(
+                height: 50,
+                child: CustomDropdown(
+                  items: userAssignedServiceCenters,
+                  value: _selectedServiceCenter,
+                  onChanged: (ServiceCenterModel? newvalue) {
+                    debugPrint(
+                      "🔄 DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                    );
+                    setState(() {
+                      _selectedServiceCenter = newvalue;
+                    });
+                    _fetchDataForUI();
+                  },
+                  itemAsString: (ServiceCenterModel item) =>
+                      item.name ?? "No Name",
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade400),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _selectedServiceCenter?.name ??
+                              "Select Service Center",
+                          style: TextStyle(
+                            color: _selectedServiceCenter != null
+                                ? Colors.black
+                                : Colors.grey.shade600,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.grey.shade600,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Text(
+                  "ServiceDate :",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: CustomTextField(
+                      readOnly: true,
+                      controller: _dateController,
+                      hintText: _dateController.text,
+                      textStyle: TextStyle(color: Colors.black),
+                      isPassword: false,
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          DateTime? newDate = await showDatePicker(
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  colorScheme: ColorScheme.light(
+                                    primary: AppColor().primariColor,
+                                    // Header color
+                                    onPrimary: Colors.white,
+                                    // Header text color
+                                    onSurface: Colors.black, // Body text color
+                                  ),
+                                  dialogTheme: DialogThemeData(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                                  textButtonTheme: TextButtonThemeData(
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppColor()
+                                          .primariColor, // Button text color
+                                    ),
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
+                            context: context,
+                            initialDate: _selectedDate,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100),
+                          );
+                          if (newDate != null && newDate != _selectedDate) {
+                            setState(() {
+                              _selectedDate = newDate;
+                              _dateController.text = DateFormatter.formatForApi(
+                                newDate,
+                              );
+                            });
+                          }
+                        },
+                        icon: Icon(
+                          Icons.date_range_outlined,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  Timedate,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
                 //Serial Button
                 GestureDetector(
                   onTap: () async {
@@ -272,7 +419,7 @@ class _HomeScreenState extends State<HomeScreen>
                 //NextButton
                 GestureDetector(
                   onTap: () async {
-                    final nextButton = Provider.of<nextButtonProvider>(
+                    final nextBtnProvider = Provider.of<nextButtonProvider>(
                       context,
                       listen: false,
                     );
@@ -282,13 +429,32 @@ class _HomeScreenState extends State<HomeScreen>
                           listen: false,
                         );
 
+                    // ২. serviceCenterId null check
+                    if (_selectedServiceCenter == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Please select a service center first.",
+                          ),
+                        ),
+                      );
+                      return;
+                    }
+
                     final String? serviceCenterId = _selectedServiceCenter?.id;
                     final String formattedDate = DateFormat(
                       'yyyy-MM-dd',
                     ).format(_selectedDate);
-                    final bool success = await nextButton.NextButton(
-                      serviceCenterId: serviceCenterId ?? "",
+                    debugPrint(
+                      "🚀 Triggering NEXT action for Service Center: $serviceCenterId on Date: $formattedDate",
+                    );
+
+                    NextButtonRequest nextRequest = NextButtonRequest(
                       date: formattedDate,
+                    );
+                    final success = await nextBtnProvider.NextButton(
+                      nextRequest,
+                      serviceCenterId!,
                     );
 
                     if (serviceCenterId == null) {
@@ -304,8 +470,9 @@ class _HomeScreenState extends State<HomeScreen>
                       debugPrint(
                         "✅ Next button action successful. Refreshing list...",
                       );
+
                       await serialListProvider.fetchSerialsButton(
-                        serviceCenterId!,
+                        serviceCenterId,
                         formattedDate,
                       );
                     } else if (mounted) {
@@ -359,53 +526,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-            SizedBox(height: 10),
-            if (shouldShowAddButton) ...[
-              Container(
-                height: 55,
-                child: CustomDropdown(
-                  items: Provider.of<GetAddButtonProvider>(
-                    context,
-                  ).serviceCenterList,
-                  onChanged: (ServiceCenterModel? newvalue) {
-                    debugPrint(
-                      "🔄 DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
-                    );
-                    setState(() {
-                      _selectedServiceCenter = newvalue;
-                    });
-                    _fetchDataForUI();
-                  },
-                  itemAsString: (ServiceCenterModel item) =>
-                      item.name ?? "No Name",
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _selectedServiceCenter?.name ??
-                              "Select Service Center",
-                          style: TextStyle(
-                            color: _selectedServiceCenter != null
-                                ? Colors.black
-                                : Colors.grey.shade600,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.grey.shade600,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+
             TabBar(
               controller: tabController,
               indicatorSize: TabBarIndicatorSize.tab,
@@ -414,8 +535,8 @@ class _HomeScreenState extends State<HomeScreen>
               labelStyle: TextStyle(fontWeight: FontWeight.w500),
               indicatorColor: AppColor().primariColor,
               tabs: [
-                Tab(text: "Queue"),
-                Tab(text: "Served"),
+                Tab(text: "Queue(${serialProvider.totalQueueCount})"),
+                Tab(text: "Served(${serialProvider.totalServedCount})"),
               ],
             ),
             Expanded(
@@ -441,13 +562,7 @@ class _HomeScreenState extends State<HomeScreen>
       ).showSnackBar(const SnackBar(content: Text("Error: ID is missing!")));
       return;
     }
-
-    debugPrint("✅ Opening Manage Dialog with:");
-    debugPrint("   - Service Center ID: $serviceCenterId");
-    debugPrint("   - Service (Serial) ID: $serviceId");
-
     final String formattedDate = DateFormatter.formatForApi(_selectedDate);
-
     showDialog<bool?>(
       context: context,
       builder: (context) {
@@ -592,7 +707,6 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           );
         }
-
         final servedList = serialProvider.servedSerials;
 
         if (servedList.isEmpty) {
@@ -600,8 +714,36 @@ class _HomeScreenState extends State<HomeScreen>
         }
 
         return ListView.builder(
-          itemCount: servedList.length,
+          itemCount: servedList.length + 1,
           itemBuilder: (context, index) {
+            if (index == servedList.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 20.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Total: ${serialProvider.totalServedCount} Person(s)",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      " ${serialProvider.totalServedAmount.toStringAsFixed(2)}BDT",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
             final serial = servedList[index];
             final String displayTime = DateFormatter.formatApiTimeToDisplayTime(
               serial.date,
@@ -636,7 +778,6 @@ class _HomeScreenState extends State<HomeScreen>
                     child: Icon(Icons.person, color: Colors.white),
                   ),
                   SizedBox(width: 8),
-
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -689,7 +830,13 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                           ],
                         ),
-                        Text(serial.serviceType!.name.toString()),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(serial.serviceType!.name.toString()),
+                            Text("${serial.serviceType!.price.toString()} BDT"),
+                          ],
+                        ),
                       ],
                     ),
                   ),

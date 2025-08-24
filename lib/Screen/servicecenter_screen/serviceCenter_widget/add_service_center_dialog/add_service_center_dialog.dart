@@ -350,7 +350,7 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
                         color: Colors.grey.shade100,
                         border: Border(
                           right: BorderSide(color: Colors.grey.shade400),
-                        ), // ডান দিকে বর্ডার
+                        ),
                       ),
                       child: const Center(child: Text("First")),
                     ),
