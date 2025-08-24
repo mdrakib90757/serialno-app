@@ -7,16 +7,14 @@ import '../../../request_model/serviceCanter_request/next_button_request/next_bu
 
 class NextButtonService {
   Future<dynamic> nextButton(
-     String serviceCenterId,
-  NextButtonRequest request,
-
+    String serviceCenterId,
+    NextButtonRequest request,
   ) async {
     try {
-      String body=jsonEncode(request.toJson());
+      String body = jsonEncode(request.toJson());
       var response = await ApiClient().post(
         "/serial-no/service-centers/$serviceCenterId/services/next",
-        body: body
-
+        body: body,
       );
 
       return response;

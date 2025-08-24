@@ -1,5 +1,4 @@
-
-class AddUserRequest{
+class AddUserRequest {
   String? name;
   String? loginName;
   String? email;
@@ -7,8 +6,8 @@ class AddUserRequest{
   String? password;
   String? confirmPassword;
   String? roleId;
-  List<String>?serviceCenterIds;
-  bool?isActive;
+  List<String>? serviceCenterIds;
+  bool? isActive;
 
   AddUserRequest({
     this.name,
@@ -19,8 +18,8 @@ class AddUserRequest{
     this.confirmPassword,
     this.roleId,
     this.isActive,
-    this.serviceCenterIds
-});
+    this.serviceCenterIds,
+  });
   Map<String, dynamic> toJson() {
     return {
       "name": name,

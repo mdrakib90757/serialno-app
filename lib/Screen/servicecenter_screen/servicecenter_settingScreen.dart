@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_addUser_settingDialog/edit_addUser_settingDialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/setting_serviceCenterdialo/setting_serviceCenterdialo.dart';
 import 'package:serialno_app/model/AddUser_serviceCenterModel.dart';
+import 'package:serialno_app/model/user_model.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/business_type_provider/business_type_provider.dart';
@@ -10,6 +12,7 @@ import 'package:serialno_app/providers/serviceCenter_provider/roles_service_cent
 import 'package:serialno_app/utils/color.dart';
 
 import '../../model/roles_model.dart';
+import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 
 class Servicecenter_Settingscreen extends StatefulWidget {
   const Servicecenter_Settingscreen({super.key});
@@ -271,7 +274,7 @@ class _Servicecenter_SettingscreenState
                             SizedBox(width: 5),
                             Center(
                               child: Text(
-                                "Add User",
+                                "Add user",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
@@ -346,21 +349,18 @@ class _Servicecenter_SettingscreenState
                     );
                   }
 
-                  final userList = getAddUser_Provider.users;
-                  if (userList.isEmpty) {
+                  final UserList = getAddUser_Provider.users;
+                  if (UserList.isEmpty) {
                     return Center(child: Text("No users found."));
                   }
 
                   return ListView.builder(
-                    itemCount: userList.length,
+                    itemCount: UserList.length,
                     itemBuilder: (context, index) {
-                      final User = userList[index];
+                      final user = UserList[index];
 
-                      final String? userRoleId = User.roleId;
+                      final String? userRoleId = user.roleId;
                       String roleName = 'N/A';
-
-                      print("--- Checking User: ${User.name} ---");
-                      print("User's Role ID: '$userRoleId'");
 
                       if (userRoleId != null &&
                           rolesProvider.roles.isNotEmpty) {
@@ -398,12 +398,12 @@ class _Servicecenter_SettingscreenState
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(child: Text(User.name)),
+                                  Expanded(child: Text(user.name)),
                                   SizedBox(width: 20),
                                   Expanded(child: Text(roleName)),
                                   Expanded(
                                     child: Text(
-                                      User.isActive == true ? "Yes" : "No",
+                                      user.isActive == true ? "Yes" : "No",
                                     ),
                                   ),
 
@@ -411,7 +411,29 @@ class _Servicecenter_SettingscreenState
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          final allServiceCenters =
+                                              Provider.of<GetAddButtonProvider>(
+                                                context,
+                                                listen: false,
+                                              ).serviceCenterList;
+                                          final allRoles =
+                                              Provider.of<RolesProvider>(
+                                                context,
+                                                listen: false,
+                                              ).roles;
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return EditAdduserSettingDialog(
+                                                userModel: user,
+                                                availableServiceCenters:
+                                                    allServiceCenters,
+                                                availableRoles: allRoles,
+                                              );
+                                            },
+                                          );
+                                        },
                                         child: Text(
                                           "Edit",
                                           style: TextStyle(

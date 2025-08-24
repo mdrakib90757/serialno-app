@@ -17,7 +17,7 @@ class serviceTypeModel {
 
   factory serviceTypeModel.fromJson(Map<String, dynamic> json) {
     return serviceTypeModel(
-      id: json["id"] ??"",
+      id: json["id"] ?? "",
       name: json["name"],
       price: (json["price"] as num?)?.toDouble(),
       defaultAllocatedTime: (json["defaultAllocatedTime"] as num?)?.toInt(),

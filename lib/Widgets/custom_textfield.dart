@@ -58,7 +58,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-
     final borderStyle = OutlineInputBorder(
       borderSide: BorderSide(color: Colors.grey.shade400),
     );
@@ -81,10 +80,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderSide: BorderSide(color: Colors.grey.shade400),
         ),
         focusedBorder: widget.showFocusBorder
-      ? OutlineInputBorder(
-      borderSide: BorderSide(color: AppColor().primariColor, width: 2),
-    )
-        : borderStyle,
+            ? OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColor().primariColor,
+                  width: 2,
+                ),
+              )
+            : borderStyle,
         enabled: widget.enabled ?? true,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),

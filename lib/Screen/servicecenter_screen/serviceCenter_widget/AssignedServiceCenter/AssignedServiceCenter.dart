@@ -44,8 +44,8 @@ class _AssignedServiceCentersDropdownState
             padding: const EdgeInsets.only(
               left: 12,
               right: 8,
-              top: 15,
-              bottom: 15,
+              top: 16,
+              bottom: 16,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
@@ -143,7 +143,6 @@ class _AssignedServiceCentersDropdownState
           color: Colors.white,
         ),
         offset: const Offset(0, -5),
-
       ),
 
       menuItemStyleData: const MenuItemStyleData(
@@ -153,6 +152,3 @@ class _AssignedServiceCentersDropdownState
     );
   }
 }
-
-
-

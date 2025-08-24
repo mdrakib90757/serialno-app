@@ -1,5 +1,4 @@
-
-class AddUserModel{
+class AddUserModel {
   final String? companyId;
   final String? userId;
   final String? roleId;
@@ -56,17 +55,12 @@ class AddUserModel{
   }
 }
 
-
 class ProfileDataModel {
   final String? gender;
   final DateTime? dateOfBirth;
   final String? photograph;
 
-  ProfileDataModel({
-    this.gender,
-    this.dateOfBirth,
-    this.photograph,
-  });
+  ProfileDataModel({this.gender, this.dateOfBirth, this.photograph});
 
   factory ProfileDataModel.fromJson(Map<String, dynamic> json) {
     return ProfileDataModel(

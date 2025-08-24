@@ -7,7 +7,6 @@ class NewSerialButtonRequest {
   final bool forSelf;
   final bool isAdmin;
 
-
   NewSerialButtonRequest({
     required this.serviceCenterId,
     required this.serviceTypeId,

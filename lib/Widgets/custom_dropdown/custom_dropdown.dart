@@ -68,9 +68,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             Positioned.fill(
               child: GestureDetector(
                 onTap: _closePopup,
-                child: Container(
-                  color: Colors.transparent,
-                ),
+                child: Container(color: Colors.transparent),
               ),
             ),
 

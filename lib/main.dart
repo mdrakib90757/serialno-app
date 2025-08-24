@@ -55,12 +55,7 @@ void main() async {
   // }
   // final authProvider = AuthProvider();
 
-  runApp(
-    MultiProvider(
-      providers: AppProviders.providers,
-      child: MyApp(),
-    ),
-  );
+  runApp(MultiProvider(providers: AppProviders.providers, child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -76,10 +71,11 @@ class MyApp extends StatelessWidget {
       // initialRoute:initialRoute,
       routes: AppRouter.routes,
 
-        home: Builder(
-          builder: (context) {
-            return const AuthWrapper();
-          },),
+      home: Builder(
+        builder: (context) {
+          return const AuthWrapper();
+        },
+      ),
     );
   }
 }
@@ -114,7 +110,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
           );
         }
 
-        final authProvider = Provider.of<AuthProvider>(context,);
+        final authProvider = Provider.of<AuthProvider>(context);
 
         if (authProvider.accessToken != null) {
           final userType = authProvider.userType?.toLowerCase() ?? '';

@@ -12,25 +12,23 @@ class nextButtonProvider with ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Map<String, dynamic>? _serviceData;
-   Map<String, dynamic>? get serviceData => _serviceData;
+  Map<String, dynamic>? get serviceData => _serviceData;
 
   Future<bool> NextButton(
-      NextButtonRequest request,
-      String serviceCenterId,
+    NextButtonRequest request,
+    String serviceCenterId,
   ) async {
     _isLoading = true;
     _errorMessage = null;
-   _serviceData = null;
+    _serviceData = null;
     notifyListeners();
 
     try {
-
       await _nextButtonService.nextButton(serviceCenterId, request);
 
       _isLoading = false;
       notifyListeners();
       return true;
-
     } catch (e) {
       _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
       _isLoading = false;

@@ -6,7 +6,8 @@ import '../../model/serviceCenter_model.dart';
 import '../auth_provider/auth_providers.dart';
 
 class serviceCenter_serialBookProvider with ChangeNotifier {
-  final Servicecenter_Bookserial_service _servicecenter_bookserial_service = Servicecenter_Bookserial_service();
+  final Servicecenter_Bookserial_service _servicecenter_bookserial_service =
+      Servicecenter_Bookserial_service();
 
   String? _token;
   String? get token => _token;

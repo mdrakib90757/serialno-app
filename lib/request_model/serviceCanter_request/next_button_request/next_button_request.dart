@@ -1,14 +1,11 @@
 // lib/request_model/next_button_request.dart
 
 class NextButtonRequest {
-   String? date;
+  String? date;
 
-  NextButtonRequest( {this.date});
+  NextButtonRequest({this.date});
 
   Map<String, dynamic> toJson() {
-
-    return {
-      "date": date,
-    };
+    return {"date": date};
   }
 }

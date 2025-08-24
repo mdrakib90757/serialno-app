@@ -65,28 +65,27 @@ class _CustomServicecenterNavigationbarState
           unselectedFontSize: 12.0,
           elevation: 5.0,
 
-
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined,size: 33,),
-              activeIcon:Icon(Icons.home,size: 33,),
+              icon: Icon(Icons.home_outlined, size: 33),
+              activeIcon: Icon(Icons.home, size: 33),
 
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.corporate_fare_outlined,size: 33,),
-              activeIcon:Icon(Icons.corporate_fare_rounded,size: 33,),
+              icon: Icon(Icons.corporate_fare_outlined, size: 33),
+              activeIcon: Icon(Icons.corporate_fare_rounded, size: 33),
 
               label: "Service-Center",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.category_outlined,size: 33,),
-              activeIcon: Icon(Icons.category,size: 33,),
+              icon: Icon(Icons.category_outlined, size: 33),
+              activeIcon: Icon(Icons.category, size: 33),
               label: "Service-Types",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined,size: 33,),
-              activeIcon: Icon(Icons.settings,size: 33,),
+              icon: Icon(Icons.settings_outlined, size: 33),
+              activeIcon: Icon(Icons.settings, size: 33),
               label: "Settings",
             ),
           ],

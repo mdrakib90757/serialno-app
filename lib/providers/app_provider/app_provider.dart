@@ -11,6 +11,7 @@ import '../serviceCenter_provider/addButtonServiceType_Provider/addButtonService
 import '../serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../serviceCenter_provider/addButton_provider/add_Button_serviceCanter_provider.dart';
 import '../serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
+import '../serviceCenter_provider/addUser_serviceCenter_provider/SingleUserInfoProvider/singleUserInfoProvider.dart';
 import '../serviceCenter_provider/business_type_provider/business_type_provider.dart';
 import '../serviceCenter_provider/company_details_provider/company_details_provider.dart';
 import '../serviceCenter_provider/editButtonServiceType_provider/editButtonServiceType_provider.dart';
@@ -35,16 +36,13 @@ import '../serviceTaker_provider/serviceType_serialbook_provider.dart';
 import '../serviceTaker_provider/update_bookserial_provider.dart';
 
 class AppProviders {
-  static List<SingleChildWidget>  get providers {
+  static List<SingleChildWidget> get providers {
     return [
-
       ChangeNotifierProvider(create: (context) => AuthProvider()),
       ChangeNotifierProvider(create: (context) => ProfileProvider()),
       ChangeNotifierProvider(create: (context) => Getprofileprovider()),
       ChangeNotifierProvider(create: (context) => PasswordUpdateProvider()),
       ChangeNotifierProvider(create: (context) => OrganizationProvider()),
-
-
 
       ChangeNotifierProvider(create: (context) => AddButtonProvider()),
       ChangeNotifierProvider(create: (context) => GetAddButtonProvider()),
@@ -52,11 +50,19 @@ class AppProviders {
       ChangeNotifierProvider(create: (context) => EditButtonProvider()),
       ChangeNotifierProvider(create: (context) => GetEditButtonProvider()),
 
-      ChangeNotifierProvider(create: (context) => GetAddButtonServiceType_Provider(),),
-      ChangeNotifierProvider(create: (context) => AddButtonServiceTypeProvider()),
+      ChangeNotifierProvider(
+        create: (context) => GetAddButtonServiceType_Provider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => AddButtonServiceTypeProvider(),
+      ),
 
-      ChangeNotifierProvider(create: (context) => EditButtonServiceTypeProvider(),),
-      ChangeNotifierProvider(create: (context) => GetEditButtonServiceTypeProvider(),),
+      ChangeNotifierProvider(
+        create: (context) => EditButtonServiceTypeProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => GetEditButtonServiceTypeProvider(),
+      ),
 
       ChangeNotifierProvider(create: (context) => NewSerialButtonProvider()),
       ChangeNotifierProvider(create: (context) => GetNewSerialButtonProvider()),
@@ -69,40 +75,45 @@ class AppProviders {
       ChangeNotifierProvider(create: (context) => BusinessTypeProvider()),
       ChangeNotifierProvider(create: (context) => CompanyDetailsProvider()),
 
-      ChangeNotifierProvider(create: (context) => serviceTypeSerialbook_Provider(),),
+      ChangeNotifierProvider(
+        create: (context) => serviceTypeSerialbook_Provider(),
+      ),
 
       ChangeNotifierProvider(create: (context) => RolesProvider()),
 
-      ChangeNotifierProvider(create: (context) => CommentCancelButtonProvider()),
-      ChangeNotifierProvider(create: (context) => GetCommentCancelButtonProvider(),),
+      ChangeNotifierProvider(
+        create: (context) => CommentCancelButtonProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => GetCommentCancelButtonProvider(),
+      ),
 
+      ChangeNotifierProvider(
+        create: (context) => AddUserServiceCenterProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => GetAdduserServiceCenterProvider(),
+      ),
 
-      ChangeNotifierProvider(create: (context) => AddUserServiceCenterProvider()),
-      ChangeNotifierProvider(create: (context) => GetAdduserServiceCenterProvider(),),
+      ChangeNotifierProvider(create: (_) => SingleUserInfoProvider()),
 
-
-
-
-
-
-
-
-
-
-
+      /// serviceTaker provider
       ChangeNotifierProvider(create: (context) => bookSerialButton_provider()),
       ChangeNotifierProvider(create: (context) => GetBookSerialProvider()),
 
       ///BusinessType Provider
-      ChangeNotifierProvider(create: (context) => ServiceCenterByTypeProvider()),
+      ChangeNotifierProvider(
+        create: (context) => ServiceCenterByTypeProvider(),
+      ),
 
       ChangeNotifierProvider(create: (context) => UpdateBookSerialProvider()),
-      ChangeNotifierProvider(create: (context) => GetUpdate_bookSerialProvider()),
+      ChangeNotifierProvider(
+        create: (context) => GetUpdate_bookSerialProvider(),
+      ),
 
-      ChangeNotifierProvider(create: (context) => serviceCenter_serialBookProvider()),
-
-
-
+      ChangeNotifierProvider(
+        create: (context) => serviceCenter_serialBookProvider(),
+      ),
     ];
   }
 }

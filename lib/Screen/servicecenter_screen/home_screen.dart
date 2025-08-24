@@ -12,12 +12,11 @@ import '../../Widgets/custom_flushbar.dart';
 import '../../Widgets/custom_sanckbar.dart';
 import '../../Widgets/custom_tabbar.dart';
 import '../../Widgets/custom_textfield.dart';
-import '../../model/profile_user_model.dart';
 import '../../model/serialService_model.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
-import '../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
+import '../../providers/serviceCenter_provider/addUser_serviceCenter_provider/SingleUserInfoProvider/singleUserInfoProvider.dart';
 import '../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../../providers/serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
 import '../../providers/serviceCenter_provider/nextButton_provider/nextButton_provider.dart';
@@ -42,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
   int indexNo = 0;
   late TabController tabController;
   final TextEditingController _dateController = TextEditingController();
+  bool _isInitialDataLoaded = false;
 
   void _fetchDataForUI() {
     if (_selectedServiceCenter != null) {
@@ -62,52 +62,6 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: tabList.length, vsync: this);
-    _updateTime();
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _updateTime());
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initialDataLoad();
-    });
-    _dateController.text = DateFormatter.formatForApi(_selectedDate);
-  }
-
-  Future<void> _initialDataLoad() async {
-    final profileProvider = context.read<Getprofileprovider>();
-    final addButtonProvider = context.read<GetAddButtonProvider>();
-    final serviceTypeProvider = context
-        .read<GetAddButtonServiceType_Provider>();
-
-    await profileProvider.fetchProfileData();
-    final companyId = profileProvider.profileData?.currentCompany.id;
-
-    if (mounted && companyId != null) {
-      debugPrint("✅ Using Company ID for fetching data: $companyId");
-
-      await Future.wait([
-        addButtonProvider.fetchGetAddButton(companyId),
-        serviceTypeProvider.fetchGetAddButton_ServiceType(companyId),
-      ]);
-
-      final serviceCenters = addButtonProvider.serviceCenterList;
-      if (mounted && serviceCenters.isNotEmpty) {
-        setState(() {
-          _selectedServiceCenter = serviceCenters.first;
-        });
-        debugPrint(
-          "✅ INITIAL LOAD: Automatically selected Service Center ID: ${_selectedServiceCenter?.id}",
-        );
-        _fetchDataForUI();
-      }
-    } else {
-      if (mounted) {
-        debugPrint("❌ Error in HomeScreen: Could not find Company ID.");
-      }
-    }
-  }
-
   void _updateTime() {
     final DateTime now = DateTime.now();
     final String formatted = DateFormat('EEEE, dd MMMM,yyyy ').format(now);
@@ -125,26 +79,60 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: tabList.length, vsync: this);
+    _updateTime();
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _updateTime());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initialDataLoad();
+    });
+    _dateController.text = DateFormatter.formatForApi(_selectedDate);
+  }
+
+  Future<void> _initialDataLoad() async {
+    final profileProvider = context.read<Getprofileprovider>();
+    final serviceCenterProvider = context.read<GetAddButtonProvider>();
+    final singleUserInfoProvider = context.read<SingleUserInfoProvider>();
+
+    await profileProvider.fetchProfileData();
+    final profile = profileProvider.profileData;
+
+    if (mounted && profile != null) {
+      final companyId = profile.currentCompany.id;
+      final userId = profile.id;
+
+      await Future.wait([
+        serviceCenterProvider.fetchGetAddButton(companyId),
+        singleUserInfoProvider.fetchUserInfo(companyId, userId),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _isInitialDataLoaded = true;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final serialProvider = Provider.of<GetNewSerialButtonProvider>(
-      context,
-      listen: false,
-    );
-    final getProfile = Provider.of<Getprofileprovider>(context, listen: false);
+    final serialProvider = context.watch<GetNewSerialButtonProvider>();
+    final getProfile = context.watch<Getprofileprovider>();
+
+    final getAddButtonProvider = context.watch<GetAddButtonProvider>();
+    final singleUserInfoProvider = context.watch<SingleUserInfoProvider>();
+
     final profile = getProfile.profileData;
     final bool shouldShowAddButton =
         profile?.currentCompany.businessTypeId == 1;
-    final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
-      context,
-      listen: false,
-    );
 
     ServiceCenterModel? defaultSelectItem;
     if (getAddButtonProvider.serviceCenterList.isNotEmpty) {
       defaultSelectItem = getAddButtonProvider.serviceCenterList.first;
     }
 
-    if (profile == null || profile.currentCompany.name.isEmpty) {
+    if (profile == null || getAddButtonProvider.isLoading) {
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -155,39 +143,42 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       );
     }
+    final company = profile.currentCompany;
 
-    final List<ServiceCenterModel> allCompanyServiceCenters =
-        getAddButtonProvider.serviceCenterList;
-    final currentUserCompanyInfo = profile.userCompanies.firstWhere(
-      (uc) => uc.companyId == profile.currentCompany.id,
-      orElse: () =>
-          UserCompany(companyId: '', roleId: '', serviceCenterIds: []),
-    );
-    final List<String> assignedCenterIds =
-        currentUserCompanyInfo.serviceCenterIds ?? [];
+    if (!_isInitialDataLoaded ||
+        getAddButtonProvider.isLoading ||
+        singleUserInfoProvider.isLoading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            color: AppColor().primariColor,
+          ),
+        ),
+      );
+    }
 
-    final List<ServiceCenterModel> userAssignedServiceCenters =
-        allCompanyServiceCenters.where((center) {
-          if (currentUserCompanyInfo.roleId ==
-              "10000000-0000-0000-0000-000000000001") {
-            return true;
-          }
-          return assignedCenterIds.contains(center.id);
-        }).toList();
+    final userInfo = singleUserInfoProvider.userInfo;
+    if (userInfo == null) {
+      return Scaffold(
+        body: Center(child: Text("Could not load user's service center info.")),
+      );
+    }
+
+    final allCompanyServiceCenters = getAddButtonProvider.serviceCenterList;
+    final assignedCenterIds = userInfo.serviceCenterIds;
+    final userAssignedServiceCenters = allCompanyServiceCenters.where((center) {
+      return assignedCenterIds.contains(center.id);
+    }).toList();
 
     if (_selectedServiceCenter == null &&
         userAssignedServiceCenters.isNotEmpty) {
+      _selectedServiceCenter = userAssignedServiceCenters.first;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _selectedServiceCenter = userAssignedServiceCenters.first;
-          });
-          _fetchDataForUI();
-        }
+        if (mounted) _fetchDataForUI();
       });
     }
 
-    final company = profile.currentCompany;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -196,10 +187,7 @@ class _HomeScreenState extends State<HomeScreen>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              company.name,
-              style: GoogleFonts.acme(fontSize: 25), // TextStyle(fontSize: 25)
-            ),
+            Text(company.name, style: GoogleFonts.acme(fontSize: 25)),
             SizedBox(height: 10),
             CustomDateDisplay(),
             SizedBox(height: 10),
@@ -207,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen>
             if (shouldShowAddButton) ...[
               Container(
                 height: 50,
-                child: CustomDropdown(
+                child: CustomDropdown<ServiceCenterModel>(
                   items: userAssignedServiceCenters,
                   value: _selectedServiceCenter,
                   onChanged: (ServiceCenterModel? newvalue) {
@@ -249,6 +237,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
             ],
+
             SizedBox(height: 8),
             Row(
               children: [

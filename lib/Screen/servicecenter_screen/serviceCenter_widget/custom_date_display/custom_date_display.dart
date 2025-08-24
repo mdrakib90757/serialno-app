@@ -16,12 +16,11 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<GetNewSerialButtonProvider>(
       builder: (context, serialProvider, child) {
         final servingSerial = serialProvider.currentlyServingSerial;
 
-        final String disPlayText = servingSerial?.serialNo?.toString()??"0";
+        final String disPlayText = servingSerial?.serialNo?.toString() ?? "0";
         return Stack(
           clipBehavior: Clip.none,
           children: [
@@ -31,7 +30,7 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade400,),
+                border: Border.all(color: Colors.grey.shade400),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.1),
@@ -83,7 +82,7 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
             ),
           ],
         );
-      }
+      },
     );
   }
 }

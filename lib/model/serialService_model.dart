@@ -34,7 +34,7 @@ class SerialModel {
     this.status,
     this.statusTime,
     this.createdTime,
-    this.charge
+    this.charge,
   });
 
   factory SerialModel.fromJson(Map<String, dynamic> json) {
@@ -56,7 +56,7 @@ class SerialModel {
       status: json['status'] as String?,
       statusTime: json['statusTime'] as String?,
       createdTime: json['createdTime'] as String?,
-      charge: json["charge"]
+      charge: json["charge"],
     );
   }
 }

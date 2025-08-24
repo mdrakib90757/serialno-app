@@ -11,6 +11,8 @@ class profile_UserModel {
   final bool isActive;
   final String userType;
   final ProfileData? profileData;
+  final String? roleId;
+  final List<String>? serviceCenterIds;
 
   profile_UserModel({
     required this.userCompanies,
@@ -24,6 +26,8 @@ class profile_UserModel {
     required this.isActive,
     required this.userType,
     this.profileData,
+    this.roleId,
+    this.serviceCenterIds,
   });
 
   factory profile_UserModel.fromJson(Map<String, dynamic> json) {
@@ -58,6 +62,11 @@ class profile_UserModel {
       profileData: json["profileData"] != null
           ? ProfileData.fromJson(json["profileData"])
           : null,
+
+      roleId: json['roleId'],
+      serviceCenterIds: json['serviceCenterIds'] != null
+          ? List<String>.from(json['serviceCenterIds'])
+          : [],
     );
   }
 }
@@ -67,7 +76,11 @@ class UserCompany {
   final String roleId;
   final List<String>? serviceCenterIds;
 
-  UserCompany({required this.companyId, required this.roleId, this.serviceCenterIds});
+  UserCompany({
+    required this.companyId,
+    required this.roleId,
+    this.serviceCenterIds,
+  });
 
   factory UserCompany.fromJson(Map<String, dynamic> json) {
     return UserCompany(companyId: json["companyId"], roleId: json["roleId"]);
