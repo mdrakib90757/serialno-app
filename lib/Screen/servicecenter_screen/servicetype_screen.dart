@@ -173,7 +173,6 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                                         SizedBox(width: 10),
                                         Builder(
                                           builder: (BuildContext context) {
-                                            // Builder ব্যবহার করে সঠিক context নিশ্চিত করুন
                                             return GestureDetector(
                                               onTap: () {
                                                 _showDeleteConfirmationMenu(

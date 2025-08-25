@@ -1,7 +1,9 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/addUser_serviceCenter_provider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/update_addUser_serviceCenter/update_addUser_serviceCenter.dart';
 
 import '../auth_provider/auth_providers.dart';
 import '../auth_provider/password_upadate_provider.dart';
@@ -96,6 +98,9 @@ class AppProviders {
       ),
 
       ChangeNotifierProvider(create: (_) => SingleUserInfoProvider()),
+      ChangeNotifierProvider(create: (_) => UpdateAddUserProvider()),
+
+      ChangeNotifierProvider(create: (_) => DeleteUserProvider()),
 
       /// serviceTaker provider
       ChangeNotifierProvider(create: (context) => bookSerialButton_provider()),

@@ -125,7 +125,9 @@ class _SettingServiceCenterDialogState
       password: _passwordController.text,
       confirmPassword: _confirmPasswordController.text,
       roleId: _selectedRole!.id!,
-      serviceCenterIds: _selectedServiceCenters.map((sc) => sc.id!).toList(),
+      serviceCenterIds: _selectedServiceCentersForUser
+          .map((sc) => sc.id!)
+          .toList(),
       isActive: _isActive,
     );
     final success = await addUserButton.addUserButtonProvider(

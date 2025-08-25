@@ -149,6 +149,7 @@ class _HomeScreenState extends State<HomeScreen>
         getAddButtonProvider.isLoading ||
         singleUserInfoProvider.isLoading) {
       return Scaffold(
+        backgroundColor: Colors.white,
         body: Center(
           child: CircularProgressIndicator(
             strokeWidth: 2.5,
@@ -161,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen>
     final userInfo = singleUserInfoProvider.userInfo;
     if (userInfo == null) {
       return Scaffold(
+        backgroundColor: Colors.white,
         body: Center(child: Text("Could not load user's service center info.")),
       );
     }

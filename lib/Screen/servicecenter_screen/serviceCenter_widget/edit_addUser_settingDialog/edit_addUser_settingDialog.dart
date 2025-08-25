@@ -6,9 +6,14 @@ import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/model/AddUser_serviceCenterModel.dart';
 import 'package:serialno_app/model/roles_model.dart';
 import 'package:serialno_app/model/serviceCenter_model.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/update_addUser_serviceCenter/update_addUser_serviceCenter.dart';
+import 'package:serialno_app/request_model/serviceCanter_request/addUser_serviceCenterRequest/editUserRequest/editUserRequest.dart';
 import 'package:serialno_app/utils/color.dart';
-
+import '../../../../Widgets/custom_flushbar.dart';
+import '../../../../Widgets/custom_sanckbar.dart';
+import '../../../../providers/profile_provider/getprofile_provider.dart';
 import '../../../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
+import '../../../../providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
 import '../../../../providers/serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import '../AssignedServiceCenter/AssignedServiceCenter.dart';
 
@@ -35,6 +40,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
   List<ServiceCenterModel> _selectedServiceCenters = [];
   List<ServiceCenterModel> _selectedServiceCentersForUser = [];
   bool _isActive = true;
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
 
   late TextEditingController _nameController;
   late TextEditingController _loginNameController;
@@ -83,8 +89,83 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
     super.dispose();
   }
 
+  Future<void> _UpdateAddUserInfo() async {
+    if (!(_fromKey.currentState?.validate() ?? false)) {
+      setState(() {
+        _autoValidateMode = AutovalidateMode.onUserInteraction;
+      });
+      return;
+    }
+
+    final updateAddUserProvider = Provider.of<UpdateAddUserProvider>(
+      context,
+      listen: false,
+    );
+    final getAddUserButton = Provider.of<GetAdduserServiceCenterProvider>(
+      context,
+      listen: false,
+    );
+    final String? userId = widget.userModel?.id;
+    final companyId = Provider.of<Getprofileprovider>(
+      context,
+      listen: false,
+    ).profileData?.currentCompany.id;
+
+    final navigator = Navigator.of(context);
+    if (companyId == null) {
+      CustomFlushbar.showSuccess(
+        context: context,
+        title: "Success",
+        message: "  User Update Successful",
+      );
+      return;
+    }
+    EditUserRequest userRequest = EditUserRequest(
+      name: _nameController.text,
+      loginName: _loginNameController.text,
+      email: _emailController.text,
+      mobileNo: _phoneController.text,
+      roleId: _selectedRole!.id!,
+      serviceCenterIds: _selectedServiceCentersForUser
+          .map((sc) => sc.id!)
+          .toList(),
+      isActive: _isActive,
+    );
+    final success = await updateAddUserProvider.UpdateAddUserButton(
+      userRequest,
+      companyId,
+      userId!,
+    );
+    if (success) {
+      await getAddUserButton.fetchUsers(companyId);
+      navigator.pop();
+      await CustomFlushbar.showSuccess(
+        context: context,
+        title: "Success",
+        message: "  User Update Successfully",
+      );
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: CustomSnackBarWidget(
+            title: "Error",
+            message: updateAddUserProvider.errorMessage ?? "Failed to Add User",
+            iconColor: Colors.red.shade400,
+            icon: Icons.dangerous_outlined,
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final updateProvider = Provider.of<UpdateAddUserProvider>(
+      context,
+      listen: false,
+    );
     final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
     final rolesProvider = Provider.of<RolesProvider>(context);
     if (rolesProvider.isLoading || serviceCenterProvider.isLoading) {
@@ -108,6 +189,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Form(
           key: _fromKey,
+          autovalidateMode: _autoValidateMode,
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -268,7 +350,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         ),
                         backgroundColor: AppColor().primariColor,
                       ),
-                      onPressed: () {},
+                      onPressed: _UpdateAddUserInfo,
                       child: Text(
                         "Save",
                         style: TextStyle(color: Colors.white),

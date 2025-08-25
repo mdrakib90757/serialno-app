@@ -77,7 +77,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     password.dispose();
     confirmPassword.dispose();
     super.dispose();
-    super.dispose();
   }
 
   void _handleServiceCenterRegistration() async {
@@ -87,7 +86,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    // Request মডেল তৈরি করা হচ্ছে
     final request = RegisterRequest(
       name: name.text.trim(),
       addressLine1: addressLine1.text.trim(),

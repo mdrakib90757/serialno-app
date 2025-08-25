@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_addUser_settingDialog/edit_addUser_settingDialog.dart';
+import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_organizationInfo/edit_organizationInfo.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/setting_serviceCenterdialo/setting_serviceCenterdialo.dart';
 import 'package:serialno_app/model/AddUser_serviceCenterModel.dart';
 import 'package:serialno_app/model/user_model.dart';
@@ -11,8 +12,10 @@ import 'package:serialno_app/providers/serviceCenter_provider/company_details_pr
 import 'package:serialno_app/providers/serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import 'package:serialno_app/utils/color.dart';
 
+import '../../Widgets/custom_flushbar.dart';
 import '../../model/roles_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
+import '../../providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
 
 class Servicecenter_Settingscreen extends StatefulWidget {
   const Servicecenter_Settingscreen({super.key});
@@ -66,6 +69,7 @@ class _Servicecenter_SettingscreenState
     final getAdduser = Provider.of<GetAdduserServiceCenterProvider>(context);
     final businessType = Provider.of<BusinessTypeProvider>(context);
     final companyDetails = Provider.of<CompanyDetailsProvider>(context);
+
     if (companyDetails.isLoading || businessType.isLoading) {
       return Scaffold(
         backgroundColor: Colors.white,
@@ -114,7 +118,9 @@ class _Servicecenter_SettingscreenState
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _showDialogBoxEDit(context);
+                  },
                   icon: Icon(Icons.edit, color: AppColor().primariColor),
                 ),
               ],
@@ -444,15 +450,25 @@ class _Servicecenter_SettingscreenState
                                         ),
                                       ),
                                       SizedBox(width: 10),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: Text(
-                                          "Delete",
-                                          style: TextStyle(
-                                            color: AppColor().scoenddaryColor,
-                                            fontSize: 15,
-                                          ),
-                                        ),
+                                      Builder(
+                                        builder: (BuildContext context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              _showDeleteConfirmationMenu(
+                                                context,
+                                                user,
+                                              );
+                                            },
+                                            child: Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                color:
+                                                    AppColor().scoenddaryColor,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
@@ -480,5 +496,146 @@ class _Servicecenter_SettingscreenState
         return SettingServiceCenterDialog();
       },
     );
+  }
+
+  void _showDialogBoxEDit(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return EditOrganizationInfo();
+      },
+    );
+  }
+
+  void _showDeleteConfirmationMenu(
+    BuildContext menuContext,
+    AddUserModel user,
+  ) {
+    final deleteProvider = Provider.of<DeleteUserProvider>(
+      context,
+      listen: false,
+    );
+    final getUserProvider = Provider.of<GetAdduserServiceCenterProvider>(
+      context,
+      listen: false,
+    );
+    final companyId = Provider.of<Getprofileprovider>(
+      context,
+      listen: false,
+    ).profileData?.currentCompany.id;
+    final RenderBox renderBox = menuContext.findRenderObject() as RenderBox;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+    final Size size = renderBox.size;
+
+    showMenu<bool>(
+      context: menuContext,
+      color: Colors.white,
+      elevation: 8.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      position: RelativeRect.fromLTRB(
+        offset.dx,
+        offset.dy + size.height * -5, // Top
+        offset.dx + size.width, // Right
+        offset.dy + size.height, // Bottom
+      ),
+      items: [
+        PopupMenuItem(
+          // value: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.warning_rounded, color: Colors.orange, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    "Confirmation",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Are you sure to delete?",
+                style: TextStyle(color: Colors.grey.shade800, fontSize: 15),
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(menuContext).pop(false);
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "No",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(menuContext).pop(true);
+                      if (companyId == null) return;
+                      final success = await deleteProvider.deleteUser(
+                        companyId,
+                        user.id,
+                      );
+                      if (mounted && success) {
+                        await getUserProvider.fetchUsers(companyId);
+                        CustomFlushbar.showSuccess(
+                          context: context,
+                          message: "User deleted successfully.",
+                          title: 'Success',
+                        );
+                      } else if (mounted) {
+                        CustomFlushbar.showSuccess(
+                          context: context,
+                          message:
+                              deleteProvider.errorMessage ??
+                              "Failed to delete user.",
+                          title: 'Failed',
+                        );
+                      }
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: AppColor().primariColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ).then((value) {
+      if (value == true) {
+        print("Delete confirmed!");
+      } else {
+        print("Delete canceled.");
+      }
+    });
   }
 }

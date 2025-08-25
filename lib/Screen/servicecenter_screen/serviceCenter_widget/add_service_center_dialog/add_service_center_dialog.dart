@@ -370,7 +370,7 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
                       ),
 
                       onPressed: _saveServiceCenter,
-                      child: const Text(
+                      child: Text(
                         "Save",
                         style: TextStyle(color: Colors.white),
                       ),

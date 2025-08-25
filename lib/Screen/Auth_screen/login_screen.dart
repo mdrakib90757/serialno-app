@@ -51,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // LoginRequest অবজেক্ট তৈরি করা
     final request = LoginRequest(
       loginName: loginName.text.trim(),
       password: password.text,
