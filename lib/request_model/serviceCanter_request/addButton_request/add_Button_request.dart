@@ -10,6 +10,7 @@ class AddButtonRequest {
   String? daysOfAdvanceSerial;
   String? noOfReservedSerials;
   String? serialNoPolicy;
+  String? dailyQuota;
 
   AddButtonRequest({
     this.id,
@@ -23,6 +24,7 @@ class AddButtonRequest {
     this.daysOfAdvanceSerial,
     this.noOfReservedSerials,
     this.serialNoPolicy,
+    this.dailyQuota,
   });
 
   Map<String, dynamic> toJson() {
@@ -38,6 +40,7 @@ class AddButtonRequest {
       "daysOfAdvanceSerial": daysOfAdvanceSerial,
       "noOfReservedSerials": noOfReservedSerials,
       "serialNoPolicy": serialNoPolicy,
+      "dailyQuota": dailyQuota,
     };
   }
 }

@@ -593,9 +593,16 @@ class _HomeScreenState extends State<HomeScreen>
           itemCount: queueList.length,
           itemBuilder: (context, index) {
             final serial = queueList[index];
-            final String displayTime = DateFormatter.formatApiTimeToDisplayTime(
-              serial.date,
+
+            // S/L Time
+            final String slTime = DateFormatter.formatForStatusTime(
+              serial.createdTime,
             );
+            // Status Time
+            final String statusTime = DateFormatter.formatForStatusTime(
+              serial.statusTime,
+            );
+
             return Container(
               margin: EdgeInsets.symmetric(vertical: 5),
               padding: EdgeInsets.all(10),
@@ -669,8 +676,8 @@ class _HomeScreenState extends State<HomeScreen>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(displayTime),
-                            Text(displayTime, style: TextStyle(fontSize: 10)),
+                            Text(slTime),
+                            Text(statusTime, style: TextStyle(fontSize: 10)),
                           ],
                         ),
                         Text(serial.serviceType!.name.toString()),
@@ -736,9 +743,15 @@ class _HomeScreenState extends State<HomeScreen>
               );
             }
             final serial = servedList[index];
-            final String displayTime = DateFormatter.formatApiTimeToDisplayTime(
-              serial.date,
+            // S/L Time
+            final String slTime = DateFormatter.formatForStatusTime(
+              serial.createdTime,
             );
+            // Status Time
+            final String statusTime = DateFormatter.formatForStatusTime(
+              serial.statusTime,
+            );
+
             return Container(
               margin: EdgeInsets.symmetric(vertical: 5),
               padding: EdgeInsets.all(10),
@@ -811,9 +824,9 @@ class _HomeScreenState extends State<HomeScreen>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(displayTime),
+                            Text(slTime),
                             Text(
-                              displayTime,
+                              statusTime,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 10,
@@ -825,7 +838,7 @@ class _HomeScreenState extends State<HomeScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(serial.serviceType!.name.toString()),
-                            Text("${serial.serviceType!.price.toString()} BDT"),
+                            Text("${serial.charge!.toString()} BDT"),
                           ],
                         ),
                       ],

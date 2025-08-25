@@ -36,8 +36,10 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
       TextEditingController();
   final TextEditingController _serialNumberController = TextEditingController();
   final TextEditingController _reservedController = TextEditingController();
+  final TextEditingController _dailyQuotaController = TextEditingController();
 
   late final TabController _tabControllerForDialog;
+  String? _selectedPolicy;
   List<String> _selectedOffDays = [];
   final List<String> _availableDays = [
     'Saturday',
@@ -66,6 +68,7 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
     _nameController.dispose();
     _hotLineController.dispose();
     _customFieldTextController.dispose();
+    _dailyQuotaController.dispose();
     super.dispose();
   }
 
@@ -129,7 +132,8 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
       weeklyOffDays: _selectedOffDays,
       daysOfAdvanceSerial: _advanceSerialController.text,
       noOfReservedSerials: _reservedController.text,
-      serialNoPolicy: _serialNumberController.text,
+      serialNoPolicy: _selectedPolicy,
+      dailyQuota: _dailyQuotaController.text,
       workingEndTime: finalEndTime,
       workingStartTime: finalStartTime,
     );
@@ -301,10 +305,7 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
                     suffixIcon: Container(
                       width: 80,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        border: Border(
-                          left: BorderSide(color: Colors.grey.shade400),
-                        ), // বাম দিকে বর্ডার
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Center(child: Text("Day(s)")),
                     ),
@@ -317,7 +318,13 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
                   style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 SizedBox(height: 8),
-                CustomTab(tabbarController: _serialNumberController),
+                CustomTab(
+                  onPolicyChanged: (policy) {
+                    setState(() {
+                      _selectedPolicy = policy;
+                    });
+                  },
+                ),
 
                 SizedBox(height: 13),
                 Text(
@@ -347,12 +354,51 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
                     prefixIcon: Container(
                       width: 80,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        border: Border(
-                          right: BorderSide(color: Colors.grey.shade400),
-                        ),
+                        borderRadius: BorderRadiusGeometry.circular(8),
                       ),
                       child: const Center(child: Text("First")),
+                    ),
+                    suffixIcon: Container(
+                      width: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadiusGeometry.circular(8),
+                      ),
+                      child: const Center(child: Text("Serial(s)")),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 13),
+
+                const Text(
+                  "Daily Quota",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  cursorColor: Colors.grey.shade400,
+                  controller: _dailyQuotaController,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.left,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColor().primariColor,
+                        width: 2,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    suffixIcon: Container(
+                      width: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadiusGeometry.circular(8),
+                      ),
+                      child: const Center(child: Text("Day(s)")),
                     ),
                   ),
                 ),

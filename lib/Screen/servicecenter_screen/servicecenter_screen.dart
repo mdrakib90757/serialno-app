@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/add_service_center_dialog/add_service_center_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_service_center_dialog/edit_service_center_dialog.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/deleteServiceCenter/delete_serviceCenter.dart';
+import '../../Widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../model/user_model.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
@@ -11,7 +13,8 @@ import '../../utils/color.dart';
 
 class ServicecenterScreen extends StatefulWidget {
   final User_Model? user;
-  const ServicecenterScreen({super.key, this.user});
+  final ServiceCenterModel? serviceCenterModel;
+  const ServicecenterScreen({super.key, this.user, this.serviceCenterModel});
 
   @override
   State<ServicecenterScreen> createState() => _ServicecenterScreenState();
@@ -113,23 +116,70 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(color: Colors.grey.shade300),
                             ),
-                            child: ListTile(
-                              title: Text(
-                                serviceCenter.name ?? "NO Name",
-                                style: TextStyle(
-                                  color: AppColor().primariColor,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              subtitle: Column(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    serviceCenter.hotlineNo ?? "No HotlineNo",
+                                    serviceCenter.name ?? "NO Name",
                                     style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                      color: AppColor().primariColor,
+                                      fontSize: 18,
                                     ),
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        serviceCenter.hotlineNo ??
+                                            "No HotlineNo",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _showDialogBoxEDIT(
+                                            context,
+                                            serviceCenter,
+                                          );
+                                        },
+                                        child: Text(
+                                          "Edit",
+                                          style: TextStyle(
+                                            color: AppColor().scoenddaryColor,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Builder(
+                                        builder: (BuildContext context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              _showDeleteConfirmationMenu(
+                                                context,
+                                                serviceCenter,
+                                              );
+                                            },
+                                            child: Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                color:
+                                                    AppColor().scoenddaryColor,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                   Text(
                                     serviceCenter.email ?? "No Email",
@@ -139,19 +189,6 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                                     ),
                                   ),
                                 ],
-                              ),
-
-                              trailing: GestureDetector(
-                                onTap: () {
-                                  _showDialogBoxEDIT(context, serviceCenter);
-                                },
-                                child: Text(
-                                  "Edit",
-                                  style: TextStyle(
-                                    color: AppColor().scoenddaryColor,
-                                    fontSize: 15,
-                                  ),
-                                ),
                               ),
                             ),
                           );
@@ -221,5 +258,140 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
         return EditServiceCenterDialog(serviceCenter: serviceCenter);
       },
     );
+  }
+
+  void _showDeleteConfirmationMenu(
+    BuildContext menuContext,
+    ServiceCenterModel serviceCenterModel,
+  ) {
+    // menuContext
+    final RenderBox renderBox = menuContext.findRenderObject() as RenderBox;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+    final Size size = renderBox.size;
+
+    final companyId = Provider.of<Getprofileprovider>(
+      context,
+      listen: false,
+    ).profileData?.currentCompany.id;
+    final deleteProvider = Provider.of<DeleteServiceCenterProvider>(
+      context,
+      listen: false,
+    );
+    final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
+      context,
+      listen: false,
+    );
+    final String serviceCenterIdToDelete = serviceCenterModel.id;
+    showMenu<bool>(
+      context: menuContext,
+      color: Colors.white,
+      elevation: 8.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      position: RelativeRect.fromLTRB(
+        offset.dx,
+        offset.dy + size.height * -5, // Top
+        offset.dx + size.width, // Right
+        offset.dy + size.height, // Bottom
+      ),
+      items: [
+        PopupMenuItem(
+          // value: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.warning_rounded, color: Colors.orange, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    "Confirmation",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Are you sure to delete?",
+                style: TextStyle(color: Colors.grey.shade800, fontSize: 15),
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(menuContext).pop(false);
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "No",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.of(menuContext).pop(true);
+                      if (companyId == null) return;
+
+                      final success = await deleteProvider.delete_serviceCenter(
+                        companyId,
+                        serviceCenterIdToDelete,
+                      );
+                      if (mounted && success) {
+                        await getAddButtonProvider.fetchGetAddButton(companyId);
+                        CustomFlushbar.showSuccess(
+                          context: context,
+                          message: "User deleted successfully.",
+                          title: 'Success',
+                        );
+                      } else if (mounted) {
+                        CustomFlushbar.showSuccess(
+                          context: context,
+                          message:
+                              deleteProvider.errorMessage ??
+                              "Failed to delete user.",
+                          title: 'Failed',
+                        );
+                      }
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: AppColor().primariColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ).then((value) {
+      if (value == true) {
+        print("Delete confirmed!");
+      } else {
+        print("Delete canceled.");
+      }
+    });
   }
 }

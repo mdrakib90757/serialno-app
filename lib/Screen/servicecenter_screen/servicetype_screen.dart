@@ -1,7 +1,9 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/add_service_type_dialog/add_service_type_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_service_type_dialog/edit_service_type_dialog.dart';
+import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
 import 'package:serialno_app/Widgets/custom_flushbar.dart';
 import 'package:serialno_app/Widgets/custom_labeltext.dart';
 import 'package:serialno_app/Widgets/custom_sanckbar.dart';
@@ -17,6 +19,11 @@ import 'package:serialno_app/request_model/serviceCanter_request/addButton_servi
 import 'package:serialno_app/request_model/serviceCanter_request/editButtonServiceType_request/editButtonServiceType_reqeust.dart';
 import 'package:serialno_app/utils/color.dart';
 
+import '../../model/serviceCenter_model.dart';
+import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
+import '../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
+import '../../utils/date_formatter/date_formatter.dart';
+
 class ServicetypeScreen extends StatefulWidget {
   const ServicetypeScreen({super.key});
 
@@ -26,6 +33,8 @@ class ServicetypeScreen extends StatefulWidget {
 
 class _ServicetypeScreenState extends State<ServicetypeScreen> {
   final GlobalKey _deleteButtonKey = GlobalKey();
+  ServiceCenterModel? _selectedServiceCenter;
+  List<ServiceCenterModel> serviceCenterList = [];
 
   @override
   void initState() {
@@ -59,6 +68,8 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
     final serviceTypeProvider = Provider.of<GetAddButtonServiceType_Provider>(
       context,
     );
+    final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -122,9 +133,205 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: serviceTypeProvider.serviceTypeList.length,
+                      itemCount: serviceTypeProvider.serviceTypeList.length + 1,
                       itemBuilder: (context, index) {
+                        if (index ==
+                            serviceTypeProvider.serviceTypeList.length) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "ServiceCenter`s Service Types",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    // Expanded(
+                                    //   child: CustomDropdown<ServiceCenterModel>(
+                                    //   items:  serviceCenterProvider.serviceCenterList,
+                                    //   value: _selectedServiceCenter,
+                                    //   onChanged: (ServiceCenterModel? newValue) {
+                                    //     setState(() {
+                                    //       _selectedServiceCenter = newValue;
+                                    //     });
+                                    //   },
+                                    //   itemAsString: (ServiceCenterModel item) =>
+                                    //   item.name ?? "No Name",
+                                    //   child: Container(
+                                    //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    //     decoration: BoxDecoration(
+                                    //       border: Border.all(color: Colors.grey.shade400),
+                                    //       borderRadius: BorderRadius.circular(5.0),
+                                    //     ),
+                                    //     child: Row(
+                                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    //       children: [
+                                    //         Text(
+                                    //           _selectedServiceCenter?.name ??
+                                    //               "Select Service Center",
+                                    //           style: TextStyle(
+                                    //             color: _selectedServiceCenter != null
+                                    //                 ? Colors.black
+                                    //                 : Colors.grey.shade600,
+                                    //           ),
+                                    //         ),
+                                    //         Icon(
+                                    //           Icons.arrow_drop_down,
+                                    //           color: Colors.grey.shade600,
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    //   ),
+                                    // ),
+                                    Expanded(
+                                      child: DropdownSearch<ServiceCenterModel>(
+                                        popupProps: PopupProps.menu(
+                                          menuProps: MenuProps(
+                                            backgroundColor: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          constraints: BoxConstraints(
+                                            maxHeight: 170,
+                                          ),
+                                        ),
+
+                                        itemAsString:
+                                            (ServiceCenterModel type) =>
+                                                type.name ?? "",
+                                        dropdownDecoratorProps: DropDownDecoratorProps(
+                                          dropdownSearchDecoration: InputDecoration(
+                                            hintText: "Select",
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                  vertical: 12,
+                                                ),
+                                            // suffixIcon: _isLoadingBusinessTypes
+                                            //     ? Container(
+                                            //   padding: EdgeInsets.all(12),
+                                            //   child: SizedBox(
+                                            //     height: 20,
+                                            //     width: 20,
+                                            //     child: CircularProgressIndicator(
+                                            //       strokeWidth: 2.5,
+                                            //       color: AppColor().primariColor,
+                                            //     ),
+                                            //   ),
+                                            // )
+                                            //     : null,
+                                            //
+                                            // enabled: !_isLoadingBusinessTypes,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.grey.shade400,
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: AppColor().primariColor,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                            disabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.grey.shade300,
+                                              ),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.grey.shade400,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        selectedItem: _selectedServiceCenter,
+                                        items: serviceCenterProvider
+                                            .serviceCenterList,
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            _selectedServiceCenter = newValue;
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value == null)
+                                            return "Please select a business type";
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+
+                                    SizedBox(width: 8),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showDialogBox(context);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 7,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppColor().primariColor,
+                                          borderRadius: BorderRadius.circular(
+                                            5,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "Add",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
                         final type = serviceTypeProvider.serviceTypeList[index];
+
                         return Container(
                           margin: EdgeInsets.symmetric(vertical: 2),
                           decoration: BoxDecoration(

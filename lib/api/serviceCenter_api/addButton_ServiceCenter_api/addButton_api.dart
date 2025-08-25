@@ -37,4 +37,15 @@ class AddButtonApi {
       return [];
     }
   }
+
+  Future<void> deleteServiceCenter(String companyId, String Id) async {
+    try {
+      await ApiClient().delete(
+        "/serial-no/companies/$companyId/service-centers/$Id",
+      );
+    } catch (e) {
+      print("❌ Error in ServiceCenter deleteUser API: $e");
+      rethrow;
+    }
+  }
 }

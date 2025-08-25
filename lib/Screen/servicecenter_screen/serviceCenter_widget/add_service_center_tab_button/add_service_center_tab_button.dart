@@ -3,7 +3,13 @@ import 'package:serialno_app/utils/color.dart';
 
 class CustomTab extends StatefulWidget {
   final TextEditingController? tabbarController;
-  const CustomTab({super.key, this.tabbarController});
+  final Function(String selectedPolicy) onPolicyChanged;
+
+  const CustomTab({
+    super.key,
+    this.tabbarController,
+    required this.onPolicyChanged,
+  });
 
   @override
   State<CustomTab> createState() => _CustomTabState();
@@ -11,6 +17,13 @@ class CustomTab extends StatefulWidget {
 
 class _CustomTabState extends State<CustomTab> {
   int _selectedIndex = -1;
+  final List<String> _policies = ['C', 'S'];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +68,21 @@ class _CustomTabState extends State<CustomTab> {
           setState(() {
             _selectedIndex = index;
           });
+          widget.onPolicyChanged(_policies[index]);
         },
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
             color: isSelected ? AppColor().primariColor : Colors.white,
-            borderRadius: borderRadius,
+            borderRadius: index == 0
+                ? const BorderRadius.only(
+                    topLeft: Radius.circular(4),
+                    bottomLeft: Radius.circular(4),
+                  )
+                : const BorderRadius.only(
+                    topRight: Radius.circular(4),
+                    bottomRight: Radius.circular(4),
+                  ),
           ),
           child: Center(
             child: Text(

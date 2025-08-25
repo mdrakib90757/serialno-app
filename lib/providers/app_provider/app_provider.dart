@@ -1,5 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/deleteServiceCenter/delete_serviceCenter.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/addUser_serviceCenter_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
@@ -48,6 +49,7 @@ class AppProviders {
 
       ChangeNotifierProvider(create: (context) => AddButtonProvider()),
       ChangeNotifierProvider(create: (context) => GetAddButtonProvider()),
+      ChangeNotifierProvider(create: (_) => DeleteServiceCenterProvider()),
 
       ChangeNotifierProvider(create: (context) => EditButtonProvider()),
       ChangeNotifierProvider(create: (context) => GetEditButtonProvider()),
