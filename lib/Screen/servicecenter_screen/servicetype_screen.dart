@@ -3,22 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/add_service_type_dialog/add_service_type_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_service_type_dialog/edit_service_type_dialog.dart';
-import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
-import 'package:serialno_app/Widgets/custom_flushbar.dart';
-import 'package:serialno_app/Widgets/custom_labeltext.dart';
-import 'package:serialno_app/Widgets/custom_sanckbar.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/model/service_type_model.dart';
-import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
-import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/addButtonServiceType_Provider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/deleteServiceTypeProvider/deleteServiceTypeProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
-import 'package:serialno_app/providers/serviceCenter_provider/editButtonServiceType_provider/editButtonServiceType_provider.dart';
-import 'package:serialno_app/providers/serviceCenter_provider/editButtonServiceType_provider/getEditButtonServiceType_Provider.dart';
-import 'package:serialno_app/request_model/serviceCanter_request/addButton_serviceType_request/addButtonServiceType_request.dart';
-import 'package:serialno_app/request_model/serviceCanter_request/editButtonServiceType_request/editButtonServiceType_reqeust.dart';
 import 'package:serialno_app/utils/color.dart';
-
+import '../../Widgets/custom_dropdown/custom_dropdown.dart';
+import '../../Widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
@@ -49,13 +40,23 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
     final profileProvider = context.read<Getprofileprovider>();
     final serviceTypeProvider = context
         .read<GetAddButtonServiceType_Provider>();
+    final serviceCenterProvider = context.read<GetAddButtonProvider>();
 
     if (profileProvider.profileData == null) {
       await profileProvider.fetchProfileData();
     }
     final companyId = profileProvider.profileData?.currentCompany.id;
     if (mounted && companyId != null) {
-      await serviceTypeProvider.fetchGetAddButton_ServiceType(companyId);
+      await Future.wait([
+        serviceTypeProvider.fetchGetAddButton_ServiceType(companyId),
+        serviceCenterProvider.fetchGetAddButton(companyId),
+      ]);
+      if (mounted && serviceCenterProvider.serviceCenterList.isNotEmpty) {
+        setState(() {
+          _selectedServiceCenter =
+              serviceCenterProvider.serviceCenterList.first;
+        });
+      }
     } else {
       if (mounted) {
         debugPrint("❌ Error in ServicetypeScreen: Could not find Company ID.");
@@ -133,205 +134,9 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: serviceTypeProvider.serviceTypeList.length + 1,
+                      itemCount: serviceTypeProvider.serviceTypeList.length,
                       itemBuilder: (context, index) {
-                        if (index ==
-                            serviceTypeProvider.serviceTypeList.length) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "ServiceCenter`s Service Types",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    // Expanded(
-                                    //   child: CustomDropdown<ServiceCenterModel>(
-                                    //   items:  serviceCenterProvider.serviceCenterList,
-                                    //   value: _selectedServiceCenter,
-                                    //   onChanged: (ServiceCenterModel? newValue) {
-                                    //     setState(() {
-                                    //       _selectedServiceCenter = newValue;
-                                    //     });
-                                    //   },
-                                    //   itemAsString: (ServiceCenterModel item) =>
-                                    //   item.name ?? "No Name",
-                                    //   child: Container(
-                                    //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                    //     decoration: BoxDecoration(
-                                    //       border: Border.all(color: Colors.grey.shade400),
-                                    //       borderRadius: BorderRadius.circular(5.0),
-                                    //     ),
-                                    //     child: Row(
-                                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    //       children: [
-                                    //         Text(
-                                    //           _selectedServiceCenter?.name ??
-                                    //               "Select Service Center",
-                                    //           style: TextStyle(
-                                    //             color: _selectedServiceCenter != null
-                                    //                 ? Colors.black
-                                    //                 : Colors.grey.shade600,
-                                    //           ),
-                                    //         ),
-                                    //         Icon(
-                                    //           Icons.arrow_drop_down,
-                                    //           color: Colors.grey.shade600,
-                                    //         ),
-                                    //       ],
-                                    //     ),
-                                    //   ),
-                                    //   ),
-                                    // ),
-                                    Expanded(
-                                      child: DropdownSearch<ServiceCenterModel>(
-                                        popupProps: PopupProps.menu(
-                                          menuProps: MenuProps(
-                                            backgroundColor: Colors.white,
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                          ),
-                                          constraints: BoxConstraints(
-                                            maxHeight: 170,
-                                          ),
-                                        ),
-
-                                        itemAsString:
-                                            (ServiceCenterModel type) =>
-                                                type.name ?? "",
-                                        dropdownDecoratorProps: DropDownDecoratorProps(
-                                          dropdownSearchDecoration: InputDecoration(
-                                            hintText: "Select",
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                  horizontal: 16,
-                                                  vertical: 12,
-                                                ),
-                                            // suffixIcon: _isLoadingBusinessTypes
-                                            //     ? Container(
-                                            //   padding: EdgeInsets.all(12),
-                                            //   child: SizedBox(
-                                            //     height: 20,
-                                            //     width: 20,
-                                            //     child: CircularProgressIndicator(
-                                            //       strokeWidth: 2.5,
-                                            //       color: AppColor().primariColor,
-                                            //     ),
-                                            //   ),
-                                            // )
-                                            //     : null,
-                                            //
-                                            // enabled: !_isLoadingBusinessTypes,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                color: Colors.grey.shade400,
-                                              ),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                color: AppColor().primariColor,
-                                                width: 2,
-                                              ),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                            disabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                color: Colors.grey.shade300,
-                                              ),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                color: Colors.grey.shade400,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-
-                                        selectedItem: _selectedServiceCenter,
-                                        items: serviceCenterProvider
-                                            .serviceCenterList,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            _selectedServiceCenter = newValue;
-                                          });
-                                        },
-                                        validator: (value) {
-                                          if (value == null)
-                                            return "Please select a business type";
-                                          return null;
-                                        },
-                                      ),
-                                    ),
-
-                                    SizedBox(width: 8),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _showDialogBox(context);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 7,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: AppColor().primariColor,
-                                          borderRadius: BorderRadius.circular(
-                                            5,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                              size: 15,
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              "Add",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-
                         final type = serviceTypeProvider.serviceTypeList[index];
-
                         return Container(
                           margin: EdgeInsets.symmetric(vertical: 2),
                           decoration: BoxDecoration(
@@ -384,6 +189,7 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                                               onTap: () {
                                                 _showDeleteConfirmationMenu(
                                                   context,
+                                                  type,
                                                 );
                                               },
                                               child: Text(
@@ -444,11 +250,25 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
     );
   }
 
-  void _showDeleteConfirmationMenu(BuildContext menuContext) {
+  void _showDeleteConfirmationMenu(
+    BuildContext menuContext,
+    serviceTypeModel typeModel,
+  ) {
     // menuContext
     final RenderBox renderBox = menuContext.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
+    final companyId = Provider.of<Getprofileprovider>(
+      context,
+      listen: false,
+    ).profileData?.currentCompany.id;
+    final deleteProvider = Provider.of<DeleteServiceTypeProvider>(
+      context,
+      listen: false,
+    );
+    final getAddButtonServiceType =
+        Provider.of<GetAddButtonServiceType_Provider>(context, listen: false);
+    final String ServiceTypeId = typeModel.id;
 
     showMenu<bool>(
       context: menuContext,
@@ -508,8 +328,30 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                   ),
                   SizedBox(width: 8),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       Navigator.of(menuContext).pop(true);
+                      if (companyId == null) return;
+                      final success = await deleteProvider.delete_serviceType(
+                        companyId,
+                        ServiceTypeId,
+                      );
+                      if (mounted && success) {
+                        await getAddButtonServiceType
+                            .fetchGetAddButton_ServiceType(companyId);
+                        CustomFlushbar.showSuccess(
+                          context: context,
+                          message: "User deleted successfully.",
+                          title: 'Success',
+                        );
+                      } else if (mounted) {
+                        CustomFlushbar.showSuccess(
+                          context: context,
+                          message:
+                              deleteProvider.errorMessage ??
+                              "Failed to delete user.",
+                          title: 'Failed',
+                        );
+                      }
                     },
                     child: Container(
                       height: 30,

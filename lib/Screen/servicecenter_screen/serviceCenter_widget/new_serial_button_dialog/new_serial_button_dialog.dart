@@ -146,6 +146,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
   Widget build(BuildContext context) {
     final getAddButton_serviceType_Provider =
         Provider.of<GetAddButtonServiceType_Provider>(context);
+    final serialProvider = Provider.of<NewSerialButtonProvider>(context);
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -335,10 +336,12 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                           ),
                         ),
                         onPressed: _saveNewSerial,
-                        child: Text(
-                          "Ok",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: serialProvider.isLoading
+                            ? Text(
+                                "Please wait",
+                                style: TextStyle(color: Colors.white),
+                              )
+                            : Text("Ok", style: TextStyle(color: Colors.white)),
                       ),
                       SizedBox(width: 10),
                       //cancel Button

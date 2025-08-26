@@ -2,12 +2,15 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
+import 'package:serialno_app/model/division_model.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/divisionProvider/divisionProvider.dart';
 
 import '../../../../Widgets/custom_labeltext.dart';
 import '../../../../Widgets/custom_textfield.dart';
 import '../../../../model/user_model.dart';
 import '../../../../providers/auth_provider/auth_providers.dart';
 import '../../../../utils/color.dart';
+import '../locationDialog/locationDialog.dart';
 
 class EditOrganizationInfo extends StatefulWidget {
   const EditOrganizationInfo({super.key});
@@ -31,10 +34,37 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
   bool _isLoadingBusinessTypes = false;
   Businesstype? _selectedBusinessType;
 
+  bool _isLoadingDivision = false;
+  DivisionModel? _selectDivision;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Made async
+      final divisionProvider = Provider.of<DivisionProvider>(
+        context,
+        listen: false,
+      );
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      await divisionProvider.fetchDivisions();
+      await authProvider.fetchBusinessTypes();
+
+      if (authProvider.userModel != null &&
+          authProvider.businessTypes.isNotEmpty) {
+        setState(() {
+          _selectedBusinessType = authProvider.businessTypes.firstWhere(
+            (type) =>
+                type.id ==
+                authProvider
+                    .userModel!
+                    .businessTypeId, // Assuming businessTypeId is the correct field
+            orElse: () => authProvider.businessTypes.first, // Fallback
+          );
+        });
+      }
+    });
   }
 
   @override
@@ -52,6 +82,8 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final divisionProvider = Provider.of<DivisionProvider>(context);
+
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -99,7 +131,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                 SizedBox(height: 20),
                 Text(
                   "Address Line 1",
-                  style: TextStyle(color: Colors.black, fontSize: 17),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 SizedBox(height: 12),
                 TextFormField(
@@ -129,7 +161,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                 SizedBox(height: 20),
                 Text(
                   "Address Line 2",
-                  style: TextStyle(color: Colors.black, fontSize: 17),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 SizedBox(height: 12),
                 TextFormField(
@@ -189,7 +221,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   itemAsString: (Businesstype type) => type.name,
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
-                      hintText: "Select",
+                      hintText: authProvider.userModel?.businessTypeName ?? "",
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 12,
@@ -247,14 +279,366 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                     return null;
                   },
                 ),
-                //
-                // CustomDropdown(
-                //     child: child,
-                //     items: items,
-                //     onChanged: onChanged,
-                //     itemAsString: itemAsString
-                // ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
+
+                Text(
+                  "Division",
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                ),
+                SizedBox(height: 12),
+                DropdownSearch<DivisionModel>(
+                  popupProps: PopupProps.menu(
+                    menuProps: MenuProps(
+                      backgroundColor: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: BoxConstraints(maxHeight: 170),
+                  ),
+
+                  itemAsString: (DivisionModel type) => type.name,
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                      hintText: "Division",
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      suffixIcon: divisionProvider.isLoading
+                          ? Container(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: AppColor().primariColor,
+                                ),
+                              ),
+                            )
+                          : null,
+
+                      enabled: !divisionProvider.isLoading,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                    ),
+                  ),
+
+                  selectedItem: _selectDivision,
+                  items: divisionProvider.divisions,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectDivision = newValue;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) return "Please select a division";
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+
+                Text(
+                  "District",
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                ),
+                SizedBox(height: 12),
+                DropdownSearch<String>(
+                  popupProps: PopupProps.menu(
+                    menuProps: MenuProps(
+                      backgroundColor: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: BoxConstraints(maxHeight: 170),
+                  ),
+
+                  //itemAsString: ( type) => type.name,
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                      hintText: "District",
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      suffixIcon: divisionProvider.isLoading
+                          ? Container(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: AppColor().primariColor,
+                                ),
+                              ),
+                            )
+                          : null,
+
+                      enabled: !divisionProvider.isLoading,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                    ),
+                  ),
+
+                  //selectedItem: _selectDivision,
+                  // items: divisionProvider.divisions,
+                  //  onChanged: (newValue) {
+                  //    setState(() {
+                  //      _selectDivision = newValue;
+                  //    });
+                  //  },
+                  validator: (value) {
+                    if (value == null) return "Please select a division";
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+
+                Text(
+                  "Thana",
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                ),
+                SizedBox(height: 12),
+                DropdownSearch<String>(
+                  popupProps: PopupProps.menu(
+                    menuProps: MenuProps(
+                      backgroundColor: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: BoxConstraints(maxHeight: 170),
+                  ),
+
+                  //itemAsString: ( type) => type.name,
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                      hintText: "Thana Or Upazila",
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      suffixIcon: divisionProvider.isLoading
+                          ? Container(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: AppColor().primariColor,
+                                ),
+                              ),
+                            )
+                          : null,
+
+                      enabled: !divisionProvider.isLoading,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                    ),
+                  ),
+
+                  //selectedItem: _selectDivision,
+                  // items: divisionProvider.divisions,
+                  //  onChanged: (newValue) {
+                  //    setState(() {
+                  //      _selectDivision = newValue;
+                  //    });
+                  //  },
+                  validator: (value) {
+                    if (value == null) return "Please select a division";
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+
+                Text(
+                  "Area",
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                ),
+                SizedBox(height: 12),
+                DropdownSearch<String>(
+                  popupProps: PopupProps.menu(
+                    menuProps: MenuProps(
+                      backgroundColor: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: BoxConstraints(maxHeight: 170),
+                  ),
+
+                  //itemAsString: ( type) => type.name,
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                      hintText: "Area or village",
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      suffixIcon: divisionProvider.isLoading
+                          ? Container(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  color: AppColor().primariColor,
+                                ),
+                              ),
+                            )
+                          : null,
+
+                      enabled: !divisionProvider.isLoading,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                    ),
+                  ),
+
+                  //selectedItem: _selectDivision,
+                  // items: divisionProvider.divisions,
+                  //  onChanged: (newValue) {
+                  //    setState(() {
+                  //      _selectDivision = newValue;
+                  //    });
+                  //  },
+                  validator: (value) {
+                    if (value == null) return "Please select a division";
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+
+                Text(
+                  "Location",
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                ),
+                SizedBox(height: 12),
+                TextFormField(
+                  cursorColor: Colors.grey.shade400,
+                  //controller: _dailyQuotaController,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.left,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColor().primariColor,
+                        width: 2,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    suffixIcon: Container(
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        // borderRadius: BorderRadiusGeometry.circular(8),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: IconButton(
+                        onPressed: () async {
+                          final result = await showDialog(
+                            context: context,
+                            builder: (context) => LocationPickerDialog(),
+                          );
+
+                          if (result != null) {
+                            print("Selected Location: $result");
+                            // TextField এ দেখাও
+                          }
+                        },
+                        icon: Icon(Icons.location_on_outlined),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

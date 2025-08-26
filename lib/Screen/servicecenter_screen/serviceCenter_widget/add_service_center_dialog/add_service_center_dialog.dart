@@ -166,6 +166,7 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
 
   @override
   Widget build(BuildContext context) {
+    final addButtonProvider = Provider.of<AddButtonProvider>(context);
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.all(10),
@@ -416,10 +417,12 @@ class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
                       ),
 
                       onPressed: _saveServiceCenter,
-                      child: Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: addButtonProvider.isLoading
+                          ? Text(
+                              "Please Wait",
+                              style: TextStyle(color: Colors.white),
+                            )
+                          : Text("Save", style: TextStyle(color: Colors.white)),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(

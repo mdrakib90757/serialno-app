@@ -1,10 +1,12 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/deleteServiceTypeProvider/deleteServiceTypeProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/deleteServiceCenter/delete_serviceCenter.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/addUser_serviceCenter_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/update_addUser_serviceCenter/update_addUser_serviceCenter.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/divisionProvider/divisionProvider.dart';
 
 import '../auth_provider/auth_providers.dart';
 import '../auth_provider/password_upadate_provider.dart';
@@ -60,6 +62,7 @@ class AppProviders {
       ChangeNotifierProvider(
         create: (context) => AddButtonServiceTypeProvider(),
       ),
+      ChangeNotifierProvider(create: (_) => DeleteServiceTypeProvider()),
 
       ChangeNotifierProvider(
         create: (context) => EditButtonServiceTypeProvider(),
@@ -101,8 +104,8 @@ class AppProviders {
 
       ChangeNotifierProvider(create: (_) => SingleUserInfoProvider()),
       ChangeNotifierProvider(create: (_) => UpdateAddUserProvider()),
-
       ChangeNotifierProvider(create: (_) => DeleteUserProvider()),
+      ChangeNotifierProvider(create: (_) => DivisionProvider()),
 
       /// serviceTaker provider
       ChangeNotifierProvider(create: (context) => bookSerialButton_provider()),

@@ -161,6 +161,9 @@ class _SettingServiceCenterDialogState
 
   @override
   Widget build(BuildContext context) {
+    final getAddUserButton = Provider.of<GetAdduserServiceCenterProvider>(
+      context,
+    );
     final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
     final rolesProvider = Provider.of<RolesProvider>(context);
     if (rolesProvider.isLoading) {
@@ -418,10 +421,12 @@ class _SettingServiceCenterDialogState
                         backgroundColor: AppColor().primariColor,
                       ),
                       onPressed: _saveAddUser,
-                      child: Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: getAddUserButton.isLoading
+                          ? Text(
+                              "Please Wait",
+                              style: TextStyle(color: Colors.white),
+                            )
+                          : Text("Save", style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(width: 8),
                     ElevatedButton(

@@ -97,6 +97,9 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final addButtonServiceType = Provider.of<AddButtonServiceTypeProvider>(
+      context,
+    );
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -218,10 +221,15 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                         ),
                         onPressed: _saveAddServiceType,
 
-                        child: Text(
-                          "Save",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: addButtonServiceType.isLoading
+                            ? Text(
+                                "Please Wait",
+                                style: TextStyle(color: Colors.white),
+                              )
+                            : Text(
+                                "Save",
+                                style: TextStyle(color: Colors.white),
+                              ),
                       ),
                       SizedBox(width: 10),
                       ElevatedButton(

@@ -70,13 +70,13 @@ class _MyAppbarState extends State<MyAppbar> {
                 }
               },
               child: Image.asset(
-                "assets/image/1st-removebg-preview.png",
+                "assets/image/serialman (2).png",
                 fit: BoxFit.contain,
               ),
             ),
           ),
 
-          // SizedBox(width: 35,),
+          SizedBox(width: 35),
           Padding(
             padding: const EdgeInsets.only(top: 5),
             child: IconButton(
