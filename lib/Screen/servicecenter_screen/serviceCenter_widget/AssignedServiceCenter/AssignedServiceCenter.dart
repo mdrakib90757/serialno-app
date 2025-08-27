@@ -70,7 +70,7 @@ class _AssignedServiceCentersDropdownState
                             return Chip(
                               label: Text(
                                 center.name ?? 'N/A',
-                                style: const TextStyle(fontSize: 12),
+                                style: const TextStyle(fontSize: 10),
                               ),
                               materialTapTargetSize:
                                   MaterialTapTargetSize.shrinkWrap,

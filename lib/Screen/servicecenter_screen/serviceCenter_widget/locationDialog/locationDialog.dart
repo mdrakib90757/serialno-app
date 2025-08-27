@@ -1,28 +1,126 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../utils/color.dart';
 
-class LocationPickerDialog extends StatefulWidget {
-  const LocationPickerDialog({super.key});
+class LocationPickerDialogContent extends StatefulWidget {
+  const LocationPickerDialogContent({super.key});
 
   @override
-  State<LocationPickerDialog> createState() => _LocationPickerDialogState();
+  State<LocationPickerDialogContent> createState() =>
+      _LocationPickerDialogContentState();
 }
 
-class _LocationPickerDialogState extends State<LocationPickerDialog> {
+class _LocationPickerDialogContentState
+    extends State<LocationPickerDialogContent> {
   final Completer<GoogleMapController> _controller = Completer();
 
   // Initial camera position (Dhaka)
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(23.8103, 90.4125),
-    zoom: 12,
+    zoom: 12.0,
   );
 
   final Set<Marker> _markers = {};
   LatLng? _selectedLocation;
   final Set<Polyline> _polylines = {};
+  MapType _currentMapType = MapType.normal;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // _addInitialMarkers();
+    // _determinePosition().then((position){
+    //
+    //   _getToPosition(position);
+    // }).catchError((e){
+    //   print("Error getting location: $e");
+    // });
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error("Location services are disabled.");
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permissions are denied");
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+        "Location permissions are permanently denied, we cannot request permissions.",
+      );
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void _addInitialMarkers() {
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: MarkerId("dhaka_medical"),
+          position: LatLng(23.7250, 90.3995),
+          infoWindow: InfoWindow(
+            title: "Dhaka Medical College",
+            snippet: "A major public hospital",
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueAzure,
+          ),
+        ),
+      );
+      _markers.add(
+        Marker(
+          markerId: MarkerId("hatirjheel"),
+          position: LatLng(23.7667, 90.4028),
+          infoWindow: InfoWindow(
+            title: "Hatirjheel",
+            snippet: "A populer recreational spot",
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueGreen,
+          ),
+        ),
+      );
+      _polylines.add(
+        Polyline(
+          polylineId: PolylineId("route"),
+          points: [LatLng(23.7250, 90.3995), LatLng(23.7667, 90.4028)],
+          color: Colors.blue,
+          width: 5,
+        ),
+      );
+    });
+  }
+
+  Future<void> _getToPosition(Position position) async {
+    final GoogleMapController controller = await _controller.future;
+    final CameraPosition newPosition = CameraPosition(
+      target: LatLng(position.latitude, position.longitude),
+      zoom: 16,
+    );
+    controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: MarkerId("_currentLocation"),
+          infoWindow: InfoWindow(title: "My Current Location"),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
+        ),
+      );
+    });
+  }
 
   void _addMarkerOnTap(LatLng position) {
     setState(() {
@@ -34,75 +132,78 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
     });
   }
 
+  void _onMapTypeButtonPressed() {
+    setState(() {
+      _currentMapType = _currentMapType == MapType.normal
+          ? MapType.satellite
+          : MapType.normal;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Dialog(
-        backgroundColor: Colors.white,
-        insetPadding: EdgeInsets.all(10),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: AppColor().primariColor),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 400,
-                child: GoogleMap(
-                  initialCameraPosition: _initialPosition,
-                  markers: _markers,
-                  polylines: _polylines,
-                  onMapCreated: (c) => _controller.complete(c),
-                  onTap: _addMarkerOnTap,
-                ),
-              ),
-              SizedBox(height: 10),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
                 children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(5),
-                      ),
-                    ),
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(color: AppColor().primariColor),
-                    ),
-                    onPressed: () => Navigator.pop(context),
+                  GoogleMap(
+                    initialCameraPosition: _initialPosition,
+                    markers: _markers,
+                    polylines: _polylines,
+                    onMapCreated: (c) => _controller.complete(c),
+                    onTap: _addMarkerOnTap,
                   ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor().primariColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(5),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Column(
+                        children: [
+                          FloatingActionButton.small(
+                            onPressed: _onMapTypeButtonPressed,
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
+                            backgroundColor: AppColor().primariColor,
+                            child: const Icon(
+                              Icons.map,
+                              size: 20.0,
+                              color: Colors.white,
+                            ),
+                            heroTag: 'map_type_button',
+                          ),
+                          SizedBox(height: 16.0),
+                          FloatingActionButton.small(
+                            onPressed: () async {
+                              try {
+                                final position = await _determinePosition();
+                                _getToPosition(position);
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(e.toString())),
+                                );
+                              }
+                            },
+                            materialTapTargetSize: MaterialTapTargetSize.padded,
+                            backgroundColor: Colors.blue,
+                            child: const Icon(
+                              Icons.my_location,
+                              size: 20.0,
+                              color: Colors.white,
+                            ),
+                            heroTag: 'my_location_button',
+                          ),
+                        ],
                       ),
-                    ),
-
-                    child: Text(
-                      "Select",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      if (_selectedLocation != null) {
-                        Navigator.pop(context, _selectedLocation);
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

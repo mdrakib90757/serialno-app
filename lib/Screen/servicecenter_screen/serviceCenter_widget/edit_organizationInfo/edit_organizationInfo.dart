@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/locationDialog/locationPickerDialogContant/locationPickerDialog.dart';
 import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
 import 'package:serialno_app/model/division_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/divisionProvider/divisionProvider.dart';
@@ -30,6 +31,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
   final TextEditingController email = TextEditingController();
   final TextEditingController phone = TextEditingController();
   final TextEditingController organization = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   bool _isLoadingBusinessTypes = false;
   Businesstype? _selectedBusinessType;
@@ -51,21 +53,66 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       await divisionProvider.fetchDivisions();
       await authProvider.fetchBusinessTypes();
 
+      setState(() {
+        _isLoadingBusinessTypes = true; // Start loading for business types
+        _isLoadingDivision =
+            true; // Assuming you want to show loading for divisions too
+      });
+
       if (authProvider.userModel != null &&
           authProvider.businessTypes.isNotEmpty) {
         setState(() {
           _selectedBusinessType = authProvider.businessTypes.firstWhere(
-            (type) =>
-                type.id ==
-                authProvider
-                    .userModel!
-                    .businessTypeId, // Assuming businessTypeId is the correct field
+            (type) => type.id == authProvider.userModel!.businessTypeId,
+            // Assuming businessTypeId is the correct field
             orElse: () => authProvider.businessTypes.first, // Fallback
           );
         });
       }
     });
   }
+
+  // Future<void> _fetchInitialData() async {
+  //   final divisionProvider = Provider.of<DivisionProvider>(context, listen: false);
+  //   final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  //
+  //   setState(() {
+  //     _isLoadingBusinessTypes = true; // Start loading for business types
+  //     _isLoadingDivision = true; // Assuming you want to show loading for divisions too
+  //   });
+  //
+  //   try {
+  //     await Future.wait([
+  //       divisionProvider.fetchDivisions(),
+  //       authProvider.fetchBusinessTypes(),
+  //     ]);
+  //
+  //     if (authProvider.userModel != null && authProvider.businessTypes.isNotEmpty) {
+  //       // Ensure this logic runs only after business types are fetched
+  //       _selectedBusinessType = authProvider.businessTypes.firstWhere(
+  //             (type) => type.id == authProvider.userModel!.businessTypeId,
+  //         orElse: () => authProvider.businessTypes.first, // Fallback
+  //       );
+  //     }
+  //
+  //     // If you want to pre-select division based on userModel, add similar logic here
+  //     if (authProvider.userModel != null && divisionProvider.divisions.isNotEmpty) {
+  //       _selectDivision = divisionProvider.divisions.firstWhere(
+  //             (division) => division.id == authProvider.userModel!.divisionId, // Assuming a divisionId field
+  //         orElse: () => divisionProvider.divisions.first, // Fallback
+  //       );
+  //     }
+  //
+  //   } catch (e) {
+  //     print("Error fetching initial data: $e");
+  //     // Handle error, e.g., show a snackbar
+  //   } finally {
+  //     setState(() {
+  //       _isLoadingBusinessTypes = false; // Stop loading for business types
+  //       _isLoadingDivision = false; // Stop loading for divisions
+  //     });
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -83,7 +130,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final divisionProvider = Provider.of<DivisionProvider>(context);
-
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -596,7 +642,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                 SizedBox(height: 12),
                 TextFormField(
                   cursorColor: Colors.grey.shade400,
-                  //controller: _dailyQuotaController,
+                  controller: _locationController,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
@@ -629,10 +675,12 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
 
                           if (result != null) {
                             print("Selected Location: $result");
-                            // TextField এ দেখাও
                           }
                         },
-                        icon: Icon(Icons.location_on_outlined),
+                        icon: Icon(
+                          Icons.location_on_outlined,
+                          color: AppColor().primariColor,
+                        ),
                       ),
                     ),
                   ),
