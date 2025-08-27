@@ -1,0 +1,99 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:serialno_app/api/serviceCenter_api/addButton_serviceType/addbutton_serviceType.dart';
+import 'package:serialno_app/providers/app_provider/app_provider.dart';
+import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
+import 'package:serialno_app/routes/app_routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Screen/Auth_screen/login_screen.dart';
+import 'Widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import 'Widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // String? token = prefs.getString('accessToken');
+  // String? userType = prefs.getString('userType');
+  // String initialRoute;
+
+  // if (token == null) {
+  //   initialRoute = AppRouteNames.login;
+  // } else if (userType == 'customer') {
+  //   initialRoute = AppRouteNames.customerHome;
+  // } else {
+  //   initialRoute = AppRouteNames.companyHome;
+  // }
+  // final authProvider = AuthProvider();
+
+  runApp(MultiProvider(providers: AppProviders.providers, child: MyApp()));
+}
+
+class MyApp extends StatelessWidget {
+  // final String initialRoute;
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(),
+      // initialRoute:initialRoute,
+      routes: AppRouter.routes,
+
+      home: Builder(
+        builder: (context) {
+          return const AuthWrapper();
+        },
+      ),
+    );
+  }
+}
+
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  late Future<void> _initializationFuture;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _initializationFuture = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    ).loadUserFromToken();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _initializationFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final authProvider = Provider.of<AuthProvider>(context);
+
+        if (authProvider.accessToken != null) {
+          final userType = authProvider.userType?.toLowerCase() ?? '';
+          if (userType == 'customer') {
+            return const CustomServicetakerNavigationbar();
+          } else {
+            return const CustomServicecenterNavigationbar();
+          }
+        } else {
+          return const LoginScreen();
+        }
+      },
+    );
+  }
+}
