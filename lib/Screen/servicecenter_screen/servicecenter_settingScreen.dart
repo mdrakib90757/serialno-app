@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/addUser_setting_serviceCenterDialog/addUser_setting_serviceCenterdialo.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_addUser_settingDialog/edit_addUser_settingDialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_organizationInfo/edit_organizationInfo.dart';
-import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/setting_serviceCenterdialo/setting_serviceCenterdialo.dart';
 import 'package:serialno_app/model/AddUser_serviceCenterModel.dart';
-import 'package:serialno_app/model/user_model.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/business_type_provider/business_type_provider.dart';
@@ -88,6 +87,7 @@ class _Servicecenter_SettingscreenState
 
     if (companyDetails.companyDetails == null) {
       return Scaffold(
+        backgroundColor: Colors.white,
         body: Center(child: Text("Could not load company info.")),
       );
     }
@@ -357,7 +357,12 @@ class _Servicecenter_SettingscreenState
 
                   final UserList = getAddUser_Provider.users;
                   if (UserList.isEmpty) {
-                    return Center(child: Text("No users found."));
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor().primariColor,
+                        strokeWidth: 2.5,
+                      ),
+                    );
                   }
 
                   return ListView.builder(
@@ -493,7 +498,7 @@ class _Servicecenter_SettingscreenState
     showDialog(
       context: context,
       builder: (context) {
-        return SettingServiceCenterDialog();
+        return AddUser_SettingServiceCenterDialog();
       },
     );
   }

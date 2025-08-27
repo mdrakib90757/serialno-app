@@ -11,6 +11,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(children: [Center(child: Text("Setting Screen"))]),
     );
   }

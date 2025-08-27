@@ -19,16 +19,16 @@ import '../../../../Widgets/custom_flushbar.dart';
 import '../../../../Widgets/custom_sanckbar.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 
-class SettingServiceCenterDialog extends StatefulWidget {
-  const SettingServiceCenterDialog({super.key});
+class AddUser_SettingServiceCenterDialog extends StatefulWidget {
+  const AddUser_SettingServiceCenterDialog({super.key});
 
   @override
-  State<SettingServiceCenterDialog> createState() =>
-      _SettingServiceCenterDialogState();
+  State<AddUser_SettingServiceCenterDialog> createState() =>
+      _AddUser_SettingServiceCenterDialogState();
 }
 
-class _SettingServiceCenterDialogState
-    extends State<SettingServiceCenterDialog> {
+class _AddUser_SettingServiceCenterDialogState
+    extends State<AddUser_SettingServiceCenterDialog> {
   ServiceCenterModel? _selectedServiceCenter;
   List<ServiceCenterModel> _selectedServiceCenters = [];
   List<ServiceCenterModel> _selectedServiceCentersForUser = [];

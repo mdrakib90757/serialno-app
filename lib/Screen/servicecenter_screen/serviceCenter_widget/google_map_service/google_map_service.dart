@@ -1,0 +1,99 @@
+import 'dart:convert';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+
+class Suggestion {
+  final String placeId;
+  final String description;
+
+  Suggestion(this.placeId, this.description);
+
+  @override
+  String toString() {
+    return description;
+  }
+}
+
+class GoogleMapsService {
+  final String _apiKey = 'AIzaSyBWSvcdDI8ecmzSEb-QM924_E3FD1McM3I';
+
+  //final String _apiKey = 'AIzaSyCvJnuQx0ui52Ypl-Bwz6r5LnmLz2SHfHc';
+  Future<List<Suggestion>> fetchSuggestions(String input) async {
+    if (input.isEmpty) {
+      return [];
+    }
+    const sessionToken = '1234567890';
+    final request =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+        '?input=$input'
+        '&key=$_apiKey'
+        '&sessiontoken=$sessionToken'
+        '&components=country:bd';
+
+    try {
+      final response = await http.get(Uri.parse(request));
+
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        if (result['status'] == 'OK') {
+          return result['predictions']
+              .map<Suggestion>(
+                (p) => Suggestion(p['place_id'], p['description']),
+              )
+              .toList();
+        }
+        print(
+          "Places API Error: ${result['error_message'] ?? result['status']}",
+        );
+      }
+    } catch (e) {
+      print("Error fetching suggestions: $e");
+    }
+    return [];
+  }
+
+  Future<LatLng> getLatLngFromPlaceId(String placeId) async {
+    final request =
+        'https://maps.googleapis.com/maps/api/geocode/json'
+        '?place_id=$placeId'
+        '&key=$_apiKey';
+
+    try {
+      final response = await http.get(Uri.parse(request));
+
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        if (result['status'] == 'OK') {
+          final location = result['results'][0]['geometry']['location'];
+          return LatLng(location['lat'], location['lng']);
+        }
+      }
+    } catch (e) {
+      print("Error getting LatLng from Place ID: $e");
+    }
+
+    throw Exception('Failed to get coordinates from place ID');
+  }
+
+  Future<Suggestion?> getPlaceDetailsFromLatLng(LatLng position) async {
+    final request =
+        'https://maps.googleapis.com/maps/api/geocode/json'
+        '?latlng=${position.latitude},${position.longitude}'
+        '&key=$_apiKey';
+    try {
+      final response = await http.get(Uri.parse(request));
+
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        if (result['status'] == 'OK' && result['results'].isNotEmpty) {
+          final place = result['results'][0];
+          return Suggestion(place['place_id'], place['formatted_address']);
+        }
+      }
+    } catch (e) {
+      print("Error in Reverse Geocoding: $e");
+    }
+
+    return null;
+  }
+}

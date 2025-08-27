@@ -10,8 +10,12 @@ import '../../../../Widgets/custom_labeltext.dart';
 import '../../../../Widgets/custom_textfield.dart';
 import '../../../../model/user_model.dart';
 import '../../../../providers/auth_provider/auth_providers.dart';
+import '../../../../providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
+import '../../../../providers/serviceCenter_provider/business_type_provider/business_type_provider.dart';
+import '../../../../providers/serviceCenter_provider/company_details_provider/company_details_provider.dart';
+import '../../../../providers/serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import '../../../../utils/color.dart';
-import '../locationDialog/locationDialog.dart';
+import '../locationDialog/locationDialogContent.dart';
 
 class EditOrganizationInfo extends StatefulWidget {
   const EditOrganizationInfo({super.key});
@@ -24,14 +28,14 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
-  final TextEditingController name = TextEditingController();
-  final TextEditingController addressLine1 = TextEditingController();
-  final TextEditingController addressLine2 = TextEditingController();
-  final TextEditingController contactName = TextEditingController();
-  final TextEditingController email = TextEditingController();
-  final TextEditingController phone = TextEditingController();
-  final TextEditingController organization = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
+  late TextEditingController name;
+  late TextEditingController addressLine1;
+  late TextEditingController addressLine2;
+  late TextEditingController contactName;
+  late TextEditingController email;
+  late TextEditingController phone;
+  late TextEditingController organization;
+  late TextEditingController _locationController;
 
   bool _isLoadingBusinessTypes = false;
   Businesstype? _selectedBusinessType;
@@ -42,77 +46,69 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Made async
-      final divisionProvider = Provider.of<DivisionProvider>(
-        context,
-        listen: false,
-      );
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    name = TextEditingController();
+    addressLine1 = TextEditingController();
+    addressLine2 = TextEditingController();
+    email = TextEditingController();
+    phone = TextEditingController();
+    _locationController = TextEditingController();
 
-      await divisionProvider.fetchDivisions();
-      await authProvider.fetchBusinessTypes();
-
-      setState(() {
-        _isLoadingBusinessTypes = true; // Start loading for business types
-        _isLoadingDivision =
-            true; // Assuming you want to show loading for divisions too
-      });
-
-      if (authProvider.userModel != null &&
-          authProvider.businessTypes.isNotEmpty) {
-        setState(() {
-          _selectedBusinessType = authProvider.businessTypes.firstWhere(
-            (type) => type.id == authProvider.userModel!.businessTypeId,
-            // Assuming businessTypeId is the correct field
-            orElse: () => authProvider.businessTypes.first, // Fallback
-          );
-        });
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchInitialData();
     });
   }
 
-  // Future<void> _fetchInitialData() async {
-  //   final divisionProvider = Provider.of<DivisionProvider>(context, listen: false);
-  //   final authProvider = Provider.of<AuthProvider>(context, listen: false);
-  //
-  //   setState(() {
-  //     _isLoadingBusinessTypes = true; // Start loading for business types
-  //     _isLoadingDivision = true; // Assuming you want to show loading for divisions too
-  //   });
-  //
-  //   try {
-  //     await Future.wait([
-  //       divisionProvider.fetchDivisions(),
-  //       authProvider.fetchBusinessTypes(),
-  //     ]);
-  //
-  //     if (authProvider.userModel != null && authProvider.businessTypes.isNotEmpty) {
-  //       // Ensure this logic runs only after business types are fetched
-  //       _selectedBusinessType = authProvider.businessTypes.firstWhere(
-  //             (type) => type.id == authProvider.userModel!.businessTypeId,
-  //         orElse: () => authProvider.businessTypes.first, // Fallback
-  //       );
-  //     }
-  //
-  //     // If you want to pre-select division based on userModel, add similar logic here
-  //     if (authProvider.userModel != null && divisionProvider.divisions.isNotEmpty) {
-  //       _selectDivision = divisionProvider.divisions.firstWhere(
-  //             (division) => division.id == authProvider.userModel!.divisionId, // Assuming a divisionId field
-  //         orElse: () => divisionProvider.divisions.first, // Fallback
-  //       );
-  //     }
-  //
-  //   } catch (e) {
-  //     print("Error fetching initial data: $e");
-  //     // Handle error, e.g., show a snackbar
-  //   } finally {
-  //     setState(() {
-  //       _isLoadingBusinessTypes = false; // Stop loading for business types
-  //       _isLoadingDivision = false; // Stop loading for divisions
-  //     });
-  //   }
-  // }
+  Future<void> _fetchInitialData() async {
+    final divisionProvider = Provider.of<DivisionProvider>(
+      context,
+      listen: false,
+    );
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final companyDetailsProvider = Provider.of<CompanyDetailsProvider>(
+      context,
+      listen: false,
+    );
+    final businessTypeProvider = Provider.of<BusinessTypeProvider>(
+      context,
+      listen: false,
+    );
+
+    setState(() {
+      _isLoadingBusinessTypes = true;
+      _isLoadingDivision = true;
+    });
+
+    try {
+      await Future.wait([
+        divisionProvider.fetchDivisions(),
+        authProvider.fetchBusinessTypes(),
+      ]);
+      if (companyDetailsProvider.companyDetails != null) {
+        final company = companyDetailsProvider.companyDetails!;
+
+        name.text = company.name ?? '';
+        addressLine1.text = company.addressLine1 ?? '';
+        addressLine2.text = company.addressLine2 ?? '';
+        email.text = company.email ?? "";
+        phone.text = company.phone ?? '';
+
+        if (authProvider.userModel != null &&
+            authProvider.businessTypes.isNotEmpty) {
+          _selectedBusinessType = authProvider.businessTypes.firstWhere(
+            (type) => type.id == authProvider.userModel!.businessTypeId,
+            orElse: () => authProvider.businessTypes.first,
+          );
+        }
+      }
+    } catch (e) {
+      print("Error fetching initial data: $e");
+    } finally {
+      setState(() {
+        _isLoadingBusinessTypes = false;
+        _isLoadingDivision = false;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -181,7 +177,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                 ),
                 SizedBox(height: 12),
                 TextFormField(
-                  controller: addressLine2,
+                  controller: addressLine1,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
@@ -240,7 +236,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                 CustomTextField(
                   hintText: "Email",
                   isPassword: false,
-                  controller: phone,
+                  controller: email,
                 ),
 
                 SizedBox(height: 20),
@@ -267,7 +263,10 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   itemAsString: (Businesstype type) => type.name,
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
-                      hintText: authProvider.userModel?.businessTypeName ?? "",
+                      hintText: _isLoadingBusinessTypes
+                          ? "Loading business types..."
+                          : authProvider.userModel?.businessTypeName ??
+                                "Select Business Type",
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 12,
@@ -646,6 +645,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
+                    hintText: "Location",
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
@@ -674,7 +674,10 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                           );
 
                           if (result != null) {
-                            print("Selected Location: $result");
+                            setState(() {
+                              _locationController.text =
+                                  '${result.latitude.toStringAsFixed(6)}, ${result.longitude.toStringAsFixed(6)}';
+                            });
                           }
                         },
                         icon: Icon(

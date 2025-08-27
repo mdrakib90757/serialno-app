@@ -56,7 +56,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
   void _updateTime() {
     if (mounted) {
       final DateTime now = DateTime.now();
-      final String formatted = DateFormat('EEEE, dd MMMM, yyyy ').format(now);
+      final String formatted = DateFormat('EEE, dd MMMM, yyyy ').format(now);
       setState(() {
         _FormatedDateTime = formatted;
       });
@@ -82,7 +82,6 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
       }
     } finally {
       if (mounted) {
-        // <<< finally ব্লকেও mounted চেক করুন
         setState(() {
           _isLoadingBusinessTypes = false;
         });
@@ -134,7 +133,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.8),
+      backgroundColor: Colors.white,
       body: Builder(
         builder: (context) {
           if (authProvider.isLoading) {

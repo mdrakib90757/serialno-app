@@ -1,9 +1,10 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/locationDialog/locationDialog.dart';
-
+import '../../../../../Widgets/custom_sanckbar.dart';
 import '../../../../../utils/color.dart';
+import '../../google_map_service/google_map_service.dart';
+import '../locationDialogContent.dart';
 
 class LocationPickerDialog extends StatefulWidget {
   const LocationPickerDialog({super.key});
@@ -13,6 +14,11 @@ class LocationPickerDialog extends StatefulWidget {
 
 class _LocationPickerDialogState extends State<LocationPickerDialog> {
   LatLng? _selectedLocationFromContent;
+  LatLng? _selectedLocation;
+  LatLng? _locationFromDropdown;
+  final GoogleMapsService _mapsService = GoogleMapsService();
+  Suggestion? _selectedPlace;
+  List<Suggestion> _suggestions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -45,11 +51,11 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                     children: [
                       GestureDetector(
                         onTap: () async {
-                          Navigator.pop(context);
                           final selectedLocation = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => Scaffold(
+                                backgroundColor: Colors.white,
                                 appBar: AppBar(
                                   title: Text(
                                     "Choose Location",
@@ -68,8 +74,127 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
+                                      DropdownSearch<Suggestion>(
+                                        itemAsString: (Suggestion s) =>
+                                            s.description,
+                                        selectedItem: _selectedPlace,
+                                        asyncItems: (String filter) =>
+                                            _mapsService.fetchSuggestions(
+                                              filter,
+                                            ),
+                                        popupProps: PopupProps.menu(
+                                          menuProps: MenuProps(
+                                            backgroundColor: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          constraints: BoxConstraints(
+                                            maxHeight: 170,
+                                          ),
+                                        ),
+                                        dropdownDecoratorProps: DropDownDecoratorProps(
+                                          dropdownSearchDecoration: InputDecoration(
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                  horizontal: 16,
+                                                  vertical: 12,
+                                                ),
+                                            // suffixIcon: divisionProvider.isLoading
+                                            //     ? Container(
+                                            //   padding: EdgeInsets.all(12),
+                                            //   child: SizedBox(
+                                            //     height: 20,
+                                            //     width: 20,
+                                            //     child: CircularProgressIndicator(
+                                            //       strokeWidth: 2.5,
+                                            //       color: AppColor().primariColor,
+                                            //     ),
+                                            //   ),
+                                            // )
+                                            //     : null,
+
+                                            //  enabled: !divisionProvider.isLoading,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.grey.shade400,
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: AppColor().primariColor,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                            disabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.grey.shade300,
+                                              ),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              borderSide: BorderSide(
+                                                color: Colors.grey.shade400,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        // selectedItem: _selectDivision,
+                                        //items: divisionProvider.divisions,
+                                        onChanged: (Suggestion? data) async {
+                                          if (data != null) {
+                                            final latLng = await _mapsService
+                                                .getLatLngFromPlaceId(
+                                                  data.placeId,
+                                                );
+                                            setState(() {
+                                              _selectedPlace = data;
+                                              _locationFromDropdown = latLng;
+                                              _selectedLocation = latLng;
+                                            });
+                                          }
+                                        },
+                                        validator: (value) {
+                                          if (value == null)
+                                            return "Please select a division";
+                                          return null;
+                                        },
+                                      ),
+                                      SizedBox(height: 10),
                                       Expanded(
-                                        child: LocationPickerDialogContent(),
+                                        child: LocationPickerDialogContent(
+                                          newLocationToDisplay:
+                                              _locationFromDropdown,
+                                          onLocationSelected:
+                                              (selectedLatLng) async {
+                                                final placeDetails =
+                                                    await _mapsService
+                                                        .getPlaceDetailsFromLatLng(
+                                                          selectedLatLng,
+                                                        );
+                                                setState(() {
+                                                  _selectedLocation =
+                                                      selectedLatLng;
+                                                  _selectedPlace = placeDetails;
+                                                  _locationFromDropdown = null;
+                                                });
+                                              },
+                                        ),
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -93,14 +218,21 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                               ),
                                             ),
                                             onPressed: () {
-                                              if (_selectedLocationFromContent !=
-                                                  null) {
+                                              if (_selectedLocation != null) {
                                                 Navigator.pop(
                                                   context,
-                                                  _selectedLocationFromContent,
+                                                  _selectedLocation,
                                                 );
                                               } else {
-                                                Navigator.pop(context);
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      "Please select a location from the map or search.",
+                                                    ),
+                                                  ),
+                                                );
                                               }
                                             },
                                           ),
@@ -149,7 +281,11 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                 ],
               ),
               SizedBox(height: 8),
-              DropdownSearch<String>(
+              DropdownSearch<Suggestion>(
+                asyncItems: (String filter) =>
+                    _mapsService.fetchSuggestions(filter),
+                itemAsString: (Suggestion s) => s.description,
+                selectedItem: _selectedPlace,
                 popupProps: PopupProps.menu(
                   menuProps: MenuProps(
                     backgroundColor: Colors.white,
@@ -157,30 +293,13 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                   ),
                   constraints: BoxConstraints(maxHeight: 170),
                 ),
-
-                //itemAsString: (DivisionModel type) => type.name,
                 dropdownDecoratorProps: DropDownDecoratorProps(
                   dropdownSearchDecoration: InputDecoration(
-                    // hintText: "Division",
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 12,
                     ),
-                    // suffixIcon: divisionProvider.isLoading
-                    //     ? Container(
-                    //   padding: EdgeInsets.all(12),
-                    //   child: SizedBox(
-                    //     height: 20,
-                    //     width: 20,
-                    //     child: CircularProgressIndicator(
-                    //       strokeWidth: 2.5,
-                    //       color: AppColor().primariColor,
-                    //     ),
-                    //   ),
-                    // )
-                    //     : null,
 
-                    //  enabled: !divisionProvider.isLoading,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide(color: Colors.grey.shade400),
@@ -206,21 +325,38 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                     ),
                   ),
                 ),
-
-                // selectedItem: _selectDivision,
-                //items: divisionProvider.divisions,
-                // onChanged: (newValue) {
-                //   setState(() {
-                //     _selectDivision = newValue;
-                //   });
-                // },
+                onChanged: (Suggestion? data) async {
+                  if (data != null) {
+                    final latLng = await _mapsService.getLatLngFromPlaceId(
+                      data.placeId,
+                    );
+                    setState(() {
+                      _selectedPlace = data;
+                      _locationFromDropdown = latLng;
+                      _selectedLocation = latLng;
+                    });
+                  }
+                },
                 validator: (value) {
                   if (value == null) return "Please select a division";
                   return null;
                 },
               ),
               SizedBox(height: 8),
-              SizedBox(height: 500, child: LocationPickerDialogContent()),
+              SizedBox(
+                height: 500,
+                child: LocationPickerDialogContent(
+                  onLocationSelected: (selectedLatLng) async {
+                    final placeDetails = await _mapsService
+                        .getPlaceDetailsFromLatLng(selectedLatLng);
+                    setState(() {
+                      _selectedLocation = selectedLatLng;
+                      _selectedPlace = placeDetails;
+                      _locationFromDropdown = null;
+                    });
+                  },
+                ),
+              ),
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -238,10 +374,21 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
-                      if (_selectedLocationFromContent != null) {
-                        Navigator.pop(context, _selectedLocationFromContent);
+                      if (_selectedLocation != null) {
+                        Navigator.pop(context, _selectedLocation);
                       } else {
-                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: CustomSnackBarWidget(
+                              title: "Failed",
+                              message:
+                                  "Please select a location from the map or search.",
+                            ),
+                            elevation: 0,
+                            backgroundColor: Colors.transparent,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
                       }
                     },
                   ),

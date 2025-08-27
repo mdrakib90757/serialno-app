@@ -4,9 +4,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../utils/color.dart';
+import '../google_map_service/google_map_service.dart';
 
 class LocationPickerDialogContent extends StatefulWidget {
-  const LocationPickerDialogContent({super.key});
+  final Function(LatLng) onLocationSelected;
+  final LatLng? newLocationToDisplay;
+  const LocationPickerDialogContent({
+    super.key,
+    required this.onLocationSelected,
+    this.newLocationToDisplay,
+  });
 
   @override
   State<LocationPickerDialogContent> createState() =>
@@ -25,6 +32,7 @@ class _LocationPickerDialogContentState
 
   final Set<Marker> _markers = {};
   LatLng? _selectedLocation;
+  Suggestion? _selectedPlace;
   final Set<Polyline> _polylines = {};
   MapType _currentMapType = MapType.normal;
 
@@ -32,13 +40,38 @@ class _LocationPickerDialogContentState
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _addInitialMarkers();
-    // _determinePosition().then((position){
-    //
-    //   _getToPosition(position);
-    // }).catchError((e){
-    //   print("Error getting location: $e");
-    // });
+    _addMarkerOnTap(_initialPosition.target);
+    _onMapTypeButtonPressed();
+    _addInitialMarkers();
+  }
+
+  @override
+  void didUpdateWidget(covariant LocationPickerDialogContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.newLocationToDisplay != null &&
+        widget.newLocationToDisplay != oldWidget.newLocationToDisplay) {
+      _updateMapLocation(widget.newLocationToDisplay!);
+    }
+  }
+
+  void _updateMapLocation(LatLng position) {
+    _moveCamera(position);
+    setState(() {
+      _markers.clear();
+      _markers.add(
+        Marker(markerId: const MarkerId("selected"), position: position),
+      );
+    });
+  }
+
+  Future<void> _moveCamera(LatLng position) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: position, zoom: 15.0),
+      ),
+    );
   }
 
   Future<Position> _determinePosition() async {
@@ -128,7 +161,8 @@ class _LocationPickerDialogContentState
       _markers.add(
         Marker(markerId: const MarkerId("selected"), position: position),
       );
-      _selectedLocation = position;
+      // _selectedLocation = position;
+      widget.onLocationSelected(position);
     });
   }
 
@@ -144,7 +178,7 @@ class _LocationPickerDialogContentState
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           children: [
             Expanded(
@@ -168,12 +202,12 @@ class _LocationPickerDialogContentState
                             onPressed: _onMapTypeButtonPressed,
                             materialTapTargetSize: MaterialTapTargetSize.padded,
                             backgroundColor: AppColor().primariColor,
-                            child: const Icon(
+                            heroTag: 'map_type_button',
+                            child: Icon(
                               Icons.map,
                               size: 20.0,
                               color: Colors.white,
                             ),
-                            heroTag: 'map_type_button',
                           ),
                           SizedBox(height: 16.0),
                           FloatingActionButton.small(

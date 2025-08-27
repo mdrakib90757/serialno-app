@@ -62,27 +62,19 @@ class _CustomServicetakerNavigationbarState
           iconSize: 25,
           items: [
             BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/image/house-chimney (1).png",
-                height: 27,
-                width: 27,
-              ),
-              label: "Home",
+              icon: Icon(Icons.home_outlined, size: 33),
+              activeIcon: Icon(Icons.home, size: 33),
+
+              label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/image/time-past.png",
-                height: 27,
-                width: 27,
-              ),
+              icon: Icon(Icons.sync, size: 33),
+              activeIcon: Icon(Icons.cloud_sync, size: 33),
               label: "My Serials",
             ),
             BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/image/setting.png",
-                height: 27,
-                width: 27,
-              ),
+              icon: Icon(Icons.settings_outlined, size: 33),
+              activeIcon: Icon(Icons.settings, size: 33),
               label: "Settings",
             ),
           ],
