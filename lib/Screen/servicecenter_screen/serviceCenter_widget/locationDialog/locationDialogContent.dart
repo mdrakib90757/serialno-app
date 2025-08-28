@@ -223,12 +223,12 @@ class _LocationPickerDialogContentState
                             },
                             materialTapTargetSize: MaterialTapTargetSize.padded,
                             backgroundColor: Colors.blue,
+                            heroTag: 'my_location_button',
                             child: const Icon(
                               Icons.my_location,
                               size: 20.0,
                               color: Colors.white,
                             ),
-                            heroTag: 'my_location_button',
                           ),
                         ],
                       ),
