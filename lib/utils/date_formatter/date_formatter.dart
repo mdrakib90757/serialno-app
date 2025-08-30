@@ -49,6 +49,24 @@ class DateFormatter {
     return DateFormat('E hh:mm:ss a').format(localTime);
   }
 
+  static String formatForStatus(DateTime? dateTime) {
+    if (dateTime == null) {
+      return "N/A";
+    }
+    try {
+      return DateFormat('hh:mm:ss a,').format(dateTime);
+    } catch (e) {
+      return "Invalid Date";
+    }
+  }
+
+  static String formatForApproxTime(String? dateString) {
+    final localTime = _parseToLocal(dateString);
+    if (localTime == null) return "N/A";
+
+    return DateFormat('E hh:mm a').format(localTime);
+  }
+
   static String formatForDisplayTimeOnly(String? dateString) {
     final localTime = _parseToLocal(dateString);
     if (localTime == null) return "N/A";

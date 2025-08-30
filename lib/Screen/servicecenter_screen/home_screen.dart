@@ -459,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen>
 
                     if (success && mounted) {
                       debugPrint(
-                        "✅ Next button action successful. Refreshing list...",
+                        "Next button action successful. Refreshing list...",
                       );
 
                       await serialListProvider.fetchSerialsButton(
@@ -467,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen>
                         formattedDate,
                       );
                     } else if (mounted) {
-                      debugPrint("❌ Next button action failed.");
+                      debugPrint(" Next button action failed.");
                       final errorMessage =
                           nextButtonProvider().errorMessage ??
                           "An unknown error occurred.";

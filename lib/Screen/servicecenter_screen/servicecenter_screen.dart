@@ -43,7 +43,7 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
         ).fetchGetAddButton(companyId);
       } else {
         debugPrint(
-          "❌ ServicecenterScreen: Company ID not found on init. Cannot fetch list.",
+          " ServicecenterScreen: Company ID not found on init. Cannot fetch list.",
         );
       }
     });

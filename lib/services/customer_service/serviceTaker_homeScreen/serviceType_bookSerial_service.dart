@@ -20,7 +20,6 @@ class serviceTypeserialbook_service {
         '${apiConfig.baseUrl}/companies/$companyId/service-types';
     final url = Uri.parse(urlString);
 
-    //final url = Uri.parse('${apiConfig.baseUrl}/service-centers/$companyId/service-types');
     try {
       final response = await http.get(
         url,

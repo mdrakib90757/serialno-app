@@ -57,7 +57,7 @@ class _Servicecenter_SettingscreenState
         ).fetchUsers(companyId);
         Provider.of<RolesProvider>(context, listen: false).fetchRoles();
       } else {
-        debugPrint("❌ initState: Company ID is null. Cannot fetch details.");
+        debugPrint("initState: Company ID is null. Cannot fetch details.");
       }
     });
   }

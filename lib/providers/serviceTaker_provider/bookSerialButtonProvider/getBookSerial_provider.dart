@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:serialno_app/model/mybooked_model.dart';
-import 'package:serialno_app/services/customer_service/serviceTaker_homeScreen/getBookSerial_service.dart';
 
-import '../../services/customer_service/serviceTaker_homeScreen/get_updateBookSerial.dart';
+import '../../../api/serviceTaker_api/bookSerial_ServiceTaker/bookSerial_ServiceTaker.dart';
 
-class GetUpdate_bookSerialProvider with ChangeNotifier {
-  final Get_UpdateBookSerial_service _get_updateBookSerial_service =
-      Get_UpdateBookSerial_service();
+class GetBookSerialProvider with ChangeNotifier {
+  final BookSerialService _bookSerialService = BookSerialService();
 
   List<MybookedModel> _bookSerialList = [];
   List<MybookedModel> get bookSerialList => _bookSerialList;
@@ -18,14 +16,15 @@ class GetUpdate_bookSerialProvider with ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<void> fetch_updateBookSerial(String date) async {
+  Future<void> fetchgetBookSerial(String date) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _bookSerialList = await _get_updateBookSerial_service
-          .get_UpdatebookSerial_Service(date);
+      _bookSerialList = await _bookSerialService.getBookSerialButtonService(
+        date,
+      );
     } catch (e) {
       _errorMessage = e.toString();
       _bookSerialList = [];

@@ -75,13 +75,17 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                   child: Column(
                                     children: [
                                       DropdownSearch<Suggestion>(
-                                        itemAsString: (Suggestion s) =>
-                                            s.description,
+                                        itemAsString: (s) =>
+                                            s.locationName ?? s.description,
                                         selectedItem: _selectedPlace,
-                                        asyncItems: (String filter) =>
-                                            _mapsService.fetchSuggestions(
-                                              filter,
-                                            ),
+                                        asyncItems: (String filter) async {
+                                          final data = await _mapsService
+                                              .fetchSuggestions(filter);
+                                          print(
+                                            "Dropdown got ${data.length} items",
+                                          ); // 👈 Debug
+                                          return data;
+                                        },
                                         popupProps: PopupProps.menu(
                                           menuProps: MenuProps(
                                             backgroundColor: Colors.white,
@@ -175,6 +179,7 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                           return null;
                                         },
                                       ),
+
                                       SizedBox(height: 10),
                                       Expanded(
                                         child: LocationPickerDialogContent(
@@ -282,10 +287,14 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
               ),
               SizedBox(height: 8),
               DropdownSearch<Suggestion>(
-                asyncItems: (String filter) =>
-                    _mapsService.fetchSuggestions(filter),
-                itemAsString: (Suggestion s) => s.description,
+                asyncItems: (String filter) async {
+                  final data = await _mapsService.fetchSuggestions(filter);
+                  print("Dropdown got ${data.length} items");
+                  return data;
+                },
+                itemAsString: (s) => s.locationName ?? s.description,
                 selectedItem: _selectedPlace,
+
                 popupProps: PopupProps.menu(
                   menuProps: MenuProps(
                     backgroundColor: Colors.white,
@@ -342,6 +351,7 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                   return null;
                 },
               ),
+
               SizedBox(height: 8),
               SizedBox(
                 height: 500,

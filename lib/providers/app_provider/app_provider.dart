@@ -30,15 +30,17 @@ import '../serviceCenter_provider/roles_service_center_provider/roles_service_ce
 import '../serviceCenter_provider/statusButtonProvider/get_status_updateButtonButton_provider.dart';
 import '../serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';
 import '../serviceTaker_provider/ServiceCenterByTypeProvider.dart';
-import '../serviceTaker_provider/bookSerialButton_provider.dart';
-import '../serviceTaker_provider/commentCancelButton_provider.dart';
-import '../serviceTaker_provider/getBookSerial_provider.dart';
-import '../serviceTaker_provider/getCommentCancelButtonProvider.dart';
-import '../serviceTaker_provider/getUpdate_bookSerial_provider.dart';
-import '../serviceTaker_provider/organization_provider.dart';
+import '../serviceTaker_provider/bookSerialButtonProvider/bookSerialButton_provider.dart';
+import '../serviceTaker_provider/bookSerialButtonProvider/getBookSerial_provider.dart';
+import '../serviceTaker_provider/commentCancelProvider/commentCancelButton_provider.dart';
+//import '../serviceTaker_provider/getBookSerialButtonProvider/getBookSerial_provider.dart';
+import '../serviceTaker_provider/commentCancelProvider/getCommentCancelButtonProvider.dart';
+import '../serviceTaker_provider/update_bookserialProvider/getUpdate_bookSerial_provider.dart';
+import '../serviceTaker_provider/mySerials/mySerial_provider.dart';
+import '../serviceTaker_provider/organaizationProvider/organization_provider.dart';
 import '../serviceTaker_provider/serviceCenter_serialBook.dart';
 import '../serviceTaker_provider/serviceType_serialbook_provider.dart';
-import '../serviceTaker_provider/update_bookserial_provider.dart';
+import '../serviceTaker_provider/update_bookserialProvider/update_bookserial_provider.dart';
 
 class AppProviders {
   static List<SingleChildWidget> get providers {
@@ -110,6 +112,9 @@ class AppProviders {
       /// serviceTaker provider
       ChangeNotifierProvider(create: (context) => bookSerialButton_provider()),
       ChangeNotifierProvider(create: (context) => GetBookSerialProvider()),
+      ChangeNotifierProvider(
+        create: (context) => MySerialServiceTakerProvider(),
+      ),
 
       ///BusinessType Provider
       ChangeNotifierProvider(

@@ -28,9 +28,6 @@ class serviceCenter_serialBookProvider with ChangeNotifier {
   //get token
   Future<void> getToken() async {
     final prefs = await SharedPreferences.getInstance();
-
-    // final token = await AuthProvider()._getToken();
-
     _token = prefs.getString("accessToken");
     print("Get_Token ${token}");
     debugPrint(

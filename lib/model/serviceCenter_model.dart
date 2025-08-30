@@ -5,9 +5,8 @@ class ServiceCenterModel {
   final String? email;
   final String? companyId;
   List<String>? weeklyOffDays;
-  DateTime?
-  workingStartTime; // DateTime? ব্যবহার করা হয়েছে, কারণ এটি null হতে পারে
-  DateTime? workingEndTime; // DateTime? ব্যবহার করা হয়েছে
+  DateTime? workingStartTime;
+  DateTime? workingEndTime;
   int? daysOfAdvanceSerial;
   int? noOfReservedSerials;
   String? serialNoPolicy;

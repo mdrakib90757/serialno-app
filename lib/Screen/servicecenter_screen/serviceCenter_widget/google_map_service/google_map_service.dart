@@ -5,18 +5,17 @@ import 'package:http/http.dart' as http;
 class Suggestion {
   final String placeId;
   final String description;
-
-  Suggestion(this.placeId, this.description);
+  final String? locationName;
+  Suggestion(this.placeId, this.description, this.locationName);
 
   @override
   String toString() {
-    return description;
+    return locationName ?? description;
   }
 }
 
 class GoogleMapsService {
   final String _apiKey = 'AIzaSyBWSvcdDI8ecmzSEb-QM924_E3FD1McM3I';
-
   //final String _apiKey = 'AIzaSyCvJnuQx0ui52Ypl-Bwz6r5LnmLz2SHfHc';
   Future<List<Suggestion>> fetchSuggestions(String input) async {
     if (input.isEmpty) {
@@ -38,7 +37,11 @@ class GoogleMapsService {
         if (result['status'] == 'OK') {
           return result['predictions']
               .map<Suggestion>(
-                (p) => Suggestion(p['place_id'], p['description']),
+                (p) => Suggestion(
+                  p['place_id'],
+                  p['description'],
+                  p['structured_formatting']?['main_text'],
+                ),
               )
               .toList();
         }
@@ -82,12 +85,18 @@ class GoogleMapsService {
         '&key=$_apiKey';
     try {
       final response = await http.get(Uri.parse(request));
+      print("API Response: ${response.body}");
 
       if (response.statusCode == 200) {
         final result = json.decode(response.body);
         if (result['status'] == 'OK' && result['results'].isNotEmpty) {
           final place = result['results'][0];
-          return Suggestion(place['place_id'], place['formatted_address']);
+
+          return Suggestion(
+            place['place_id'],
+            place['formatted_address'],
+            place['address_components']?[0]?['long_name'],
+          );
         }
       }
     } catch (e) {

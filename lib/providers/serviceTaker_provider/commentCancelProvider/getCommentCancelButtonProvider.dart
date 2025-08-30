@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:serialno_app/model/mybooked_model.dart';
-import 'package:serialno_app/services/customer_service/serviceTaker_homeScreen/getBookSerial_service.dart';
+import '../../../api/serviceTaker_api/commentCencel_serviceTaker/commentCencel_serviceTaker.dart';
 
-class GetBookSerialProvider with ChangeNotifier {
-  final GetBookSerial_service _getBookSerial_service = GetBookSerial_service();
+class GetCommentCancelButtonProvider with ChangeNotifier {
+  final CommentCancelService _commentCancelService = CommentCancelService();
 
   List<MybookedModel> _bookSerialList = [];
   List<MybookedModel> get bookSerialList => _bookSerialList;
@@ -15,13 +15,13 @@ class GetBookSerialProvider with ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<void> fetchgetBookSerial(String date) async {
+  Future<void> get_commentCancelButton(String date) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _bookSerialList = await _getBookSerial_service.getbookSerialButtonService(
+      _bookSerialList = await _commentCancelService.getCommentCancelButton(
         date,
       );
     } catch (e) {

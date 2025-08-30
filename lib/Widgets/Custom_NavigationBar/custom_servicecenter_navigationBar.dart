@@ -56,6 +56,7 @@ class _CustomServicecenterNavigationbarState
               _currentIndex = index;
             });
           },
+
           type: BottomNavigationBarType.fixed,
           //backgroundColor: Colors.white,
           selectedItemColor: AppColor().primariColor,
@@ -64,7 +65,6 @@ class _CustomServicecenterNavigationbarState
           selectedFontSize: 12.0,
           unselectedFontSize: 12.0,
           elevation: 5.0,
-
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined, size: 33),

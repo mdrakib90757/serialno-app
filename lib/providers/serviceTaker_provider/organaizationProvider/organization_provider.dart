@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:serialno_app/services/customer_service/serviceTaker_homeScreen/organization_service.dart';
-
-import '../../model/organization_model.dart';
+import '../../../api/serviceTaker_api/organaization_service/organaization_service.dart';
+import '../../../model/organization_model.dart';
 
 class OrganizationProvider with ChangeNotifier {
-  final OrganizationService _organizationService = OrganizationService();
+  final organizationService _organizationService = organizationService();
 
   List<OrganizationModel> _organizations = [];
   List<OrganizationModel> get organizations => _organizations;
@@ -25,7 +24,8 @@ class OrganizationProvider with ChangeNotifier {
         businessTypeId: businessTypeId,
       );
     } catch (e) {
-      _errorMessage = _organizationService.errorMessage ?? e.toString();
+      _errorMessage = e.toString();
+      _organizations = [];
     } finally {
       _isLoading = false;
       notifyListeners();

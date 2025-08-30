@@ -17,6 +17,8 @@ class MybookedModel {
   String? statusTime;
   String? comment;
   String? createdTime;
+  bool? isReserved;
+  String? approxServeTime;
 
   MybookedModel({
     this.user,
@@ -37,6 +39,8 @@ class MybookedModel {
     this.statusTime,
     this.comment,
     this.createdTime,
+    this.isReserved,
+    this.approxServeTime,
   });
 
   MybookedModel.fromJson(Map<String, dynamic> json) {
@@ -64,6 +68,8 @@ class MybookedModel {
     statusTime = json['statusTime'];
     comment = json['comment'];
     createdTime = json['createdTime'];
+    isReserved = json['isReserved'];
+    approxServeTime = json['approxServeTime'];
   }
 
   Map<String, dynamic> toJson() {
