@@ -12,7 +12,21 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(children: [Center(child: Text("Setting Screen"))]),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
+            SizedBox(height: 12),
+
+            Text(
+              'No Data Found',
+              style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

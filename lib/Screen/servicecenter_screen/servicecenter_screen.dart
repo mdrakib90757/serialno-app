@@ -87,7 +87,8 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (shouldShowAddButton) _buildAddButton(context),
+                  // if (shouldShowAddButton)
+                  _buildAddButton(context),
                 ],
               ),
               SizedBox(height: 10),

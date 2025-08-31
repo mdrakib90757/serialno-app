@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/serviceTaker_provider/mySerials/mySerial_provider.dart';
 import 'package:serialno_app/utils/color.dart';
@@ -16,21 +17,38 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
     with SingleTickerProviderStateMixin {
   int pageNo = 1;
   int pageSize = 10;
-
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<MySerialServiceTakerProvider>(
         context,
         listen: false,
-      ).MyServicesProvider(pageNo: pageNo, pageSize: pageSize);
+      ).fetchMyServices(isRefresh: true);
+    });
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent * 0.8) {
+        Provider.of<MySerialServiceTakerProvider>(
+          context,
+          listen: false,
+        ).fetchMyServices();
+      }
     });
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final MySerialProvider = Provider.of<MySerialServiceTakerProvider>(context);
+    final mySerialProvider = Provider.of<MySerialServiceTakerProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -39,164 +57,185 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Serial History",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            Expanded(child: _buildBody(mySerialProvider)),
+          ],
+        ),
+      ),
+    );
+  }
 
-            MySerialProvider.isLoading
-                ? Center(
+  Widget _buildBody(MySerialServiceTakerProvider provider) {
+    if (provider.isLoading) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: AppColor().primariColor,
+          strokeWidth: 2.5,
+        ),
+      );
+    }
+    if (provider.sortedDates.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
+            SizedBox(height: 12),
+
+            Text(
+              'No Serial Found',
+              style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      controller: _scrollController,
+
+      itemCount: provider.sortedDates.length + (provider.hasMore ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (index >= provider.sortedDates.length) {
+          return provider.hasMore
+              ? Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: CircularProgressIndicator(
                       color: AppColor().primariColor,
                       strokeWidth: 2.5,
                     ),
-                  )
-                : MySerialProvider.services.isEmpty
-                ? Expanded(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+                )
+              : Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Row(
                         children: [
-                          Icon(
-                            Icons.inbox_outlined,
-                            size: 60,
-                            color: Colors.grey.shade300,
+                          Expanded(
+                            child: Divider(
+                              thickness: 1,
+                              color: Colors.grey.shade400,
+                            ),
                           ),
-                          SizedBox(height: 12),
 
-                          Text(
-                            'No Serial Found',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[300],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
+                            child: Text(
+                              "End of List",
+                              style: TextStyle(color: Colors.grey.shade600),
+                            ),
+                          ),
+
+                          Expanded(
+                            child: Divider(
+                              thickness: 1,
+                              color: Colors.grey.shade400,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  )
-                : Expanded(
-                    child: ListView.builder(
-                      itemCount: MySerialProvider.services.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == MySerialProvider.services.length) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 1,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                ),
+                  ),
+                );
+        }
 
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0,
-                                  ),
-                                  child: Text(
-                                    "End of List",
-                                    style: TextStyle(
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ),
+        final dateKey = provider.sortedDates[index];
 
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 1,
-                                    color: Colors.grey.shade400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
+        final servicesForDate = provider.groupedServices[dateKey]!;
+        String formattedDate;
+        try {
+          final DateTime parsedDate = DateFormat('yyyy-MM-dd').parse(dateKey);
+          formattedDate = DateFormat('dd-MM-yyyy').format(parsedDate);
+        } catch (e) {
+          print("Could not parse date: $dateKey. Error: $e");
+          formattedDate = dateKey;
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                child: Text(
+                  formattedDate,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor().primariColor,
+                  ),
+                ),
+              ),
 
-                        final serialData = MySerialProvider.services[index];
-
-                        // S/L Time
-                        final String slTime = DateFormatter.formatForStatus(
-                          serialData.createdTime,
-                        );
-
-                        // Status Time
-                        final String statusTime = DateFormatter.formatForStatus(
-                          serialData.statusTime,
-                        );
-                        print(statusTime);
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey.shade300),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "${serialData.company?.name}",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "${serialData.serviceCenter?.name}",
-                                  style: TextStyle(
-                                    color: AppColor().primariColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "${serialData.serviceType?.name}",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Serial No:-${serialData.serialNo}",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  "${serialData.status} at ${statusTime}",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
+              Column(
+                children: servicesForDate.map((serialData) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 3),
+                    // padding: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: ListTile(
+                      // leading: CircleAvatar(
+                      //   backgroundColor: Colors.grey.shade400,
+                      //   child: Text(
+                      //     serialData.serialNo.toString(),
+                      //     style:  TextStyle(
+                      //       fontWeight: FontWeight.bold,
+                      //       color: AppColor().primariColor
+                      //     ),
+                      //   ),
+                      // ),
+                      title: Text(
+                        serialData.company?.name ?? 'N/A',
+                        style: TextStyle(color: Colors.grey.shade700),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            serialData.serviceCenter?.name ?? 'N/A',
+                            style: TextStyle(
+                              color: AppColor().primariColor,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        );
-                      },
+                          Text(serialData.serviceType?.name ?? 'N/A'),
+                          Text(
+                            "Serial No :- ${serialData.serialNo.toString()}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey.shade700,
+                            ),
+                          ),
+
+                          Text(
+                            'Booked at ${DateFormatter.formatForStatus(serialData.createdTime)}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-          ],
-        ),
-      ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

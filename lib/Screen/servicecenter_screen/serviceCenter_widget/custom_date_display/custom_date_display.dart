@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import 'package:serialno_app/utils/color.dart';
 
+import '../../../../providers/profile_provider/getprofile_provider.dart';
+
 class CustomDateDisplay extends StatefulWidget {
   const CustomDateDisplay({Key? key}) : super(key: key);
 
@@ -16,6 +18,16 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    final serialProvider = context.watch<GetNewSerialButtonProvider>();
+    final getProfile = context.watch<Getprofileprovider>();
+    final profile = getProfile.profileData;
+
+    final bool shouldShowAddButton =
+        profile?.currentCompany.businessTypeId == 1;
+
+    final ServingStatus = serialProvider.currentlyServingSerial?.status;
+    final bool Status = ServingStatus == "Serving";
+
     return Consumer<GetNewSerialButtonProvider>(
       builder: (context, serialProvider, child) {
         final servingSerial = serialProvider.currentlyServingSerial;
@@ -64,22 +76,24 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
               ),
             ),
 
-            Positioned(
-              right: -8,
-              top: -20,
-              child: CircleAvatar(
-                radius: 30,
-                backgroundColor: AppColor().primariColor,
-                child: Text(
-                  "${disPlayText}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            if (shouldShowAddButton && Status) ...[
+              Positioned(
+                right: -8,
+                top: -20,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: AppColor().primariColor,
+                  child: Text(
+                    "${disPlayText}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ],
         );
       },

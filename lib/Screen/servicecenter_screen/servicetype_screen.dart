@@ -8,12 +8,9 @@ import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/deleteServiceTypeProvider/deleteServiceTypeProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import 'package:serialno_app/utils/color.dart';
-import '../../Widgets/custom_dropdown/custom_dropdown.dart';
 import '../../Widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
-import '../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
-import '../../utils/date_formatter/date_formatter.dart';
 
 class ServicetypeScreen extends StatefulWidget {
   const ServicetypeScreen({super.key});

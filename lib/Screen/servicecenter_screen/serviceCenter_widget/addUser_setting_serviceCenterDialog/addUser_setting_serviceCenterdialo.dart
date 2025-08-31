@@ -51,7 +51,7 @@ class _AddUser_SettingServiceCenterDialogState
   void _fetchDataForUI() {
     if (_selectedServiceCenter != null) {
       debugPrint(
-        "🚀 FETCHING SERIALS for Service Center ID: ${_selectedServiceCenter!.id!}",
+        " FETCHING SERIALS for Service Center ID: ${_selectedServiceCenter!.id!}",
       );
 
       final formattedDate = DateFormatter.formatForApi(_selectedDate);
@@ -61,9 +61,7 @@ class _AddUser_SettingServiceCenterDialogState
         listen: false,
       ).fetchSerialsButton(_selectedServiceCenter!.id!, formattedDate);
     } else {
-      debugPrint(
-        "⚠️ _fetchDataForUI called but _selectedServiceCenter is null.",
-      );
+      debugPrint("_fetchDataForUI called but _selectedServiceCenter is null.");
     }
   }
 

@@ -11,7 +11,10 @@ import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton
 import 'package:serialno_app/utils/color.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
 
+import '../../../../Widgets/custom_flushbar.dart';
+import '../../../../Widgets/custom_sanckbar.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
+import '../../../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 
 class NewSerialButtonDialog extends StatefulWidget {
   final ServiceCenterModel serviceCenterModel;
@@ -32,6 +35,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
 
   serviceTypeModel? _selectedServiceType;
   DateTime _selectedDate = DateTime.now();
+  bool _serviceTypeHasError = false;
 
   @override
   void initState() {
@@ -45,7 +49,17 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     _serviceDateDisplayController = TextEditingController(
       text: DateFormat('yyy-MM-dd').format(_selectedDate),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final companyId = widget.serviceCenterModel.companyId;
+      if (companyId != null && companyId.isNotEmpty) {
+        Provider.of<GetAddButtonServiceType_Provider>(
+          context,
+          listen: false,
+        ).fetchGetAddButton_ServiceType(companyId);
+      } else {
+        print("Error: Company ID is missing, cannot fetch service types.");
+      }
+    });
   }
 
   @override
@@ -101,7 +115,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
   Future<void> _saveNewSerial() async {
     if (!(_dialogFormKey.currentState?.validate() ?? false)) {
       setState(() {
-        _autovalidateMode = AutovalidateMode.onUserInteraction;
+        _autovalidateMode = AutovalidateMode.disabled;
       });
       return;
     }
@@ -118,6 +132,11 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       listen: false,
     );
 
+    final getSerialProvider = Provider.of<GetNewSerialButtonProvider>(
+      context,
+      listen: false,
+    );
+
     String dateForApiCreate = DateFormatter.formatForApi(_selectedDate);
     String serviceTypeId = _selectedServiceType!.id!;
     String serviceCenterId = widget.serviceCenterModel.id!;
@@ -128,7 +147,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       serviceDate: dateForApiCreate,
       name: _nameController.text,
       contactNo: _contactController.text,
-      forSelf: true,
+      forSelf: false,
       isAdmin: true,
     );
 
@@ -137,9 +156,32 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       serviceCenterId,
     );
 
-    if (mounted && success) {
-      Navigator.pop(context, true);
-    } else if (mounted) {}
+    if (success) {
+      await getSerialProvider.fetchSerialsButton(
+        serviceCenterId,
+        dateForApiCreate,
+      );
+      Navigator.of(context);
+      await CustomFlushbar.showSuccess(
+        context: context,
+        title: "Success",
+        message: " Add NewSerial Successfully",
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: CustomSnackBarWidget(
+            title: "Error",
+            message: serialProvider.errorMessage ?? "Failed to Add User",
+            iconColor: Colors.red.shade400,
+            icon: Icons.dangerous_outlined,
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+      );
+    }
   }
 
   @override
@@ -157,7 +199,6 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-
         child: Container(
           //height: 415,
           width: double.infinity,
@@ -205,45 +246,86 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   SizedBox(height: 10),
                   CustomLabeltext("Service Type"),
                   SizedBox(height: 8),
-                  CustomDropdown<serviceTypeModel>(
-                    items: getAddButton_serviceType_Provider.serviceTypeList,
-                    value: _selectedServiceType,
-                    onChanged: (serviceTypeModel? newValue) {
-                      setState(() {
-                        _selectedServiceType = newValue;
-                      });
-                      print(newValue?.name);
+
+                  FormField<serviceTypeModel>(
+                    autovalidateMode: _autovalidateMode,
+
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Required';
+                      }
+                      return null;
                     },
-                    itemAsString: (serviceTypeModel item) =>
-                        item.name ?? "No Name",
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    builder: (FormFieldState<serviceTypeModel> state) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            _selectedServiceType?.name ?? "Select Service Type",
-                            style: TextStyle(
-                              color: _selectedServiceType != null
-                                  ? Colors.black
-                                  : Colors.grey.shade600,
+                          CustomDropdown<serviceTypeModel>(
+                            items: getAddButton_serviceType_Provider
+                                .serviceTypeList,
+                            value: _selectedServiceType,
+                            onChanged: (serviceTypeModel? newValue) {
+                              setState(() {
+                                _selectedServiceType = newValue;
+                                // if (newValue != null) {
+                                //   _serviceTypeHasError = false;
+                                // }
+                              });
+                              state.didChange(newValue);
+                              print(newValue?.name);
+                            },
+                            itemAsString: (serviceTypeModel item) =>
+                                item.name ?? "No Name",
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: state.hasError
+                                      ? Colors.red.shade900
+                                      : Colors.grey.shade400,
+                                  width: state.hasError ? 1.5 : 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    _selectedServiceType?.name ??
+                                        "Select Service Type",
+                                    style: TextStyle(
+                                      color: _selectedServiceType != null
+                                          ? Colors.black
+                                          : Colors.grey.shade600,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
+                          if (state.hasError)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 5),
+                              child: Text(
+                                state.errorText!,
+                                style: TextStyle(
+                                  color: Colors.red.shade900,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
                         ],
-                      ),
-                    ),
+                      );
+                    },
                   ),
 
                   SizedBox(height: 10),
@@ -289,6 +371,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                           firstDate: DateTime(1900),
                           lastDate: DateTime(2100),
                         );
+
                         if (newDate != null) {
                           setState(() {
                             _selectedDate = newDate;

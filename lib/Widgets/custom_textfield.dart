@@ -20,8 +20,6 @@ class CustomTextField extends StatefulWidget {
   final VoidCallback? onTap;
   final bool showFocusBorder;
 
-  //final String? Function(String?)? validator;
-
   const CustomTextField({
     this.showFocusBorder = true,
     super.key,

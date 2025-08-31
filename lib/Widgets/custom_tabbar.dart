@@ -206,11 +206,6 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
                 widget.date,
               );
 
-              // await  SeriallistProvider.fetchSerialsButton(
-              //       widget.serviceCenterId,
-              //       widget.date!
-              //   );
-
               navigator.pop(true);
             } else {}
           },
@@ -220,9 +215,9 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding:  EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          child: const Text('Update'),
+          child: Text('Update'),
         ),
 
         OutlinedButton(

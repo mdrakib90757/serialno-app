@@ -190,55 +190,48 @@ class _HomeScreenState extends State<HomeScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(company.name, style: GoogleFonts.acme(fontSize: 25)),
-            SizedBox(height: 10),
+            SizedBox(height: 8),
             CustomDateDisplay(),
-            SizedBox(height: 10),
-
-            if (shouldShowAddButton) ...[
-              Container(
-                height: 50,
-                child: CustomDropdown<ServiceCenterModel>(
-                  items: userAssignedServiceCenters,
-                  value: _selectedServiceCenter,
-                  onChanged: (ServiceCenterModel? newvalue) {
-                    debugPrint(
-                      "🔄 DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
-                    );
-                    setState(() {
-                      _selectedServiceCenter = newvalue;
-                    });
-                    _fetchDataForUI();
-                  },
-                  itemAsString: (ServiceCenterModel item) =>
-                      item.name ?? "No Name",
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _selectedServiceCenter?.name ??
-                              "Select Service Center",
-                          style: TextStyle(
-                            color: _selectedServiceCenter != null
-                                ? Colors.black
-                                : Colors.grey.shade600,
-                          ),
+            SizedBox(height: 8),
+            Container(
+              height: 50,
+              child: CustomDropdown<ServiceCenterModel>(
+                items: userAssignedServiceCenters,
+                value: _selectedServiceCenter,
+                onChanged: (ServiceCenterModel? newvalue) {
+                  debugPrint(
+                    "🔄 DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                  );
+                  setState(() {
+                    _selectedServiceCenter = newvalue;
+                  });
+                  _fetchDataForUI();
+                },
+                itemAsString: (ServiceCenterModel item) =>
+                    item.name ?? "No Name",
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade400),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _selectedServiceCenter?.name ?? "Select Service Center",
+                        style: TextStyle(
+                          color: _selectedServiceCenter != null
+                              ? Colors.black
+                              : Colors.grey.shade600,
                         ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.grey.shade600,
-                        ),
-                      ],
-                    ),
+                      ),
+                      Icon(Icons.arrow_drop_down, color: Colors.grey.shade600),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
 
             SizedBox(height: 8),
             Row(
@@ -410,10 +403,16 @@ class _HomeScreenState extends State<HomeScreen>
                 //NextButton
                 GestureDetector(
                   onTap: () async {
+
+                    if (serialProvider.queueSerials.isEmpty && serialProvider.servedSerials.isEmpty) {
+                      print("Button is disabled. No action taken.");
+                      return;
+                    }
                     final nextBtnProvider = Provider.of<nextButtonProvider>(
                       context,
                       listen: false,
                     );
+
                     final serialListProvider =
                         Provider.of<GetNewSerialButtonProvider>(
                           context,
@@ -422,20 +421,11 @@ class _HomeScreenState extends State<HomeScreen>
 
                     // ২. serviceCenterId null check
                     if (_selectedServiceCenter == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Please select a service center first.",
-                          ),
-                        ),
-                      );
                       return;
                     }
 
                     final String? serviceCenterId = _selectedServiceCenter?.id;
-                    final String formattedDate = DateFormat(
-                      'yyyy-MM-dd',
-                    ).format(_selectedDate);
+                    final String formattedDate = DateFormat('yyyy-MM-dd',).format(_selectedDate);
                     debugPrint(
                       "Triggering NEXT action for Service Center: $serviceCenterId on Date: $formattedDate",
                     );
@@ -443,19 +433,20 @@ class _HomeScreenState extends State<HomeScreen>
                     NextButtonRequest nextRequest = NextButtonRequest(
                       date: formattedDate,
                     );
+
                     final success = await nextBtnProvider.NextButton(
                       nextRequest,
                       serviceCenterId!,
                     );
 
-                    if (serviceCenterId == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please select a service center."),
-                        ),
-                      );
-                      return;
-                    }
+                    // if (serviceCenterId == null) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text("Please select a service center."),
+                    //     ),
+                    //   );
+                    //   return;
+                    // }
 
                     if (success && mounted) {
                       debugPrint(
@@ -466,8 +457,10 @@ class _HomeScreenState extends State<HomeScreen>
                         serviceCenterId,
                         formattedDate,
                       );
+
                     } else if (mounted) {
                       debugPrint(" Next button action failed.");
+
                       final errorMessage =
                           nextButtonProvider().errorMessage ??
                           "An unknown error occurred.";
@@ -487,10 +480,13 @@ class _HomeScreenState extends State<HomeScreen>
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: AppColor().primariColor,
+                      color:
+                          serialProvider.queueSerials.isEmpty &&
+                              serialProvider.servedSerials.isEmpty
+                          ? Colors.grey.shade200
+                          : AppColor().primariColor,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -499,7 +495,11 @@ class _HomeScreenState extends State<HomeScreen>
                           child: Text(
                             "Next",
                             style: TextStyle(
-                              color: Colors.white,
+                              color:
+                                  serialProvider.queueSerials.isEmpty &&
+                                      serialProvider.servedSerials.isEmpty
+                                  ? Colors.grey.shade400
+                                  : Colors.white,
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
@@ -508,7 +508,11 @@ class _HomeScreenState extends State<HomeScreen>
                         SizedBox(width: 8),
                         Icon(
                           Icons.arrow_forward,
-                          color: Colors.white,
+                          color:
+                              serialProvider.queueSerials.isEmpty &&
+                                  serialProvider.servedSerials.isEmpty
+                              ? Colors.grey.shade400
+                              : Colors.white,
                           size: 15,
                         ),
                       ],
@@ -621,8 +625,8 @@ class _HomeScreenState extends State<HomeScreen>
             );
 
             return Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
-              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.symmetric(vertical: 3),
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
@@ -633,7 +637,7 @@ class _HomeScreenState extends State<HomeScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       "${serial.serialNo}.",
                       style: TextStyle(
@@ -787,7 +791,7 @@ class _HomeScreenState extends State<HomeScreen>
             );
 
             return Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
+              margin: EdgeInsets.symmetric(vertical: 3),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
