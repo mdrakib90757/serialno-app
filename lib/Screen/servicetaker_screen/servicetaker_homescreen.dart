@@ -209,7 +209,25 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
 
                         if (bookSerialProvider.bookSerialList.isEmpty) {
                           return Center(
-                            child: Text("No appointments found for today."),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.inbox_outlined,
+                                  size: 60,
+                                  color: Colors.grey.shade300,
+                                ),
+                                SizedBox(height: 12),
+
+                                Text(
+                                  'No appointment for today',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[300],
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         }
 

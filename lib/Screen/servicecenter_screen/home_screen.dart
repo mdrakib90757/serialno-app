@@ -437,7 +437,7 @@ class _HomeScreenState extends State<HomeScreen>
                       'yyyy-MM-dd',
                     ).format(_selectedDate);
                     debugPrint(
-                      "🚀 Triggering NEXT action for Service Center: $serviceCenterId on Date: $formattedDate",
+                      "Triggering NEXT action for Service Center: $serviceCenterId on Date: $formattedDate",
                     );
 
                     NextButtonRequest nextRequest = NextButtonRequest(
@@ -567,7 +567,7 @@ class _HomeScreenState extends State<HomeScreen>
     ).then((wasSuccessful) {
       if (mounted) {
         if (wasSuccessful == true) {
-          debugPrint("✅ Dialog returned success. Refreshing UI...");
+          debugPrint("Dialog returned success. Refreshing UI...");
           _fetchDataForUI();
         }
       }
@@ -587,7 +587,24 @@ class _HomeScreenState extends State<HomeScreen>
         }
         final queueList = serialProvider.queueSerials;
         if (queueList.isEmpty) {
-          return const Center(child: Text("No items in the queue."));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.inbox_outlined,
+                  size: 60,
+                  color: Colors.grey.shade300,
+                ),
+                SizedBox(height: 12),
+
+                Text(
+                  'No items in the queue',
+                  style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+                ),
+              ],
+            ),
+          );
         }
         return ListView.builder(
           itemCount: queueList.length,
@@ -708,7 +725,24 @@ class _HomeScreenState extends State<HomeScreen>
         final servedList = serialProvider.servedSerials;
 
         if (servedList.isEmpty) {
-          return const Center(child: Text("No items have been served yet."));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.inbox_outlined,
+                  size: 60,
+                  color: Colors.grey.shade300,
+                ),
+                SizedBox(height: 12),
+
+                Text(
+                  'No items have been served yet',
+                  style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+                ),
+              ],
+            ),
+          );
         }
 
         return ListView.builder(

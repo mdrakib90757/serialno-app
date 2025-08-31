@@ -47,11 +47,37 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                 fontSize: 20,
               ),
             ),
+
             MySerialProvider.isLoading
                 ? Center(
                     child: CircularProgressIndicator(
                       color: AppColor().primariColor,
                       strokeWidth: 2.5,
+                    ),
+                  )
+                : MySerialProvider.services.isEmpty
+                ? Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.inbox_outlined,
+                            size: 60,
+                            color: Colors.grey.shade300,
+                          ),
+                          SizedBox(height: 12),
+
+                          Text(
+                            'No Serial Found',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 : Expanded(

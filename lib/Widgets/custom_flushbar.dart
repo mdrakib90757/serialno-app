@@ -1,5 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:serialno_app/utils/color.dart';
 
 class CustomFlushbar {
   static Future<void> showSuccess({
@@ -10,8 +11,8 @@ class CustomFlushbar {
   }) async {
     await Flushbar(
       title: title,
-      titleColor: Colors.green.shade700,
-      icon: const Icon(Icons.check_circle, color: Colors.green),
+      titleColor: AppColor().primariColor,
+      icon: Icon(Icons.check_circle, color: AppColor().primariColor),
       message: message,
       messageColor: Colors.black,
       duration: const Duration(seconds: 2),
@@ -19,7 +20,7 @@ class CustomFlushbar {
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       borderRadius: BorderRadius.circular(12),
-      borderColor: Colors.green.shade300,
+      borderColor: AppColor().primariColor,
       borderWidth: 1.5,
       flushbarPosition: FlushbarPosition.TOP,
       isDismissible: true,
@@ -27,9 +28,12 @@ class CustomFlushbar {
         onPressed: () {
           if (onOkPressed != null) onOkPressed();
         },
-        child: const Text(
+        child: Text(
           "OK",
-          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: AppColor().primariColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     ).show(context);

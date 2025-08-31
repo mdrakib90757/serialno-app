@@ -9,7 +9,7 @@ import '../../model/serialService_model.dart' hide ProfileData;
 import '../../model/user_model.dart' hide ProfileData;
 import '../../request_model/auth_request/login_request.dart';
 import '../../request_model/auth_request/register_requset.dart';
-import '../../request_model/auth_request/serviceTaker_register.dart'; // আপনার LoginRequest মডেল
+import '../../request_model/auth_request/serviceTaker_register.dart';
 
 class AuthProvider with ChangeNotifier {
   final AuthApi _authApi = AuthApi();

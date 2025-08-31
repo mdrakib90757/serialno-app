@@ -41,7 +41,7 @@ class _Servicecenter_SettingscreenState
 
       final companyId = profileProvider.profileData?.currentCompany.id;
       if (companyId != null && companyId.isNotEmpty) {
-        debugPrint("🚀 Calling fetchDetails for Company ID: $companyId");
+        debugPrint(" Calling fetchDetails for Company ID: $companyId");
         Provider.of<CompanyDetailsProvider>(
           context,
           listen: false,
@@ -88,7 +88,19 @@ class _Servicecenter_SettingscreenState
     if (companyDetails.companyDetails == null) {
       return Scaffold(
         backgroundColor: Colors.white,
-        body: Center(child: Text("Could not load company info.")),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
+              SizedBox(height: 12),
+              Text(
+                'Could not load company info.',
+                style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+              ),
+            ],
+          ),
+        ),
       );
     }
 

@@ -71,131 +71,149 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // create add button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Service Center",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // create add button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Service Center",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                    if (shouldShowAddButton) _buildAddButton(context),
-                  ],
-                ),
-                SizedBox(height: 10),
-                getAddButtonProvider.isLoading
-                    ? Center(
+                  ),
+                  if (shouldShowAddButton) _buildAddButton(context),
+                ],
+              ),
+              SizedBox(height: 10),
+              getAddButtonProvider.isLoading
+                  ? Expanded(
+                      child: Center(
                         child: CircularProgressIndicator(
                           color: AppColor().primariColor,
                           strokeWidth: 2.5,
                         ),
-                      )
-                    : getAddButtonProvider.serviceCenterList.isEmpty
-                    ? Center(child: Text("No Service Center Found."))
-                    : ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount:
-                            getAddButtonProvider.serviceCenterList.length,
-                        itemBuilder: (context, index) {
-                          final serviceCenter =
-                              getAddButtonProvider.serviceCenterList[index];
-                          return Container(
-                            margin: EdgeInsets.symmetric(vertical: 2),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey.shade300),
+                      ),
+                    )
+                  : getAddButtonProvider.serviceCenterList.isEmpty
+                  ? Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.inbox_outlined,
+                              size: 60,
+                              color: Colors.grey.shade300,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    serviceCenter.name ?? "NO Name",
-                                    style: TextStyle(
-                                      color: AppColor().primariColor,
-                                      fontSize: 18,
-                                    ),
+                            SizedBox(height: 12),
+                            Text(
+                              'No Service Center Found',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[300],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: getAddButtonProvider.serviceCenterList.length,
+                      itemBuilder: (context, index) {
+                        final serviceCenter =
+                            getAddButtonProvider.serviceCenterList[index];
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  serviceCenter.name ?? "NO Name",
+                                  style: TextStyle(
+                                    color: AppColor().primariColor,
+                                    fontSize: 18,
                                   ),
+                                ),
 
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        serviceCenter.hotlineNo ??
-                                            "No HotlineNo",
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      serviceCenter.hotlineNo ?? "No HotlineNo",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showDialogBoxEDIT(
+                                          context,
+                                          serviceCenter,
+                                        );
+                                      },
+                                      child: Text(
+                                        "Edit",
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: AppColor().scoenddaryColor,
                                           fontSize: 15,
                                         ),
                                       ),
-                                      Spacer(),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _showDialogBoxEDIT(
-                                            context,
-                                            serviceCenter,
-                                          );
-                                        },
-                                        child: Text(
-                                          "Edit",
-                                          style: TextStyle(
-                                            color: AppColor().scoenddaryColor,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Builder(
-                                        builder: (BuildContext context) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              _showDeleteConfirmationMenu(
-                                                context,
-                                                serviceCenter,
-                                              );
-                                            },
-                                            child: Text(
-                                              "Delete",
-                                              style: TextStyle(
-                                                color:
-                                                    AppColor().scoenddaryColor,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    serviceCenter.email ?? "No Email",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
                                     ),
+                                    SizedBox(width: 8),
+                                    Builder(
+                                      builder: (BuildContext context) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            _showDeleteConfirmationMenu(
+                                              context,
+                                              serviceCenter,
+                                            );
+                                          },
+                                          child: Text(
+                                            "Delete",
+                                            style: TextStyle(
+                                              color: AppColor().scoenddaryColor,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  serviceCenter.email ?? "No Email",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-              ],
-            ),
+                          ),
+                        );
+                      },
+                    ),
+            ],
           ),
         ),
       ),

@@ -55,7 +55,7 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
                   Text(
                     DateFormat('EEEE, d MMMM yyyy').format(_today),
                     style: TextStyle(
-                      color: Colors.lightGreen.shade600,
+                      color: AppColor().primariColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),

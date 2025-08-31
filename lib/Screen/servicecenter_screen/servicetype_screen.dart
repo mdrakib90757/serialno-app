@@ -59,7 +59,7 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
       }
     } else {
       if (mounted) {
-        debugPrint("❌ Error in ServicetypeScreen: Could not find Company ID.");
+        debugPrint(" Error in ServicetypeScreen: Could not find Company ID.");
       }
     }
   }
@@ -122,14 +122,37 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
             ),
             SizedBox(height: 10),
             serviceTypeProvider.isLoading
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor().primariColor,
-                      strokeWidth: 2.5,
+                ? Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor().primariColor,
+                        strokeWidth: 2.5,
+                      ),
                     ),
                   )
                 : serviceTypeProvider.serviceTypeList.isEmpty
-                ? Center(child: Text("No ServiceType Founds"))
+                ? Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.inbox_outlined,
+                            size: 60,
+                            color: Colors.grey.shade300,
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            'No Service Type Found',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[300],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 : Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
