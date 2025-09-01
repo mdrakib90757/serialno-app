@@ -4,6 +4,8 @@ import 'package:serialno_app/core/api_client.dart';
 import 'package:serialno_app/model/serialService_model.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/status_UpdateButtonRequest/status_updateButtonRequest.dart';
 
+import '../../../request_model/serviceCanter_request/next_button_request/next_button_request.dart';
+
 class StatusUpdateButtonService {
   Future<dynamic> statusButton(
     StatusButtonRequest statusRequest,

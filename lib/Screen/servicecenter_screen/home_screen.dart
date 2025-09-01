@@ -403,8 +403,8 @@ class _HomeScreenState extends State<HomeScreen>
                 //NextButton
                 GestureDetector(
                   onTap: () async {
-
-                    if (serialProvider.queueSerials.isEmpty && serialProvider.servedSerials.isEmpty) {
+                    if (serialProvider.queueSerials.isEmpty &&
+                        serialProvider.servedSerials.isEmpty) {
                       print("Button is disabled. No action taken.");
                       return;
                     }
@@ -425,7 +425,9 @@ class _HomeScreenState extends State<HomeScreen>
                     }
 
                     final String? serviceCenterId = _selectedServiceCenter?.id;
-                    final String formattedDate = DateFormat('yyyy-MM-dd',).format(_selectedDate);
+                    final String formattedDate = DateFormat(
+                      'yyyy-MM-dd',
+                    ).format(_selectedDate);
                     debugPrint(
                       "Triggering NEXT action for Service Center: $serviceCenterId on Date: $formattedDate",
                     );
@@ -439,15 +441,6 @@ class _HomeScreenState extends State<HomeScreen>
                       serviceCenterId!,
                     );
 
-                    // if (serviceCenterId == null) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //       content: Text("Please select a service center."),
-                    //     ),
-                    //   );
-                    //   return;
-                    // }
-
                     if (success && mounted) {
                       debugPrint(
                         "Next button action successful. Refreshing list...",
@@ -457,7 +450,6 @@ class _HomeScreenState extends State<HomeScreen>
                         serviceCenterId,
                         formattedDate,
                       );
-
                     } else if (mounted) {
                       debugPrint(" Next button action failed.");
 
@@ -566,6 +558,7 @@ class _HomeScreenState extends State<HomeScreen>
           serviceCenterId: serviceCenterId,
           serviceId: serviceId,
           date: formattedDate,
+          serialDetails: serial,
         );
       },
     ).then((wasSuccessful) {

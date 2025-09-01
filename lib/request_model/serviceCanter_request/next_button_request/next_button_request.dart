@@ -1,5 +1,3 @@
-// lib/request_model/next_button_request.dart
-
 class NextButtonRequest {
   String? date;
 

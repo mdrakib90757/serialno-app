@@ -30,10 +30,19 @@ class nextButtonProvider with ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
-      _isLoading = false;
-      notifyListeners();
-      return false;
+      final errorMessageString = e.toString();
+
+      if (errorMessageString.contains("No Content")) {
+        print(" Received 204 No Content. Treating as success.");
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      } else {
+        _errorMessage = errorMessageString.replaceAll("Exception: ", "").trim();
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
     }
   }
 }

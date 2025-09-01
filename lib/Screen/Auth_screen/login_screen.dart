@@ -57,8 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     bool success = await authProvider.login(request: request);
 
-    if (!mounted) return;
-
     if (success) {
       String userType = authProvider.userType?.toLowerCase().trim() ?? "";
 

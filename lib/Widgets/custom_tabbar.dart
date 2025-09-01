@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/status_UpdateButtonRequest/status_updateButtonRequest.dart';
+import '../model/serialService_model.dart';
 import '../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../providers/serviceCenter_provider/statusButtonProvider/get_status_updateButtonButton_provider.dart';
 import '../providers/serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';
@@ -11,12 +13,14 @@ class ManageSerialDialog extends StatefulWidget {
   final String serviceCenterId;
   final String serviceId;
   final String? date;
+  final SerialModel? serialDetails;
   const ManageSerialDialog({
     Key? key,
     required this.serviceId,
     required this.serviceCenterId,
     required this.initialStatus,
     this.date,
+    this.serialDetails,
   }) : super(key: key);
 
   @override
@@ -36,22 +40,40 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
 
   late String _selectedStatus;
   final _commentController = TextEditingController();
+  final _amountController = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    final details = widget.serialDetails;
+
     _selectedStatus = widget.initialStatus;
+
+    _selectedStatus = details?.status ?? 'Booked';
+
+    final defaultPrice = details?.serviceType?.price?.toString() ?? '0.0';
+    _amountController.text = defaultPrice;
+
+    _commentController.text = details?.comment ?? '';
   }
 
   @override
   void dispose() {
     _commentController.dispose();
+    _amountController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final statusProvider = Provider.of<GetNewSerialButtonProvider>(
+      context,
+      listen: false,
+    );
+    final serialProvider =
+        statusProvider.servedSerials + statusProvider.servedSerials;
+
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
       backgroundColor: Colors.white,
@@ -60,9 +82,10 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Manage Serial',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          Text(
+            "Serial:- ${widget.serialDetails?.serialNo} - ${widget.serialDetails?.name}",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            overflow: TextOverflow.ellipsis,
           ),
           IconButton(
             icon: const Icon(Icons.close),
@@ -80,7 +103,7 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Status',
+                ' Serial Status',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
@@ -89,6 +112,7 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               const SizedBox(height: 8),
               Wrap(
                 spacing: 5.0,
+                runSpacing: 5.0,
                 children: _statuses.map((status) {
                   bool isSelected = _selectedStatus == status;
                   return FilterChip(
@@ -124,6 +148,23 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               ),
               const SizedBox(height: 10),
 
+              if (_selectedStatus == 'Served') ...[
+                Text("Collected Amount (BDT)"),
+                SizedBox(height: 8),
+                CustomTextField(
+                  readOnly: false,
+                  controller: _amountController,
+                  hintText: _amountController.text,
+                  textStyle: TextStyle(color: Colors.black),
+                  isPassword: false,
+                  suffixIcon: Container(
+                    padding: EdgeInsets.all(8),
+                    child: Text("BDT"),
+                  ),
+                ),
+              ],
+
+              SizedBox(height: 8),
               const Text(
                 'Comment',
                 style: TextStyle(
@@ -165,6 +206,7 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               context,
               listen: false,
             );
+
             final getProvider = Provider.of<getStatusUpdate_Provider>(
               context,
               listen: false,
@@ -173,11 +215,18 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               context,
               listen: false,
             );
+
             final navigator = Navigator.of(context);
             final messenger = ScaffoldMessenger.of(context);
 
             final status = _selectedStatus;
             final comment = _commentController.text;
+
+            double? collectedAmount;
+            if (status == 'Served') {
+              collectedAmount = double.tryParse(_amountController.text) ?? 0.0;
+            }
+
             final bool isPresent = [
               'Present',
               'Serving',
@@ -190,6 +239,7 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               comment: comment.isNotEmpty ? comment : "",
               serviceCenterId: widget.serviceCenterId,
               serviceId: widget.serviceId,
+              charge: collectedAmount,
             );
 
             final success = await statusProvider.updateStatus(
@@ -213,11 +263,13 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
             backgroundColor: AppColor().primariColor,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(5),
             ),
-            padding:  EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          child: Text('Update'),
+          child: Provider.of<statusUpdateButton_provder>(context).isLoading
+              ? Text('Please wait...')
+              : Text('Update'),
         ),
 
         OutlinedButton(
@@ -225,7 +277,7 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
           style: OutlinedButton.styleFrom(
             foregroundColor: Colors.black87,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(5),
             ),
             side: BorderSide(color: Colors.grey.shade400),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

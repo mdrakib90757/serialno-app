@@ -76,7 +76,7 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
               ),
             ),
 
-            if (shouldShowAddButton && Status) ...[
+            if (Status) ...[
               Positioned(
                 right: -8,
                 top: -20,
