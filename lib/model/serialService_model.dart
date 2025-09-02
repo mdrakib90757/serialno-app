@@ -57,6 +57,7 @@ class SerialModel {
       statusTime: json['statusTime'] as String?,
       createdTime: json['createdTime'] as String?,
       charge: json["charge"],
+      comment: json["comment"],
     );
   }
 }

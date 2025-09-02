@@ -10,7 +10,7 @@ import 'package:serialno_app/request_model/serviceCanter_request/next_button_req
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
 import '../../Widgets/custom_flushbar.dart';
 import '../../Widgets/custom_sanckbar.dart';
-import '../../Widgets/custom_tabbar.dart';
+import 'statusDialogServiceCenter/statusDialog_serviceCenter.dart';
 import '../../Widgets/custom_textfield.dart';
 import '../../model/serialService_model.dart';
 import '../../model/serviceCenter_model.dart';
@@ -20,6 +20,8 @@ import '../../providers/serviceCenter_provider/addUser_serviceCenter_provider/Si
 import '../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../../providers/serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
 import '../../providers/serviceCenter_provider/nextButton_provider/nextButton_provider.dart';
+import '../../providers/serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';
+import '../../request_model/serviceCanter_request/status_UpdateButtonRequest/status_updateButtonRequest.dart';
 import '../../utils/color.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -400,73 +402,231 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   ),
                 ),
+
                 //NextButton
                 GestureDetector(
                   onTap: () async {
-                    if (serialProvider.queueSerials.isEmpty &&
-                        serialProvider.servedSerials.isEmpty) {
-                      print("Button is disabled. No action taken.");
-                      return;
-                    }
-                    final nextBtnProvider = Provider.of<nextButtonProvider>(
-                      context,
-                      listen: false,
-                    );
+                    // if (serialProvider.queueSerials.isEmpty &&
+                    //     serialProvider.servedSerials.isEmpty) {
+                    //   print("Button is disabled. No action taken.");
+                    //   return;
+                    // }
+                    // final nextBtnProvider = Provider.of<nextButtonProvider>(
+                    //   context,
+                    //   listen: false,
+                    // );
+                    //
+                    //
+                    // final serialListProvider =
+                    //     Provider.of<GetNewSerialButtonProvider>(
+                    //       context,
+                    //       listen: false,
+                    //     );
+                    //
+                    //
+                    // // ২. serviceCenterId null check
+                    // if (_selectedServiceCenter == null) {
+                    //   return;
+                    // }
+                    //
+                    // final String? serviceCenterId = _selectedServiceCenter?.id;
+                    // final String formattedDate = DateFormat(
+                    //   'yyyy-MM-dd',
+                    // ).format(_selectedDate);
+                    // debugPrint(
+                    //   "Triggering NEXT action for Service Center: $serviceCenterId on Date: $formattedDate",
+                    // );
+                    //
+                    // NextButtonRequest nextRequest = NextButtonRequest(
+                    //   date: formattedDate,
+                    // );
+                    //
+                    // final success = await nextBtnProvider.NextButton(
+                    //   nextRequest,
+                    //   serviceCenterId!,
+                    // );
+                    //
+                    // if (success && mounted) {
+                    //   debugPrint(
+                    //     "Next button action successful. Refreshing list...",
+                    //   );
+                    //
+                    //   await serialListProvider.fetchSerialsButton(
+                    //     serviceCenterId,
+                    //     formattedDate,
+                    //   );
+                    // } else if (mounted) {
+                    //   debugPrint(" Next button action failed.");
+                    //
+                    //   final errorMessage =
+                    //       nextButtonProvider().errorMessage ??
+                    //       "An unknown error occurred.";
+                    //
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       elevation: 0,
+                    //       backgroundColor: Colors.transparent,
+                    //       behavior: SnackBarBehavior.floating,
+                    //       content: CustomSnackBarWidget(
+                    //         title: "Error",
+                    //         message: errorMessage,
+                    //       ),
+                    //     ),
+                    //   );
+                    // }
+                    ///
+                    ///
 
-                    final serialListProvider =
+                    final serialProvider =
                         Provider.of<GetNewSerialButtonProvider>(
                           context,
                           listen: false,
                         );
+                    final statusUpdateProvider =
+                        Provider.of<statusUpdateButton_provder>(
+                          context,
+                          listen: false,
+                        );
 
-                    // ২. serviceCenterId null check
-                    if (_selectedServiceCenter == null) {
+                    if (statusUpdateProvider.isLoading ||
+                        serialProvider.isLoading) {
+                      print("Already processing a request. Please wait.");
                       return;
                     }
 
-                    final String? serviceCenterId = _selectedServiceCenter?.id;
-                    final String formattedDate = DateFormat(
-                      'yyyy-MM-dd',
-                    ).format(_selectedDate);
-                    debugPrint(
-                      "Triggering NEXT action for Service Center: $serviceCenterId on Date: $formattedDate",
-                    );
+                    final SerialModel? nextSerial = serialProvider.nextInQueue;
 
-                    NextButtonRequest nextRequest = NextButtonRequest(
-                      date: formattedDate,
-                    );
+                    if (nextSerial == null) {
+                      print("No serial in queue. Button is disabled.");
+                      return;
+                    }
 
-                    final success = await nextBtnProvider.NextButton(
-                      nextRequest,
-                      serviceCenterId!,
-                    );
+                    final String currentStatus =
+                        nextSerial.status?.toLowerCase() ?? "";
 
-                    if (success && mounted) {
-                      debugPrint(
-                        "Next button action successful. Refreshing list...",
+                    if (currentStatus == 'booked' ||
+                        currentStatus == 'waiting' ||
+                        currentStatus == 'present') {
+                      print(
+                        "First tap: Changing status to Serving for serial #${nextSerial.serialNo}",
                       );
 
-                      await serialListProvider.fetchSerialsButton(
-                        serviceCenterId,
-                        formattedDate,
+                      StatusButtonRequest requestData = StatusButtonRequest(
+                        serviceId: nextSerial.id!,
+                        serviceCenterId: nextSerial.serviceCenterId!,
+                        status: "Serving",
+                        isPresent: true,
+                        comment: nextSerial.comment,
+                        charge: nextSerial.charge,
                       );
-                    } else if (mounted) {
-                      debugPrint(" Next button action failed.");
 
-                      final errorMessage =
-                          nextButtonProvider().errorMessage ??
-                          "An unknown error occurred.";
+                      final bool servingSuccess = await statusUpdateProvider
+                          .updateStatus(
+                            requestData,
+                            nextSerial.serviceCenterId!,
+                            nextSerial.id!,
+                          );
+                      if (servingSuccess && mounted) {
+                        final List<SerialModel> queue =
+                            serialProvider.queueSerials;
+                        final int currentSerialIndex = queue.indexWhere(
+                          (s) => s.id == nextSerial.id,
+                        );
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                          behavior: SnackBarBehavior.floating,
-                          content: CustomSnackBarWidget(
-                            title: "Error",
-                            message: errorMessage,
+                        if (currentSerialIndex != -1 &&
+                            currentSerialIndex + 1 < queue.length) {
+                          final SerialModel serialToMakeWaiting =
+                              queue[currentSerialIndex + 1];
+
+                          if (serialToMakeWaiting.status?.toLowerCase() ==
+                              'booked') {
+                            print(
+                              "Making next serial #${serialToMakeWaiting.serialNo} Waiting...",
+                            );
+
+                            StatusButtonRequest waitingRequest =
+                                StatusButtonRequest(
+                                  serviceId: serialToMakeWaiting.id!,
+                                  serviceCenterId:
+                                      serialToMakeWaiting.serviceCenterId!,
+                                  status: "Waiting",
+                                  isPresent: false,
+                                );
+
+                            await statusUpdateProvider.updateStatus(
+                              waitingRequest,
+                              serialToMakeWaiting.serviceCenterId!,
+                              serialToMakeWaiting.id!,
+                            );
+                          }
+                        }
+                        await serialProvider.fetchSerialsButton(
+                          _selectedServiceCenter!.id!,
+                          DateFormat('yyyy-MM-dd').format(_selectedDate),
+                        );
+
+                        // final success = await statusUpdateProvider.updateStatus(
+                        //   requestData,
+                        //   nextSerial.serviceCenterId!,
+                        //   nextSerial.id!,
+                        // );
+
+                        // if (success && mounted) {
+                        //   await serialProvider.fetchSerialsButton(
+                        //     _selectedServiceCenter!.id!,
+                        //     DateFormat('yyyy-MM-dd').format(_selectedDate),
+                        //   );
+
+                        CustomFlushbar.showSuccess(
+                          context: context,
+                          title: "Status Updated",
+                          message:
+                              "Serial #${nextSerial.serialNo} is now Serving.",
+                        );
+                      } else if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            elevation: 0,
+                            backgroundColor: Colors.transparent,
+                            behavior: SnackBarBehavior.floating,
+                            content: CustomSnackBarWidget(
+                              title: "Error",
+                              message:
+                                  statusUpdateProvider.errorMessage ??
+                                  "Failed to update status.",
+                            ),
                           ),
-                        ),
+                        );
+                      }
+                    } else if (currentStatus == 'serving') {
+                      print(
+                        "Second tap: Showing dialog to mark serial #${nextSerial.serialNo} as Served.",
+                      );
+
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ManageSerialDialog(
+                            // initialStatus: serial.status ?? "",
+                            // serviceCenterId: serviceCenterId,
+                            // serviceId: serviceId,
+                            date: DateFormat(
+                              'yyyy-MM-dd',
+                            ).format(_selectedDate),
+                            serialDetails: nextSerial,
+                          );
+                        },
+                      ).then((result) async {
+                        if (result == true && mounted) {
+                          await serialProvider.fetchSerialsButton(
+                            _selectedServiceCenter!.id!,
+                            DateFormat('yyyy-MM-dd').format(_selectedDate),
+                          );
+                        }
+                      });
+                    } else {
+                      print(
+                        "Next button clicked for a serial with status: $currentStatus. No action defined.",
                       );
                     }
                   },
@@ -554,9 +714,9 @@ class _HomeScreenState extends State<HomeScreen>
       context: context,
       builder: (context) {
         return ManageSerialDialog(
-          initialStatus: serial.status ?? "",
-          serviceCenterId: serviceCenterId,
-          serviceId: serviceId,
+          // initialStatus: serial.status ?? "",
+          // serviceCenterId: serviceCenterId,
+          // serviceId: serviceId,
           date: formattedDate,
           serialDetails: serial,
         );

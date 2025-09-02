@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:serialno_app/api/serviceCenter_api/newSerialButton_servicecenter/newSerialButton.dart';
 import 'package:serialno_app/model/serialService_model.dart';
@@ -17,11 +18,38 @@ class GetNewSerialButtonProvider with ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  List<SerialModel> get queueSerials =>
-      _allSerials.where((serial) => serial.status != 'Served').toList();
+  //
+  // List<SerialModel> get queueSerials =>
+  //     _allSerials.where((serial) =>
+  //     serial.status?.toLowerCase() != 'Served' &&
+  //         serial.status?.toLowerCase() != 'Cancelled' &&
+  //         serial.status?.toLowerCase() != 'Absent'
+  //     ).toList()..sort((a, b) => a.serialNo!.compareTo(b.serialNo!));
+
+  List<SerialModel> get queueSerials {
+    final items = _allSerials
+        .where((s) => s.status?.toLowerCase() != 'served')
+        .toList();
+    items.sort((a, b) => (a.serialNo ?? 0).compareTo(b.serialNo ?? 0));
+    return items;
+  }
 
   List<SerialModel> get servedSerials =>
-      _allSerials.where((serial) => serial.status == 'Served').toList();
+      _allSerials.where((s) => s.status?.toLowerCase() == 'served').toList()
+        ..sort((a, b) => (a.serialNo ?? 0).compareTo(b.serialNo ?? 0));
+
+  SerialModel? get nextInQueue {
+    final servingSerial = currentlyServingSerial;
+    if (servingSerial != null) {
+      return servingSerial;
+    }
+
+    const activeQueueStatuses = {'booked', 'present', 'waiting'};
+    return _allSerials
+        .where((s) => activeQueueStatuses.contains(s.status?.toLowerCase()))
+        .sortedBy<num>((s) => s.serialNo ?? 0)
+        .firstOrNull;
+  }
 
   int get totalQueueCount {
     return queueSerials.length;

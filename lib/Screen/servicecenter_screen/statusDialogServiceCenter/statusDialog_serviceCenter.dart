@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/status_UpdateButtonRequest/status_updateButtonRequest.dart';
-import '../model/serialService_model.dart';
-import '../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
-import '../providers/serviceCenter_provider/statusButtonProvider/get_status_updateButtonButton_provider.dart';
-import '../providers/serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';
-import '../utils/color.dart';
+import '../../../model/serialService_model.dart';
+import '../../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
+import '../../../providers/serviceCenter_provider/statusButtonProvider/get_status_updateButtonButton_provider.dart';
+import '../../../providers/serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';
+import '../../../utils/color.dart';
 
 class ManageSerialDialog extends StatefulWidget {
-  final String initialStatus;
-  final String serviceCenterId;
-  final String serviceId;
+  // final String? initialStatus;
+  // final String? serviceCenterId;
+  // final String? serviceId;
   final String? date;
-  final SerialModel? serialDetails;
+  final SerialModel serialDetails;
   const ManageSerialDialog({
     Key? key,
-    required this.serviceId,
-    required this.serviceCenterId,
-    required this.initialStatus,
+    // this.serviceId,
+    // this.serviceCenterId,
+    //this.initialStatus,
     this.date,
-    this.serialDetails,
+    required this.serialDetails,
   }) : super(key: key);
 
   @override
@@ -48,14 +48,18 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
     super.initState();
     final details = widget.serialDetails;
 
-    _selectedStatus = widget.initialStatus;
+    final String currentStatus = details.status?.toLowerCase() ?? 'booked';
 
-    _selectedStatus = details?.status ?? 'Booked';
+    if (currentStatus == 'serving') {
+      _selectedStatus = 'Served';
+    } else {
+      _selectedStatus = details.status ?? 'Booked';
+    }
 
-    final defaultPrice = details?.serviceType?.price?.toString() ?? '0.0';
+    final defaultPrice = details.serviceType?.price?.toString() ?? '0.0';
     _amountController.text = defaultPrice;
 
-    _commentController.text = details?.comment ?? '';
+    _commentController.text = details.comment ?? '';
   }
 
   @override
@@ -216,16 +220,18 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               listen: false,
             );
 
-            final navigator = Navigator.of(context);
             final messenger = ScaffoldMessenger.of(context);
 
             final status = _selectedStatus;
             final comment = _commentController.text;
-
             double? collectedAmount;
             if (status == 'Served') {
               collectedAmount = double.tryParse(_amountController.text) ?? 0.0;
             }
+
+            final String serviceId = widget.serialDetails.id!;
+            final String serviceCenterId =
+                widget.serialDetails.serviceCenterId!;
 
             final bool isPresent = [
               'Present',
@@ -236,25 +242,23 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
             StatusButtonRequest requestData = StatusButtonRequest(
               isPresent: isPresent,
               status: status,
-              comment: comment.isNotEmpty ? comment : "",
-              serviceCenterId: widget.serviceCenterId,
-              serviceId: widget.serviceId,
+              comment: comment.isNotEmpty ? comment : null,
+              serviceCenterId: serviceCenterId,
+              serviceId: serviceId,
               charge: collectedAmount,
             );
 
+            final navigator = Navigator.of(context);
             final success = await statusProvider.updateStatus(
               requestData,
-              widget.serviceCenterId,
-              widget.serviceId,
+              serviceCenterId,
+              serviceId,
             );
 
             if (!mounted) return;
 
             if (success) {
-              await getProvider.fetchStatusButton(
-                widget.serviceCenterId,
-                widget.date,
-              );
+              await getProvider.fetchStatusButton(serviceCenterId, widget.date);
 
               navigator.pop(true);
             } else {}
