@@ -23,6 +23,7 @@ import '../../../../providers/serviceTaker_provider/organaizationProvider/organi
 import '../../../../providers/serviceTaker_provider/serviceCenter_serialBook.dart';
 import '../../../../providers/serviceTaker_provider/serviceType_serialbook_provider.dart';
 import '../../../../utils/color.dart';
+import '../../../../utils/date_formatter/date_formatter.dart';
 import '../../servicetaker_homescreen.dart';
 
 class BookSerialButton extends StatefulWidget {
@@ -54,6 +55,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
   ServiceCenterModel? _selectedServiceCenter;
   serviceTypeModel? _selectedServiceType;
   bool _isInit = true;
+  DateTime _selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -809,6 +811,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   CustomTextField(
                     controller: DateController,
                     hintText: todayDate,
+                    //DateFormatter.formatForApi(_selectedDate),
                     isPassword: false,
                     suffixIcon: IconButton(
                       onPressed: () async {
@@ -867,6 +870,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+
                   CustomRadioGroup<UserName>(
                     groupValue: _SelectUserName,
                     items: [UserName.Self, UserName.Other],
@@ -924,6 +928,12 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                         CustomTextField(
                           isPassword: false,
                           controller: _nameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Required';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(height: 15),
                         CustomLabeltext("Contact No"),
@@ -931,6 +941,12 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                         CustomTextField(
                           isPassword: false,
                           controller: _contactNoController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Required';
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),

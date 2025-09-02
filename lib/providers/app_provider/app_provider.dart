@@ -25,6 +25,7 @@ import '../serviceCenter_provider/editButton_provider/edit_ButtonProvider.dart';
 import '../serviceCenter_provider/editButton_provider/get_EditButton_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
+import '../serviceCenter_provider/newSerialButton_provider/queue_edit_list_provider/queue_edit_list_provider.dart';
 import '../serviceCenter_provider/nextButton_provider/nextButton_provider.dart';
 import '../serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import '../serviceCenter_provider/statusButtonProvider/get_status_updateButtonButton_provider.dart';
@@ -75,7 +76,7 @@ class AppProviders {
 
       ChangeNotifierProvider(create: (context) => NewSerialButtonProvider()),
       ChangeNotifierProvider(create: (context) => GetNewSerialButtonProvider()),
-
+      ChangeNotifierProvider(create: (context) => QueueListEditProvider()),
       ChangeNotifierProvider(create: (context) => getStatusUpdate_Provider()),
       ChangeNotifierProvider(create: (context) => statusUpdateButton_provder()),
 

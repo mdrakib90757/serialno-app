@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
-import 'package:serialno_app/Widgets/custom_labeltext.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
-import 'package:serialno_app/model/serviceCenter_model.dart';
-import 'package:serialno_app/model/service_type_model.dart';
-import 'package:serialno_app/providers/serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
-import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton_request/newSerialButton_request.dart';
-import 'package:serialno_app/utils/color.dart';
-import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
+import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton_request/queue_edit_list_request/queue_edit_list_request.dart';
 
+import '../../../../Widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../Widgets/custom_flushbar.dart';
+import '../../../../Widgets/custom_labeltext.dart';
 import '../../../../Widgets/custom_sanckbar.dart';
+import '../../../../Widgets/custom_textfield.dart';
+import '../../../../model/serialService_model.dart';
+import '../../../../model/serviceCenter_model.dart';
+import '../../../../model/service_type_model.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../../../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
+import '../../../../providers/serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
+import '../../../../providers/serviceCenter_provider/newSerialButton_provider/queue_edit_list_provider/queue_edit_list_provider.dart';
+import '../../../../request_model/serviceCanter_request/newSerialButton_request/newSerialButton_request.dart';
+import '../../../../utils/color.dart';
+import '../../../../utils/date_formatter/date_formatter.dart';
 
-class NewSerialButtonDialog extends StatefulWidget {
+class QueueListEditDialog extends StatefulWidget {
   final ServiceCenterModel serviceCenterModel;
-  const NewSerialButtonDialog({super.key, required this.serviceCenterModel});
+  final SerialModel serialToEdit;
+  const QueueListEditDialog({
+    super.key,
+    required this.serviceCenterModel,
+    required this.serialToEdit,
+  });
 
   @override
-  State<NewSerialButtonDialog> createState() => _NewSerialButtonDialogState();
+  State<QueueListEditDialog> createState() => _QueueListEditDialogState();
 }
 
-class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
+class _QueueListEditDialogState extends State<QueueListEditDialog> {
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
@@ -40,14 +48,23 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
   @override
   void initState() {
     super.initState();
+
+    final serial = widget.serialToEdit;
+
     _serviceCenterController = TextEditingController(
       text: widget.serviceCenterModel.name ?? "N/A",
     );
-    _nameController = TextEditingController();
-    _contactController = TextEditingController();
+    _nameController = TextEditingController(text: serial.name);
+    _contactController = TextEditingController(text: serial.contactNo);
 
+    if (serial.createdTime != null && serial.createdTime is String) {
+      _selectedDate =
+          DateTime.tryParse(serial.createdTime as String) ?? DateTime.now();
+    } else {
+      _selectedDate = DateTime.now();
+    }
     _serviceDateDisplayController = TextEditingController(
-      text: DateFormat('yyy-MM-dd').format(_selectedDate),
+      text: DateFormat('yyyy-MM-dd').format(_selectedDate),
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -113,7 +130,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     }
   }
 
-  Future<void> _saveNewSerial() async {
+  Future<void> _updateQueueSerial() async {
     if (!(_dialogFormKey.currentState?.validate() ?? false)) {
       setState(() {
         _autovalidateMode = AutovalidateMode.disabled;
@@ -132,6 +149,10 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       context,
       listen: false,
     );
+    final queueEditListProvider = Provider.of<QueueListEditProvider>(
+      context,
+      listen: false,
+    );
 
     final getSerialProvider = Provider.of<GetNewSerialButtonProvider>(
       context,
@@ -141,8 +162,9 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     String dateForApiCreate = DateFormatter.formatForApi(_selectedDate);
     String serviceTypeId = _selectedServiceType!.id!;
     String serviceCenterId = widget.serviceCenterModel.id!;
+    String serviceId = widget.serialToEdit.id!;
 
-    NewSerialButtonRequest buttonRequest = NewSerialButtonRequest(
+    queueEditListRequest queueEditRequest = queueEditListRequest(
       serviceCenterId: serviceCenterId,
       serviceTypeId: serviceTypeId,
       serviceDate: dateForApiCreate,
@@ -152,9 +174,10 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       isAdmin: true,
     );
 
-    final success = await serialProvider.SerialButton(
-      buttonRequest,
+    final success = await queueEditListProvider.QueueListEdit(
+      queueEditRequest,
       serviceCenterId,
+      serviceId,
     );
 
     if (success) {
@@ -166,7 +189,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       await CustomFlushbar.showSuccess(
         context: context,
         title: "Success",
-        message: " Add NewSerial Successfully",
+        message: "Serial updated successfully",
       );
       Navigator.pop(context);
     } else {
@@ -174,7 +197,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
         SnackBar(
           content: CustomSnackBarWidget(
             title: "Error",
-            message: serialProvider.errorMessage ?? "Failed to Add User",
+            message: serialProvider.errorMessage ?? "Failed to update serial",
             iconColor: Colors.red.shade400,
             icon: Icons.dangerous_outlined,
           ),
@@ -190,9 +213,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     final getAddButton_serviceType_Provider =
         Provider.of<GetAddButtonServiceType_Provider>(context);
     final serialProvider = Provider.of<NewSerialButtonProvider>(context);
-    final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    DateTime selectedDialogDate = DateTime.now();
-
+    final queueEditListProvider = Provider.of<QueueListEditProvider>(context);
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -211,7 +232,6 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
           ),
           child: Form(
             key: _dialogFormKey,
-            autovalidateMode: _autovalidateMode,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,83 +270,118 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   SizedBox(height: 10),
                   CustomLabeltext("Service Type"),
                   SizedBox(height: 8),
-                  FormField<serviceTypeModel>(
-                    autovalidateMode: _autovalidateMode,
 
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Required';
+                  Consumer<GetAddButtonServiceType_Provider>(
+                    builder: (context, serviceTypeProvider, child) {
+                      if (serviceTypeProvider.isLoading &&
+                          serviceTypeProvider.serviceTypeList.isEmpty) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: AppColor().primariColor,
+                            strokeWidth: 2.5,
+                          ),
+                        );
                       }
-                      return null;
-                    },
-                    builder: (FormFieldState<serviceTypeModel> state) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomDropdown<serviceTypeModel>(
-                            items: getAddButton_serviceType_Provider
-                                .serviceTypeList,
-                            value: _selectedServiceType,
-                            onChanged: (serviceTypeModel? newValue) {
-                              setState(() {
-                                _selectedServiceType = newValue;
-                                // if (newValue != null) {
-                                //   _serviceTypeHasError = false;
-                                // }
-                              });
-                              state.didChange(newValue);
-                              print(newValue?.name);
-                            },
-                            itemAsString: (serviceTypeModel item) =>
-                                item.name ?? "No Name",
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: state.hasError
-                                      ? Colors.red.shade900
-                                      : Colors.grey.shade400,
-                                  width: state.hasError ? 1.5 : 1.0,
+                      if (_selectedServiceType == null &&
+                          widget.serialToEdit.serviceType != null) {
+                        try {
+                          _selectedServiceType = serviceTypeProvider
+                              .serviceTypeList
+                              .firstWhere(
+                                (item) =>
+                                    item.id ==
+                                    widget.serialToEdit.serviceType!.id,
+                              );
+                        } catch (e) {
+                          print(
+                            "Default service type not found in the list: $e",
+                          );
+                          _selectedServiceType = null;
+                        }
+                      }
+                      return FormField<serviceTypeModel>(
+                        autovalidateMode: _autovalidateMode,
+
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Required';
+                          }
+                          return null;
+                        },
+                        initialValue: _selectedServiceType,
+                        builder: (FormFieldState<serviceTypeModel> state) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomDropdown<serviceTypeModel>(
+                                items: getAddButton_serviceType_Provider
+                                    .serviceTypeList,
+                                value: _selectedServiceType,
+                                onChanged: (serviceTypeModel? newValue) {
+                                  setState(() {
+                                    _selectedServiceType = newValue;
+                                    // if (newValue != null) {
+                                    //   _serviceTypeHasError = false;
+                                    // }
+                                  });
+                                  state.didChange(newValue);
+                                  print(newValue?.name);
+                                },
+                                itemAsString: (serviceTypeModel item) =>
+                                    item.name ?? "No Name",
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: state.hasError
+                                          ? Colors.red.shade900
+                                          : Colors.grey.shade400,
+                                      width: state.hasError ? 1.5 : 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        _selectedServiceType?.name ??
+                                            " Select Service Type",
+                                        style: TextStyle(
+                                          color: _selectedServiceType != null
+                                              ? Colors.black
+                                              : Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(5.0),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    _selectedServiceType?.name ??
-                                        "Select Service Type",
+                              if (state.hasError)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 12,
+                                    top: 5,
+                                  ),
+                                  child: Text(
+                                    state.errorText!,
                                     style: TextStyle(
-                                      color: _selectedServiceType != null
-                                          ? Colors.black
-                                          : Colors.grey.shade600,
+                                      color: Colors.red.shade900,
+                                      fontSize: 12,
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (state.hasError)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12, top: 5),
-                              child: Text(
-                                state.errorText!,
-                                style: TextStyle(
-                                  color: Colors.red.shade900,
-                                  fontSize: 12,
                                 ),
-                              ),
-                            ),
-                        ],
+                            ],
+                          );
+                        },
                       );
                     },
                   ),
@@ -335,15 +390,8 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   CustomLabeltext("Date"),
                   SizedBox(height: 8),
                   CustomTextField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Required';
-                      }
-                      return null;
-                    },
                     onTap: _selectDate,
-                    hintText: todayDate,
-                    //DateFormatter.formatForApi(_selectedDate),
+                    hintText: DateFormatter.formatForApi(_selectedDate),
                     textStyle: TextStyle(color: Colors.grey.shade400),
                     isPassword: false,
                     controller: _serviceDateDisplayController,
@@ -428,8 +476,8 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        onPressed: _saveNewSerial,
-                        child: serialProvider.isLoading
+                        onPressed: _updateQueueSerial,
+                        child: queueEditListProvider.isLoading
                             ? Text(
                                 "Please wait",
                                 style: TextStyle(color: Colors.white),

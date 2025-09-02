@@ -79,10 +79,9 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
         statusProvider.servedSerials + statusProvider.servedSerials;
 
     return AlertDialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 24.0),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -94,7 +93,7 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
-            splashRadius: 20,
+            splashRadius: 18,
           ),
         ],
       ),
@@ -113,10 +112,10 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 8),
+
               Wrap(
                 spacing: 5.0,
-                runSpacing: 5.0,
+                // runSpacing: 5.0,
                 children: _statuses.map((status) {
                   bool isSelected = _selectedStatus == status;
                   return FilterChip(
@@ -150,7 +149,6 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 10),
 
               if (_selectedStatus == 'Served') ...[
                 Text("Collected Amount (BDT)"),
@@ -269,7 +267,7 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            // padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
           child: Provider.of<statusUpdateButton_provder>(context).isLoading
               ? Text('Please wait...')
@@ -284,12 +282,12 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               borderRadius: BorderRadius.circular(5),
             ),
             side: BorderSide(color: Colors.grey.shade400),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
           child: const Text('Cancel'),
         ),
       ],
-      actionsPadding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
+      // actionsPadding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
     );
   }
 }

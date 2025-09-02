@@ -19,6 +19,7 @@ class CustomTextField extends StatefulWidget {
   final bool? readOnly;
   final VoidCallback? onTap;
   final bool showFocusBorder;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     this.showFocusBorder = true,
@@ -38,6 +39,7 @@ class CustomTextField extends StatefulWidget {
     this.filled,
     this.readOnly,
     this.onTap,
+    this.validator,
   });
 
   @override
@@ -62,7 +64,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
     return TextFormField(
       controller: widget.controller,
-      validator: (value) => value!.isEmpty ? "Required" : null,
+      validator:
+          widget.validator ??
+          (value) {
+            if (value == null || value.isEmpty) {
+              return 'Required';
+            }
+            return null;
+          },
       autovalidateMode: autovalidateMode,
       onChanged: (value) {
         if (autovalidateMode != AutovalidateMode.always) {
