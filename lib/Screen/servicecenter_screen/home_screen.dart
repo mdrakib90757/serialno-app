@@ -673,11 +673,13 @@ class _HomeScreenState extends State<HomeScreen>
               labelColor: AppColor().primariColor,
               labelStyle: TextStyle(fontWeight: FontWeight.w500),
               indicatorColor: AppColor().primariColor,
+              dividerColor: Colors.transparent,
               tabs: [
                 Tab(text: "Queue(${serialProvider.totalQueueCount})"),
                 Tab(text: "Served(${serialProvider.totalServedCount})"),
               ],
             ),
+            SizedBox(height: 8,),
             Expanded(
               child: TabBarView(
                 controller: tabController,
