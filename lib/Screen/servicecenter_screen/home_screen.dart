@@ -121,6 +121,11 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String selectedDateString = DateFormat(
+      'yyyy-MM-dd',
+    ).format(_selectedDate);
+    final bool isToday = todayString == selectedDateString;
     final serialProvider = context.watch<GetNewSerialButtonProvider>();
     final getProfile = context.watch<Getprofileprovider>();
 
@@ -204,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen>
                 value: _selectedServiceCenter,
                 onChanged: (ServiceCenterModel? newvalue) {
                   debugPrint(
-                    "🔄 DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                    "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
                   );
                   setState(() {
                     _selectedServiceCenter = newvalue;
@@ -254,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen>
                     child: CustomTextField(
                       readOnly: true,
                       controller: _dateController,
-                      hintText: _dateController.text,
+                      hintText: todayString,
                       textStyle: TextStyle(color: Colors.black),
                       isPassword: false,
                       suffixIcon: IconButton(
@@ -263,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen>
                             builder: (context, child) {
                               return Theme(
                                 data: Theme.of(context).copyWith(
+                                  useMaterial3: false,
                                   colorScheme: ColorScheme.light(
                                     primary: AppColor().primariColor,
                                     // Header color
@@ -287,8 +293,10 @@ class _HomeScreenState extends State<HomeScreen>
                             },
                             context: context,
                             initialDate: _selectedDate,
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime(2100),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime.now().add(
+                              const Duration(days: 365),
+                            ),
                           );
                           if (newDate != null && newDate != _selectedDate) {
                             setState(() {
@@ -297,6 +305,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 newDate,
                               );
                             });
+                            _fetchDataForUI();
                           }
                         },
                         icon: Icon(
@@ -315,69 +324,75 @@ class _HomeScreenState extends State<HomeScreen>
               children: [
                 //Serial Button
                 GestureDetector(
-                  onTap: () async {
-                    final NewSerialButton =
-                        Provider.of<NewSerialButtonProvider>(
-                          context,
-                          listen: false,
-                        );
+                  onTap: isToday
+                      ? () async {
+                          final NewSerialButton =
+                              Provider.of<NewSerialButtonProvider>(
+                                context,
+                                listen: false,
+                              );
 
-                    if (_selectedServiceCenter == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Please select a service center first.",
-                          ),
-                        ),
-                      );
-                      return;
-                    }
-                    final bool? wasSuccessful = await showDialog<bool?>(
-                      context: context,
-                      builder: (context) {
-                        return NewSerialButtonDialog(
-                          serviceCenterModel: _selectedServiceCenter!,
-                        );
-                      },
-                    );
+                          if (_selectedServiceCenter == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Please select a service center first.",
+                                ),
+                              ),
+                            );
+                            return;
+                          }
 
-                    if (mounted) {
-                      if (wasSuccessful == true) {
-                        await CustomFlushbar.showSuccess(
-                          context: context,
-                          title: "Success",
-                          message: "New serial has been booked successfully.",
-                        );
+                          final bool? wasSuccessful = await showDialog<bool?>(
+                            context: context,
+                            builder: (context) {
+                              return NewSerialButtonDialog(
+                                serviceCenterModel: _selectedServiceCenter!,
+                              );
+                            },
+                          );
 
-                        _fetchDataForUI();
-                      } else if (wasSuccessful == false) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                            behavior: SnackBarBehavior.floating,
-                            content: CustomSnackBarWidget(
-                              title: "Error",
-                              message:
-                                  NewSerialButton.errorMessage ??
-                                  "Failed to create new serial. Please try again.",
-                            ),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Please select a service center first.",
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  },
+                          if (mounted) {
+                            if (wasSuccessful == true) {
+                              await CustomFlushbar.showSuccess(
+                                context: context,
+                                title: "Success",
+                                message:
+                                    "New serial has been booked successfully.",
+                              );
+
+                              _fetchDataForUI();
+                            } else if (wasSuccessful == false) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  behavior: SnackBarBehavior.floating,
+                                  content: CustomSnackBarWidget(
+                                    title: "Error",
+                                    message:
+                                        NewSerialButton.errorMessage ??
+                                        "Failed to create new serial. Please try again.",
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Please select a service center first.",
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        }
+                      : null,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColor().primariColor,
+                      color: isToday
+                          ? AppColor().primariColor
+                          : Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Padding(
@@ -388,12 +403,20 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.add, color: Colors.white, size: 15),
+                          Icon(
+                            Icons.add,
+                            color: isToday
+                                ? Colors.white
+                                : Colors.grey.shade400,
+                            size: 15,
+                          ),
                           SizedBox(width: 5),
                           Text(
                             "New Serial",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: isToday
+                                  ? Colors.white
+                                  : Colors.grey.shade400,
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
@@ -406,196 +429,208 @@ class _HomeScreenState extends State<HomeScreen>
 
                 //NextButton
                 GestureDetector(
-                  onTap: () async {
-                    final serialProvider =
-                        Provider.of<GetNewSerialButtonProvider>(
-                          context,
-                          listen: false,
-                        );
-                    final statusUpdateProvider =
-                        Provider.of<statusUpdateButton_provder>(
-                          context,
-                          listen: false,
-                        );
+                  onTap: isToday
+                      ? () async {
+                          final serialProvider =
+                              Provider.of<GetNewSerialButtonProvider>(
+                                context,
+                                listen: false,
+                              );
+                          final statusUpdateProvider =
+                              Provider.of<statusUpdateButton_provder>(
+                                context,
+                                listen: false,
+                              );
 
-                    if (statusUpdateProvider.isLoading ||
-                        serialProvider.isLoading) {
-                      print("Already processing a request. Please wait.");
-                      return;
-                    }
+                          if (statusUpdateProvider.isLoading ||
+                              serialProvider.isLoading) {
+                            print("Already processing a request. Please wait.");
+                            return;
+                          }
 
-                    final SerialModel? nextSerial = serialProvider.nextInQueue;
+                          final SerialModel? nextSerial =
+                              serialProvider.nextInQueue;
 
-                    if (nextSerial == null) {
-                      print("No active serial in queue. Button is disabled.");
-                      return;
-                    }
-
-                    final String currentStatus =
-                        nextSerial.status?.toLowerCase() ?? "";
-
-                    if ([
-                      'booked',
-                      'waiting',
-                      'present',
-                    ].contains(currentStatus)) {
-                      StatusButtonRequest servingRequest = StatusButtonRequest(
-                        serviceId: nextSerial.id!,
-                        serviceCenterId: nextSerial.serviceCenterId!,
-                        status: "Serving",
-                        isPresent: true,
-                      );
-
-                      final bool servingSuccess = await statusUpdateProvider
-                          .updateStatus(
-                            servingRequest,
-                            nextSerial.serviceCenterId!,
-                            nextSerial.id!,
-                          );
-
-                      if (!servingSuccess) {
-                        if (mounted) {
-                          CustomFlushbar.showSuccess(
-                            context: context,
-                            title: "Status Updated",
-                            message:
-                                "Serial #${nextSerial.serialNo} is now Serving.",
-                          );
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              statusUpdateProvider.errorMessage ??
-                                  "Failed to update status.",
-                            ),
-                          ),
-                        );
-
-                        return;
-                      }
-
-                      if (mounted) {
-                        await serialProvider.fetchSerialsButton(
-                          _selectedServiceCenter!.id!,
-                          DateFormat('yyyy-MM-dd').format(_selectedDate),
-                        );
-
-                        final nextWaitingCandidate = serialProvider.queueSerials
-                            .firstWhereOrNull(
-                              (s) =>
-                                  s.serialNo! > nextSerial.serialNo! &&
-                                  s.status?.toLowerCase() == 'booked',
+                          if (nextSerial == null) {
+                            print(
+                              "No active serial in queue. Button is disabled.",
                             );
+                            return;
+                          }
 
-                        if (nextWaitingCandidate != null) {
-                          StatusButtonRequest waitingRequest =
-                              StatusButtonRequest(
-                                serviceId: nextWaitingCandidate.id!,
-                                serviceCenterId:
-                                    nextWaitingCandidate.serviceCenterId!,
-                                status: "Waiting",
-                                isPresent: false,
-                              );
-                          await statusUpdateProvider.updateStatus(
-                            waitingRequest,
-                            nextWaitingCandidate.serviceCenterId!,
-                            nextWaitingCandidate.id!,
-                          );
-                        }
-                        await serialProvider.fetchSerialsButton(
-                          _selectedServiceCenter!.id!,
-                          DateFormat('yyyy-MM-dd').format(_selectedDate),
-                        );
-                      }
-                    } else if (currentStatus == 'serving') {
-                      final navigator = Navigator.of(context);
+                          final String currentStatus =
+                              nextSerial.status?.toLowerCase() ?? "";
 
-                      final result = await showDialog<bool>(
-                        context: context,
-                        builder: (context) {
-                          return ManageSerialDialog(
-                            serialDetails: nextSerial,
-                            date: DateFormat(
-                              'yyyy-MM-dd',
-                            ).format(_selectedDate),
-                          );
-                        },
-                      );
-
-                      if (result == true && navigator.mounted) {
-                        print(
-                          "Dialog returned success. Refreshing list and triggering auto-next...",
-                        );
-
-                        await serialProvider.fetchSerialsButton(
-                          _selectedServiceCenter!.id!,
-                          DateFormat('yyyy-MM-dd').format(_selectedDate),
-                        );
-
-                        final newNextSerial = serialProvider.nextInQueue;
-
-                        if (newNextSerial != null) {
-                          StatusButtonRequest newServingRequest =
-                              StatusButtonRequest(
-                                serviceId: newNextSerial.id!,
-                                serviceCenterId: newNextSerial.serviceCenterId!,
-                                status: "Serving",
-                                isPresent: true,
-                              );
-
-                          final newServingSuccess = await statusUpdateProvider
-                              .updateStatus(
-                                newServingRequest,
-                                newNextSerial.serviceCenterId!,
-                                newNextSerial.id!,
-                              );
-
-                          if (newServingSuccess) {
-                            await serialProvider.fetchSerialsButton(
-                              _selectedServiceCenter!.id!,
-                              DateFormat('yyyy-MM-dd').format(_selectedDate),
-                            );
-
-                            final finalNextWaiting = serialProvider.queueSerials
-                                .firstWhereOrNull(
-                                  (s) =>
-                                      s.serialNo! > newNextSerial.serialNo! &&
-                                      s.status?.toLowerCase() == 'booked',
+                          if ([
+                            'booked',
+                            'waiting',
+                            'present',
+                          ].contains(currentStatus)) {
+                            StatusButtonRequest servingRequest =
+                                StatusButtonRequest(
+                                  serviceId: nextSerial.id!,
+                                  serviceCenterId: nextSerial.serviceCenterId!,
+                                  status: "Serving",
+                                  isPresent: true,
                                 );
 
-                            if (finalNextWaiting != null) {
-                              StatusButtonRequest finalWaitingRequest =
-                                  StatusButtonRequest(
-                                    serviceId: finalNextWaiting.id!,
-                                    serviceCenterId:
-                                        finalNextWaiting.serviceCenterId!,
-                                    status: "Waiting",
-                                    isPresent: false,
-                                  );
-                              await statusUpdateProvider.updateStatus(
-                                finalWaitingRequest,
-                                finalNextWaiting.serviceCenterId!,
-                                finalNextWaiting.id!,
+                            final bool servingSuccess =
+                                await statusUpdateProvider.updateStatus(
+                                  servingRequest,
+                                  nextSerial.serviceCenterId!,
+                                  nextSerial.id!,
+                                );
+
+                            if (!servingSuccess) {
+                              if (mounted) {
+                                CustomFlushbar.showSuccess(
+                                  context: context,
+                                  title: "Status Updated",
+                                  message:
+                                      "Serial #${nextSerial.serialNo} is now Serving.",
+                                );
+                              }
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    statusUpdateProvider.errorMessage ??
+                                        "Failed to update status.",
+                                  ),
+                                ),
                               );
+
+                              return;
                             }
 
-                            await serialProvider.fetchSerialsButton(
-                              _selectedServiceCenter!.id!,
-                              DateFormat('yyyy-MM-dd').format(_selectedDate),
+                            if (mounted) {
+                              await serialProvider.fetchSerialsButton(
+                                _selectedServiceCenter!.id!,
+                                DateFormat('yyyy-MM-dd').format(_selectedDate),
+                              );
+
+                              final nextWaitingCandidate = serialProvider
+                                  .queueSerials
+                                  .firstWhereOrNull(
+                                    (s) =>
+                                        s.serialNo! > nextSerial.serialNo! &&
+                                        s.status?.toLowerCase() == 'booked',
+                                  );
+
+                              if (nextWaitingCandidate != null) {
+                                StatusButtonRequest waitingRequest =
+                                    StatusButtonRequest(
+                                      serviceId: nextWaitingCandidate.id!,
+                                      serviceCenterId:
+                                          nextWaitingCandidate.serviceCenterId!,
+                                      status: "Waiting",
+                                      isPresent: false,
+                                    );
+                                await statusUpdateProvider.updateStatus(
+                                  waitingRequest,
+                                  nextWaitingCandidate.serviceCenterId!,
+                                  nextWaitingCandidate.id!,
+                                );
+                              }
+                              await serialProvider.fetchSerialsButton(
+                                _selectedServiceCenter!.id!,
+                                DateFormat('yyyy-MM-dd').format(_selectedDate),
+                              );
+                            }
+                          } else if (currentStatus == 'serving') {
+                            final navigator = Navigator.of(context);
+
+                            final result = await showDialog<bool>(
+                              context: context,
+                              builder: (context) {
+                                return ManageSerialDialog(
+                                  serialDetails: nextSerial,
+                                  date: DateFormat(
+                                    'yyyy-MM-dd',
+                                  ).format(_selectedDate),
+                                );
+                              },
                             );
+
+                            if (result == true && navigator.mounted) {
+                              print(
+                                "Dialog returned success. Refreshing list and triggering auto-next...",
+                              );
+
+                              await serialProvider.fetchSerialsButton(
+                                _selectedServiceCenter!.id!,
+                                DateFormat('yyyy-MM-dd').format(_selectedDate),
+                              );
+
+                              final newNextSerial = serialProvider.nextInQueue;
+
+                              if (newNextSerial != null) {
+                                StatusButtonRequest newServingRequest =
+                                    StatusButtonRequest(
+                                      serviceId: newNextSerial.id!,
+                                      serviceCenterId:
+                                          newNextSerial.serviceCenterId!,
+                                      status: "Serving",
+                                      isPresent: true,
+                                    );
+
+                                final newServingSuccess =
+                                    await statusUpdateProvider.updateStatus(
+                                      newServingRequest,
+                                      newNextSerial.serviceCenterId!,
+                                      newNextSerial.id!,
+                                    );
+
+                                if (newServingSuccess) {
+                                  await serialProvider.fetchSerialsButton(
+                                    _selectedServiceCenter!.id!,
+                                    DateFormat(
+                                      'yyyy-MM-dd',
+                                    ).format(_selectedDate),
+                                  );
+
+                                  final finalNextWaiting = serialProvider
+                                      .queueSerials
+                                      .firstWhereOrNull(
+                                        (s) =>
+                                            s.serialNo! >
+                                                newNextSerial.serialNo! &&
+                                            s.status?.toLowerCase() == 'booked',
+                                      );
+
+                                  if (finalNextWaiting != null) {
+                                    StatusButtonRequest finalWaitingRequest =
+                                        StatusButtonRequest(
+                                          serviceId: finalNextWaiting.id!,
+                                          serviceCenterId:
+                                              finalNextWaiting.serviceCenterId!,
+                                          status: "Waiting",
+                                          isPresent: false,
+                                        );
+                                    await statusUpdateProvider.updateStatus(
+                                      finalWaitingRequest,
+                                      finalNextWaiting.serviceCenterId!,
+                                      finalNextWaiting.id!,
+                                    );
+                                  }
+
+                                  await serialProvider.fetchSerialsButton(
+                                    _selectedServiceCenter!.id!,
+                                    DateFormat(
+                                      'yyyy-MM-dd',
+                                    ).format(_selectedDate),
+                                  );
+                                }
+                              }
+                            }
                           }
                         }
-                      }
-                    }
-                  },
+                      : null,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color:
-                          serialProvider.queueSerials.isEmpty &&
-                              serialProvider.servedSerials.isEmpty
+                      color: !isToday || serialProvider.queueSerials.isEmpty
                           ? Colors.grey.shade200
                           : AppColor().primariColor,
                     ),
@@ -607,8 +642,8 @@ class _HomeScreenState extends State<HomeScreen>
                             "Next",
                             style: TextStyle(
                               color:
-                                  serialProvider.queueSerials.isEmpty &&
-                                      serialProvider.servedSerials.isEmpty
+                                  !isToday ||
+                                      serialProvider.queueSerials.isEmpty
                                   ? Colors.grey.shade400
                                   : Colors.white,
                               fontSize: 15,
@@ -619,9 +654,7 @@ class _HomeScreenState extends State<HomeScreen>
                         SizedBox(width: 8),
                         Icon(
                           Icons.arrow_forward,
-                          color:
-                              serialProvider.queueSerials.isEmpty &&
-                                  serialProvider.servedSerials.isEmpty
+                          color: !isToday || serialProvider.queueSerials.isEmpty
                               ? Colors.grey.shade400
                               : Colors.white,
                           size: 15,
@@ -691,6 +724,12 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildQueueList() {
+    final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String selectedDateString = DateFormat(
+      'yyyy-MM-dd',
+    ).format(_selectedDate);
+    final bool isToday = todayString == selectedDateString;
+
     return Consumer<GetNewSerialButtonProvider>(
       builder: (context, serialProvider, child) {
         if (serialProvider.isLoading) {
@@ -786,7 +825,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 ),
                                 SizedBox(width: 10),
 
-                                if (canBeEdited) ...[
+                                if (isToday && canBeEdited) ...[
                                   GestureDetector(
                                     onTap: () {
                                       showDialog(

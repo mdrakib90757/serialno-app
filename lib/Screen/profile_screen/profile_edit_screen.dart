@@ -22,6 +22,18 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     super.initState();
   }
 
+  String _formatDate(String? dateString) {
+    if (dateString == null || dateString.isEmpty) {
+      return "Not set"; // বা "No DOB"
+    }
+    try {
+      final DateTime parsedDate = DateTime.parse(dateString);
+      return DateFormat('dd/MM/yyyy').format(parsedDate);
+    } catch (e) {
+      return dateString;
+    }
+  }
+
   void _showDialog(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final result = await showDialog(
@@ -42,6 +54,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     if (profile == null) {
       return Scaffold(
+        backgroundColor: Colors.white,
         appBar: MyAppbar(),
         body: Center(
           child: CircularProgressIndicator(
@@ -114,7 +127,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         "Name",
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.6),
-                          fontSize: 20,
+                          fontSize: 15,
                         ),
                       ),
                       Consumer(
@@ -122,7 +135,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           return Text(
                             profile!.name,
                             //authProvider.user_model!.user.name??"",
-                            style: TextStyle(color: Colors.black, fontSize: 18),
+                            style: TextStyle(color: Colors.black, fontSize: 17),
                           );
                         },
                       ),
@@ -152,7 +165,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         "Login Name",
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.6),
-                          fontSize: 20,
+                          fontSize: 15,
                         ),
                       ),
                       Consumer(
@@ -160,7 +173,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           return Text(
                             //authProvider.user_model!.user.loginName??"",
                             profile!.loginName,
-                            style: TextStyle(color: Colors.black, fontSize: 18),
+                            style: TextStyle(color: Colors.black, fontSize: 17),
                           );
                         },
                       ),
@@ -191,7 +204,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         "Mobile No",
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.6),
-                          fontSize: 20,
+                          fontSize: 15,
                         ),
                       ),
                       Consumer(
@@ -199,7 +212,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           return Text(
                             //authProvider.user_model!.user.mobileNo??"",
                             profile!.mobileNo,
-                            style: TextStyle(color: Colors.black, fontSize: 18),
+                            style: TextStyle(color: Colors.black, fontSize: 17),
                           );
                         },
                       ),
@@ -230,7 +243,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         "Email",
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.6),
-                          fontSize: 20,
+                          fontSize: 15,
                         ),
                       ),
                       Consumer(
@@ -238,7 +251,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           return Text(
                             //authProvider.user_model!.user.email??"",
                             profile!.email,
-                            style: TextStyle(color: Colors.black, fontSize: 18),
+                            style: TextStyle(color: Colors.black, fontSize: 17),
                           );
                         },
                       ),
@@ -270,14 +283,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         "Gender",
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.6),
-                          fontSize: 20,
+                          fontSize: 15,
                         ),
                       ),
 
                       Text(
-                        // authProvider.user_model!.user.profileData!.gender??"",
                         profile?.profileData?.gender ?? "",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
+                        style: TextStyle(color: Colors.black, fontSize: 17),
                       ),
                     ],
                   ),
@@ -306,13 +318,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         "Date of birth",
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.6),
-                          fontSize: 20,
+                          fontSize: 15,
                         ),
                       ),
                       Text(
-                        //authProvider.user_model!.user.profileData!.dateOfBirth??"",
-                        profile?.profileData?.dateOfBirth ?? "No DOB",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
+                        _formatDate(profile?.profileData?.dateOfBirth) ??
+                            "No DOB",
+                        style: TextStyle(color: Colors.black, fontSize: 17),
                       ),
                     ],
                   ),

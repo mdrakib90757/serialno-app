@@ -819,6 +819,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           builder: (context, child) {
                             return Theme(
                               data: Theme.of(context).copyWith(
+                                useMaterial3: false,
                                 colorScheme: ColorScheme.light(
                                   primary: AppColor().primariColor,
                                   // Header color

@@ -47,7 +47,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     _contactController = TextEditingController();
 
     _serviceDateDisplayController = TextEditingController(
-      text: DateFormat('yyy-MM-dd').format(_selectedDate),
+      text: DateFormat('dd-MM-yyyy').format(_selectedDate),
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -190,7 +190,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     final getAddButton_serviceType_Provider =
         Provider.of<GetAddButtonServiceType_Provider>(context);
     final serialProvider = Provider.of<NewSerialButtonProvider>(context);
-    final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String todayDate = DateFormat('dd-MM-yyyy-').format(DateTime.now());
     DateTime selectedDialogDate = DateTime.now();
 
     return Dialog(
@@ -354,6 +354,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                           builder: (context, child) {
                             return Theme(
                               data: Theme.of(context).copyWith(
+                                useMaterial3: false,
                                 colorScheme: ColorScheme.light(
                                   primary: AppColor().primariColor,
                                   // Header color
@@ -386,7 +387,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                           setState(() {
                             _selectedDate = newDate;
                             _serviceDateDisplayController.text = DateFormat(
-                              "yyyy-MM-dd",
+                              "dd-MM-yyyy",
                             ).format(_selectedDate);
                           });
                         }

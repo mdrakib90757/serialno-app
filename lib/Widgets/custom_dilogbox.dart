@@ -245,6 +245,7 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                           builder: (context, child) {
                             return Theme(
                               data: Theme.of(context).copyWith(
+                                useMaterial3: false,
                                 colorScheme: ColorScheme.light(
                                   primary: AppColor().primariColor,
                                   // Header color
@@ -359,8 +360,8 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                                     : "Update",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
