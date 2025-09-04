@@ -60,12 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
     if (success) {
       String userType = authProvider.userType?.toLowerCase().trim() ?? "";
 
-      await CustomFlushbar.showSuccess(
-        context: context,
-        title: "Success",
-        message: "Login Successful",
-      );
-
       if (userType == "company") {
         Navigator.pushReplacement(
           context,

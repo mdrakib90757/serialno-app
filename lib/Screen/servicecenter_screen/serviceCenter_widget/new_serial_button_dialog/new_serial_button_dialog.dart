@@ -47,7 +47,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
     _contactController = TextEditingController();
 
     _serviceDateDisplayController = TextEditingController(
-      text: DateFormat('dd-MM-yyyy').format(_selectedDate),
+      text: DateFormat('yyyy-MM-dd').format(_selectedDate),
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -114,248 +114,263 @@ class _Servicecenter_SettingscreenState
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Organization info",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Organization info",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _showDialogBoxEDit(context);
-                  },
-                  icon: Icon(Icons.edit, color: AppColor().primariColor),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text("Name : ", style: TextStyle(color: Colors.grey.shade600)),
-                Text(
-                  "${company_man.name}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text(
-                  "Address Line1 : ",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-                Text(
-                  "${company_man.addressLine1} ",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text(
-                  "AddressLine2: ",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-                Text(
-                  "${company_man.addressLine2}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text("Email: ", style: TextStyle(color: Colors.grey.shade600)),
-                Text(
-                  "${company_man.email}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text("Phone : ", style: TextStyle(color: Colors.grey.shade600)),
-                Text(
-                  "${company_man.phone} ",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text(
-                  "Business Type : ",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-                Text(
-                  "${companyDetails.companyDetails?.businessType?.name}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text(
-                  "Division : ",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-                Text(
-                  "${company_man.division?.name}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text(
-                  "District :",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-                Text(
-                  "${company_man.district?.name}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text("Thana : ", style: TextStyle(color: Colors.grey.shade600)),
-                Text(
-                  "${company_man.thana?.name} ",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Text("Area : -", style: TextStyle(color: Colors.grey.shade600)),
-                Text(
-                  "${company_man.area}",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
+                  IconButton(
+                    onPressed: () {
+                      _showDialogBoxEDit(context);
+                    },
+                    icon: Icon(Icons.edit, color: AppColor().primariColor),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Name : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Address Line1 : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.addressLine1} ",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "AddressLine2: ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.addressLine2}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Email: ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.email}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Phone : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.phone} ",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Business Type : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${companyDetails.companyDetails?.businessType?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Division : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.division?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "District :",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.district?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Thana : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.thana?.name} ",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Area : -",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.area}",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
 
-            //add user Button
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Service Man",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _showDialogBox(context);
-                      },
-                      child: Container(
-                        height: 35,
-                        width: 110,
-                        decoration: BoxDecoration(
-                          color: AppColor().primariColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 18,
-                              weight: 8,
-                            ),
-                            SizedBox(width: 5),
-                            Center(
-                              child: Text(
-                                "Add user",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
+              //add user Button
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Name",
+                        "Service Man",
                         style: TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        "Role",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                        ),
-                      ),
-
-                      Text(
-                        "Active",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                        ),
-                      ),
-
-                      Text(
-                        "Action",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
+                      GestureDetector(
+                        onTap: () {
+                          _showDialogBox(context);
+                        },
+                        child: Container(
+                          height: 35,
+                          width: 110,
+                          decoration: BoxDecoration(
+                            color: AppColor().primariColor,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 18,
+                                weight: 8,
+                              ),
+                              SizedBox(width: 5),
+                              Center(
+                                child: Text(
+                                  "Add user",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
+                  SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Name",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          "Role",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
 
-            SizedBox(height: 10),
+                        Text(
+                          "Active",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
 
-            Expanded(
-              child: Consumer<GetAdduserServiceCenterProvider>(
+                        Text(
+                          "Action",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 10),
+
+              Consumer<GetAdduserServiceCenterProvider>(
                 builder: (context, getAddUser_Provider, child) {
                   if (getAddUser_Provider.isLoading &&
                       getAddUser_Provider.users.isEmpty) {
@@ -378,6 +393,8 @@ class _Servicecenter_SettingscreenState
                   }
 
                   return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: UserList.length,
                     itemBuilder: (context, index) {
                       final user = UserList[index];
@@ -499,8 +516,8 @@ class _Servicecenter_SettingscreenState
                   );
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

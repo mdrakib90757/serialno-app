@@ -153,18 +153,6 @@ class _MyAppbarState extends State<MyAppbar> {
                   );
                   await authProvider.logout();
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      behavior: SnackBarBehavior.floating,
-                      content: CustomSnackBarWidget(
-                        title: "Error",
-                        message: authProvider.errorMessage ?? "Logout Success",
-                      ),
-                    ),
-                  );
-
                   navigator.pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => LoginScreen()),
                     (Route<dynamic> route) => false,

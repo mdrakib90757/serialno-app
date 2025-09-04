@@ -17,39 +17,44 @@ class CustomSnackBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.red.shade400),
       ),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: iconColor, size: 32),
-              const SizedBox(width: 10),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Icon(icon, color: iconColor, size: 25),
+                  SizedBox(width: 8),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 },
-                icon: Icon(Icons.close, color: iconColor),
+                child: Icon(Icons.close, color: iconColor),
               ),
             ],
           ),
-          const SizedBox(height: 5),
+          SizedBox(height: 5),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               message,
               style: const TextStyle(

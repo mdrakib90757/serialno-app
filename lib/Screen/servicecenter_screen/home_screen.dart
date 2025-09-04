@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen>
   void _fetchDataForUI() {
     if (_selectedServiceCenter != null) {
       debugPrint(
-        "🚀 FETCHING SERIALS for Service Center ID: ${_selectedServiceCenter!.id!}",
+        " FETCHING SERIALS for Service Center ID: ${_selectedServiceCenter!.id!}",
       );
 
       final formattedDate = DateFormatter.formatForApi(_selectedDate);
@@ -60,9 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
         listen: false,
       ).fetchSerialsButton(_selectedServiceCenter!.id!, formattedDate);
     } else {
-      debugPrint(
-        "⚠️ _fetchDataForUI called but _selectedServiceCenter is null.",
-      );
+      debugPrint("⚠_fetchDataForUI called but _selectedServiceCenter is null.");
     }
   }
 
@@ -679,7 +677,7 @@ class _HomeScreenState extends State<HomeScreen>
                 Tab(text: "Served(${serialProvider.totalServedCount})"),
               ],
             ),
-            SizedBox(height: 8,),
+            SizedBox(height: 8),
             Expanded(
               child: TabBarView(
                 controller: tabController,
