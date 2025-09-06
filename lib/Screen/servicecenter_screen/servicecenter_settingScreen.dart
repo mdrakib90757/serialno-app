@@ -12,6 +12,7 @@ import 'package:serialno_app/providers/serviceCenter_provider/roles_service_cent
 import 'package:serialno_app/utils/color.dart';
 
 import '../../Widgets/custom_flushbar.dart';
+import '../../model/company_details_model.dart';
 import '../../model/roles_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../../providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
@@ -132,7 +133,10 @@ class _Servicecenter_SettingscreenState
                   ),
                   IconButton(
                     onPressed: () {
-                      _showDialogBoxEDit(context);
+                      _showDialogBoxEDit(
+                        context,
+                        companyDetails.companyDetails!,
+                      );
                     },
                     icon: Icon(Icons.edit, color: AppColor().primariColor),
                   ),
@@ -262,8 +266,21 @@ class _Servicecenter_SettingscreenState
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
                   Text(
-                    "${company_man.area}",
+                    "${company_man.area?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Location : -",
                     style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    company_man.location ?? "N/A",
+                    style: TextStyle(color: Colors.black),
                   ),
                 ],
               ),
@@ -532,13 +549,35 @@ class _Servicecenter_SettingscreenState
     );
   }
 
-  void _showDialogBoxEDit(BuildContext context) {
+  void _showDialogBoxEDit(
+    BuildContext context,
+    CompanyDetailsModel companyInfo,
+  ) {
+    final companyDetailsProvider = Provider.of<CompanyDetailsProvider>(
+      context,
+      listen: false,
+    );
     showDialog(
       context: context,
       builder: (context) {
-        return EditOrganizationInfo();
+        return EditOrganizationInfo(companyDetails: companyInfo);
       },
-    );
+    ).then((wasSuccessful) {
+      if (wasSuccessful == true) {
+        debugPrint(
+          " DIALOG RETURNED SUCCESS, NOW REFRESHING COMPANY DETAILS... ",
+        );
+
+        companyDetailsProvider.fetchDetails(companyInfo.id!);
+
+        CustomFlushbar.showSuccess(
+          context: context,
+          title: "Success",
+          message: "Organization information updated successfully.",
+        );
+      }
+    });
+    ;
   }
 
   void _showDeleteConfirmationMenu(

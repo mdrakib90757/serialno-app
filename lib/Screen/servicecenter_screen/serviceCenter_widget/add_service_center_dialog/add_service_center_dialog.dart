@@ -15,14 +15,16 @@ import 'package:serialno_app/utils/color.dart';
 import '../add_service_center_tab_button/add_service_center_tab_button.dart';
 import '../add_service_center_time_picker/add_service_center_time_picker.dart';
 
-class AddServiceCenterDialog extends StatefulWidget {
-  const AddServiceCenterDialog({Key? key}) : super(key: key);
+class Add_button_Dialog_serviceCenter_screen extends StatefulWidget {
+  const Add_button_Dialog_serviceCenter_screen({Key? key}) : super(key: key);
 
   @override
-  _AddServiceCenterDialogState createState() => _AddServiceCenterDialogState();
+  _Add_button_Dialog_serviceCenter_screenState createState() =>
+      _Add_button_Dialog_serviceCenter_screenState();
 }
 
-class _AddServiceCenterDialogState extends State<AddServiceCenterDialog>
+class _Add_button_Dialog_serviceCenter_screenState
+    extends State<Add_button_Dialog_serviceCenter_screen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();

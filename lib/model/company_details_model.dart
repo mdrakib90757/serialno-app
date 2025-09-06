@@ -1,9 +1,9 @@
 class CompanyDetailsModel {
   BusinessType? businessType;
-  Division? division;
-  District? district;
-  District? thana;
-  Null? area;
+  LocationPart? division;
+  LocationPart? district;
+  LocationPart? thana;
+  LocationPart? area;
   String? id;
   String? name;
   String? addressLine1;
@@ -13,12 +13,12 @@ class CompanyDetailsModel {
   String? createDate;
   bool? isActive;
   int? businessTypeId;
-  String? location;
+  dynamic location;
   int? divisionId;
   int? districtId;
   int? thanaId;
-  Null? areaId;
-  Null? logo;
+  int? areaId;
+  dynamic logo;
 
   CompanyDetailsModel({
     this.businessType,
@@ -43,137 +43,76 @@ class CompanyDetailsModel {
     this.logo,
   });
 
-  CompanyDetailsModel.fromJson(Map<String, dynamic> json) {
-    businessType = json['businessType'] != null
-        ? new BusinessType.fromJson(json['businessType'])
-        : null;
-    division = json['division'] != null
-        ? new Division.fromJson(json['division'])
-        : null;
-    district = json['district'] != null
-        ? new District.fromJson(json['district'])
-        : null;
-    thana = json['thana'] != null ? new District.fromJson(json['thana']) : null;
-    area = json['area'];
-    id = json['id'];
-    name = json['name'];
-    addressLine1 = json['addressLine1'];
-    addressLine2 = json['addressLine2'];
-    email = json['email'];
-    phone = json['phone'];
-    createDate = json['createDate'];
-    isActive = json['isActive'];
-    businessTypeId = json['businessTypeId'];
-    location = json['location'];
-    divisionId = json['divisionId'];
-    districtId = json['districtId'];
-    thanaId = json['thanaId'];
-    areaId = json['areaId'];
-    logo = json['logo'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.businessType != null) {
-      data['businessType'] = this.businessType!.toJson();
-    }
-    if (this.division != null) {
-      data['division'] = this.division!.toJson();
-    }
-    if (this.district != null) {
-      data['district'] = this.district!.toJson();
-    }
-    if (this.thana != null) {
-      data['thana'] = this.thana!.toJson();
-    }
-    data['area'] = this.area;
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['addressLine1'] = this.addressLine1;
-    data['addressLine2'] = this.addressLine2;
-    data['email'] = this.email;
-    data['phone'] = this.phone;
-    data['createDate'] = this.createDate;
-    data['isActive'] = this.isActive;
-    data['businessTypeId'] = this.businessTypeId;
-    data['location'] = this.location;
-    data['divisionId'] = this.divisionId;
-    data['districtId'] = this.districtId;
-    data['thanaId'] = this.thanaId;
-    data['areaId'] = this.areaId;
-    data['logo'] = this.logo;
-    return data;
+  factory CompanyDetailsModel.fromJson(Map<String, dynamic> json) {
+    return CompanyDetailsModel(
+      businessType: json['businessType'] != null
+          ? BusinessType.fromJson(json['businessType'])
+          : null,
+      division: json['division'] != null
+          ? LocationPart.fromJson(json['division'])
+          : null,
+      district: json['district'] != null
+          ? LocationPart.fromJson(json['district'])
+          : null,
+      thana: json['thana'] != null
+          ? LocationPart.fromJson(json['thana'])
+          : null,
+      area: json['area'] != null
+          ? LocationPart.fromJson(json['area'])
+          : null, // <<< পরিবর্তন
+      id: json['id'],
+      name: json['name'],
+      addressLine1: json['addressLine1'],
+      addressLine2: json['addressLine2'],
+      email: json['email'],
+      phone: json['phone'],
+      createDate: json['createDate'],
+      isActive: json['isActive'],
+      businessTypeId: json['businessTypeId'],
+      location: json['location'],
+      divisionId: json['divisionId'],
+      districtId: json['districtId'],
+      thanaId: json['thanaId'],
+      areaId: json['areaId'],
+      logo: json['logo'],
+    );
   }
 }
 
 class BusinessType {
   int? id;
   String? name;
-  Null? config;
+  dynamic config;
 
   BusinessType({this.id, this.name, this.config});
 
-  BusinessType.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    config = json['config'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['config'] = this.config;
-    return data;
+  factory BusinessType.fromJson(Map<String, dynamic> json) {
+    return BusinessType(
+      id: json['id'],
+      name: json['name'],
+      config: json['config'],
+    );
   }
 }
 
-class Division {
-  int? id;
-  String? name;
-  String? type;
-  Null? parentId;
-
-  Division({this.id, this.name, this.type, this.parentId});
-
-  Division.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    type = json['type'];
-    parentId = json['parentId'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['type'] = this.type;
-    data['parentId'] = this.parentId;
-    return data;
-  }
-}
-
-class District {
+class LocationPart {
   int? id;
   String? name;
   String? type;
   int? parentId;
+  LocationPart? parent;
 
-  District({this.id, this.name, this.type, this.parentId});
+  LocationPart({this.id, this.name, this.type, this.parentId, this.parent});
 
-  District.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    type = json['type'];
-    parentId = json['parentId'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['type'] = this.type;
-    data['parentId'] = this.parentId;
-    return data;
+  factory LocationPart.fromJson(Map<String, dynamic> json) {
+    return LocationPart(
+      id: json['id'],
+      name: json['name'],
+      type: json['type'],
+      parentId: json['parentId'],
+      parent: json['parent'] != null
+          ? LocationPart.fromJson(json['parent'])
+          : null,
+    );
   }
 }

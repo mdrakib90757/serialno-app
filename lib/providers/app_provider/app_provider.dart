@@ -7,6 +7,8 @@ import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCen
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/update_addUser_serviceCenter/update_addUser_serviceCenter.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/divisionProvider/divisionProvider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/update_organization_settingScreen/get_update_organization/get_update_organization_provider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/update_organization_settingScreen/update_organization_Provider.dart';
 
 import '../auth_provider/auth_providers.dart';
 import '../auth_provider/password_upadate_provider.dart';
@@ -23,6 +25,7 @@ import '../serviceCenter_provider/editButtonServiceType_provider/editButtonServi
 import '../serviceCenter_provider/editButtonServiceType_provider/getEditButtonServiceType_Provider.dart';
 import '../serviceCenter_provider/editButton_provider/edit_ButtonProvider.dart';
 import '../serviceCenter_provider/editButton_provider/get_EditButton_provider.dart';
+import '../serviceCenter_provider/location_provider/location_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/queue_edit_list_provider/queue_edit_list_provider.dart';
@@ -109,6 +112,10 @@ class AppProviders {
       ChangeNotifierProvider(create: (_) => UpdateAddUserProvider()),
       ChangeNotifierProvider(create: (_) => DeleteUserProvider()),
       ChangeNotifierProvider(create: (_) => DivisionProvider()),
+      ChangeNotifierProvider(create: (context) => LocationProvider()),
+
+      ChangeNotifierProvider(create: (_) => UpdateOrganizationInfoProvider()),
+      ChangeNotifierProvider(create: (context) => getUpdateOrganization()),
 
       /// serviceTaker provider
       ChangeNotifierProvider(create: (context) => bookSerialButton_provider()),
