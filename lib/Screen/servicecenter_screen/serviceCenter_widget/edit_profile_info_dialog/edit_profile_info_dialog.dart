@@ -3,26 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/update_profile_request.dart';
 
-import '../model/user_model.dart';
-import '../providers/auth_provider/auth_providers.dart';
-import '../providers/profile_provider/getprofile_provider.dart';
-import '../providers/profile_provider/profile_update_provider.dart';
-import '../utils/color.dart';
-import 'custom_flushbar.dart';
-import 'custom_labeltext.dart';
-import 'custom_sanckbar.dart';
-import 'custom_textfield.dart';
+import '../../../../model/user_model.dart';
+import '../../../../providers/auth_provider/auth_providers.dart';
+import '../../../../providers/profile_provider/getprofile_provider.dart';
+import '../../../../providers/profile_provider/profile_update_provider.dart';
+import '../../../../utils/color.dart';
+import '../../../../Widgets/custom_flushbar.dart';
+import '../../../../Widgets/custom_labeltext.dart';
+import '../../../../Widgets/custom_sanckbar.dart';
+import '../../../../Widgets/custom_textfield.dart';
 
-class CustomDilogbox extends StatefulWidget {
+class edit_profile_info_dialog extends StatefulWidget {
   final User_Model user;
   final User_Model? serviceTaker;
-  const CustomDilogbox({super.key, required this.user, this.serviceTaker});
+  const edit_profile_info_dialog({
+    super.key,
+    required this.user,
+    this.serviceTaker,
+  });
 
   @override
-  State<CustomDilogbox> createState() => _CustomDilogboxState();
+  State<edit_profile_info_dialog> createState() =>
+      _edit_profile_info_dialogState();
 }
 
-class _CustomDilogboxState extends State<CustomDilogbox> {
+class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
   DateTime date = DateTime(2022, 12, 24);
   bool isSelect = false;
   String? _selectGenter;
@@ -128,7 +133,7 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                     hintText: "name",
                     isPassword: false,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
 
                   CustomLabeltext("Login Name"),
                   SizedBox(height: 10),
@@ -140,7 +145,7 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                     hintText: "Login name",
                     isPassword: false,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
 
                   CustomLabeltext("Mobile No"),
                   SizedBox(height: 10),
@@ -149,7 +154,7 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                     hintText: "mobile no",
                     isPassword: false,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   CustomLabeltext("Email"),
                   SizedBox(height: 10),
                   CustomTextField(
@@ -157,85 +162,90 @@ class _CustomDilogboxState extends State<CustomDilogbox> {
                     hintText: "email",
                     isPassword: false,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   CustomLabeltext("Gender"),
                   SizedBox(height: 12),
-                  DropdownSearch<String>(
-                    popupProps: PopupProps.menu(
-                      menuProps: MenuProps(
-                        backgroundColor: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      constraints: BoxConstraints(maxHeight: 150),
+                  Container(
+                    height: 45,
+                    child: DropdownSearch<String>(
+                      popupProps: PopupProps.menu(
+                        menuProps: MenuProps(
+                          backgroundColor: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        constraints: BoxConstraints(maxHeight: 150),
 
-                      emptyBuilder: (context, searchEntry) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [],
+                        emptyBuilder: (context, searchEntry) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 24.0,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          hintText: "Gender",
+                          hintStyle: TextStyle(color: Colors.grey.shade400),
+                          suffixIcon: Icon(Icons.date_range_outlined),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(
+                              color: AppColor().primariColor,
+                              width: 2,
                             ),
                           ),
-                        );
-                      },
-                    ),
-
-                    dropdownDecoratorProps: DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                        hintText: "Gender",
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        suffixIcon: Icon(Icons.date_range_outlined),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                            color: AppColor().primariColor,
-                            width: 2,
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.grey.shade400),
                           ),
                         ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
                       ),
-                    ),
-                    validator: (value) =>
-                        value == null || value.isEmpty ? "Required" : null,
-                    autoValidateMode: _autovalidateMode,
-                    items: genderList,
+                      validator: (value) =>
+                          value == null || value.isEmpty ? "Required" : null,
+                      autoValidateMode: _autovalidateMode,
+                      items: genderList,
 
-                    //items: ['Google', 'Meta', 'Amazon', 'Netflix'],
-                    onChanged: (newValue) {
-                      setState(() {
-                        _autovalidateMode = AutovalidateMode.always;
-                        _selectGenter = newValue;
-                      });
-                    },
+                      //items: ['Google', 'Meta', 'Amazon', 'Netflix'],
+                      onChanged: (newValue) {
+                        setState(() {
+                          _autovalidateMode = AutovalidateMode.always;
+                          _selectGenter = newValue;
+                        });
+                      },
+                    ),
                   ),
 
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   CustomLabeltext("Date of Birth"),
                   SizedBox(height: 10),
                   CustomTextField(
                     controller: dateOfBirth,
                     hintText: dateOfBirth.text.isEmpty
-                        ? "${date.year}/${date.month}/${date.day}"
+                        ? "${date.year}-${date.month}-${date.day}"
                         : dateOfBirth.text,
                     textStyle: TextStyle(color: Colors.black),
                     isPassword: false,

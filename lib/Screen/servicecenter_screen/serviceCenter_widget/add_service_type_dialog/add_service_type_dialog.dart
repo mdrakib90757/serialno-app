@@ -104,7 +104,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
+        // side: BorderSide(color: AppColor().primariColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -151,13 +151,18 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                     hintText: "Name",
                     isPassword: false,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
 
                   Text("Service Price", style: TextStyle(fontSize: 15)),
                   SizedBox(height: 10),
                   TextFormField(
                     controller: priceController,
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      isDense: true,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400),
                       ),
@@ -178,7 +183,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
 
                   Text(
                     "Default Allocated Time",
@@ -188,6 +193,11 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                   TextFormField(
                     controller: timeController,
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      isDense: true,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400),
                       ),

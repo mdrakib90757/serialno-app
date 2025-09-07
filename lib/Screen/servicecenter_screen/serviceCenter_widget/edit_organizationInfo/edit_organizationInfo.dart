@@ -170,10 +170,8 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
     name.dispose();
     addressLine1.dispose();
     addressLine2.dispose();
-    contactName.dispose();
     email.dispose();
     phone.dispose();
-    organization.dispose();
     super.dispose();
   }
 
@@ -243,7 +241,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
+        //side: BorderSide(color: AppColor().primariColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -283,7 +281,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   controller: name,
                 ),
 
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 Text(
                   "Address Line 1",
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -293,6 +291,11 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   cursorColor: Colors.grey,
                   controller: addressLine1,
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
@@ -324,6 +327,11 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   cursorColor: Colors.grey,
                   controller: addressLine2,
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
@@ -345,7 +353,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   ),
                 ),
 
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 CustomLabeltext("Email"),
                 SizedBox(height: 8),
                 CustomTextField(
@@ -354,7 +362,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   controller: email,
                 ),
 
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 CustomLabeltext("Mobile Number"),
                 SizedBox(height: 8),
                 CustomTextField(
@@ -363,419 +371,434 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   controller: phone,
                 ),
 
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 CustomLabeltext("Business Type"),
                 SizedBox(height: 8),
-                DropdownSearch<Businesstype>(
-                  popupProps: PopupProps.menu(
-                    menuProps: MenuProps(
-                      backgroundColor: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                Container(
+                  height: 45,
+                  child: DropdownSearch<Businesstype>(
+                    popupProps: PopupProps.menu(
+                      menuProps: MenuProps(
+                        backgroundColor: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: BoxConstraints(maxHeight: 170),
                     ),
-                    constraints: BoxConstraints(maxHeight: 170),
-                  ),
 
-                  itemAsString: (Businesstype type) => type.name,
-                  dropdownDecoratorProps: DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                      hintText: _isLoadingBusinessTypes
-                          ? "Loading business types..."
-                          : authProvider.userModel?.businessTypeName ??
-                                "Select Business Type",
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      suffixIcon: _isLoadingBusinessTypes
-                          ? Container(
-                              padding: EdgeInsets.all(12),
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: AppColor().primariColor,
+                    itemAsString: (Businesstype type) => type.name,
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: _isLoadingBusinessTypes
+                            ? "Loading business types..."
+                            : authProvider.userModel?.businessTypeName ??
+                                  "Select Business Type",
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        suffixIcon: _isLoadingBusinessTypes
+                            ? Container(
+                                padding: EdgeInsets.all(12),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: AppColor().primariColor,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : null,
+                              )
+                            : null,
 
-                      enabled: !_isLoadingBusinessTypes,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
+                        enabled: !_isLoadingBusinessTypes,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(
+                            color: AppColor().primariColor,
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
                         ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
                     ),
-                  ),
 
-                  selectedItem: _selectedBusinessType,
-                  items: authProvider.businessTypes,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedBusinessType = newValue;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) return "Please select a business type";
-                    return null;
-                  },
+                    selectedItem: _selectedBusinessType,
+                    items: authProvider.businessTypes,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedBusinessType = newValue;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null) return "Please select a business type";
+                      return null;
+                    },
+                  ),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
 
                 Text(
                   "Division",
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
                 SizedBox(height: 8),
-                DropdownSearch<LocationPart>(
-                  popupProps: PopupProps.menu(
-                    menuProps: MenuProps(
-                      backgroundColor: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                Container(
+                  height: 45,
+                  child: DropdownSearch<LocationPart>(
+                    popupProps: PopupProps.menu(
+                      menuProps: MenuProps(
+                        backgroundColor: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: BoxConstraints(maxHeight: 170),
                     ),
-                    constraints: BoxConstraints(maxHeight: 170),
-                  ),
 
-                  selectedItem: _selectedDivision,
-                  itemAsString: (item) => item.name ?? '',
+                    selectedItem: _selectedDivision,
+                    itemAsString: (item) => item.name ?? '',
 
-                  dropdownDecoratorProps: DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                      hintText: "Division",
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      suffixIcon: locationProvider.isLoading
-                          ? Container(
-                              padding: EdgeInsets.all(12),
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: AppColor().primariColor,
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: "Division",
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        suffixIcon: locationProvider.isLoading
+                            ? Container(
+                                padding: EdgeInsets.all(12),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: AppColor().primariColor,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : null,
+                              )
+                            : null,
 
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(
+                            color: AppColor().primariColor,
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
                         ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
                     ),
+
+                    items: locationProvider.divisions,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedDivision = newValue;
+                        _selectedDistrict = null;
+                        _selectedThana = null;
+                        _selectedArea = null;
+                      });
+                      locationProvider.clearDistricts();
+                      locationProvider.clearThanas();
+                      locationProvider.clearAreas();
+
+                      if (newValue != null) {
+                        locationProvider.getDistricts(newValue.id!);
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null) return "Please select a division";
+                      return null;
+                    },
                   ),
-
-                  items: locationProvider.divisions,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedDivision = newValue;
-                      _selectedDistrict = null;
-                      _selectedThana = null;
-                      _selectedArea = null;
-                    });
-                    locationProvider.clearDistricts();
-                    locationProvider.clearThanas();
-                    locationProvider.clearAreas();
-
-                    if (newValue != null) {
-                      locationProvider.getDistricts(newValue.id!);
-                    }
-                  },
-                  validator: (value) {
-                    if (value == null) return "Please select a division";
-                    return null;
-                  },
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
 
                 Text(
                   "District",
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
                 SizedBox(height: 8),
-                DropdownSearch<LocationPart>(
-                  popupProps: PopupProps.menu(
-                    menuProps: MenuProps(
-                      backgroundColor: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                Container(
+                  height: 45,
+                  child: DropdownSearch<LocationPart>(
+                    popupProps: PopupProps.menu(
+                      menuProps: MenuProps(
+                        backgroundColor: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: BoxConstraints(maxHeight: 170),
                     ),
-                    constraints: BoxConstraints(maxHeight: 170),
-                  ),
 
-                  items: locationProvider.districts,
-                  selectedItem: _selectedDistrict,
-                  itemAsString: (item) => item.name ?? '',
-                  enabled: _selectedDivision != null,
+                    items: locationProvider.districts,
+                    selectedItem: _selectedDistrict,
+                    itemAsString: (item) => item.name ?? '',
+                    enabled: _selectedDivision != null,
 
-                  dropdownDecoratorProps: DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                      hintText: "District",
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      suffixIcon: locationProvider.isLoading
-                          ? Container(
-                              padding: EdgeInsets.all(12),
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: AppColor().primariColor,
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: "District",
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        suffixIcon: locationProvider.isLoading
+                            ? Container(
+                                padding: EdgeInsets.all(12),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: AppColor().primariColor,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : null,
+                              )
+                            : null,
 
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(
+                            color: AppColor().primariColor,
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
                         ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
                     ),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedDistrict = newValue;
+                        _selectedThana = null;
+                        _selectedArea = null;
+                      });
+                      locationProvider.clearThanas();
+                      locationProvider.clearAreas();
+                      if (newValue != null) {
+                        locationProvider.getThanas(newValue.id!);
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null) return "Please select a division";
+                      return null;
+                    },
                   ),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedDistrict = newValue;
-                      _selectedThana = null;
-                      _selectedArea = null;
-                    });
-                    locationProvider.clearThanas();
-                    locationProvider.clearAreas();
-                    if (newValue != null) {
-                      locationProvider.getThanas(newValue.id!);
-                    }
-                  },
-                  validator: (value) {
-                    if (value == null) return "Please select a division";
-                    return null;
-                  },
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
 
                 Text(
                   "Thana",
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
                 SizedBox(height: 8),
-                DropdownSearch<LocationPart>(
-                  popupProps: PopupProps.menu(
-                    menuProps: MenuProps(
-                      backgroundColor: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                Container(
+                  height: 45,
+                  child: DropdownSearch<LocationPart>(
+                    popupProps: PopupProps.menu(
+                      menuProps: MenuProps(
+                        backgroundColor: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: BoxConstraints(maxHeight: 170),
                     ),
-                    constraints: BoxConstraints(maxHeight: 170),
-                  ),
 
-                  items: locationProvider.districts,
-                  selectedItem: _selectedDistrict,
-                  itemAsString: (item) => item.name ?? '',
-                  enabled: _selectedDistrict != null && !_isLoading,
-                  dropdownDecoratorProps: DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                      hintText: "Thana Or Upazila",
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      suffixIcon: locationProvider.isLoading
-                          ? Container(
-                              padding: EdgeInsets.all(12),
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: AppColor().primariColor,
+                    items: locationProvider.districts,
+                    selectedItem: _selectedDistrict,
+                    itemAsString: (item) => item.name ?? '',
+                    enabled: _selectedDistrict != null && !_isLoading,
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: "Thana Or Upazila",
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        suffixIcon: locationProvider.isLoading
+                            ? Container(
+                                padding: EdgeInsets.all(12),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: AppColor().primariColor,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : null,
+                              )
+                            : null,
 
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(
+                            color: AppColor().primariColor,
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
                         ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
                     ),
-                  ),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedThana = newValue;
-                      _selectedArea = null;
-                    });
-                    locationProvider.clearThanas();
-                    locationProvider.clearAreas();
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedThana = newValue;
+                        _selectedArea = null;
+                      });
+                      locationProvider.clearThanas();
+                      locationProvider.clearAreas();
 
-                    if (newValue != null) {
-                      locationProvider.getAreas(newValue.id!);
-                    }
-                  },
-                  validator: (value) {
-                    if (value == null) return "Please select a division";
-                    return null;
-                  },
+                      if (newValue != null) {
+                        locationProvider.getAreas(newValue.id!);
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null) return "Please select a division";
+                      return null;
+                    },
+                  ),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
 
                 Text(
                   "Area",
                   style: TextStyle(color: Colors.black, fontSize: 17),
                 ),
                 SizedBox(height: 8),
-                DropdownSearch<LocationPart>(
-                  popupProps: PopupProps.menu(
-                    menuProps: MenuProps(
-                      backgroundColor: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                Container(
+                  height: 45,
+                  child: DropdownSearch<LocationPart>(
+                    popupProps: PopupProps.menu(
+                      menuProps: MenuProps(
+                        backgroundColor: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: BoxConstraints(maxHeight: 170),
                     ),
-                    constraints: BoxConstraints(maxHeight: 170),
-                  ),
 
-                  items: locationProvider.thanas,
-                  selectedItem: _selectedThana,
-                  itemAsString: (item) => item.name ?? '',
-                  enabled: _selectedDistrict != null,
+                    items: locationProvider.thanas,
+                    selectedItem: _selectedThana,
+                    itemAsString: (item) => item.name ?? '',
+                    enabled: _selectedDistrict != null,
 
-                  dropdownDecoratorProps: DropDownDecoratorProps(
-                    dropdownSearchDecoration: InputDecoration(
-                      hintText: "Area or village",
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      suffixIcon: locationProvider.isLoading
-                          ? Container(
-                              padding: EdgeInsets.all(12),
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: AppColor().primariColor,
+                    dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: "Area or village",
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        suffixIcon: locationProvider.isLoading
+                            ? Container(
+                                padding: EdgeInsets.all(12),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    color: AppColor().primariColor,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : null,
+                              )
+                            : null,
 
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(
+                            color: AppColor().primariColor,
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
                         ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
                     ),
-                  ),
 
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedArea = newValue;
-                    });
-                    locationProvider.clearAreas();
-                    if (newValue != null) {
-                      locationProvider.getAreas(newValue.id!);
-                    }
-                  },
-                  validator: (value) {
-                    if (value == null) return "Please select a division";
-                    return null;
-                  },
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedArea = newValue;
+                      });
+                      locationProvider.clearAreas();
+                      if (newValue != null) {
+                        locationProvider.getAreas(newValue.id!);
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null) return "Please select a division";
+                      return null;
+                    },
+                  ),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
 
                 Text(
                   "Location",
@@ -789,7 +812,11 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
                     hintText: "Location",
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),

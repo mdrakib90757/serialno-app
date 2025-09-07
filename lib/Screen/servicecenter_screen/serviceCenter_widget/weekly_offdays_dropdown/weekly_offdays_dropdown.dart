@@ -36,8 +36,8 @@ class _WeeklyOff_daysDropdownState extends State<WeeklyOff_daysDropdown> {
             padding: const EdgeInsets.only(
               left: 12,
               right: 8,
-              top: 15,
-              bottom: 15,
+              top: 10,
+              bottom: 10,
             ),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -83,7 +83,6 @@ class _WeeklyOff_daysDropdownState extends State<WeeklyOff_daysDropdown> {
                           }).toList(),
                         ),
                 ),
-
                 const Icon(Icons.arrow_drop_down, color: Colors.grey),
               ],
             ),

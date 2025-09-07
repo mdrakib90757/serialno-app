@@ -83,6 +83,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: obscureText,
       obscuringCharacter: "*",
       decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 12,
+        ),
+        isDense: true,
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade400),
         ),

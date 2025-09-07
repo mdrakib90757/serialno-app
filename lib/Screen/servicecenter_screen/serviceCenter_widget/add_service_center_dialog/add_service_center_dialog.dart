@@ -173,7 +173,7 @@ class _Add_button_Dialog_serviceCenter_screenState
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
+        //side: BorderSide(color: AppColor().primariColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -202,7 +202,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                     ),
                   ],
                 ),
-                const SizedBox(height: 13),
+                const SizedBox(height: 10),
                 const CustomLabeltext("Name"),
                 const SizedBox(height: 10),
                 CustomTextField(
@@ -211,7 +211,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   isPassword: false,
                 ),
 
-                const SizedBox(height: 13),
+                const SizedBox(height: 10),
                 const CustomLabeltext("Hotline No."),
                 const SizedBox(height: 8),
                 CustomTextField(
@@ -220,7 +220,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   isPassword: false,
                 ),
 
-                const SizedBox(height: 13),
+                const SizedBox(height: 10),
                 const Text(
                   "Email",
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -229,6 +229,11 @@ class _Add_button_Dialog_serviceCenter_screenState
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
@@ -249,7 +254,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   ),
                 ),
 
-                const SizedBox(height: 13),
+                const SizedBox(height: 10),
                 const Text(
                   "Weekly off-days",
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -264,7 +269,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   },
                 ),
 
-                SizedBox(height: 13),
+                SizedBox(height: 10),
                 CustomFieldWithTabs(
                   onEndTimeChanged: (time) {
                     setState(() {
@@ -280,7 +285,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   textController: _customFieldTextController,
                 ),
 
-                SizedBox(height: 13),
+                SizedBox(height: 10),
                 const Text(
                   "Advance Serial",
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -292,7 +297,11 @@ class _Add_button_Dialog_serviceCenter_screenState
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
@@ -306,7 +315,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
                     suffixIcon: Container(
-                      width: 80,
+                      width: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -315,7 +324,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   ),
                 ),
 
-                SizedBox(height: 13),
+                SizedBox(height: 10),
                 Text(
                   "Serial Number Policy",
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -341,7 +350,11 @@ class _Add_button_Dialog_serviceCenter_screenState
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
@@ -355,14 +368,16 @@ class _Add_button_Dialog_serviceCenter_screenState
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
                     prefixIcon: Container(
-                      width: 80,
+                      width: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadiusGeometry.circular(8),
                       ),
-                      child: const Center(child: Text("First")),
+                      child: const Center(
+                        child: Text("First", style: TextStyle()),
+                      ),
                     ),
                     suffixIcon: Container(
-                      width: 80,
+                      width: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadiusGeometry.circular(8),
                       ),
@@ -383,7 +398,11 @@ class _Add_button_Dialog_serviceCenter_screenState
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.left,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ), // vertical padding কমানো হলো
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),

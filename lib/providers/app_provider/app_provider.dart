@@ -23,8 +23,8 @@ import '../serviceCenter_provider/business_type_provider/business_type_provider.
 import '../serviceCenter_provider/company_details_provider/company_details_provider.dart';
 import '../serviceCenter_provider/editButtonServiceType_provider/editButtonServiceType_provider.dart';
 import '../serviceCenter_provider/editButtonServiceType_provider/getEditButtonServiceType_Provider.dart';
-import '../serviceCenter_provider/editButton_provider/edit_ButtonProvider.dart';
-import '../serviceCenter_provider/editButton_provider/get_EditButton_provider.dart';
+import '../serviceCenter_provider/editButton_serviceCenter_provider/edit_Button_serviceCenter_Provider.dart';
+import '../serviceCenter_provider/editButton_serviceCenter_provider/get_EditButton_provider.dart';
 import '../serviceCenter_provider/location_provider/location_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';

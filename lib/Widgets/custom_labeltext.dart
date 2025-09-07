@@ -23,7 +23,7 @@ class _CustomLabeltextState extends State<CustomLabeltext> {
     return RichText(
       text: TextSpan(
         text: widget.label,
-        style: TextStyle(color: Colors.black, fontSize: 14.50),
+        style: TextStyle(color: Colors.black, fontSize: 13),
         children: [
           TextSpan(
             text: " *",

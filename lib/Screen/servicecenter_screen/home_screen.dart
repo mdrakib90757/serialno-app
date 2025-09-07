@@ -7,12 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/custom_date_display/custom_date_display.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/new_serial_button_dialog/new_serial_button_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/queue_list_edit_dialog/queue_list_edit_dialog.dart';
+import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/statusDialogServiceCenter/statusDialog_serviceCenter.dart';
 import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/next_button_request/next_button_request.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
 import '../../Widgets/custom_flushbar.dart';
 import '../../Widgets/custom_sanckbar.dart';
-import 'statusDialogServiceCenter/statusDialog_serviceCenter.dart';
 import '../../Widgets/custom_textfield.dart';
 import '../../model/serialService_model.dart';
 import '../../model/serviceCenter_model.dart';
@@ -198,10 +198,10 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             Text(company.name, style: GoogleFonts.acme(fontSize: 25)),
             SizedBox(height: 8),
-            CustomDateDisplay(),
+            CustomDateDisplay(selectedDate: _selectedDate),
             SizedBox(height: 5),
             Container(
-              height: 50,
+              height: 45,
               child: CustomDropdown<ServiceCenterModel>(
                 items: userAssignedServiceCenters,
                 value: _selectedServiceCenter,
@@ -252,64 +252,61 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 SizedBox(width: 8),
                 Expanded(
-                  child: SizedBox(
-                    height: 50,
-                    child: CustomTextField(
-                      readOnly: true,
-                      controller: _dateController,
-                      hintText: todayString,
-                      textStyle: TextStyle(color: Colors.black),
-                      isPassword: false,
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          DateTime? newDate = await showDatePicker(
-                            builder: (context, child) {
-                              return Theme(
-                                data: Theme.of(context).copyWith(
-                                  useMaterial3: false,
-                                  colorScheme: ColorScheme.light(
-                                    primary: AppColor().primariColor,
-                                    // Header color
-                                    onPrimary: Colors.white,
-                                    // Header text color
-                                    onSurface: Colors.black, // Body text color
-                                  ),
-                                  dialogTheme: DialogThemeData(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16.0),
-                                    ),
-                                  ),
-                                  textButtonTheme: TextButtonThemeData(
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: AppColor()
-                                          .primariColor, // Button text color
-                                    ),
+                  child: CustomTextField(
+                    readOnly: true,
+                    controller: _dateController,
+                    hintText: todayString,
+                    textStyle: TextStyle(color: Colors.black),
+                    isPassword: false,
+                    suffixIcon: IconButton(
+                      onPressed: () async {
+                        DateTime? newDate = await showDatePicker(
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                useMaterial3: false,
+                                colorScheme: ColorScheme.light(
+                                  primary: AppColor().primariColor,
+                                  // Header color
+                                  onPrimary: Colors.white,
+                                  // Header text color
+                                  onSurface: Colors.black, // Body text color
+                                ),
+                                dialogTheme: DialogThemeData(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                 ),
-                                child: child!,
-                              );
-                            },
-                            context: context,
-                            initialDate: _selectedDate,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now().add(
-                              const Duration(days: 365),
-                            ),
-                          );
-                          if (newDate != null && newDate != _selectedDate) {
-                            setState(() {
-                              _selectedDate = newDate;
-                              _dateController.text = DateFormatter.formatForApi(
-                                newDate,
-                              );
-                            });
-                            _fetchDataForUI();
-                          }
-                        },
-                        icon: Icon(
-                          Icons.date_range_outlined,
-                          color: Colors.grey.shade400,
-                        ),
+                                textButtonTheme: TextButtonThemeData(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppColor()
+                                        .primariColor, // Button text color
+                                  ),
+                                ),
+                              ),
+                              child: child!,
+                            );
+                          },
+                          context: context,
+                          initialDate: _selectedDate,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now().add(
+                            const Duration(days: 365),
+                          ),
+                        );
+                        if (newDate != null && newDate != _selectedDate) {
+                          setState(() {
+                            _selectedDate = newDate;
+                            _dateController.text = DateFormatter.formatForApi(
+                              newDate,
+                            );
+                          });
+                          _fetchDataForUI();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.date_range_outlined,
+                        color: Colors.grey.shade400,
                       ),
                     ),
                   ),

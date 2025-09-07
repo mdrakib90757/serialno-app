@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../Widgets/my_Appbar.dart';
-import '../../Widgets/custom_dilogbox.dart';
+import '../servicecenter_screen/serviceCenter_widget/edit_profile_info_dialog/edit_profile_info_dialog.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
 import '../../utils/color.dart';
@@ -38,7 +38,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final result = await showDialog(
       context: context,
-      builder: (context) => CustomDilogbox(user: authProvider.userModel!),
+      builder: (context) =>
+          edit_profile_info_dialog(user: authProvider.userModel!),
     );
 
     if (result == true) {

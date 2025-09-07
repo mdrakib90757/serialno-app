@@ -4,11 +4,13 @@ import 'package:serialno_app/utils/color.dart';
 class CustomTab extends StatefulWidget {
   final TextEditingController? tabbarController;
   final Function(String selectedPolicy) onPolicyChanged;
+  final String? initialPolicy;
 
   const CustomTab({
     super.key,
     this.tabbarController,
     required this.onPolicyChanged,
+    this.initialPolicy,
   });
 
   @override
@@ -23,6 +25,9 @@ class _CustomTabState extends State<CustomTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (widget.initialPolicy != null) {
+      _selectedIndex = _policies.indexOf(widget.initialPolicy!);
+    }
   }
 
   @override

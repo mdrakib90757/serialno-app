@@ -9,6 +9,8 @@ class CustomFieldWithTabs extends StatefulWidget {
   final TextEditingController textController;
   final ValueChanged<Time?> onStartTimeChanged;
   final ValueChanged<Time?> onEndTimeChanged;
+  final Time? initialStartTime;
+  final Time? initialEndTime;
 
   const CustomFieldWithTabs({
     super.key,
@@ -16,6 +18,8 @@ class CustomFieldWithTabs extends StatefulWidget {
     required this.textController,
     required this.onStartTimeChanged,
     required this.onEndTimeChanged,
+    this.initialStartTime,
+    this.initialEndTime,
   });
   @override
   State<CustomFieldWithTabs> createState() => _CustomFieldWithTabsState();
@@ -27,6 +31,13 @@ class _CustomFieldWithTabsState extends State<CustomFieldWithTabs> {
 
   Time? _startTime;
   Time? _endTime;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _startTime = widget.initialStartTime;
+    _endTime = widget.initialEndTime;
+  }
 
   @override
   void dispose() {
@@ -102,6 +113,7 @@ class _CustomFieldWithTabsState extends State<CustomFieldWithTabs> {
           ),
           const SizedBox(height: 8),
           Container(
+            height: 45,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.grey.shade400, width: 1.0),

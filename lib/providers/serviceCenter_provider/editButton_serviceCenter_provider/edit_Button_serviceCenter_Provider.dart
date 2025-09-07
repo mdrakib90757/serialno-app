@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../api/serviceCenter_api/updateButton_serviceCanter/editButton_serviceCenter.dart';
-import '../../../request_model/serviceCanter_request/editButton_request/edit_Button_request.dart';
+import '../../../request_model/serviceCanter_request/editButton_request_serviceCenter/edit_Button_request.dart';
 
 class EditButtonProvider with ChangeNotifier {
   final EditButtonApi _editButtonApi = EditButtonApi();

@@ -180,7 +180,7 @@ class _AddUser_SettingServiceCenterDialogState
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
+        // side: BorderSide(color: AppColor().primariColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -221,7 +221,7 @@ class _AddUser_SettingServiceCenterDialogState
                   hintText: "Name",
                   prefixIcon: Icons.person,
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Login Name"),
                 SizedBox(height: 8),
@@ -231,7 +231,7 @@ class _AddUser_SettingServiceCenterDialogState
                   isPassword: false,
                   //controller: phone
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Email Address"),
                 SizedBox(height: 8),
@@ -242,7 +242,7 @@ class _AddUser_SettingServiceCenterDialogState
                   prefixIcon: Icons.email_outlined,
                   //controller: phone
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Mobile Number"),
                 SizedBox(height: 8),
@@ -253,7 +253,7 @@ class _AddUser_SettingServiceCenterDialogState
                   //controller: phone,
                   prefixIcon: Icons.call,
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Password"),
                 SizedBox(height: 12),
@@ -265,7 +265,7 @@ class _AddUser_SettingServiceCenterDialogState
                   // controller: password,
                 ),
 
-                SizedBox(height: 13),
+                SizedBox(height: 10),
                 CustomLabeltext("Confirm Password"),
                 SizedBox(height: 8),
                 TextFormField(
@@ -287,6 +287,11 @@ class _AddUser_SettingServiceCenterDialogState
 
                   // controller: confirmPassword,
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
@@ -327,47 +332,53 @@ class _AddUser_SettingServiceCenterDialogState
 
                 CustomLabeltext("Role"),
                 SizedBox(height: 12),
-                CustomDropdown<Data>(
-                  items: rolesProvider.roles,
-                  value: _selectedRole,
-                  onChanged: (Data? newValue) {
-                    setState(() {
-                      _selectedRole = newValue;
-                    });
-                  },
-                  itemAsString: (Data? item) => item?.name ?? "No name",
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _selectedRole?.name ?? "Select Role",
-                          style: TextStyle(
-                            color: _selectedRole != null
-                                ? Colors.black
-                                : Colors.grey.shade600,
+                Container(
+                  height: 45,
+                  child: CustomDropdown<Data>(
+                    items: rolesProvider.roles,
+                    value: _selectedRole,
+                    onChanged: (Data? newValue) {
+                      setState(() {
+                        _selectedRole = newValue;
+                      });
+                    },
+                    itemAsString: (Data? item) => item?.name ?? "No name",
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _selectedRole?.name ?? "Select Role",
+                            style: TextStyle(
+                              color: _selectedRole != null
+                                  ? Colors.black
+                                  : Colors.grey.shade600,
+                            ),
                           ),
-                        ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.grey.shade600,
-                        ),
-                      ],
+                          Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.grey.shade600,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 Text(
                   "Assigned Service Center",
                   style: TextStyle(color: Colors.black, fontSize: 15.20),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 AssignedServiceCentersDropdown(
                   availableServiceCenters:
                       serviceCenterProvider.serviceCenterList,

@@ -7,7 +7,9 @@ import 'package:serialno_app/utils/color.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 
 class CustomDateDisplay extends StatefulWidget {
-  const CustomDateDisplay({Key? key}) : super(key: key);
+  final DateTime selectedDate;
+  const CustomDateDisplay({Key? key, required this.selectedDate})
+    : super(key: key);
 
   @override
   _CustomDateDisplayState createState() => _CustomDateDisplayState();
@@ -27,6 +29,21 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
 
     final ServingStatus = serialProvider.currentlyServingSerial?.status;
     final bool Status = ServingStatus == "Serving";
+
+    final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String selectedDateString = DateFormat(
+      'yyyy-MM-dd',
+    ).format(widget.selectedDate);
+    final bool isToday = todayString == selectedDateString;
+
+    String displayDayText;
+    if (isToday) {
+      displayDayText = "Today";
+    } else {
+      displayDayText = DateFormat(
+        'EEEE',
+      ).format(widget.selectedDate); // যেমন: "Sunday"
+    }
 
     return Consumer<GetNewSerialButtonProvider>(
       builder: (context, serialProvider, child) {
@@ -76,7 +93,7 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
               ),
             ),
 
-            if (Status) ...[
+            if (Status && isToday) ...[
               Positioned(
                 right: -8,
                 top: -20,

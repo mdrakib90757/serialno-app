@@ -322,9 +322,10 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                         hintText: "Select",
                         hintStyle: TextStyle(color: Colors.grey.shade400),
                         contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                          horizontal: 14,
+                          vertical: 10,
                         ),
+                        isDense: true,
                         suffixIcon: _isLoadingBusinessTypes
                             ? Container(
                                 padding: EdgeInsets.all(12),
@@ -409,7 +410,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       return null;
                     },
                   ),
-
                   SizedBox(height: 10),
 
                   if (_selectedBusinessType?.id == 1) ...[
@@ -472,9 +472,10 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                               hintStyle: TextStyle(color: Colors.grey.shade400),
                               suffixIcon: Icon(Icons.search),
                               contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16,
+                                horizontal: 14,
                                 vertical: 12,
                               ),
+                              isDense: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
                                 borderSide: BorderSide(
@@ -613,14 +614,15 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                                 item.name ?? "",
                             dropdownDecoratorProps: DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
+                                isDense: true,
                                 hintText: "Service Center",
                                 hintStyle: TextStyle(
                                   color: Colors.grey.shade400,
                                 ),
                                 suffixIcon: Icon(Icons.search),
                                 contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
+                                  horizontal: 14,
+                                  vertical: 10,
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5),
@@ -759,9 +761,10 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                             hintStyle: TextStyle(color: Colors.grey.shade400),
                             suffixIcon: Icon(Icons.search),
                             contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
+                              horizontal: 14,
+                              vertical: 10,
                             ),
+                            isDense: true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
                               borderSide: BorderSide(

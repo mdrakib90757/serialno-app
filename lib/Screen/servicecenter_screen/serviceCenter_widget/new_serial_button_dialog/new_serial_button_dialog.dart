@@ -197,7 +197,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
+        // side: BorderSide(color: AppColor().primariColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(

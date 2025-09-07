@@ -269,24 +269,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: name,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Address Line 1"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         CustomTextField(
                           hintText: "Address Line 1",
                           isPassword: false,
                           controller: addressLine1,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         Text(
                           "Address Line 2",
                           style: TextStyle(color: Colors.black, fontSize: 17),
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         TextFormField(
                           controller: addressLine2,
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            isDense: true,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.grey.shade400,
@@ -312,24 +317,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Contact Name"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         CustomTextField(
                           hintText: "Contact Name",
                           isPassword: false,
                           controller: contactName,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         Text(
                           "Email Address",
                           style: TextStyle(color: Colors.black, fontSize: 17),
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         TextFormField(
                           controller: email,
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            isDense: true,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.grey.shade400,
@@ -355,18 +365,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Mobile Number"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         CustomTextField(
                           hintText: "Mobile Number",
                           isPassword: false,
                           controller: phone,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Business Type"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         DropdownSearch<Businesstype>(
                           popupProps: PopupProps.menu(
                             menuProps: MenuProps(
@@ -445,7 +455,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                         ),
 
-                        SizedBox(height: 15),
+                        SizedBox(height: 10),
                         if (_selectedBusinessType?.id == 1) ...[
                           Text(
                             "Organization",
@@ -530,12 +540,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       if (trimmerValue.isNotEmpty) {
                                         _saveNewItem(value);
 
-                                        fieldTextEditingController
-                                            .clear(); // নতুন আইটেম সেভ করা হচ্ছে
+                                        fieldTextEditingController.clear();
 
                                         setState(() {
                                           organization.clear();
-                                          //Organization.text = value; // মূল কন্ট্রোলার আপডেট করা হচ্ছে
+                                          //Organization.text = value;
                                         });
                                       }
                                       onFieldSubmitted();
@@ -605,27 +614,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ],
 
-                        SizedBox(height: 15),
+                        SizedBox(height: 10),
                         CustomLabeltext("Login Name"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         CustomTextField(
                           hintText: "Login name",
                           isPassword: false,
                           controller: loginName,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Password"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         CustomTextField(
                           hintText: "Password",
                           isPassword: true,
                           controller: password,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Confirm Password"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         TextFormField(
                           onChanged: (value) {
                             setState(
@@ -646,6 +655,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                           controller: confirmPassword,
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            isDense: true,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.grey.shade400,
@@ -733,14 +747,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomLabeltext("Name"),
-                        SizedBox(height: 12),
+                        SizedBox(height: 10),
                         CustomTextField(
                           hintText: "Name",
                           isPassword: false,
                           controller: name,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         Text(
                           "Email Address",
                           style: TextStyle(
@@ -752,6 +766,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         TextFormField(
                           controller: email,
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            isDense: true,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.grey.shade400,
@@ -776,7 +795,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Mobile Number"),
                         SizedBox(height: 12),
                         CustomTextField(
@@ -785,7 +804,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: phone,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Gender"),
                         SizedBox(height: 12),
                         DropdownButtonFormField<String>(
@@ -796,11 +815,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           onChanged: (newValue) {
                             setState(() {
                               _autovalidateMode = AutovalidateMode.always;
-                              _selectedGender =
-                                  newValue ?? ''; // Null safety যোগ করুন
+                              _selectedGender = newValue ?? '';
                             });
                           },
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            isDense: true,
                             hintText: "Gender",
                             hintStyle: TextStyle(
                               color: Colors.grey.shade50,
@@ -832,7 +855,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           }).toList(),
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Login Name"),
                         SizedBox(height: 12),
                         CustomTextField(
@@ -841,7 +864,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: loginName,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Password"),
                         SizedBox(height: 12),
                         CustomTextField(
@@ -850,7 +873,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: password,
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         CustomLabeltext("Confirm Password"),
                         SizedBox(height: 12),
                         TextFormField(
@@ -873,6 +896,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                           controller: confirmPassword,
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                            isDense: true,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.grey.shade400,

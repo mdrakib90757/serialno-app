@@ -44,8 +44,8 @@ class _AssignedServiceCentersDropdownState
             padding: const EdgeInsets.only(
               left: 12,
               right: 8,
-              top: 16,
-              bottom: 16,
+              top: 10,
+              bottom: 10,
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),

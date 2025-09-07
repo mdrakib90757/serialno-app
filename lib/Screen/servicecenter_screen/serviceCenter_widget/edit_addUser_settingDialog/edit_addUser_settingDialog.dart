@@ -182,7 +182,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
       backgroundColor: Colors.white,
       insetPadding: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
+        // side: BorderSide(color: AppColor().primariColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -214,7 +214,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                     ),
                   ],
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Name"),
                 SizedBox(height: 8),
@@ -224,7 +224,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                   hintText: "Name",
                   prefixIcon: Icons.person,
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Login Name"),
                 SizedBox(height: 8),
@@ -234,7 +234,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                   isPassword: false,
                   //controller: phone
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Email Address"),
                 SizedBox(height: 8),
@@ -245,7 +245,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                   prefixIcon: Icons.email_outlined,
                   //controller: phone
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Mobile Number"),
                 SizedBox(height: 8),
@@ -256,10 +256,10 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                   //controller: phone,
                   prefixIcon: Icons.call,
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 CustomLabeltext("Role"),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 CustomDropdown<Data>(
                   items: widget.availableRoles,
                   value: _selectedRole,
@@ -294,13 +294,13 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                     ),
                   ),
                 ),
-                SizedBox(height: 13),
+                SizedBox(height: 10),
 
                 Text(
                   "Assigned Service Center",
                   style: TextStyle(color: Colors.black, fontSize: 15.20),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 AssignedServiceCentersDropdown(
                   availableServiceCenters: widget.availableServiceCenters,
                   initialSelectedCenters: _selectedServiceCentersForUser,

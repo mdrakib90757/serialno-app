@@ -1,4 +1,6 @@
+import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Widgets/custom_flushbar.dart';
 import 'package:serialno_app/Widgets/custom_labeltext.dart';
@@ -7,10 +9,13 @@ import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
-import 'package:serialno_app/providers/serviceCenter_provider/editButton_provider/edit_ButtonProvider.dart';
-import 'package:serialno_app/providers/serviceCenter_provider/editButton_provider/get_EditButton_provider.dart';
-import 'package:serialno_app/request_model/serviceCanter_request/editButton_request/edit_Button_request.dart';
 import 'package:serialno_app/utils/color.dart';
+import '../../../../providers/serviceCenter_provider/editButton_serviceCenter_provider/edit_Button_serviceCenter_Provider.dart';
+import '../../../../providers/serviceCenter_provider/editButton_serviceCenter_provider/get_EditButton_provider.dart';
+import '../../../../request_model/serviceCanter_request/editButton_request_serviceCenter/edit_Button_request.dart';
+import '../add_service_center_tab_button/add_service_center_tab_button.dart';
+import '../add_service_center_time_picker/add_service_center_time_picker.dart';
+import '../weekly_offdays_dropdown/weekly_offdays_dropdown.dart';
 
 class EditServiceCenterDialog extends StatefulWidget {
   final ServiceCenterModel serviceCenter;
@@ -21,22 +26,75 @@ class EditServiceCenterDialog extends StatefulWidget {
       _EditServiceCenterDialogState();
 }
 
-class _EditServiceCenterDialogState extends State<EditServiceCenterDialog> {
+class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
+    with TickerProviderStateMixin {
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
 
   late TextEditingController nameController;
   late TextEditingController hotlinenoController;
   late TextEditingController emailController;
+  late TabController _tabControllerForDialog;
+  late TextEditingController _customFieldTextController;
+  late TextEditingController _advanceSerialController;
+  late TextEditingController _reservedController;
+  late TextEditingController _dailyQuotaController;
+
+  Time? _dialogStartTime;
+  Time? _dialogEndTime;
+  String? _selectedPolicy;
+  List<String> _selectedOffDays = [];
+  final List<String> _availableDays = [
+    'Saturday',
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+  ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    nameController = TextEditingController(text: widget.serviceCenter.name);
+
+    _tabControllerForDialog = TabController(length: 2, vsync: this);
+
+    final serviceCenter = widget.serviceCenter;
+
+    nameController = TextEditingController(text: serviceCenter.name ?? '');
     hotlinenoController = TextEditingController(
-      text: widget.serviceCenter.hotlineNo,
+      text: serviceCenter.hotlineNo ?? '',
     );
-    emailController = TextEditingController(text: widget.serviceCenter.email);
+    emailController = TextEditingController(text: serviceCenter.email ?? '');
+    _advanceSerialController = TextEditingController(
+      text: serviceCenter.daysOfAdvanceSerial?.toString() ?? '0',
+    );
+    _reservedController = TextEditingController(
+      text: serviceCenter.noOfReservedSerials?.toString() ?? '0',
+    );
+    _dailyQuotaController = TextEditingController();
+    _selectedPolicy = serviceCenter.serialNoPolicy;
+
+    _customFieldTextController = TextEditingController(
+      text: serviceCenter.serialNoPolicy,
+    );
+
+    _selectedOffDays = List<String>.from(serviceCenter.weeklyOffDays ?? []);
+
+    if (serviceCenter.workingStartTime != null) {
+      final startTime = serviceCenter.workingStartTime!;
+      _dialogStartTime = Time(hour: startTime.hour, minute: startTime.minute);
+    } else {
+      _dialogStartTime = null;
+    }
+
+    if (serviceCenter.workingEndTime != null) {
+      final endTime = serviceCenter.workingEndTime!;
+      _dialogEndTime = Time(hour: endTime.hour, minute: endTime.minute);
+    } else {
+      _dialogEndTime = null;
+    }
   }
 
   @override
@@ -44,7 +102,107 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog> {
     nameController.dispose();
     hotlinenoController.dispose();
     emailController.dispose();
+    _tabControllerForDialog.dispose();
+    _customFieldTextController.dispose();
+    _advanceSerialController.dispose();
+    _reservedController.dispose();
+    _dailyQuotaController.dispose();
+    _dialogStartTime = null;
+    _dialogEndTime = null;
+    _selectedPolicy = null;
+    _selectedOffDays = [];
     super.dispose();
+  }
+
+  Future<void> _UpdateServiceCenter() async {
+    if (_dialogFormKey.currentState!.validate()) {
+      final serviceCenter = widget.serviceCenter;
+
+      final editButtonProvider = Provider.of<EditButtonProvider>(
+        context,
+        listen: false,
+      );
+      final getEditButtonProvider = Provider.of<GetEditButtonProvider>(
+        context,
+        listen: false,
+      ).selectedServiceCenterId;
+      final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
+        context,
+        listen: false,
+      );
+      final navigator = Navigator.of(context);
+      final companyId = Provider.of<Getprofileprovider>(
+        context,
+        listen: false,
+      ).profileData?.currentCompany.id;
+
+      if (companyId == null) {
+        return;
+      }
+
+      String? formatTimeForApi(Time? time) {
+        if (time == null) return null;
+        final now = DateTime.now();
+        final dateTime = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          time.hour,
+          time.minute,
+        );
+        return DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(dateTime);
+      }
+
+      EditButtonRequest editRequest = EditButtonRequest(
+        id: widget.serviceCenter.id,
+        name: nameController.text,
+        hotlineNo: hotlinenoController.text,
+        email: emailController.text,
+        companyId: companyId,
+        customTextForSerialNo: serviceCenter.serialNoPolicy,
+        dailyQuota: int.tryParse(_dailyQuotaController.text) ?? 0,
+        daysOfAdvanceSerial: int.tryParse(_advanceSerialController.text) ?? 0,
+        noOfReservedSerials: int.tryParse(_reservedController.text) ?? 0,
+        serialNoPolicy: _selectedPolicy,
+        weeklyOffDays: _selectedOffDays,
+        workingEndTime: formatTimeForApi(_dialogEndTime),
+        workingStartTime: formatTimeForApi(_dialogStartTime),
+      );
+      final success = await editButtonProvider.editButton(
+        editRequest,
+        companyId,
+        widget.serviceCenter.id,
+      );
+      if (success) {
+        navigator.pop();
+        await CustomFlushbar.showSuccess(
+          context: context,
+          title: "Success",
+          message: "Edit Service Center Update Successful",
+        );
+        if (companyId != null && companyId.isNotEmpty) {
+          await getAddButtonProvider.fetchGetAddButton(companyId);
+        }
+      } else {
+        navigator.pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: CustomSnackBarWidget(
+              title: "Error",
+              message:
+                  editButtonProvider.errorMessage ??
+                  "Failed to Edit Service Center Update",
+              iconColor: Colors.red.shade400,
+              icon: Icons.dangerous_outlined,
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -53,7 +211,7 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog> {
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
+        //side: BorderSide(color: AppColor().primariColor),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -119,6 +277,11 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog> {
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      isDense: true,
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400),
                       ),
@@ -140,6 +303,179 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog> {
                     ),
                   ),
 
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Weekly off-days",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  WeeklyOff_daysDropdown(
+                    initialSelectedDays: _selectedOffDays,
+                    availableDays: _availableDays,
+                    onSelectionChanged: (selectedDays) {
+                      setState(() {
+                        _selectedOffDays = selectedDays;
+                      });
+                    },
+                  ),
+
+                  SizedBox(height: 10),
+                  CustomFieldWithTabs(
+                    initialEndTime: _dialogEndTime,
+                    initialStartTime: _dialogStartTime,
+                    onEndTimeChanged: (time) {
+                      setState(() {
+                        _dialogEndTime = time;
+                      });
+                    },
+                    onStartTimeChanged: (time) {
+                      setState(() {
+                        _dialogStartTime = time;
+                      });
+                    },
+                    tabController: _tabControllerForDialog,
+                    textController: _customFieldTextController,
+                  ),
+
+                  SizedBox(height: 10),
+                  const Text(
+                    "Advance Serial",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    cursorColor: Colors.grey.shade400,
+                    controller: _advanceSerialController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.left,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      suffixIcon: Container(
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Center(child: Text("Day(s)")),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 13),
+                  Text(
+                    "Serial Number Policy",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  CustomTab(
+                    initialPolicy: _selectedPolicy,
+                    onPolicyChanged: (policy) {
+                      setState(() {
+                        _selectedPolicy = policy;
+                      });
+                    },
+                  ),
+
+                  SizedBox(height: 10),
+                  Text(
+                    "Reserved Serials",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  TextFormField(
+                    cursorColor: Colors.grey.shade400,
+                    controller: _reservedController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.left,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      prefixIcon: Container(
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadiusGeometry.circular(8),
+                        ),
+                        child: const Center(child: Text("First")),
+                      ),
+                      suffixIcon: Container(
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadiusGeometry.circular(8),
+                        ),
+                        child: const Center(child: Text("Serial(s)")),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 13),
+
+                  const Text(
+                    "Daily Quota",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    cursorColor: Colors.grey.shade400,
+                    controller: _dailyQuotaController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.left,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColor().primariColor,
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      suffixIcon: Container(
+                        width: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadiusGeometry.circular(8),
+                        ),
+                        child: const Center(child: Text("Day(s)")),
+                      ),
+                    ),
+                  ),
+
                   SizedBox(height: 10),
                   //Button Logic
                   Row(
@@ -152,78 +488,7 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        onPressed: () async {
-                          final editButtonProvider =
-                              Provider.of<EditButtonProvider>(
-                                context,
-                                listen: false,
-                              );
-                          final getEditButtonProvider =
-                              Provider.of<GetEditButtonProvider>(
-                                context,
-                                listen: false,
-                              ).selectedServiceCenterId;
-                          final getAddButtonProvider =
-                              Provider.of<GetAddButtonProvider>(
-                                context,
-                                listen: false,
-                              );
-                          final navigator = Navigator.of(context);
-                          final companyId = Provider.of<Getprofileprovider>(
-                            context,
-                            listen: false,
-                          ).profileData?.currentCompany.id;
-
-                          //Validator Logic
-                          if (_dialogFormKey.currentState!.validate()) {}
-                          if (companyId == null) {
-                            return;
-                          }
-                          EditButtonRequest editRequest = EditButtonRequest(
-                            id: widget.serviceCenter.id,
-                            name: nameController.text,
-                            hotlineNo: hotlinenoController.text,
-                            email: emailController.text,
-                            companyId: companyId,
-                          );
-                          final success = await editButtonProvider.editButton(
-                            editRequest,
-                            companyId,
-                            widget.serviceCenter.id,
-                          );
-                          if (success) {
-                            navigator.pop();
-                            //get Service Center
-                            await CustomFlushbar.showSuccess(
-                              context: context,
-                              title: "Success",
-                              message: "Edit Service Center Update Successful",
-                            );
-                            if (companyId != null && companyId.isNotEmpty) {
-                              await getAddButtonProvider.fetchGetAddButton(
-                                companyId,
-                              );
-                            }
-                          } else {
-                            navigator.pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: CustomSnackBarWidget(
-                                  title: "Error",
-                                  message:
-                                      editButtonProvider.errorMessage ??
-                                      "Failed to Edit Service Center Update",
-                                  iconColor: Colors.red.shade400,
-                                  icon: Icons.dangerous_outlined,
-                                ),
-                                backgroundColor: Colors.transparent,
-                                elevation: 0,
-                                behavior: SnackBarBehavior.floating,
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
-                          }
-                        },
+                        onPressed: _UpdateServiceCenter,
                         child: Text(
                           "Save",
                           style: TextStyle(color: Colors.white),

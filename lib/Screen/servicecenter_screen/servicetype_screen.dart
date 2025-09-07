@@ -154,6 +154,7 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: serviceTypeProvider.serviceTypeList.length,
                       itemBuilder: (context, index) {
                         final type = serviceTypeProvider.serviceTypeList[index];
