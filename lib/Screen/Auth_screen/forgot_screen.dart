@@ -77,10 +77,10 @@ class _ForgotScreenState extends State<ForgotScreen> {
                     borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),
-                  prefixIcon: Icon(
-                    Icons.email_outlined,
-                    color: Colors.grey.shade600,
-                  ),
+                  // prefixIcon: Icon(
+                  //   Icons.email_outlined,
+                  //   color: Colors.grey.shade600,
+                  // ),
                   hintText: "Email address",
                   hintStyle: TextStyle(
                     color: Colors.grey.shade600,

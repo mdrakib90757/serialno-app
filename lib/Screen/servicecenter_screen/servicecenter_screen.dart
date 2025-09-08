@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/add_service_center_dialog/add_service_center_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_service_center_dialog/edit_service_center_dialog.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/deleteServiceCenter/delete_serviceCenter.dart';
-import '../../Widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../model/user_model.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
@@ -70,7 +70,7 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -92,130 +92,6 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                   ],
                 ),
                 SizedBox(height: 10),
-                // getAddButtonProvider.isLoading
-                //     ? Expanded(
-                //         child: Center(
-                //           child: CircularProgressIndicator(
-                //             color: AppColor().primariColor,
-                //             strokeWidth: 2.5,
-                //           ),
-                //         ),
-                //       )
-                //     : getAddButtonProvider.serviceCenterList.isEmpty
-                //     ? Expanded(
-                //         child: Center(
-                //           child: Column(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               Icon(
-                //                 Icons.inbox_outlined,
-                //                 size: 60,
-                //                 color: Colors.grey.shade300,
-                //               ),
-                //               SizedBox(height: 12),
-                //               Text(
-                //                 'No Service Center Found',
-                //                 style: TextStyle(
-                //                   fontSize: 16,
-                //                   color: Colors.grey[300],
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       )
-                //     : ListView.builder(
-                //   padding: EdgeInsets.zero,
-                //         itemCount:
-                //             getAddButtonProvider.serviceCenterList.length,
-                //         itemBuilder: (context, index) {
-                //           final serviceCenter =
-                //               getAddButtonProvider.serviceCenterList[index];
-                //           return Container(
-                //             margin: EdgeInsets.symmetric(vertical: 2),
-                //             decoration: BoxDecoration(
-                //               color: Colors.white,
-                //               borderRadius: BorderRadius.circular(5),
-                //               border: Border.all(color: Colors.grey.shade300),
-                //             ),
-                //             child: Padding(
-                //               padding: const EdgeInsets.all(8.0),
-                //               child: Column(
-                //                 mainAxisAlignment: MainAxisAlignment.start,
-                //                 crossAxisAlignment: CrossAxisAlignment.start,
-                //                 children: [
-                //                   Text(
-                //                     serviceCenter.name ?? "NO Name",
-                //                     style: TextStyle(
-                //                       color: AppColor().primariColor,
-                //                       fontSize: 18,
-                //                     ),
-                //                   ),
-                //
-                //                   Row(
-                //                     mainAxisAlignment:
-                //                         MainAxisAlignment.spaceBetween,
-                //                     children: [
-                //                       Text(
-                //                         serviceCenter.hotlineNo ??
-                //                             "No HotlineNo",
-                //                         style: TextStyle(
-                //                           color: Colors.black,
-                //                           fontSize: 15,
-                //                         ),
-                //                       ),
-                //                       Spacer(),
-                //                       GestureDetector(
-                //                         onTap: () {
-                //                           _showDialogBoxEDIT(
-                //                             context,
-                //                             serviceCenter,
-                //                           );
-                //                         },
-                //                         child: Text(
-                //                           "Edit",
-                //                           style: TextStyle(
-                //                             color: AppColor().scoenddaryColor,
-                //                             fontSize: 15,
-                //                           ),
-                //                         ),
-                //                       ),
-                //                       SizedBox(width: 8),
-                //                       Builder(
-                //                         builder: (BuildContext context) {
-                //                           return GestureDetector(
-                //                             onTap: () {
-                //                               _showDeleteConfirmationMenu(
-                //                                 context,
-                //                                 serviceCenter,
-                //                               );
-                //                             },
-                //                             child: Text(
-                //                               "Delete",
-                //                               style: TextStyle(
-                //                                 color:
-                //                                     AppColor().scoenddaryColor,
-                //                                 fontSize: 15,
-                //                               ),
-                //                             ),
-                //                           );
-                //                         },
-                //                       ),
-                //                     ],
-                //                   ),
-                //                   Text(
-                //                     serviceCenter.email ?? "No Email",
-                //                     style: TextStyle(
-                //                       color: Colors.black,
-                //                       fontSize: 15,
-                //                     ),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           );
-                //         },
-                //       ),
                 _buildServiceCenterList(),
               ],
             ),

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
-import 'package:serialno_app/Widgets/custom_labeltext.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
+
 import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/model/service_type_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton_request/newSerialButton_request.dart';
 import 'package:serialno_app/utils/color.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
-
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../../../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 
@@ -250,87 +250,50 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   SizedBox(height: 10),
                   CustomLabeltext("Service Type"),
                   SizedBox(height: 8),
-
-                  FormField<serviceTypeModel>(
-                    autovalidateMode: _autovalidateMode,
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Required';
-                      }
-                      return null;
-                    },
-
-                    initialValue: _selectedServiceType,
-                    builder: (FormFieldState<serviceTypeModel> state) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomDropdown<serviceTypeModel>(
-                            items: getAddButton_serviceType_Provider
-                                .serviceTypeList,
-                            value: _selectedServiceType,
-                            onChanged: (serviceTypeModel? newValue) {
-                              setState(() {
-                                _selectedServiceType = newValue;
-                              });
-
-                              state.didChange(newValue);
-                              print(newValue?.name);
-                            },
-                            itemAsString: (serviceTypeModel item) =>
-                                item.name ?? "No Name",
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
-                              ),
-
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: state.hasError
-                                      ? Colors.red.shade900
-                                      : Colors.grey.shade400,
-                                  width: state.hasError ? 1.5 : 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    _selectedServiceType?.name ??
-                                        "Select Service Type",
-                                    style: TextStyle(
-                                      color: _selectedServiceType != null
-                                          ? Colors.black
-                                          : Colors.grey.shade600,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ],
+                  Container(
+                    height: 45,
+                    child: CustomDropdown<serviceTypeModel>(
+                      items: getAddButton_serviceType_Provider.serviceTypeList,
+                      value: _selectedServiceType,
+                      onChanged: (serviceTypeModel? newvalue) {
+                        debugPrint(
+                          "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                        );
+                        setState(() {
+                          _selectedServiceType = newvalue;
+                        });
+                      },
+                      itemAsString: (serviceTypeModel item) =>
+                          item.name ?? "No Name",
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _selectedServiceType?.name ??
+                                  "Select Service Center",
+                              style: TextStyle(
+                                color: _selectedServiceType != null
+                                    ? Colors.black
+                                    : Colors.grey.shade600,
                               ),
                             ),
-                          ),
-
-                          if (state.hasError)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12, top: 5),
-                              child: Text(
-                                state.errorText!,
-                                style: TextStyle(
-                                  color: Colors.red.shade900,
-                                  fontSize: 12,
-                                ),
-                              ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.grey.shade600,
                             ),
-                        ],
-                      );
-                    },
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
 
                   SizedBox(height: 10),

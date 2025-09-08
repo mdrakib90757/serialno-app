@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/seviceTaker_request/bookSerial_request/bookSerial_request.dart';
-import '../../../../Widgets/MyRadio Button.dart';
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_labeltext.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
-import '../../../../Widgets/custom_textfield.dart';
 import '../../../../api/auth_api/auth_api.dart';
+import '../../../../global_widgets/MyRadio Button.dart';
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../model/organization_model.dart';
 import '../../../../model/serviceCenter_model.dart';
 import '../../../../model/service_type_model.dart';
@@ -281,96 +282,9 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   SizedBox(height: 10),
                   CustomLabeltext("ServiceType Provider Type"),
                   SizedBox(height: 10),
-                  DropdownSearch<Businesstype>(
-                    popupProps: PopupProps.menu(
-                      menuProps: MenuProps(
-                        backgroundColor: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      constraints: BoxConstraints(maxHeight: 170),
-                      emptyBuilder: (context, searchEntry) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.inbox_outlined,
-                                  size: 60,
-                                  color: Colors.grey[300],
-                                ),
-                                SizedBox(height: 12),
-
-                                Text(
-                                  'No data',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[300],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    itemAsString: (Businesstype type) => type.name,
-                    dropdownDecoratorProps: DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                        hintText: "Select",
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
-                        isDense: true,
-                        suffixIcon: _isLoadingBusinessTypes
-                            ? Container(
-                                padding: EdgeInsets.all(12),
-                                child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: AppColor().primariColor,
-                                  ),
-                                ),
-                              )
-                            : null,
-                        enabled: !_isLoadingBusinessTypes,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                            color: AppColor().primariColor,
-                            width: 2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.red),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
-                      ),
-                    ),
-
+                  CustomDropdown<Businesstype>(
                     selectedItem: _selectedBusinessType,
-
-                    //_selectedBusinessType,
                     items: _businessTypes,
-
                     onChanged: (newValue) {
                       setState(() {
                         _selectedBusinessType = newValue;
@@ -404,11 +318,40 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       }
                     },
 
-                    autoValidateMode: _autovalidateMode,
-                    validator: (value) {
-                      if (value == null) return "Please select a business type";
-                      return null;
-                    },
+                    itemAsString: (Businesstype type) => type.name,
+                    // validator: (value) {
+                    //       if (value == null)
+                    //         return "Please select a business type";
+                    //       return null;
+                    //     },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _selectedBusinessType?.name ??
+                                "Select BusinessType",
+                            style: TextStyle(
+                              color: _selectedBusinessType != null
+                                  ? Colors.black
+                                  : Colors.grey.shade600,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.grey.shade600,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(height: 10),
 
@@ -417,99 +360,9 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     SizedBox(height: 8),
                     Consumer<OrganizationProvider>(
                       builder: (context, OrgProvider, child) {
-                        return DropdownSearch<OrganizationModel>(
+                        return CustomDropdown<OrganizationModel>(
                           selectedItem: _selectedOrganization,
-
-                          autoValidateMode: _autovalidateMode,
-                          validator: (value) {
-                            if (value == null) return "Requird";
-                            return null;
-                          },
-
-                          popupProps: PopupProps.menu(
-                            menuProps: MenuProps(
-                              backgroundColor: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            constraints: BoxConstraints(maxHeight: 150),
-
-                            emptyBuilder: (context, searchEntry) {
-                              return Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 24.0,
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.inbox_outlined,
-                                        size: 60,
-                                        color: Colors.grey[300],
-                                      ),
-                                      SizedBox(height: 12),
-
-                                      Text(
-                                        'No data',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.grey[300],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          itemAsString: (OrganizationModel item) =>
-                              item.name ?? "No name",
-                          dropdownDecoratorProps: DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
-                              hintText: "Organization",
-                              hintStyle: TextStyle(color: Colors.grey.shade400),
-                              suffixIcon: Icon(Icons.search),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 12,
-                              ),
-                              isDense: true,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade400,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: AppColor().primariColor,
-                                  width: 2,
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: Colors.red),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade400,
-                                ),
-                              ),
-                            ),
-                          ),
-
                           items: OrgProvider.organizations,
-
                           onChanged: (OrganizationModel? Newvalue) {
                             setState(() {
                               _selectedOrganization = Newvalue;
@@ -535,6 +388,41 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                               ).clearData();
                             }
                           },
+                          itemAsString: (OrganizationModel type) =>
+                              type.name ?? "",
+                          // validator: (value) {
+                          //       if (value == null)
+                          //         return "Please select a business type";
+                          //       return null;
+                          //     },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _selectedOrganization?.name ??
+                                      "Select Organization",
+                                  style: TextStyle(
+                                    color: _selectedOrganization != null
+                                        ? Colors.black
+                                        : Colors.grey.shade600,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -567,97 +455,9 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                               ),
                             );
                           }
-                          return DropdownSearch<ServiceCenterModel>(
+                          return CustomDropdown<ServiceCenterModel>(
                             selectedItem: _selectedServiceCenter,
-                            autoValidateMode: _autovalidateMode,
-                            validator: (value) {
-                              if (value == null) return "Required";
-                              return null;
-                            },
-                            popupProps: PopupProps.menu(
-                              menuProps: MenuProps(
-                                backgroundColor: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              constraints: BoxConstraints(maxHeight: 150),
-                              emptyBuilder: (context, searchEntry) {
-                                return Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 24.0,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.inbox_outlined,
-                                          size: 60,
-                                          color: Colors.grey[300],
-                                        ),
-                                        SizedBox(height: 12),
-
-                                        Text(
-                                          'No data',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[300],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            itemAsString: (ServiceCenterModel item) =>
-                                item.name ?? "",
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
-                                isDense: true,
-                                hintText: "Service Center",
-                                hintStyle: TextStyle(
-                                  color: Colors.grey.shade400,
-                                ),
-                                suffixIcon: Icon(Icons.search),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 10,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade400,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                    color: AppColor().primariColor,
-                                    width: 2,
-                                  ),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(color: Colors.red),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade300,
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade400,
-                                  ),
-                                ),
-                              ),
-                            ),
-
                             items: allServiceCenters,
-
                             onChanged: (ServiceCenterModel? newValue) {
                               setState(() {
                                 _selectedServiceCenter = newValue;
@@ -687,6 +487,43 @@ class _BookSerialButtonState extends State<BookSerialButton> {
 
                               print(newValue?.name);
                             },
+
+                            itemAsString: (ServiceCenterModel item) =>
+                                item.name ?? "",
+                            // validator: (value) {
+                            //       if (value == null)
+                            //         return "Please select a business type";
+                            //       return null;
+                            //     },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade400),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    _selectedServiceCenter?.name ??
+                                        "Select BusinessType",
+                                    style: TextStyle(
+                                      color: _selectedServiceCenter != null
+                                          ? Colors.black
+                                          : Colors.grey.shade600,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       );
@@ -709,102 +546,10 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           ),
                         );
                       }
-
-                      return DropdownSearch<serviceTypeModel>(
-                        autoValidateMode: _autovalidateMode,
-                        validator: (value) {
-                          if (value == null) return "Required";
-                          return null;
-                        },
-                        popupProps: PopupProps.menu(
-                          menuProps: MenuProps(
-                            backgroundColor: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          constraints: BoxConstraints(maxHeight: 150),
-
-                          emptyBuilder: (context, searchEntry) {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 24.0,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.inbox_outlined,
-                                      size: 60,
-                                      color: Colors.grey.shade300,
-                                    ),
-                                    SizedBox(height: 12),
-
-                                    Text(
-                                      'No data',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[300],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                      return CustomDropdown<serviceTypeModel>(
                         itemAsString: (serviceTypeModel item) =>
                             item.name ?? "",
                         selectedItem: _selectedServiceType,
-                        dropdownDecoratorProps: DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            hintText: "Service Type",
-                            hintStyle: TextStyle(color: Colors.grey.shade400),
-                            suffixIcon: Icon(Icons.search),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 12,
-                            ),
-                            isDense: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: AppColor().primariColor,
-                                width: 2,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade300,
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            prefixIconConstraints: const BoxConstraints(
-                              minWidth: 0,
-                              minHeight: 0,
-                            ),
-                            suffixIconConstraints: const BoxConstraints(
-                              minWidth: 0,
-                              minHeight: 0,
-                            ),
-                          ),
-                        ),
-
                         items: serviceTypeProvider.serviceTypeList,
                         onChanged: (newValue) {
                           setState(() {
@@ -812,6 +557,39 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           });
                           print(newValue?.name);
                         },
+                        // validator: (value) {
+                        //       if (value == null)
+                        //         return "Please select a business type";
+                        //       return null;
+                        //     },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade400),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _selectedServiceType?.name ??
+                                    "Select ServiceType",
+                                style: TextStyle(
+                                  color: _selectedServiceType != null
+                                      ? Colors.black
+                                      : Colors.grey.shade600,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.grey.shade600,
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -822,7 +600,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   CustomTextField(
                     controller: DateController,
                     hintText: todayDate,
-                    //DateFormatter.formatForApi(_selectedDate),
                     isPassword: false,
                     suffixIcon: IconButton(
                       onPressed: () async {

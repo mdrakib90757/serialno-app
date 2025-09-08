@@ -8,7 +8,7 @@ import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/deleteServiceTypeProvider/deleteServiceTypeProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import 'package:serialno_app/utils/color.dart';
-import '../../Widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 
@@ -71,7 +71,7 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

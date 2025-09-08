@@ -142,7 +142,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
             _controllersInitialized = true;
           }
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

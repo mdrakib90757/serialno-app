@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/seviceTaker_request/commentCancel_request/commentCancel_request.dart';
-
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
 import '../../../../model/mybooked_model.dart';
 import '../../../../providers/serviceTaker_provider/bookSerialButtonProvider/getBookSerial_provider.dart';
 import '../../../../providers/serviceTaker_provider/commentCancelProvider/commentCancelButton_provider.dart';

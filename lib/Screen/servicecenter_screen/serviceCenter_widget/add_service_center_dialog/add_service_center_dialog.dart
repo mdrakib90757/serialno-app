@@ -2,16 +2,16 @@ import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/weekly_offdays_dropdown/weekly_offdays_dropdown.dart';
-import 'package:serialno_app/Widgets/custom_flushbar.dart';
-import 'package:serialno_app/Widgets/custom_labeltext.dart';
-import 'package:serialno_app/Widgets/custom_sanckbar.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/add_Button_serviceCanter_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/addButton_request/add_Button_request.dart';
 import 'package:serialno_app/utils/color.dart';
 
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../add_service_center_tab_button/add_service_center_tab_button.dart';
 import '../add_service_center_time_picker/add_service_center_time_picker.dart';
 
@@ -221,44 +221,17 @@ class _Add_button_Dialog_serviceCenter_screenState
                 ),
 
                 const SizedBox(height: 10),
-                const Text(
-                  "Email",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
+                CustomLabeltext("Email", showStar: false),
                 const SizedBox(height: 8),
-                TextFormField(
+                CustomTextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
-                    ),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColor().primariColor,
-                        width: 2,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    hintText: "Email",
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontSize: 15,
-                    ),
-                  ),
+                  hintText: "Email",
+                  isPassword: false,
+                  enableValidation: false,
                 ),
 
                 const SizedBox(height: 10),
-                const Text(
-                  "Weekly off-days",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
+                CustomLabeltext("Weekly off-day"),
                 const SizedBox(height: 8),
                 WeeklyOff_daysDropdown(
                   availableDays: _availableDays,
@@ -286,53 +259,27 @@ class _Add_button_Dialog_serviceCenter_screenState
                 ),
 
                 SizedBox(height: 10),
-                const Text(
-                  "Advance Serial",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
+                CustomLabeltext("Advance Serials", showStar: false),
                 const SizedBox(height: 8),
-                TextFormField(
-                  cursorColor: Colors.grey.shade400,
+                CustomTextField(
                   controller: _advanceSerialController,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.left,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
+                  isPassword: false,
+                  enableValidation: false,
+                  suffixIcon: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColor().primariColor,
-                        width: 2,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    suffixIcon: Container(
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(child: Text("Day(s)")),
-                    ),
-                    suffixIconConstraints: const BoxConstraints(
-                      minWidth: 0,
-                      minHeight: 0,
-                    ),
+                    child: const Center(child: Text("Day(s)")),
+                  ),
+                  suffixIconConstraints: const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
                   ),
                 ),
 
                 SizedBox(height: 10),
-                Text(
-                  "Serial Number Policy",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
+                CustomLabeltext("Serial Number Policy", showStar: false),
                 SizedBox(height: 8),
                 CustomTab(
                   onPolicyChanged: (policy) {
@@ -342,17 +289,14 @@ class _Add_button_Dialog_serviceCenter_screenState
                   },
                 ),
 
-                SizedBox(height: 13),
-                Text(
-                  "Reserved Serials",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
+                SizedBox(height: 10),
+                CustomLabeltext("Reserved Serials", showStar: false),
                 SizedBox(height: 8),
                 TextFormField(
                   cursorColor: Colors.grey.shade400,
                   controller: _reservedController,
                   keyboardType: TextInputType.number,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.left,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 14,
@@ -399,47 +343,23 @@ class _Add_button_Dialog_serviceCenter_screenState
                     ),
                   ),
                 ),
-                SizedBox(height: 13),
-
-                const Text(
-                  "Daily Quota",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
+                SizedBox(height: 10),
+                CustomLabeltext("Daily Quota", showStar: false),
                 const SizedBox(height: 8),
-                TextFormField(
-                  cursorColor: Colors.grey.shade400,
+                CustomTextField(
                   controller: _dailyQuotaController,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.left,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
+                  isPassword: false,
+                  enableValidation: false,
+                  suffixIcon: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColor().primariColor,
-                        width: 2,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    suffixIcon: Container(
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadiusGeometry.circular(8),
-                      ),
-                      child: const Center(child: Text("Day(s)")),
-                    ),
-                    suffixIconConstraints: const BoxConstraints(
-                      minWidth: 0,
-                      minHeight: 0,
-                    ),
+                    child: const Center(child: Text("Day(s)")),
+                  ),
+                  suffixIconConstraints: const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
                   ),
                 ),
 

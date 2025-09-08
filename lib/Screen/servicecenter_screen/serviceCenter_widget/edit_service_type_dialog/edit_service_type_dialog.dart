@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/Widgets/custom_flushbar.dart';
-import 'package:serialno_app/Widgets/custom_labeltext.dart';
-import 'package:serialno_app/Widgets/custom_sanckbar.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/model/service_type_model.dart';
 import 'package:serialno_app/utils/color.dart';
-
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../../../../providers/serviceCenter_provider/editButtonServiceType_provider/editButtonServiceType_provider.dart';
@@ -174,67 +173,23 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
 
                   SizedBox(height: 10),
 
-                  Text("Service Price", style: TextStyle(fontSize: 15)),
-                  SizedBox(height: 10),
-                  TextFormField(
+                  CustomLabeltext("Service Price", showStar: false),
+                  const SizedBox(height: 8),
+                  CustomTextField(
+                    hintText: "Price in BDT",
                     controller: priceController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 12,
-                      ),
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-
-                      hintText: "Price in BDT",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontSize: 14,
-                      ),
-                    ),
+                    isPassword: false,
+                    enableValidation: false,
                   ),
                   SizedBox(height: 10),
 
-                  Text("Default Allocated", style: TextStyle(fontSize: 14)),
-                  SizedBox(height: 10),
-                  TextFormField(
+                  CustomLabeltext("Default Allocated Time", showStar: false),
+                  const SizedBox(height: 8),
+                  CustomTextField(
+                    hintText: "Time in minutes",
                     controller: timeController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 12,
-                      ),
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-
-                      hintText: "Time in menutes",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontSize: 13,
-                      ),
-                    ),
+                    isPassword: false,
+                    enableValidation: false,
                   ),
                   SizedBox(height: 10),
 

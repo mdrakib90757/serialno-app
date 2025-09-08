@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../../Widgets/my_Appbar.dart';
+import '../../global_widgets/My_Appbar.dart';
 import '../servicecenter_screen/serviceCenter_widget/edit_profile_info_dialog/edit_profile_info_dialog.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';

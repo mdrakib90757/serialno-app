@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 import '../Screen/Auth_screen/login_screen.dart';
-import '../Widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import '../Widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 
 class AppRouteNames {
   static const String login = '/login';

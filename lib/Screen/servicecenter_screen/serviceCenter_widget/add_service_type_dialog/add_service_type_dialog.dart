@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
-
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_labeltext.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
-import '../../../../Widgets/custom_textfield.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/addButtonServiceType_Provider.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../../../../request_model/serviceCanter_request/addButton_serviceType_request/addButtonServiceType_request.dart';
@@ -153,70 +152,22 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                   ),
                   SizedBox(height: 10),
 
-                  Text("Service Price", style: TextStyle(fontSize: 15)),
-                  SizedBox(height: 10),
-                  TextFormField(
+                  CustomLabeltext("Service Price", showStar: false),
+                  const SizedBox(height: 8),
+                  CustomTextField(
+                    hintText: "Price in BDT",
                     controller: priceController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 12,
-                      ),
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-
-                      hintText: "Price in BDT",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontSize: 15,
-                      ),
-                    ),
+                    isPassword: false,
+                    enableValidation: false,
                   ),
                   SizedBox(height: 10),
-
-                  Text(
-                    "Default Allocated Time",
-                    style: TextStyle(color: Colors.black, fontSize: 15),
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
+                  CustomLabeltext("Default Allocated Time", showStar: false),
+                  const SizedBox(height: 8),
+                  CustomTextField(
+                    hintText: "Time in minutes",
                     controller: timeController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 12,
-                      ),
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-
-                      hintText: "Time in minutes",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontSize: 15,
-                      ),
-                    ),
+                    isPassword: false,
+                    enableValidation: false,
                   ),
                   SizedBox(height: 10),
                   Row(

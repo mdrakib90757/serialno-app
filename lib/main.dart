@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/api/serviceCenter_api/addButton_serviceType/addbutton_serviceType.dart';
 import 'package:serialno_app/providers/app_provider/app_provider.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 
@@ -8,8 +7,8 @@ import 'package:serialno_app/routes/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Screen/Auth_screen/login_screen.dart';
-import 'Widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import 'Widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+import 'global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import 'global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

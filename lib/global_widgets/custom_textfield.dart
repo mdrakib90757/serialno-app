@@ -8,6 +8,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final IconData? prefixIcon;
+  final Widget? prefix;
   final Widget? suffixIcon;
   final TextInputAction? textInputAction;
   final void Function()? onEditingComplete;
@@ -20,6 +21,9 @@ class CustomTextField extends StatefulWidget {
   final VoidCallback? onTap;
   final bool showFocusBorder;
   final String? Function(String?)? validator;
+  final bool enableValidation;
+  final BoxConstraints? suffixIconConstraints;
+  final BoxConstraints? prefixIconConstraints;
 
   const CustomTextField({
     this.showFocusBorder = true,
@@ -40,6 +44,10 @@ class CustomTextField extends StatefulWidget {
     this.readOnly,
     this.onTap,
     this.validator,
+    this.enableValidation = true,
+    this.suffixIconConstraints,
+    this.prefix,
+    this.prefixIconConstraints,
   });
 
   @override
@@ -64,14 +72,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
     return TextFormField(
       controller: widget.controller,
-      validator:
-          widget.validator ??
-          (value) {
-            if (value == null || value.isEmpty) {
-              return 'Required';
-            }
-            return null;
-          },
+      validator: widget.enableValidation
+          ? widget.validator ??
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Required';
+                  }
+                  return null;
+                }
+          : null,
       autovalidateMode: autovalidateMode,
       onChanged: (value) {
         if (autovalidateMode != AutovalidateMode.always) {
@@ -83,6 +92,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: obscureText,
       obscuringCharacter: "*",
       decoration: InputDecoration(
+        constraints: BoxConstraints(),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 12,
@@ -115,7 +125,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           color: widget.textStyle != null ? Colors.black : Colors.grey.shade400,
           fontSize: 16,
         ),
-
+        prefix: widget.prefix,
         suffixIcon: widget.suffixIcon != null
             ? widget.suffixIcon
             : widget.isPassword
@@ -131,7 +141,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               )
             : null,
+        suffixIconConstraints: widget.suffixIconConstraints,
+        prefixIconConstraints: widget.prefixIconConstraints,
       ),
+
       cursorColor: Colors.grey.shade500,
     );
   }

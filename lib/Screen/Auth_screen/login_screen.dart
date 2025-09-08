@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/Auth_screen/registration_screen.dart';
-
-import '../../Widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import '../../Widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
-import '../../Widgets/custom_flushbar.dart';
-import '../../Widgets/custom_sanckbar.dart';
-import '../../Widgets/custom_textfield.dart';
+import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+import 'package:serialno_app/global_widgets/custom_sanckbar.dart';
+import '../../global_widgets/custom_textfield.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../request_model/auth_request/login_request.dart';
 

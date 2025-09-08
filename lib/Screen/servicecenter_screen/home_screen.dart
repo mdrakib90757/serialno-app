@@ -8,12 +8,10 @@ import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/cu
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/new_serial_button_dialog/new_serial_button_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/queue_list_edit_dialog/queue_list_edit_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/statusDialogServiceCenter/statusDialog_serviceCenter.dart';
-import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
-import 'package:serialno_app/request_model/serviceCanter_request/next_button_request/next_button_request.dart';
-import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
-import '../../Widgets/custom_flushbar.dart';
-import '../../Widgets/custom_sanckbar.dart';
-import '../../Widgets/custom_textfield.dart';
+import '../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../global_widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_sanckbar.dart';
+import '../../global_widgets/custom_textfield.dart';
 import '../../model/serialService_model.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
@@ -25,6 +23,7 @@ import '../../providers/serviceCenter_provider/nextButton_provider/nextButton_pr
 import '../../providers/serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';
 import '../../request_model/serviceCanter_request/status_UpdateButtonRequest/status_updateButtonRequest.dart';
 import '../../utils/color.dart';
+import '../../utils/date_formatter/date_formatter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -198,10 +197,12 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             Text(company.name, style: GoogleFonts.acme(fontSize: 25)),
             SizedBox(height: 8),
+            //customToday date and serving circle
             CustomDateDisplay(selectedDate: _selectedDate),
             SizedBox(height: 5),
+            //service center dropdown
             Container(
-              height: 45,
+              height: 47,
               child: CustomDropdown<ServiceCenterModel>(
                 items: userAssignedServiceCenters,
                 value: _selectedServiceCenter,
@@ -240,6 +241,7 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
             SizedBox(height: 5),
+            //service date
             Row(
               children: [
                 Text(
@@ -321,6 +323,8 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
             SizedBox(height: 8),
+
+            //serial button and next button
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -667,7 +671,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-
+            // queue and served tabBar
             TabBar(
               controller: tabController,
               indicatorSize: TabBarIndicatorSize.tab,
@@ -682,6 +686,7 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
             SizedBox(height: 8),
+            //tabBar list
             Expanded(
               child: TabBarView(
                 controller: tabController,
@@ -727,6 +732,7 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
+  //queue build Widget
   Widget _buildQueueList() {
     final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final String selectedDateString = DateFormat(
@@ -898,7 +904,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  // HomeScreen.dart
+  // served build widget
   Widget _buildServedList() {
     return Consumer<GetNewSerialButtonProvider>(
       builder: (context, serialProvider, child) {

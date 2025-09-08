@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton_request/queue_edit_list_request/queue_edit_list_request.dart';
-
-import '../../../../Widgets/custom_dropdown/custom_dropdown.dart';
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_labeltext.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
-import '../../../../Widgets/custom_textfield.dart';
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../model/serialService_model.dart';
 import '../../../../model/serviceCenter_model.dart';
 import '../../../../model/service_type_model.dart';

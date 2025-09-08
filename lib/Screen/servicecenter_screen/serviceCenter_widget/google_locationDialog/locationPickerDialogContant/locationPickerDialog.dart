@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../../Widgets/custom_sanckbar.dart';
+import '../../../../../global_widgets/custom_sanckbar.dart';
 import '../../../../../utils/color.dart';
 import '../../google_map_service/google_map_service.dart';
 import '../locationDialogContent.dart';

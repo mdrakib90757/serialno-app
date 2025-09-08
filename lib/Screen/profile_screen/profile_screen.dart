@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/profile_screen/profile_edit_screen.dart';
-import '../../Widgets/my_Appbar.dart';
+import '../../global_widgets/My_Appbar.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
 import 'password_screen.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/model/serialService_model.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/status_UpdateButtonRequest/status_updateButtonRequest.dart';
 import 'package:serialno_app/utils/color.dart';
 
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../../../../providers/serviceCenter_provider/statusButtonProvider/get_status_updateButtonButton_provider.dart';
 import '../../../../providers/serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';

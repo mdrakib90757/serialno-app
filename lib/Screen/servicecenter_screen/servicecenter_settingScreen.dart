@@ -11,7 +11,7 @@ import 'package:serialno_app/providers/serviceCenter_provider/company_details_pr
 import 'package:serialno_app/providers/serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import 'package:serialno_app/utils/color.dart';
 
-import '../../Widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_flushbar.dart';
 import '../../model/company_details_model.dart';
 import '../../model/roles_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
@@ -114,7 +114,7 @@ class _Servicecenter_SettingscreenState
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

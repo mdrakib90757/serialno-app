@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../Widgets/My_Appbar.dart';
-import '../../Widgets/custom_flushbar.dart';
-import '../../Widgets/custom_labeltext.dart';
-import '../../Widgets/custom_sanckbar.dart';
-import '../../Widgets/custom_textfield.dart';
+import '../../global_widgets/My_Appbar.dart';
+import '../../global_widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_labeltext.dart';
+import '../../global_widgets/custom_sanckbar.dart';
+import '../../global_widgets/custom_textfield.dart';
 import '../../providers/auth_provider/password_upadate_provider.dart';
 import '../../request_model/auth_request/update_password_request.dart';
 import '../../utils/color.dart';
@@ -95,7 +94,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
         backgroundColor: Colors.white,
         appBar: MyAppbar(),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -127,7 +126,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 controller: password_controller,
                 hintText: "Current Password",
                 isPassword: true,
-                prefixIcon: Icons.lock_outline,
+                //prefixIcon: Icons.lock_outline,
               ),
               SizedBox(height: 20),
               CustomLabeltext("New Password"),
@@ -136,7 +135,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 controller: Newpassword_controller,
                 hintText: "New Password",
                 isPassword: true,
-                prefixIcon: Icons.lock_outline,
+                //prefixIcon: Icons.lock_outline,
               ),
               SizedBox(height: 20),
               CustomLabeltext("Confirm Password"),
@@ -145,7 +144,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 controller: Confirmpassword_controller,
                 hintText: "Confirm Password",
                 isPassword: true,
-                prefixIcon: Icons.lock_outline,
+                //prefixIcon: Icons.lock_outline,
               ),
 
               SizedBox(height: 20),

@@ -5,6 +5,7 @@ class CustomDropdown<T> extends StatefulWidget {
   final Widget child;
   final List<T> items;
   final T? value;
+  final T? selectedItem;
   final ValueChanged<T> onChanged;
   final String Function(T item) itemAsString;
   final double popupHeight;
@@ -17,6 +18,7 @@ class CustomDropdown<T> extends StatefulWidget {
     required this.onChanged,
     required this.itemAsString,
     this.popupHeight = 200.0,
+    this.selectedItem,
   }) : super(key: key);
 
   @override

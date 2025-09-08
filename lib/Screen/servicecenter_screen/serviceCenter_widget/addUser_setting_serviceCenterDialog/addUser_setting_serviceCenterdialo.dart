@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/AssignedServiceCenter/AssignedServiceCenter.dart';
-import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
-import 'package:serialno_app/Widgets/custom_labeltext.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/model/roles_model.dart';
 import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
@@ -14,9 +11,11 @@ import 'package:serialno_app/providers/serviceCenter_provider/roles_service_cent
 import 'package:serialno_app/request_model/serviceCanter_request/addUser_serviceCenterRequest/addUser_ServiceCenter_request.dart';
 import 'package:serialno_app/utils/color.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
-
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 
 class AddUser_SettingServiceCenterDialog extends StatefulWidget {
@@ -219,7 +218,11 @@ class _AddUser_SettingServiceCenterDialogState
                   controller: _nameController,
                   isPassword: false,
                   hintText: "Name",
-                  prefixIcon: Icons.person,
+                  // prefixIcon: Icons.person,
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
+                  ),
                 ),
                 SizedBox(height: 10),
 
@@ -229,6 +232,10 @@ class _AddUser_SettingServiceCenterDialogState
                   controller: _loginNameController,
                   hintText: "Login Name",
                   isPassword: false,
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
+                  ),
                   //controller: phone
                 ),
                 SizedBox(height: 10),
@@ -239,7 +246,11 @@ class _AddUser_SettingServiceCenterDialogState
                   controller: _emailController,
                   hintText: "Email address",
                   isPassword: false,
-                  prefixIcon: Icons.email_outlined,
+                  //prefixIcon: Icons.email_outlined,
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
+                  ),
                   //controller: phone
                 ),
                 SizedBox(height: 10),
@@ -251,7 +262,65 @@ class _AddUser_SettingServiceCenterDialogState
                   hintText: "Mobile Number",
                   isPassword: false,
                   //controller: phone,
-                  prefixIcon: Icons.call,
+                  //prefixIcon: Icons.call,
+                ),
+                SizedBox(height: 10),
+
+                CustomLabeltext("Role"),
+                SizedBox(height: 10),
+                Container(
+                  height: 47,
+                  child: CustomDropdown<Data>(
+                    items: rolesProvider.roles,
+                    value: _selectedRole,
+                    onChanged: (Data? newValue) {
+                      setState(() {
+                        _selectedRole = newValue;
+                      });
+                    },
+                    itemAsString: (Data? item) => item?.name ?? "No name",
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _selectedRole?.name ?? "Select Role",
+                            style: TextStyle(
+                              color: _selectedRole != null
+                                  ? Colors.black
+                                  : Colors.grey.shade600,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.grey.shade600,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                CustomLabeltext("Assigned Service Center", showStar: false),
+                SizedBox(height: 10),
+                AssignedServiceCentersDropdown(
+                  availableServiceCenters:
+                      serviceCenterProvider.serviceCenterList,
+                  initialSelectedCenters: _selectedServiceCentersForUser,
+                  onSelectionChanged: (selectedList) {
+                    setState(() {
+                      _selectedServiceCentersForUser = selectedList;
+                    });
+                  },
                 ),
                 SizedBox(height: 10),
 
@@ -259,7 +328,7 @@ class _AddUser_SettingServiceCenterDialogState
                 SizedBox(height: 12),
                 CustomTextField(
                   controller: _passwordController,
-                  prefixIcon: Icons.lock,
+                  // prefixIcon: Icons.lock,
                   hintText: "Password",
                   isPassword: true,
                   // controller: password,
@@ -301,10 +370,10 @@ class _AddUser_SettingServiceCenterDialogState
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
-                    prefixIcon: Icon(
-                      Icons.lock_outline,
-                      color: Colors.grey.shade400,
-                    ),
+                    // prefixIcon: Icon(
+                    //   Icons.lock_outline,
+                    //   color: Colors.grey.shade400,
+                    // ),
                     hintText: "Confirm password",
                     hintStyle: TextStyle(
                       color: Colors.grey.shade400,
@@ -328,68 +397,7 @@ class _AddUser_SettingServiceCenterDialogState
                   obscureText: obscureIndex1,
                   obscuringCharacter: "*",
                 ),
-                SizedBox(height: 13),
-
-                CustomLabeltext("Role"),
-                SizedBox(height: 12),
-                Container(
-                  height: 45,
-                  child: CustomDropdown<Data>(
-                    items: rolesProvider.roles,
-                    value: _selectedRole,
-                    onChanged: (Data? newValue) {
-                      setState(() {
-                        _selectedRole = newValue;
-                      });
-                    },
-                    itemAsString: (Data? item) => item?.name ?? "No name",
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            _selectedRole?.name ?? "Select Role",
-                            style: TextStyle(
-                              color: _selectedRole != null
-                                  ? Colors.black
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 SizedBox(height: 10),
-
-                Text(
-                  "Assigned Service Center",
-                  style: TextStyle(color: Colors.black, fontSize: 15.20),
-                ),
-                SizedBox(height: 10),
-                AssignedServiceCentersDropdown(
-                  availableServiceCenters:
-                      serviceCenterProvider.serviceCenterList,
-                  initialSelectedCenters: _selectedServiceCentersForUser,
-                  onSelectionChanged: (selectedList) {
-                    setState(() {
-                      _selectedServiceCentersForUser = selectedList;
-                    });
-                  },
-                ),
-                SizedBox(height: 13),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

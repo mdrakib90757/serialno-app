@@ -4,11 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 import 'package:serialno_app/request_model/seviceTaker_request/update_bookSerialRequest/update_bookSerialRequest.dart';
-import '../../../../Widgets/MyRadio Button.dart';
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_labeltext.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
-import '../../../../Widgets/custom_textfield.dart';
+import '../../../../global_widgets/MyRadio Button.dart';
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../model/mybooked_model.dart';
 
 import '../../../../model/service_type_model.dart';
@@ -246,93 +247,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                           ),
                         );
                       }
-
-                      return DropdownSearch<serviceTypeModel>(
-                        autoValidateMode: _autovalidateMode,
-                        validator: (value) {
-                          if (value == null) return "Required";
-                          return null;
-                        },
-                        popupProps: PopupProps.menu(
-                          menuProps: MenuProps(
-                            backgroundColor: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          constraints: BoxConstraints(maxHeight: 150),
-
-                          emptyBuilder: (context, searchEntry) {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 24.0,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.inbox_outlined,
-                                      size: 60,
-                                      color: Colors.grey.shade300,
-                                    ),
-                                    SizedBox(height: 12),
-
-                                    Text(
-                                      'No data',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[300],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        itemAsString: (serviceTypeModel item) =>
-                            item.name ?? "no data",
-                        selectedItem: _selectedServiceType,
-                        dropdownDecoratorProps: DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            hintText: "Service Type",
-                            hintStyle: TextStyle(color: Colors.grey.shade400),
-                            suffixIcon: Icon(Icons.search),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: AppColor().primariColor,
-                                width: 2,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade300,
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                          ),
-                        ),
-
+                      return CustomDropdown<serviceTypeModel>(
                         items: serviceTypeProvider.serviceTypeList,
 
                         onChanged: (serviceTypeModel? newValue) {
@@ -341,6 +256,43 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                           });
                           print(newValue?.name);
                         },
+
+                        itemAsString: (serviceTypeModel item) =>
+                            item.name ?? "no data",
+                        selectedItem: _selectedServiceType,
+                        // validator: (value) {
+                        //       if (value == null)
+                        //         return "Please select a business type";
+                        //       return null;
+                        //     },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade400),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _selectedServiceType?.name ??
+                                    "Select ServiceType",
+                                style: TextStyle(
+                                  color: _selectedServiceType != null
+                                      ? Colors.black
+                                      : Colors.grey.shade600,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.grey.shade600,
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
                   ),

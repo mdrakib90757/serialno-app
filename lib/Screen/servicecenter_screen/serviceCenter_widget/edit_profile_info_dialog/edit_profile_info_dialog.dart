@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/update_profile_request.dart';
 
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../model/user_model.dart';
 import '../../../../providers/auth_provider/auth_providers.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 import '../../../../providers/profile_provider/profile_update_provider.dart';
 import '../../../../utils/color.dart';
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_labeltext.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
-import '../../../../Widgets/custom_textfield.dart';
 
 class edit_profile_info_dialog extends StatefulWidget {
   final User_Model user;

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/Widgets/custom_dropdown/custom_dropdown.dart';
-import 'package:serialno_app/Widgets/custom_labeltext.dart';
-import 'package:serialno_app/Widgets/custom_textfield.dart';
 import 'package:serialno_app/model/AddUser_serviceCenterModel.dart';
 import 'package:serialno_app/model/roles_model.dart';
 import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/update_addUser_serviceCenter/update_addUser_serviceCenter.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/addUser_serviceCenterRequest/editUserRequest/editUserRequest.dart';
 import 'package:serialno_app/utils/color.dart';
-import '../../../../Widgets/custom_flushbar.dart';
-import '../../../../Widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_labeltext.dart';
+import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_textfield.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 import '../../../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../../../../providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
@@ -162,10 +162,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final updateProvider = Provider.of<UpdateAddUserProvider>(
-      context,
-      listen: false,
-    );
+    final updateProvider = Provider.of<UpdateAddUserProvider>(context);
     final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
     final rolesProvider = Provider.of<RolesProvider>(context);
     if (rolesProvider.isLoading || serviceCenterProvider.isLoading) {
@@ -222,7 +219,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                   controller: _nameController,
                   isPassword: false,
                   hintText: "Name",
-                  prefixIcon: Icons.person,
+                  //  prefixIcon: Icons.person,
                 ),
                 SizedBox(height: 10),
 
@@ -242,7 +239,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                   controller: _emailController,
                   hintText: "Email address",
                   isPassword: false,
-                  prefixIcon: Icons.email_outlined,
+                  // prefixIcon: Icons.email_outlined,
                   //controller: phone
                 ),
                 SizedBox(height: 10),
@@ -254,43 +251,49 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                   hintText: "Mobile Number",
                   isPassword: false,
                   //controller: phone,
-                  prefixIcon: Icons.call,
+                  // prefixIcon: Icons.call,
                 ),
                 SizedBox(height: 10),
 
                 CustomLabeltext("Role"),
                 SizedBox(height: 10),
-                CustomDropdown<Data>(
-                  items: widget.availableRoles,
-                  value: _selectedRole,
-                  onChanged: (Data? newValue) {
-                    setState(() {
-                      _selectedRole = newValue;
-                    });
-                  },
-                  itemAsString: (Data? item) => item?.name ?? "No name",
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _selectedRole?.name ?? "Select Role",
-                          style: TextStyle(
-                            color: _selectedRole != null
-                                ? Colors.black
-                                : Colors.grey.shade600,
+                Container(
+                  height: 47,
+                  child: CustomDropdown<Data>(
+                    items: widget.availableRoles,
+                    value: _selectedRole,
+                    onChanged: (Data? newValue) {
+                      setState(() {
+                        _selectedRole = newValue;
+                      });
+                    },
+                    itemAsString: (Data? item) => item?.name ?? "No name",
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _selectedRole?.name ?? "Select Role",
+                            style: TextStyle(
+                              color: _selectedRole != null
+                                  ? Colors.black
+                                  : Colors.grey.shade600,
+                            ),
                           ),
-                        ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.grey.shade600,
-                        ),
-                      ],
+                          Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.grey.shade600,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -351,10 +354,12 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         backgroundColor: AppColor().primariColor,
                       ),
                       onPressed: _UpdateAddUserInfo,
-                      child: Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: updateProvider.isLoading
+                          ? Text(
+                              "please wait...",
+                              style: TextStyle(color: Colors.white),
+                            )
+                          : Text("Save", style: TextStyle(color: Colors.white)),
                     ),
                     SizedBox(width: 8),
                     ElevatedButton(

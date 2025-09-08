@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/auth_request/serviceTaker_register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../Widgets/MyRadio Button.dart';
-import '../../Widgets/custom_flushbar.dart';
-import '../../Widgets/custom_labeltext.dart';
-import '../../Widgets/custom_sanckbar.dart';
-import '../../Widgets/custom_textfield.dart';
+import '../../global_widgets/MyRadio Button.dart';
+import '../../global_widgets/custom_dropdown/custom_dropdown.dart';
+import '../../global_widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_labeltext.dart';
+import '../../global_widgets/custom_sanckbar.dart';
+import '../../global_widgets/custom_textfield.dart';
 import '../../model/user_model.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../request_model/auth_request/register_requset.dart';
@@ -279,42 +279,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
 
                         SizedBox(height: 10),
-                        Text(
-                          "Address Line 2",
-                          style: TextStyle(color: Colors.black, fontSize: 17),
-                        ),
+                        CustomLabeltext("Address Line 2", showStar: false),
                         SizedBox(height: 10),
-                        TextFormField(
+                        CustomTextField(
                           controller: addressLine2,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 12,
-                            ),
-                            isDense: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColor().primariColor,
-                                width: 2,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-
-                            hintText: "Address Line 2",
-                            hintStyle: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontSize: 15,
-                            ),
-                          ),
+                          enableValidation: false,
+                          hintText: "Address Line 2",
+                          isPassword: false,
                         ),
 
                         SizedBox(height: 10),
@@ -327,42 +298,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
 
                         SizedBox(height: 10),
-                        Text(
-                          "Email Address",
-                          style: TextStyle(color: Colors.black, fontSize: 17),
-                        ),
+                        CustomLabeltext("Email Address", showStar: false),
                         SizedBox(height: 10),
-                        TextFormField(
+                        CustomTextField(
+                          hintText: "Email Address",
+                          isPassword: false,
                           controller: email,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 12,
-                            ),
-                            isDense: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColor().primariColor,
-                                width: 2,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-
-                            hintText: "Email Address",
-                            hintStyle: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontSize: 15,
-                            ),
-                          ),
+                          enableValidation: false,
                         ),
 
                         SizedBox(height: 10),
@@ -377,82 +319,51 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         SizedBox(height: 10),
                         CustomLabeltext("Business Type"),
                         SizedBox(height: 10),
-                        DropdownSearch<Businesstype>(
-                          popupProps: PopupProps.menu(
-                            menuProps: MenuProps(
-                              backgroundColor: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            constraints: BoxConstraints(maxHeight: 170),
-                          ),
-
-                          itemAsString: (Businesstype type) => type.name,
-                          dropdownDecoratorProps: DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
-                              hintText: "Select",
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              suffixIcon: _isLoadingBusinessTypes
-                                  ? Container(
-                                      padding: EdgeInsets.all(12),
-                                      child: SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2.5,
-                                          color: AppColor().primariColor,
-                                        ),
-                                      ),
-                                    )
-                                  : null,
-
-                              enabled: !_isLoadingBusinessTypes,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade400,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: AppColor().primariColor,
-                                  width: 2,
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: Colors.red),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade400,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          selectedItem: _selectedBusinessType,
+                        CustomDropdown<Businesstype>(
                           items: authProvider.businessTypes,
-                          onChanged: (newValue) {
+                          value: _selectedBusinessType,
+                          onChanged: (Businesstype? newvalue) {
+                            debugPrint(
+                              "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                            );
                             setState(() {
-                              _selectedBusinessType = newValue;
+                              _selectedBusinessType = newvalue;
                             });
                           },
-                          validator: (value) {
-                            if (value == null)
-                              return "Please select a business type";
-                            return null;
-                          },
+                          itemAsString: (Businesstype type) => type.name,
+                          // validator: (value) {
+                          //       if (value == null)
+                          //         return "Please select a business type";
+                          //       return null;
+                          //     },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _selectedBusinessType?.name ??
+                                      "Select BusinessType",
+                                  style: TextStyle(
+                                    color: _selectedBusinessType != null
+                                        ? Colors.black
+                                        : Colors.grey.shade600,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
 
                         SizedBox(height: 10),
@@ -675,10 +586,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 color: Colors.grey.shade400,
                               ),
                             ),
-                            prefixIcon: Icon(
-                              Icons.lock_outline,
-                              color: Colors.grey.shade400,
-                            ),
                             hintText: "Confirm password",
                             hintStyle: TextStyle(
                               color: Colors.grey.shade400,
@@ -807,52 +714,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         SizedBox(height: 10),
                         CustomLabeltext("Gender"),
                         SizedBox(height: 12),
-                        DropdownButtonFormField<String>(
-                          validator: (value) => value == null || value.isEmpty
-                              ? "Required"
-                              : null,
-                          autovalidateMode: _autovalidateMode,
+                        CustomDropdown<String>(
+                          items: genderList,
+                          value: _selectedGender,
+                          itemAsString: (item) => item,
+                          // validator: (value) {
+                          //   if (value == null)
+                          //     return "Please select a Gender";
+                          //   return null;
+                          // },
                           onChanged: (newValue) {
                             setState(() {
-                              _autovalidateMode = AutovalidateMode.always;
-                              _selectedGender = newValue ?? '';
+                              _selectedGender = newValue;
                             });
                           },
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 14,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
                               vertical: 12,
                             ),
-                            isDense: true,
-                            hintText: "Gender",
-                            hintStyle: TextStyle(
-                              color: Colors.grey.shade50,
-                              fontSize: 15,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _selectedGender ?? "Select Gender",
+                                  style: TextStyle(
+                                    color: _selectedGender != null
+                                        ? Colors.black
+                                        : Colors.grey.shade600,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
                             ),
                           ),
-                          value: _selectedGender,
-                          items: genderList.map((String value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
                         ),
 
                         SizedBox(height: 10),
@@ -915,10 +817,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               borderSide: BorderSide(
                                 color: Colors.grey.shade400,
                               ),
-                            ),
-                            prefixIcon: Icon(
-                              Icons.lock_outline,
-                              color: Colors.grey.shade400,
                             ),
                             hintText: "Confirm password",
                             hintStyle: TextStyle(
