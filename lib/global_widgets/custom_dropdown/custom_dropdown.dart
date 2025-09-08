@@ -74,7 +74,6 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                 child: Container(color: Colors.transparent),
               ),
             ),
-
             Positioned(
               width: size.width,
               child: CompositedTransformFollower(
@@ -83,10 +82,8 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                 offset: Offset(0.0, yOffset),
                 child: Material(
                   color: Colors.white,
-
                   elevation: 4.0,
                   borderRadius: BorderRadius.circular(8.0),
-
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: widget.popupHeight),
                     child: ListView.builder(
@@ -96,6 +93,10 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                       itemBuilder: (context, index) {
                         final item = widget.items[index];
                         return ListTile(
+                          visualDensity: VisualDensity(
+                            horizontal: 0,
+                            vertical: -4,
+                          ),
                           title: Text(widget.itemAsString(item)),
                           onTap: () {
                             widget.onChanged(item);

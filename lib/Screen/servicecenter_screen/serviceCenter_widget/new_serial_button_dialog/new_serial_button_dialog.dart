@@ -250,50 +250,57 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   SizedBox(height: 10),
                   CustomLabeltext("Service Type"),
                   SizedBox(height: 8),
-                  Container(
-                    height: 45,
-                    child: CustomDropdown<serviceTypeModel>(
-                      items: getAddButton_serviceType_Provider.serviceTypeList,
-                      value: _selectedServiceType,
-                      onChanged: (serviceTypeModel? newvalue) {
-                        debugPrint(
-                          "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
-                        );
-                        setState(() {
-                          _selectedServiceType = newvalue;
-                        });
-                      },
-                      itemAsString: (serviceTypeModel item) =>
-                          item.name ?? "No Name",
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade400),
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              _selectedServiceType?.name ??
-                                  "Select Service Center",
-                              style: TextStyle(
-                                color: _selectedServiceType != null
-                                    ? Colors.black
-                                    : Colors.grey.shade600,
-                              ),
+                  Consumer<GetAddButtonServiceType_Provider>(
+                    builder: (context, serviceTypeProvider, child) {
+                      return Container(
+                        height: 45,
+                        child: CustomDropdown<serviceTypeModel>(
+                          items:
+                              getAddButton_serviceType_Provider.serviceTypeList,
+                          value: _selectedServiceType,
+                          onChanged: (serviceTypeModel? newvalue) {
+                            debugPrint(
+                              "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                            );
+                            setState(() {
+                              _selectedServiceType = newvalue;
+                            });
+                          },
+                          itemAsString: (serviceTypeModel item) =>
+                              item.name ?? "No Name",
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
                             ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.grey.shade600,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
-                          ],
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                serviceTypeProvider.isLoading
+                                    ? Text("ServiceCenter Loading...")
+                                    : Text(
+                                        _selectedServiceType?.name ??
+                                            "Select Service Center",
+                                        style: TextStyle(
+                                          color: _selectedServiceType != null
+                                              ? Colors.black
+                                              : Colors.grey.shade600,
+                                        ),
+                                      ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
 
                   SizedBox(height: 10),
@@ -403,7 +410,10 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                                 "Please wait",
                                 style: TextStyle(color: Colors.white),
                               )
-                            : Text("Ok", style: TextStyle(color: Colors.white)),
+                            : Text(
+                                "save",
+                                style: TextStyle(color: Colors.white),
+                              ),
                       ),
                       SizedBox(width: 10),
                       //cancel Button

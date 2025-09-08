@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/update_profile_request.dart';
 
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
@@ -167,75 +168,47 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                   SizedBox(height: 12),
                   Container(
                     height: 45,
-                    child: DropdownSearch<String>(
-                      popupProps: PopupProps.menu(
-                        menuProps: MenuProps(
-                          backgroundColor: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        constraints: BoxConstraints(maxHeight: 150),
-
-                        emptyBuilder: (context, searchEntry) {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 24.0,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-
-                      dropdownDecoratorProps: DropDownDecoratorProps(
-                        dropdownSearchDecoration: InputDecoration(
-                          hintText: "Gender",
-                          hintStyle: TextStyle(color: Colors.grey.shade400),
-                          suffixIcon: Icon(Icons.date_range_outlined),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(
-                              color: AppColor().primariColor,
-                              width: 2,
-                            ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
-                        ),
-                      ),
-                      validator: (value) =>
-                          value == null || value.isEmpty ? "Required" : null,
-                      autoValidateMode: _autovalidateMode,
+                    child: CustomDropdown<String>(
                       items: genderList,
-
-                      //items: ['Google', 'Meta', 'Amazon', 'Netflix'],
+                      value: _selectGenter,
+                      itemAsString: (item) => item,
+                      // validator: (value) {
+                      //   if (value == null)
+                      //     return "Please select a Gender";
+                      //   return null;
+                      // },
                       onChanged: (newValue) {
                         setState(() {
-                          _autovalidateMode = AutovalidateMode.always;
                           _selectGenter = newValue;
                         });
                       },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _selectGenter ?? "Select Gender",
+                              style: TextStyle(
+                                color: _selectGenter != null
+                                    ? Colors.black
+                                    : Colors.grey.shade600,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.grey.shade600,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
 

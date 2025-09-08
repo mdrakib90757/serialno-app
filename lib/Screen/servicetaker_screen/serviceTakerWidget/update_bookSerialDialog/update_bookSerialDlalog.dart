@@ -17,6 +17,7 @@ import '../../../../providers/serviceTaker_provider/bookSerialButtonProvider/get
 import '../../../../providers/serviceTaker_provider/serviceType_serialbook_provider.dart';
 import '../../../../providers/serviceTaker_provider/update_bookserialProvider/update_bookserial_provider.dart';
 import '../../../../utils/color.dart';
+import '../../../../utils/date_formatter/date_formatter.dart';
 import '../../servicetaker_homescreen.dart';
 
 class UpdateBookSerialDlalog extends StatefulWidget {
@@ -40,6 +41,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   bool _isInit = true;
   final Date = DateTime.now();
+  DateTime _selectedDate = DateTime.now();
 
   void _initializeFields() {
     final booking = widget.bookingDetails;
@@ -54,6 +56,19 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
       _contactNoController.text = booking.contactNo ?? '';
       _nameController.text = booking.name!;
     }
+    // final serviceTypeProvider = Provider.of<serviceTypeSerialbook_Provider>(context, listen: false);
+    // setState(() {
+    //   if (booking.serviceType?.name != null && serviceTypeProvider.serviceTypeList.isNotEmpty) {
+    //     _selectedServiceType = serviceTypeProvider.serviceTypeList.firstWhere(
+    //           (type) => type.name == booking.serviceType!.name,
+    //       orElse: () => serviceTypeProvider.serviceTypeList.first, // Default to the first item
+    //     );
+    //   } else if (serviceTypeProvider.serviceTypeList.isNotEmpty) {
+    //     _selectedServiceType = serviceTypeProvider.serviceTypeList.first; // Default if booking.serviceType is null
+    //   } else {
+    //     _selectedServiceType = null;
+    //   }
+    // });
   }
 
   void _fetchInitialData() {
@@ -62,7 +77,29 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
       Provider.of<serviceTypeSerialbook_Provider>(
         context,
         listen: false,
-      ).serviceType_serialbook(companyId);
+      ).serviceType_serialbook(companyId).then((_) {
+        if (mounted) {
+          // Ensure the widget is still in the tree
+          final serviceTypeProvider =
+              Provider.of<serviceTypeSerialbook_Provider>(
+                context,
+                listen: false,
+              );
+          setState(() {
+            if (widget.bookingDetails.serviceType?.name != null) {
+              _selectedServiceType = serviceTypeProvider.serviceTypeList
+                  .firstWhere(
+                    (type) =>
+                        type.name == widget.bookingDetails.serviceType!.name,
+                    orElse: () => null!, // Return null if not found
+                  );
+            } else {
+              _selectedServiceType =
+                  null; // Set to null if booking.serviceType?.name is null
+            }
+          });
+        }
+      });
     }
   }
 
@@ -70,6 +107,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //_initializeFields();
   }
 
   @override
@@ -177,8 +215,11 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
   Widget build(BuildContext context) {
     final updateProvider = Provider.of<UpdateBookSerialProvider>(context);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    DateTime selectedDialogDate = DateTime.now();
+    final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String selectedDateString = DateFormat(
+      'yyyy-MM-dd',
+    ).format(_selectedDate);
+    final bool isToday = todayString == selectedDateString;
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -277,15 +318,17 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                _selectedServiceType?.name ??
-                                    "Select ServiceType",
-                                style: TextStyle(
-                                  color: _selectedServiceType != null
-                                      ? Colors.black
-                                      : Colors.grey.shade600,
-                                ),
-                              ),
+                              serviceTypeProvider.isLoading
+                                  ? Text("ServiceTypeLoading...")
+                                  : Text(
+                                      _selectedServiceType?.name ??
+                                          "Select ServiceType",
+                                      style: TextStyle(
+                                        color: _selectedServiceType != null
+                                            ? Colors.black
+                                            : Colors.grey.shade600,
+                                      ),
+                                    ),
                               Icon(
                                 Icons.arrow_drop_down,
                                 color: Colors.grey.shade600,
@@ -300,66 +343,59 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
 
                   CustomLabeltext("Date"),
                   SizedBox(height: 8),
-                  TextField(
+                  CustomTextField(
+                    fillColor: Colors.red.shade50,
+                    filled: true,
+                    enabled: false,
                     controller: _dateController,
-                    decoration: InputDecoration(
-                      enabled: false,
-                      filled: true,
-                      fillColor: Colors.red.shade50,
-                      hintText: todayDate,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          DateTime? newDate = await showDatePicker(
-                            builder: (context, child) {
-                              return Theme(
-                                data: Theme.of(context).copyWith(
-                                  colorScheme: ColorScheme.light(
-                                    primary: AppColor().primariColor,
-                                    // Header color
-                                    onPrimary: Colors.white,
-                                    // Header text color
-                                    onSurface: Colors.black, // Body text color
-                                  ),
-                                  dialogTheme: DialogThemeData(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16.0),
-                                    ),
-                                  ),
-                                  textButtonTheme: TextButtonThemeData(
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: AppColor()
-                                          .primariColor, // Button text color
-                                    ),
+                    hintText: todayString,
+                    isPassword: false,
+                    suffixIcon: IconButton(
+                      onPressed: () async {
+                        DateTime? newDate = await showDatePicker(
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                useMaterial3: false,
+                                colorScheme: ColorScheme.light(
+                                  primary: AppColor().primariColor,
+                                  // Header color
+                                  onPrimary: Colors.white,
+                                  // Header text color
+                                  onSurface: Colors.black, // Body text color
+                                ),
+                                dialogTheme: DialogThemeData(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
                                   ),
                                 ),
-                                child: child!,
-                              );
-                            },
-                            context: context,
-                            initialDate:
-                                DateTime.tryParse(_dateController.text) ??
-                                DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime(2100),
-                          );
-                          if (newDate != null) {
-                            setState(() {
-                              _dateController.text = DateFormat(
-                                "yyyy-MM-dd",
-                              ).format(newDate);
-                            });
-                          }
-                        },
-                        icon: Icon(
-                          Icons.date_range_outlined,
-                          color: Colors.grey.shade400,
-                        ),
+                                textButtonTheme: TextButtonThemeData(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppColor()
+                                        .primariColor, // Button text color
+                                  ),
+                                ),
+                              ),
+                              child: child!,
+                            );
+                          },
+                          context: context,
+                          initialDate: _selectedDate,
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
+                        if (newDate != null) {
+                          setState(() {
+                            _selectedDate = newDate;
+                            _dateController.text = DateFormat(
+                              "yyyy-MM-dd",
+                            ).format(newDate);
+                          });
+                        }
+                      },
+                      icon: Icon(
+                        Icons.date_range_outlined,
+                        color: Colors.grey.shade400,
                       ),
                     ),
                   ),

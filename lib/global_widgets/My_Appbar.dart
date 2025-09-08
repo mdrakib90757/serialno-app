@@ -115,16 +115,18 @@ class _MyAppbarState extends State<MyAppbar> {
           SizedBox(width: 7),
 
           PopupMenuButton<String>(
-            menuPadding: EdgeInsets.symmetric(horizontal: 30),
+            // menuPadding: EdgeInsets.symmetric(horizontal: 30),
             elevation: 4,
             color: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
               side: BorderSide(color: Colors.grey.shade400),
             ),
-            offset: const Offset(0, 70),
+            offset: const Offset(30, 55),
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<String>(
+                height: 35,
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -141,6 +143,8 @@ class _MyAppbarState extends State<MyAppbar> {
               ),
 
               PopupMenuItem<String>(
+                height: 35,
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 onTap: () async {
                   final navigator = Navigator.of(context);
 

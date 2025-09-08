@@ -231,7 +231,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                 ),
 
                 const SizedBox(height: 10),
-                CustomLabeltext("Weekly off-day"),
+                CustomLabeltext("Weekly off-day", showStar: false),
                 const SizedBox(height: 8),
                 WeeklyOff_daysDropdown(
                   availableDays: _availableDays,

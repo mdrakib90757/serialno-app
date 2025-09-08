@@ -151,17 +151,17 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
     }
 
     if (getAddButtonProvider.serviceCenterList.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 50.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.inbox_outlined, size: 60, color: Colors.grey),
+              Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
               SizedBox(height: 12),
               Text(
                 'No Service Center Found',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(fontSize: 16, color: Colors.grey.shade300),
               ),
             ],
           ),

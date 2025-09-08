@@ -279,7 +279,7 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
                   ),
 
                   const SizedBox(height: 10),
-                  CustomLabeltext("Weekly off-day"),
+                  CustomLabeltext("Weekly off-day", showStar: false),
                   const SizedBox(height: 8),
                   WeeklyOff_daysDropdown(
                     initialSelectedDays: _selectedOffDays,
