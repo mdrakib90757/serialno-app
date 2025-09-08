@@ -269,7 +269,6 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                   SizedBox(height: 10),
                   CustomLabeltext("Service Type"),
                   SizedBox(height: 8),
-
                   Consumer<GetAddButtonServiceType_Provider>(
                     builder: (context, serviceTypeProvider, child) {
                       if (serviceTypeProvider.isLoading &&
@@ -288,9 +287,9 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                               .serviceTypeList
                               .firstWhere(
                                 (item) =>
-                                    item.id ==
-                                    widget.serialToEdit.serviceType!.id,
-                              );
+                            item.id ==
+                                widget.serialToEdit.serviceType!.id,
+                          );
                         } catch (e) {
                           print(
                             "Default service type not found in the list: $e",
@@ -298,94 +297,54 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                           _selectedServiceType = null;
                         }
                       }
-                      return FormField<serviceTypeModel>(
-                        autovalidateMode: _autovalidateMode,
-
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Required';
-                          }
-                          return null;
-                        },
-                        initialValue: _selectedServiceType,
-                        builder: (FormFieldState<serviceTypeModel> state) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomDropdown<serviceTypeModel>(
-                                items: getAddButton_serviceType_Provider
-                                    .serviceTypeList,
-                                value: _selectedServiceType,
-                                onChanged: (serviceTypeModel? newValue) {
-                                  setState(() {
-                                    _selectedServiceType = newValue;
-                                    // if (newValue != null) {
-                                    //   _serviceTypeHasError = false;
-                                    // }
-                                  });
-                                  state.didChange(newValue);
-                                  print(newValue?.name);
-                                },
-                                itemAsString: (serviceTypeModel item) =>
-                                    item.name ?? "No Name",
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: state.hasError
-                                          ? Colors.red.shade900
-                                          : Colors.grey.shade400,
-                                      width: state.hasError ? 1.5 : 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        _selectedServiceType?.name ??
-                                            " Select Service Type",
-                                        style: TextStyle(
-                                          color: _selectedServiceType != null
-                                              ? Colors.black
-                                              : Colors.grey.shade600,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                      return Container(
+                          height: 47,
+                          child: CustomDropdown<serviceTypeModel>(
+                            items: getAddButton_serviceType_Provider
+                                .serviceTypeList,
+                            value: _selectedServiceType,
+                            onChanged: (serviceTypeModel? newValue) {
+                              setState(() {
+                                _selectedServiceType = newValue;
+                                // if (newValue != null) {
+                                //   _serviceTypeHasError = false;
+                                // }
+                              });
+                              print(newValue?.name);
+                            },
+                            itemAsString: (serviceTypeModel item) =>
+                            item.name ?? "No Name",
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16,
+                                  vertical: 12),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade400),
+                                borderRadius: BorderRadius.circular(5.0),
                               ),
-                              if (state.hasError)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 12,
-                                    top: 5,
-                                  ),
-                                  child: Text(
-                                    state.errorText!,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  Text(
+                                    _selectedServiceType?.name ??
+                                        "Select Service Center",
                                     style: TextStyle(
-                                      color: Colors.red.shade900,
-                                      fontSize: 12,
+                                      color: _selectedServiceType != null
+                                          ? Colors.black
+                                          : Colors.grey.shade600,
                                     ),
                                   ),
-                                ),
-                            ],
-                          );
-                        },
-                      );
-                    },
+                                  Icon(Icons.arrow_drop_down,
+                                      color: Colors.grey.shade600),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                    }
                   ),
-
                   SizedBox(height: 10),
+
                   CustomLabeltext("Date"),
                   SizedBox(height: 8),
                   CustomTextField(
@@ -481,7 +440,7 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                                 "Please wait",
                                 style: TextStyle(color: Colors.white),
                               )
-                            : Text("Ok", style: TextStyle(color: Colors.white)),
+                            : Text("save", style: TextStyle(color: Colors.white)),
                       ),
                       SizedBox(width: 10),
                       //cancel Button

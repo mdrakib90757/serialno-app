@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
             SizedBox(height: 5),
-            //service date
+            //serviceCenter date
             Row(
               children: [
                 Text(
