@@ -60,6 +60,11 @@ class _ForgotScreenState extends State<ForgotScreen> {
               SizedBox(height: 15),
               TextField(
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  isDense: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.grey.shade400),

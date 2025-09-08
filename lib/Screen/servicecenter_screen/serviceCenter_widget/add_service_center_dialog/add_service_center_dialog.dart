@@ -299,7 +299,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 14,
-                      vertical: 10,
+                      vertical: 12,
                     ),
                     isDense: true,
                     border: OutlineInputBorder(
@@ -320,6 +320,10 @@ class _Add_button_Dialog_serviceCenter_screenState
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Center(child: Text("Day(s)")),
+                    ),
+                    suffixIconConstraints: const BoxConstraints(
+                      minWidth: 0,
+                      minHeight: 0,
                     ),
                   ),
                 ),
@@ -352,7 +356,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 14,
-                      vertical: 10,
+                      vertical: 12,
                     ),
                     isDense: true,
                     border: OutlineInputBorder(
@@ -368,6 +372,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
                     prefixIcon: Container(
+                      margin: EdgeInsets.symmetric(vertical: 12),
                       width: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadiusGeometry.circular(8),
@@ -377,11 +382,20 @@ class _Add_button_Dialog_serviceCenter_screenState
                       ),
                     ),
                     suffixIcon: Container(
+                      margin: EdgeInsets.symmetric(vertical: 12),
                       width: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadiusGeometry.circular(8),
                       ),
                       child: const Center(child: Text("Serial(s)")),
+                    ),
+                    prefixIconConstraints: const BoxConstraints(
+                      minWidth: 0,
+                      minHeight: 0,
+                    ),
+                    suffixIconConstraints: const BoxConstraints(
+                      minWidth: 0,
+                      minHeight: 0,
                     ),
                   ),
                 ),
@@ -401,7 +415,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 12,
-                    ), // vertical padding কমানো হলো
+                    ),
                     isDense: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey.shade400),
@@ -421,6 +435,10 @@ class _Add_button_Dialog_serviceCenter_screenState
                         borderRadius: BorderRadiusGeometry.circular(8),
                       ),
                       child: const Center(child: Text("Day(s)")),
+                    ),
+                    suffixIconConstraints: const BoxConstraints(
+                      minWidth: 0,
+                      minHeight: 0,
                     ),
                   ),
                 ),

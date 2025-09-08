@@ -373,6 +373,10 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
                         ),
                         child: const Center(child: Text("Day(s)")),
                       ),
+                      suffixIconConstraints: const BoxConstraints(
+                        minWidth: 0,
+                        minHeight: 0,
+                      ),
                     ),
                   ),
 
@@ -434,6 +438,14 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
                         ),
                         child: const Center(child: Text("Serial(s)")),
                       ),
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 0,
+                        minHeight: 0,
+                      ),
+                      suffixIconConstraints: const BoxConstraints(
+                        minWidth: 0,
+                        minHeight: 0,
+                      ),
                     ),
                   ),
                   SizedBox(height: 13),
@@ -472,6 +484,10 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
                           borderRadius: BorderRadiusGeometry.circular(8),
                         ),
                         child: const Center(child: Text("Day(s)")),
+                      ),
+                      suffixIconConstraints: const BoxConstraints(
+                        minWidth: 0,
+                        minHeight: 0,
                       ),
                     ),
                   ),

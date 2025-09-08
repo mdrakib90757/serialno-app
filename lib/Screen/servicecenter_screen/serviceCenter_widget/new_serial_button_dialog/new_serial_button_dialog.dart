@@ -250,15 +250,17 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   SizedBox(height: 10),
                   CustomLabeltext("Service Type"),
                   SizedBox(height: 8),
+
                   FormField<serviceTypeModel>(
                     autovalidateMode: _autovalidateMode,
-
                     validator: (value) {
                       if (value == null) {
                         return 'Required';
                       }
                       return null;
                     },
+
+                    initialValue: _selectedServiceType,
                     builder: (FormFieldState<serviceTypeModel> state) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,20 +272,19 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                             onChanged: (serviceTypeModel? newValue) {
                               setState(() {
                                 _selectedServiceType = newValue;
-                                // if (newValue != null) {
-                                //   _serviceTypeHasError = false;
-                                // }
                               });
+
                               state.didChange(newValue);
                               print(newValue?.name);
                             },
                             itemAsString: (serviceTypeModel item) =>
                                 item.name ?? "No Name",
                             child: Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
-                                vertical: 12,
+                                vertical: 10,
                               ),
+
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(
@@ -315,6 +316,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                               ),
                             ),
                           ),
+
                           if (state.hasError)
                             Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
@@ -334,67 +336,70 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   SizedBox(height: 10),
                   CustomLabeltext("Date"),
                   SizedBox(height: 8),
-                  CustomTextField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Required';
-                      }
-                      return null;
-                    },
-                    onTap: _selectDate,
-                    hintText: todayDate,
-                    //DateFormatter.formatForApi(_selectedDate),
-                    textStyle: TextStyle(color: Colors.grey.shade400),
-                    isPassword: false,
-                    controller: _serviceDateDisplayController,
-                    // readOnly: true,
-                    suffixIcon: IconButton(
-                      onPressed: () async {
-                        DateTime? newDate = await showDatePicker(
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                useMaterial3: false,
-                                colorScheme: ColorScheme.light(
-                                  primary: AppColor().primariColor,
-                                  // Header color
-                                  onPrimary: Colors.white,
-                                  // Header text color
-                                  onSurface: Colors.black, // Body text color
-                                ),
-                                dialogTheme: DialogThemeData(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColor()
-                                        .primariColor, // Button text color
-                                  ),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                          context: context,
-                          initialDate: _selectedDate,
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100),
-                        );
-
-                        if (newDate != null) {
-                          setState(() {
-                            _selectedDate = newDate;
-                            _serviceDateDisplayController.text = DateFormat(
-                              "dd-MM-yyyy",
-                            ).format(_selectedDate);
-                          });
+                  Container(
+                    height: 45,
+                    child: CustomTextField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
                         }
+                        return null;
                       },
-                      icon: Icon(
-                        Icons.date_range_outlined,
-                        color: Colors.grey.shade400,
+                      onTap: _selectDate,
+                      hintText: todayDate,
+                      //DateFormatter.formatForApi(_selectedDate),
+                      textStyle: TextStyle(color: Colors.grey.shade400),
+                      isPassword: false,
+                      controller: _serviceDateDisplayController,
+                      // readOnly: true,
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          DateTime? newDate = await showDatePicker(
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  useMaterial3: false,
+                                  colorScheme: ColorScheme.light(
+                                    primary: AppColor().primariColor,
+                                    // Header color
+                                    onPrimary: Colors.white,
+                                    // Header text color
+                                    onSurface: Colors.black, // Body text color
+                                  ),
+                                  dialogTheme: DialogThemeData(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                                  textButtonTheme: TextButtonThemeData(
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppColor()
+                                          .primariColor, // Button text color
+                                    ),
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
+                            context: context,
+                            initialDate: _selectedDate,
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime(2100),
+                          );
+
+                          if (newDate != null) {
+                            setState(() {
+                              _selectedDate = newDate;
+                              _serviceDateDisplayController.text = DateFormat(
+                                "dd-MM-yyyy",
+                              ).format(_selectedDate);
+                            });
+                          }
+                        },
+                        icon: Icon(
+                          Icons.date_range_outlined,
+                          color: Colors.grey.shade400,
+                        ),
                       ),
                     ),
                   ),

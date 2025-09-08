@@ -521,7 +521,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                             });
                             if (Newvalue != null && Newvalue.id != null) {
                               print(
-                                "✅ Organization Selected. Fetching Service Centers for Company ID: ${Newvalue.id}",
+                                " Organization Selected. Fetching Service Centers for Company ID: ${Newvalue.id}",
                               );
 
                               Provider.of<serviceCenter_serialBookProvider>(
@@ -762,7 +762,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                             suffixIcon: Icon(Icons.search),
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 14,
-                              vertical: 10,
+                              vertical: 12,
                             ),
                             isDense: true,
                             enabledBorder: OutlineInputBorder(
@@ -793,6 +793,14 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                               borderSide: BorderSide(
                                 color: Colors.grey.shade400,
                               ),
+                            ),
+                            prefixIconConstraints: const BoxConstraints(
+                              minWidth: 0,
+                              minHeight: 0,
+                            ),
+                            suffixIconConstraints: const BoxConstraints(
+                              minWidth: 0,
+                              minHeight: 0,
                             ),
                           ),
                         ),

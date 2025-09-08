@@ -252,61 +252,68 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 SizedBox(width: 8),
                 Expanded(
-                  child: CustomTextField(
-                    readOnly: true,
-                    controller: _dateController,
-                    hintText: todayString,
-                    textStyle: TextStyle(color: Colors.black),
-                    isPassword: false,
-                    suffixIcon: IconButton(
-                      onPressed: () async {
-                        DateTime? newDate = await showDatePicker(
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                useMaterial3: false,
-                                colorScheme: ColorScheme.light(
-                                  primary: AppColor().primariColor,
-                                  // Header color
-                                  onPrimary: Colors.white,
-                                  // Header text color
-                                  onSurface: Colors.black, // Body text color
-                                ),
-                                dialogTheme: DialogThemeData(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
+                  child: Container(
+                    height: 45,
+                    child: CustomTextField(
+                      readOnly: true,
+                      controller: _dateController,
+                      hintText: todayString,
+                      textStyle: TextStyle(color: Colors.black),
+                      isPassword: false,
+                      suffixIcon: IconButton(
+                        constraints: const BoxConstraints(
+                          minWidth: 0,
+                          minHeight: 0,
+                        ),
+                        onPressed: () async {
+                          DateTime? newDate = await showDatePicker(
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  useMaterial3: false,
+                                  colorScheme: ColorScheme.light(
+                                    primary: AppColor().primariColor,
+                                    // Header color
+                                    onPrimary: Colors.white,
+                                    // Header text color
+                                    onSurface: Colors.black, // Body text color
+                                  ),
+                                  dialogTheme: DialogThemeData(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                                  textButtonTheme: TextButtonThemeData(
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: AppColor()
+                                          .primariColor, // Button text color
+                                    ),
                                   ),
                                 ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColor()
-                                        .primariColor, // Button text color
-                                  ),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                          context: context,
-                          initialDate: _selectedDate,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now().add(
-                            const Duration(days: 365),
-                          ),
-                        );
-                        if (newDate != null && newDate != _selectedDate) {
-                          setState(() {
-                            _selectedDate = newDate;
-                            _dateController.text = DateFormatter.formatForApi(
-                              newDate,
-                            );
-                          });
-                          _fetchDataForUI();
-                        }
-                      },
-                      icon: Icon(
-                        Icons.date_range_outlined,
-                        color: Colors.grey.shade400,
+                                child: child!,
+                              );
+                            },
+                            context: context,
+                            initialDate: _selectedDate,
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime.now().add(
+                              const Duration(days: 365),
+                            ),
+                          );
+                          if (newDate != null && newDate != _selectedDate) {
+                            setState(() {
+                              _selectedDate = newDate;
+                              _dateController.text = DateFormatter.formatForApi(
+                                newDate,
+                              );
+                            });
+                            _fetchDataForUI();
+                          }
+                        },
+                        icon: Icon(
+                          Icons.date_range_outlined,
+                          color: Colors.grey.shade400,
+                        ),
                       ),
                     ),
                   ),

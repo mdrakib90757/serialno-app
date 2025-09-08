@@ -830,7 +830,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                       borderSide: BorderSide(color: Colors.grey.shade400),
                     ),
                     suffixIcon: Container(
-                      width: 80,
+                      width: 70,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade50,
                         // borderRadius: BorderRadiusGeometry.circular(8),
@@ -855,6 +855,10 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                           color: AppColor().primariColor,
                         ),
                       ),
+                    ),
+                    suffixIconConstraints: const BoxConstraints(
+                      minWidth: 0,
+                      minHeight: 0,
                     ),
                   ),
                 ),
