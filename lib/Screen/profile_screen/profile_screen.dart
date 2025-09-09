@@ -2,13 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/profile_screen/profile_edit_screen.dart';
+import '../../global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import '../../global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+import '../../global_widgets/Custom_NavigationBar/my_bottom_navigationBar/my_bottom_navigationBar.dart';
 import '../../global_widgets/My_Appbar.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
 import 'password_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+  const ProfileScreen({
+    super.key,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -22,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MyAppbar(),
+      appBar: widget.showAppBar ? MyAppbar() : null,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 80),
         child: Center(
@@ -45,11 +56,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 GestureDetector(
                   onTap: () async {
                     await getupdateprofile.fetchProfileData();
+                    final profileProvider = Provider.of<Getprofileprovider>(
+                      context,
+                      listen: false,
+                    );
+                    final profile = profileProvider.profileData;
+                    String userType =
+                        profile?.userType.toLowerCase().trim() ?? "";
+                    bool isServiceTakerUser = (userType == "customer");
 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfileEditScreen(),
+                        builder: (context) => ProfileEditScreen(
+                          showAppBar: true,
+                          showBottomNavBar: true,
+                          isServiceTaker: isServiceTakerUser,
+                        ),
                       ),
                     );
                   },
@@ -83,9 +106,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
+                    final profileProvider = Provider.of<Getprofileprovider>(
+                      context,
+                      listen: false,
+                    );
+                    final profile = profileProvider.profileData;
+                    String userType =
+                        profile?.userType.toLowerCase().trim() ?? "";
+                    bool isServicetakerUser =
+                        (userType ==
+                        "customer");
+
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PasswordScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => PasswordScreen(
+                          showAppBar: true,
+                          showBottomNavBar: true,
+                          isServiceTaker: isServicetakerUser,
+                        ),
+                      ),
                     );
                   },
                   child: Container(
@@ -119,6 +159,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+
+      bottomNavigationBar: widget.showBottomNavBar
+          ? MyBottomNavigationBar(
+              currentIndex: 0,
+              onTap: (index) {
+                if (widget.isServiceTaker) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => CustomServicetakerNavigationbar(),
+                    ),
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => CustomServicecenterNavigationbar(),
+                    ),
+                    (route) => false,
+                  );
+                }
+              },
+              isServicetaker: widget.isServiceTaker,
+            )
+          : null,
     );
   }
 }

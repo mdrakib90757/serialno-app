@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../../global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import '../../global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+import '../../global_widgets/Custom_NavigationBar/my_bottom_navigationBar/my_bottom_navigationBar.dart';
 import '../../global_widgets/My_Appbar.dart';
 import '../servicecenter_screen/serviceCenter_widget/edit_profile_info_dialog/edit_profile_info_dialog.dart';
 import '../../providers/auth_provider/auth_providers.dart';
@@ -8,7 +11,15 @@ import '../../providers/profile_provider/getprofile_provider.dart';
 import '../../utils/color.dart';
 
 class ProfileEditScreen extends StatefulWidget {
-  const ProfileEditScreen({super.key});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+  const ProfileEditScreen({
+    super.key,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<ProfileEditScreen> createState() => _ProfileEditScreenState();
@@ -23,7 +34,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   String _formatDate(String? dateString) {
     if (dateString == null || dateString.isEmpty) {
-      return "Not set"; // বা "No DOB"
+      return "Not set";
     }
     try {
       final DateTime parsedDate = DateTime.parse(dateString);
@@ -55,7 +66,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     if (profile == null) {
       return Scaffold(
         backgroundColor: Colors.white,
-        appBar: MyAppbar(),
         body: Center(
           child: CircularProgressIndicator(
             strokeWidth: 2.5,
@@ -66,7 +76,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     }
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: MyAppbar(),
+      appBar: widget.showAppBar ? MyAppbar() : null,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
@@ -75,17 +85,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: AppColor().primariColor,
-                      size: 25,
-                    ),
-                  ),
                   Text(
                     "Basic Information",
                     style: TextStyle(
@@ -334,6 +335,30 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           ),
         ),
       ),
+
+      bottomNavigationBar: widget.showBottomNavBar
+          ? MyBottomNavigationBar(
+              currentIndex: 0,
+              onTap: (index) {
+                if (widget.isServiceTaker) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => CustomServicetakerNavigationbar(),
+                    ),
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => CustomServicecenterNavigationbar(),
+                    ),
+                    (route) => false,
+                  );
+                }
+              },
+              isServicetaker: widget.isServiceTaker,
+            )
+          : null,
     );
   }
 }

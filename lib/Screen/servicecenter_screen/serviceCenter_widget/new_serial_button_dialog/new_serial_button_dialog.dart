@@ -281,7 +281,17 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 serviceTypeProvider.isLoading
-                                    ? Text("ServiceCenter Loading...")
+                                    ? Align(
+                                        alignment: Alignment.center,
+                                        child: SizedBox(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          child: CircularProgressIndicator(
+                                            color: AppColor().primariColor,
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      )
                                     : Text(
                                         _selectedServiceType?.name ??
                                             "Select Service Center",

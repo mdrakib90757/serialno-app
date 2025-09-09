@@ -270,7 +270,7 @@ class AuthProvider with ChangeNotifier {
       email: userModel.user.email,
       phone: userModel.user.mobileNo,
       loginName: userModel.user.loginName,
-      password: "", // Password should not be stored here
+      password: "",
       registeredDate: userModel.user.registeredDate,
       isActive: userModel.user.isActive,
       userType: userModel.user.userType,

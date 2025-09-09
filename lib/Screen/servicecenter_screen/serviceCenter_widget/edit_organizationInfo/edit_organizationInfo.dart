@@ -236,7 +236,20 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
     final UpdateOrgProvider = Provider.of<UpdateOrganizationInfoProvider>(
       context,
     );
-
+    final companyDetailsProvider = context.watch<CompanyDetailsProvider>();
+    if (companyDetailsProvider.isLoading ||
+        locationProvider.isLoading ||
+        authProvider.isLoading) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            color: AppColor().primariColor,
+          ),
+        ),
+      );
+    }
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -322,48 +335,65 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                 SizedBox(height: 10),
                 CustomLabeltext("Business Type"),
                 SizedBox(height: 10),
-                CustomDropdown<Businesstype>(
-                  items: authProvider.businessTypes,
-                  value: _selectedBusinessType,
-                  //   selectedItem: _,
-                  onChanged: (Businesstype? newvalue) {
-                    debugPrint(
-                      "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                Consumer<AuthProvider>(
+                  builder: (context, authProvider, child) {
+                    return CustomDropdown<Businesstype>(
+                      items: authProvider.businessTypes,
+                      value: _selectedBusinessType,
+                      //   selectedItem: _,
+                      onChanged: (Businesstype? newvalue) {
+                        debugPrint(
+                          "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                        );
+                        setState(() {
+                          _selectedBusinessType = newvalue;
+                        });
+                      },
+                      itemAsString: (Businesstype type) => type.name,
+                      // validator: (value) {
+                      //       if (value == null)
+                      //         return "Please select a business type";
+                      //       return null;
+                      //     },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            authProvider.isBusinessTypesLoading
+                                ? SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor().primariColor,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    _selectedBusinessType?.name ??
+                                        "Select Business Type",
+                                    style: TextStyle(
+                                      color: _selectedBusinessType != null
+                                          ? Colors.black
+                                          : Colors.grey.shade600,
+                                    ),
+                                  ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.grey.shade600,
+                            ),
+                          ],
+                        ),
+                      ),
                     );
-                    setState(() {
-                      _selectedBusinessType = newvalue;
-                    });
                   },
-                  itemAsString: (Businesstype type) => type.name,
-                  // validator: (value) {
-                  //       if (value == null)
-                  //         return "Please select a business type";
-                  //       return null;
-                  //     },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _selectedBusinessType?.name ?? "Select BusinessType",
-                          style: TextStyle(
-                            color: _selectedBusinessType != null
-                                ? Colors.black
-                                : Colors.grey.shade600,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.grey.shade600,
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
 
                 // CustomDropdownFormField<BusinessType>(

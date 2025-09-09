@@ -6,6 +6,7 @@ import 'package:serialno_app/Screen/profile_screen/profile_screen.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import '../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
+import '../utils/color.dart';
 import 'Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
 import 'Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 import 'custom_sanckbar.dart';
@@ -114,72 +115,217 @@ class _MyAppbarState extends State<MyAppbar> {
           ),
           SizedBox(width: 7),
 
-          PopupMenuButton<String>(
-            // menuPadding: EdgeInsets.symmetric(horizontal: 30),
-            elevation: 4,
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-              side: BorderSide(color: Colors.grey.shade400),
-            ),
-            offset: const Offset(30, 55),
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                height: 35,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfileScreen()),
-                  );
-                },
-                child: Text(
-                  'Account profile',
-                  style: TextStyle(
-                    fontSize: 19,
-                    color: Colors.black.withOpacity(0.8),
-                  ),
-                ),
-              ),
-
-              PopupMenuItem<String>(
-                height: 35,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                onTap: () async {
-                  final navigator = Navigator.of(context);
-
-                  print("--- Clearing all provider states ---");
-                  context.read<GetNewSerialButtonProvider>().clearData();
-
-                  final authProvider = Provider.of<AuthProvider>(
-                    context,
-                    listen: false,
-                  );
-                  await authProvider.logout();
-
-                  navigator.pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-
-                child: Text(
-                  'Logout',
-                  style: TextStyle(
-                    color: Colors.black.withOpacity(0.8),
-                    fontSize: 19,
-                  ),
-                ),
-              ),
-            ],
-
-            child: const CircleAvatar(
+          // PopupMenuButton<String>(
+          //   // menuPadding: EdgeInsets.symmetric(horizontal: 30),
+          //   elevation: 4,
+          //   color: Colors.white,
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(5),
+          //     side: BorderSide(color: Colors.grey.shade400),
+          //   ),
+          //   offset: const Offset(30, 55),
+          //   itemBuilder: (BuildContext context) => [
+          //     PopupMenuItem<String>(
+          //       height: 35,
+          //       padding: EdgeInsets.symmetric(horizontal: 16),
+          //       onTap: () {
+          //         Navigator.push(
+          //           context,
+          //           MaterialPageRoute(builder: (context) => ProfileScreen()),
+          //         );
+          //       },
+          //       child: Text(
+          //         'Account profile',
+          //         style: TextStyle(
+          //           fontSize: 19,
+          //           color: Colors.black.withOpacity(0.8),
+          //         ),
+          //       ),
+          //     ),
+          //
+          //     PopupMenuItem<String>(
+          //       height: 35,
+          //       padding: EdgeInsets.symmetric(horizontal: 16),
+          //       onTap: () async {
+          //         final navigator = Navigator.of(context);
+          //
+          //         print("--- Clearing all provider states ---");
+          //         context.read<GetNewSerialButtonProvider>().clearData();
+          //
+          //         final authProvider = Provider.of<AuthProvider>(
+          //           context,
+          //           listen: false,
+          //         );
+          //         await authProvider.logout();
+          //
+          //         navigator.pushAndRemoveUntil(
+          //           MaterialPageRoute(builder: (context) => LoginScreen()),
+          //           (Route<dynamic> route) => false,
+          //         );
+          //       },
+          //
+          //       child: Text(
+          //         'Logout',
+          //         style: TextStyle(
+          //           color: Colors.black.withOpacity(0.8),
+          //           fontSize: 19,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          //
+          //   child: const CircleAvatar(
+          //     radius: 25,
+          //     backgroundColor: Colors.grey,
+          //     child: Icon(CupertinoIcons.person, size: 20, color: Colors.white),
+          //   ),
+          // ),
+          GestureDetector(
+            onTap: () => _showAccountDialog(context),
+            child: CircleAvatar(
               radius: 25,
-              backgroundColor: Colors.grey,
+              backgroundColor: Colors.grey.shade400,
               child: Icon(CupertinoIcons.person, size: 20, color: Colors.white),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // You'd call this function when the profile icon is tapped
+  void _showAccountDialog(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final String userName = authProvider.userModel?.user.name ?? "Loading...";
+    final String userEmail = authProvider.userModel?.user.email ?? "Loading...";
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+          child: Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              side: BorderSide(color: Colors.grey.shade300), // Rounded corners
+            ),
+            elevation: 10,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.grey.shade200,
+                    child: Text(
+                      'H',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: AppColor().primariColor,
+                      ),
+                    ), // Fallback initial
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    userName,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(userEmail, style: TextStyle(color: Colors.grey[600])),
+                  Divider(
+                    height: 30,
+                    thickness: 2,
+                    color: Colors.grey.shade200,
+                  ),
+                  _buildDialogOption(
+                    icon: Icons.person_outline,
+                    text: 'View Profile',
+                    onTap: () {
+                      final profileProvider = Provider.of<Getprofileprovider>(
+                        context,
+                        listen: false,
+                      );
+                      final profile = profileProvider.profileData;
+                      String userType =
+                          profile?.userType.toLowerCase().trim() ?? "";
+                      bool isServicetakerUser = (userType == "customer");
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                            showAppBar: true,
+                            showBottomNavBar: true,
+                            isServiceTaker: isServicetakerUser,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildDialogOption(
+                    icon: Icons.settings_outlined,
+                    text: 'App Settings',
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      // Navigate to settings screen
+                    },
+                  ),
+                  _buildDialogOption(
+                    icon: Icons.logout,
+                    text: 'Logout',
+                    textColor: AppColor().primariColor,
+
+                    onTap: () async {
+                      final navigator = Navigator.of(context);
+
+                      print("--- Clearing all provider states ---");
+                      context.read<GetNewSerialButtonProvider>().clearData();
+
+                      final authProvider = Provider.of<AuthProvider>(
+                        context,
+                        listen: false,
+                      );
+                      await authProvider.logout();
+
+                      navigator.pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDialogOption({
+    required IconData icon,
+    required String text,
+    required VoidCallback onTap,
+    Color? textColor,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 7.0),
+        child: Row(
+          children: [
+            Icon(icon, color: textColor ?? Colors.grey.shade600),
+            SizedBox(width: 15),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: textColor ?? Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

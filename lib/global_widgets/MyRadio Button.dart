@@ -42,7 +42,7 @@ class CustomRadioGroup<T> extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    itemTitleBuilder(item), // এখান থেকে টেক্সট আসবে
+                    itemTitleBuilder(item),
                     style: TextStyle(
                       color: isSelected
                           ? Colors.black.withOpacity(0.8)

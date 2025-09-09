@@ -271,15 +271,15 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                   SizedBox(height: 8),
                   Consumer<GetAddButtonServiceType_Provider>(
                     builder: (context, serviceTypeProvider, child) {
-                      if (serviceTypeProvider.isLoading &&
-                          serviceTypeProvider.serviceTypeList.isEmpty) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: AppColor().primariColor,
-                            strokeWidth: 2.5,
-                          ),
-                        );
-                      }
+                      // if (serviceTypeProvider.isLoading &&
+                      //     serviceTypeProvider.serviceTypeList.isEmpty) {
+                      //   return Center(
+                      //     child: CircularProgressIndicator(
+                      //       color: AppColor().primariColor,
+                      //       strokeWidth: 2.5,
+                      //     ),
+                      //   );
+                      // }
                       if (_selectedServiceType == null &&
                           widget.serialToEdit.serviceType != null) {
                         try {
@@ -326,15 +326,29 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  _selectedServiceType?.name ??
-                                      "Select Service Center",
-                                  style: TextStyle(
-                                    color: _selectedServiceType != null
-                                        ? Colors.black
-                                        : Colors.grey.shade600,
-                                  ),
-                                ),
+                                serviceTypeProvider.isLoading &&
+                                        serviceTypeProvider
+                                            .serviceTypeList
+                                            .isEmpty
+                                    ? Center(
+                                        child: SizedBox(
+                                          width: 20.0,
+                                          height: 20.0,
+                                          child: CircularProgressIndicator(
+                                            color: AppColor().primariColor,
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        _selectedServiceType?.name ??
+                                            "Select Service Type",
+                                        style: TextStyle(
+                                          color: _selectedServiceType != null
+                                              ? Colors.black
+                                              : Colors.grey.shade600,
+                                        ),
+                                      ),
                                 Icon(
                                   Icons.arrow_drop_down,
                                   color: Colors.grey.shade600,

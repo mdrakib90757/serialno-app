@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
+import '../../global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+import '../../global_widgets/Custom_NavigationBar/my_bottom_navigationBar/my_bottom_navigationBar.dart';
 import '../../global_widgets/My_Appbar.dart';
 import '../../global_widgets/custom_flushbar.dart';
 import '../../global_widgets/custom_labeltext.dart';
@@ -10,7 +13,16 @@ import '../../request_model/auth_request/update_password_request.dart';
 import '../../utils/color.dart';
 
 class PasswordScreen extends StatefulWidget {
-  const PasswordScreen({super.key});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+
+  const PasswordScreen({
+    super.key,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<PasswordScreen> createState() => _PasswordScreenState();
@@ -91,8 +103,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
     return Form(
       key: _formkey,
       child: Scaffold(
+        appBar: widget.showAppBar ? MyAppbar() : null,
         backgroundColor: Colors.white,
-        appBar: MyAppbar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
@@ -100,15 +112,15 @@ class _PasswordScreenState extends State<PasswordScreen> {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: AppColor().primariColor,
-                    ),
-                  ),
+                  // IconButton(
+                  //   onPressed: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.arrow_back,
+                  //     color: AppColor().primariColor,
+                  //   ),
+                  // ),
                   Text(
                     "Account Password",
                     style: TextStyle(
@@ -174,6 +186,30 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ],
           ),
         ),
+        bottomNavigationBar: widget.showBottomNavBar
+            ? MyBottomNavigationBar(
+                currentIndex: 0,
+                onTap: (index) {
+                  if (widget.isServiceTaker) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => CustomServicetakerNavigationbar(),
+                      ),
+                      (route) => false,
+                    );
+                  } else {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            CustomServicecenterNavigationbar(),
+                      ),
+                      (route) => false,
+                    );
+                  }
+                },
+                isServicetaker: widget.isServiceTaker,
+              )
+            : null,
       ),
     );
   }
