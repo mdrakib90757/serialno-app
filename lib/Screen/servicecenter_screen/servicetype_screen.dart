@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/add_service_type_dialog/add_service_type_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_service_type_dialog/edit_service_type_dialog.dart';
+import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/service_center_service_type_widget/service_center_service_type_widget.dart';
 import 'package:serialno_app/model/service_type_model.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/deleteServiceTypeProvider/deleteServiceTypeProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import 'package:serialno_app/utils/color.dart';
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
+import '../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../global_widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
+import '../../providers/serviceCenter_provider/get_serviceCenter_serviceType_provider/get_service_center_service_type_provider.dart';
 
 class ServicetypeScreen extends StatefulWidget {
   const ServicetypeScreen({super.key});
@@ -22,6 +25,7 @@ class ServicetypeScreen extends StatefulWidget {
 
 class _ServicetypeScreenState extends State<ServicetypeScreen> {
   final GlobalKey _deleteButtonKey = GlobalKey();
+  serviceTypeModel? _selectedServiceType;
   ServiceCenterModel? _selectedServiceCenter;
   List<ServiceCenterModel> serviceCenterList = [];
 
@@ -64,74 +68,101 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final getProfileProvider = Provider.of<Getprofileprovider>(
+      context,
+      listen: false,
+    );
     final serviceTypeProvider = Provider.of<GetAddButtonServiceType_Provider>(
       context,
     );
-    final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
+    final companyId = getProfileProvider.profileData?.currentCompany.id;
+    final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
+      context,
+      listen: false,
+    );
+    final companyIdd = getAddButtonProvider.fetchGetAddButton(companyId!);
+    final secondGetServiceType =
+        Provider.of<get_service_center_service_type_provider>(context);
+
+    //
+    // if (serviceTypeProvider.isLoading ||
+    //     getAddButtonProvider.isLoading||secondGetServiceType.isLoading) {
+    //   return Scaffold(
+    //     backgroundColor: Colors.white,
+    //     body: Center(
+    //       child: CustomLoading(
+    //         color: AppColor().primariColor,
+    //         //size: 20,
+    //         strokeWidth: 2.5,
+    //       ),
+    //     ),
+    //   );
+    // }
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // create add button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Service Type",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    //add Button
-                    _showDialogBox(context);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                    decoration: BoxDecoration(
-                      color: AppColor().primariColor,
-                      borderRadius: BorderRadius.circular(5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // create add button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Service Type",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.add, color: Colors.white, size: 15),
-                        SizedBox(width: 5),
-                        Text(
-                          "Add",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //add Button
+                      _showDialogBox(context);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColor().primariColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.add, color: Colors.white, size: 15),
+                          SizedBox(width: 5),
+                          Text(
+                            "Add",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            serviceTypeProvider.isLoading
-                ? Expanded(
-                    child: Center(
+                ],
+              ),
+              SizedBox(height: 10),
+              serviceTypeProvider.isLoading
+                  ? Center(
                       child: CustomLoading(
                         color: AppColor().primariColor,
                         // size: 20,
                         strokeWidth: 2.5,
                       ),
-                    ),
-                  )
-                : serviceTypeProvider.serviceTypeList.isEmpty
-                ? Expanded(
-                    child: Center(
+                    )
+                  : serviceTypeProvider.serviceTypeList.isEmpty
+                  ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -150,15 +181,17 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                           ),
                         ],
                       ),
-                    ),
-                  )
-                : Expanded(
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
+                    )
+                  : ListView.builder(
+                      // scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: serviceTypeProvider.serviceTypeList.length,
+                      itemCount: serviceTypeProvider.serviceTypeList.length + 1,
                       itemBuilder: (context, index) {
+                        if (index >=
+                            serviceTypeProvider.serviceTypeList.length) {
+                          return service_center_service_type_widget();
+                        }
                         final type = serviceTypeProvider.serviceTypeList[index];
                         return Container(
                           margin: EdgeInsets.symmetric(vertical: 2),
@@ -243,8 +276,8 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                         );
                       },
                     ),
-                  ),
-          ],
+            ],
+          ),
         ),
       ),
     );

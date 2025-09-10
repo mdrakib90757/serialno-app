@@ -1,38 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
+import 'package:serialno_app/request_model/serviceCanter_request/add_service_center_service_type_request/service_center_service_type_request.dart';
+
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
+import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
 import '../../../../global_widgets/custom_textfield.dart';
+import '../../../../model/service_type_model.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/addButtonServiceType_Provider.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
+import '../../../../providers/serviceCenter_provider/add_service_center_serviceType_provider/add_service_center_service_type_provider.dart';
+import '../../../../providers/serviceCenter_provider/get_serviceCenter_serviceType_provider/get_service_center_service_type_provider.dart';
 import '../../../../request_model/serviceCanter_request/addButton_serviceType_request/addButtonServiceType_request.dart';
 import '../../../../utils/color.dart';
 
-class AddServiceTypeDialog extends StatefulWidget {
-  const AddServiceTypeDialog({super.key});
+class service_center_service_type_dialog extends StatefulWidget {
+  final ServiceCenterModel? selectedServiceCenter;
+  const service_center_service_type_dialog({
+    super.key,
+    this.selectedServiceCenter,
+  });
 
   @override
-  State<AddServiceTypeDialog> createState() => _AddServiceTypeDialogState();
+  State<service_center_service_type_dialog> createState() =>
+      _service_center_service_type_dialogState();
 }
 
-class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
+class _service_center_service_type_dialogState
+    extends State<service_center_service_type_dialog> {
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
+  final TextEditingController ServiceTypeController = TextEditingController();
+  final TextEditingController ServicePriceController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
-
+  ServiceCenterModel? serviceCenterModel;
+  serviceTypeModel? _selectedServiceType;
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    nameController.dispose();
-    priceController.dispose();
+    ServiceTypeController.dispose();
+    ServicePriceController.dispose();
     timeController.dispose();
   }
 
-  Future<void> _saveAddServiceType() async {
+  @override
+  void initState() {
+    super.initState();
+    serviceCenterModel = widget.selectedServiceCenter;
+  }
+
+  Future<void> _saveAddSecondServiceType() async {
     if (!_dialogFormKey.currentState!.validate()) return;
     final getProfileProvider = Provider.of<Getprofileprovider>(
       context,
@@ -45,23 +66,37 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
       context,
       listen: false,
     );
+
+    final secondGetServiceType =
+        Provider.of<get_service_center_service_type_provider>(
+          context,
+          listen: false,
+        );
     final navigator = Navigator.of(context);
     if (companyId == null) {
       // Show error
       return;
     }
 
-    AddButtonServiceTypeRequest serviceTypeRequest =
-        AddButtonServiceTypeRequest(
-          name: nameController.text,
-          price: priceController.text,
-          defaultAllocatedTime: timeController.text,
-          companyId: companyId,
+    final secondServiceType =
+        Provider.of<add_service_center_service_type_provider>(
+          context,
+          listen: false,
         );
 
-    final success = await addButtonServiceType.addButtonServiceType(
+    final ServiceCenterId = widget.selectedServiceCenter?.id ?? "";
+    final ServiceTypeId = _selectedServiceType?.id ?? "";
+
+    add_service_center_service_type_request serviceTypeRequest =
+        add_service_center_service_type_request(
+          id: ServiceTypeId,
+          price: int.parse(ServicePriceController.text),
+          defaultAllocatedTime: int.parse(timeController.text),
+        );
+
+    final success = await secondServiceType.postServiceType(
+      ServiceCenterId,
       serviceTypeRequest,
-      companyId,
     );
 
     if (success) {
@@ -73,7 +108,10 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
         message: "ServiceType Added Successful",
       );
 
-      await getAddButtonServiceType.fetchGetAddButton_ServiceType(companyId);
+      // await getAddButtonServiceType.fetchGetAddButton_ServiceType(companyId);
+      await secondGetServiceType.second_fetchGetAddButton_ServiceType(
+        ServiceCenterId,
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -99,6 +137,9 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
     final addButtonServiceType = Provider.of<AddButtonServiceTypeProvider>(
       context,
     );
+    final getAddButton_serviceType_Provider =
+        Provider.of<GetAddButtonServiceType_Provider>(context);
+
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -107,7 +148,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Container(
           //height: 410,
           width: double.infinity,
@@ -126,7 +167,9 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Add Service Types",
+                        widget.selectedServiceCenter?.name != null
+                            ? " ${widget.selectedServiceCenter!.name}"
+                            : "Add Service Types",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 20,
@@ -143,12 +186,66 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                   ),
                   SizedBox(height: 10),
 
-                  CustomLabeltext("Name"),
+                  CustomLabeltext("Service Type"),
                   SizedBox(height: 8),
-                  CustomTextField(
-                    controller: nameController,
-                    hintText: "Name",
-                    isPassword: false,
+                  Consumer<GetAddButtonServiceType_Provider>(
+                    builder: (context, serviceTypeProvider, child) {
+                      return Container(
+                        height: 45,
+                        child: CustomDropdown<serviceTypeModel>(
+                          items:
+                              getAddButton_serviceType_Provider.serviceTypeList,
+                          value: _selectedServiceType,
+                          onChanged: (serviceTypeModel? newvalue) {
+                            debugPrint(
+                              "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                            );
+                            setState(() {
+                              _selectedServiceType = newvalue;
+                            });
+                          },
+                          itemAsString: (serviceTypeModel item) =>
+                              item.name ?? "No Name",
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                serviceTypeProvider.isLoading
+                                    ? Align(
+                                        alignment: Alignment.center,
+                                        child: CustomLoading(
+                                          color: AppColor().primariColor,
+                                          size: 20,
+                                          strokeWidth: 2.5,
+                                        ),
+                                      )
+                                    : Text(
+                                        _selectedServiceType?.name ??
+                                            "Select Service Center",
+                                        style: TextStyle(
+                                          color: _selectedServiceType != null
+                                              ? Colors.black
+                                              : Colors.grey.shade600,
+                                        ),
+                                      ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(height: 10),
 
@@ -156,7 +253,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: "Price in BDT",
-                    controller: priceController,
+                    controller: ServicePriceController,
                     isPassword: false,
                     enableValidation: false,
                   ),
@@ -180,7 +277,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        onPressed: _saveAddServiceType,
+                        onPressed: _saveAddSecondServiceType,
 
                         child: addButtonServiceType.isLoading
                             ? Text(

@@ -19,20 +19,24 @@ import '../serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServ
 import '../serviceCenter_provider/addButton_provider/add_Button_serviceCanter_provider.dart';
 import '../serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../serviceCenter_provider/addUser_serviceCenter_provider/SingleUserInfoProvider/singleUserInfoProvider.dart';
+import '../serviceCenter_provider/add_service_center_serviceType_provider/add_service_center_service_type_provider.dart';
 import '../serviceCenter_provider/business_type_provider/business_type_provider.dart';
 import '../serviceCenter_provider/company_details_provider/company_details_provider.dart';
 import '../serviceCenter_provider/editButtonServiceType_provider/editButtonServiceType_provider.dart';
 import '../serviceCenter_provider/editButtonServiceType_provider/getEditButtonServiceType_Provider.dart';
 import '../serviceCenter_provider/editButton_serviceCenter_provider/edit_Button_serviceCenter_Provider.dart';
 import '../serviceCenter_provider/editButton_serviceCenter_provider/get_EditButton_provider.dart';
+import '../serviceCenter_provider/get_serviceCenter_serviceType_provider/get_service_center_service_type_provider.dart';
 import '../serviceCenter_provider/location_provider/location_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/newSerialProvider.dart';
 import '../serviceCenter_provider/newSerialButton_provider/queue_edit_list_provider/queue_edit_list_provider.dart';
 import '../serviceCenter_provider/nextButton_provider/nextButton_provider.dart';
 import '../serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
+
 import '../serviceCenter_provider/statusButtonProvider/get_status_updateButtonButton_provider.dart';
 import '../serviceCenter_provider/statusButtonProvider/status_UpdateButton_provider.dart';
+import '../serviceCenter_provider/update_service_center_service_type_provider/update_service_center_service_type_provider.dart';
 import '../serviceTaker_provider/ServiceCenterByTypeProvider.dart';
 import '../serviceTaker_provider/bookSerialButtonProvider/bookSerialButton_provider.dart';
 import '../serviceTaker_provider/bookSerialButtonProvider/getBookSerial_provider.dart';
@@ -75,6 +79,18 @@ class AppProviders {
       ),
       ChangeNotifierProvider(
         create: (context) => GetEditButtonServiceTypeProvider(),
+      ),
+
+      ChangeNotifierProvider(
+        create: (context) => add_service_center_service_type_provider(),
+      ),
+
+      ChangeNotifierProvider(
+        create: (context) => get_service_center_service_type_provider(),
+      ),
+
+      ChangeNotifierProvider(
+        create: (context) => UpdateServiceCenterServiceTypeProvider(),
       ),
 
       ChangeNotifierProvider(create: (context) => NewSerialButtonProvider()),

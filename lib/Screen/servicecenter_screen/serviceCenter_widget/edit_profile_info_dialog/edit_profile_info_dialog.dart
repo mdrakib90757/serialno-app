@@ -337,16 +337,23 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                                     }
                                   },
                             child: Center(
-                              child: Text(
-                                UpdateProfile.isLoading
-                                    ? "Please Wait.. "
-                                    : "Update",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: UpdateProfile.isLoading
+                                  ? Text(
+                                      "Please Wait..",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Update",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                             ),
                           );
                         },

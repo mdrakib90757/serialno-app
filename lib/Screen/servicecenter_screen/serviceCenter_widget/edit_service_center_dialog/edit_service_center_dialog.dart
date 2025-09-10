@@ -207,6 +207,7 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
 
   @override
   Widget build(BuildContext context) {
+    final editButtonProvider = Provider.of<EditButtonProvider>(context);
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -425,10 +426,15 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
                           ),
                         ),
                         onPressed: _UpdateServiceCenter,
-                        child: Text(
-                          "Save",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: editButtonProvider.isLoading
+                            ? Text(
+                                "Please wait...",
+                                style: TextStyle(color: Colors.white),
+                              )
+                            : Text(
+                                "Save",
+                                style: TextStyle(color: Colors.white),
+                              ),
                       ),
 
                       SizedBox(width: 10),

@@ -56,14 +56,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 GestureDetector(
                   onTap: () async {
                     //await getupdateprofile.fetchProfileData();
-                    final profileProvider = Provider.of<Getprofileprovider>(
+                    // final profileProvider = Provider.of<Getprofileprovider>(
+                    //   context,
+                    //   listen: false,
+                    // );
+                    // final profile = profileProvider.profileData;
+                    // String userType = profile?.userType.toLowerCase().trim() ?? "";
+                    // bool isServiceTakerUser = (userType == "customer");
+                    final authProvider = Provider.of<AuthProvider>(
                       context,
                       listen: false,
                     );
-                    final profile = profileProvider.profileData;
-                    String userType =
-                        profile?.userType.toLowerCase().trim() ?? "";
-                    bool isServiceTakerUser = (userType == "customer");
+
+                    bool isServiceTakerUser =
+                        authProvider.userType?.toLowerCase().trim() ==
+                        "customer";
 
                     Navigator.push(
                       context,
@@ -109,15 +116,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 10),
                 GestureDetector(
-                  onTap: () {
-                    final profileProvider = Provider.of<Getprofileprovider>(
+                  onTap: () async {
+                    // final profileProvider = Provider.of<Getprofileprovider>(
+                    //   context,
+                    //   listen: false,
+                    // );
+                    // final profile = profileProvider.profileData;
+                    // String userType =
+                    //     profile?.userType.toLowerCase().trim() ?? "";
+                    // bool isServicetakerUser = (userType == "customer");
+
+                    final authProvider = Provider.of<AuthProvider>(
                       context,
                       listen: false,
                     );
-                    final profile = profileProvider.profileData;
-                    String userType =
-                        profile?.userType.toLowerCase().trim() ?? "";
-                    bool isServicetakerUser = (userType == "customer");
+
+                    bool isServiceTakerUser =
+                        authProvider.userType?.toLowerCase().trim() ==
+                        "customer";
 
                     Navigator.push(
                       context,
@@ -125,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         builder: (context) => PasswordScreen(
                           showAppBar: true,
                           showBottomNavBar: true,
-                          isServiceTaker: isServicetakerUser,
+                          isServiceTaker: isServiceTakerUser,
                         ),
                       ),
                     );

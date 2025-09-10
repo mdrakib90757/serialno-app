@@ -46,7 +46,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
   UserName? _SelectUserName = UserName.Self;
   List<Businesstype> _businessTypes = [];
 
-
   bool _isLoadingBusinessTypes = true;
   String? _businessTypeError;
   String _FormatedDateTime = "";
@@ -234,19 +233,20 @@ class _BookSerialButtonState extends State<BookSerialButton> {
 
   @override
   Widget build(BuildContext context) {
-
     final bookProvider = Provider.of<bookSerialButton_provider>(context);
     final businessProvider = Provider.of<BusinessTypeProvider>(context);
     final orgProvider = Provider.of<OrganizationProvider>(context);
-    final serviceCenterProvider = Provider.of<serviceCenter_serialBookProvider>(context,);
-    final serviceTypeProvider = Provider.of<serviceTypeSerialbook_Provider>(context,);
+    final serviceCenterProvider = Provider.of<serviceCenter_serialBookProvider>(
+      context,
+    );
+    final serviceTypeProvider = Provider.of<serviceTypeSerialbook_Provider>(
+      context,
+    );
 
     final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime selectedDialogDate = DateTime.now();
 
-    // if (businessProvider.isLoading ||
-    //     orgProvider.isLoading ||
-    //     serviceCenterProvider.isLoading||serviceTypeProvider.isLoading) {
+    // if () {
     //   return Scaffold(
     //     backgroundColor: Colors.white,
     //     body: Center(
@@ -258,6 +258,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     //     ),
     //   );
     // }
+
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -304,76 +305,90 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   SizedBox(height: 10),
                   CustomLabeltext("ServiceType Provider Type"),
                   SizedBox(height: 10),
-                  CustomDropdown<Businesstype>(
-                    selectedItem: _selectedBusinessType,
-                    items: _businessTypes,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedBusinessType = newValue;
-                        _selectedOrganization = null;
-                        _selectedServiceCenter = null;
-                        _selectedServiceType = null;
+                  Consumer<BusinessTypeProvider>(
+                    builder: (context, BusProvider, child) {
+                      return CustomDropdown<Businesstype>(
+                        selectedItem: _selectedBusinessType,
+                        items: _businessTypes,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedBusinessType = newValue;
+                            _selectedOrganization = null;
+                            _selectedServiceCenter = null;
+                            _selectedServiceType = null;
 
-                        context.read<OrganizationProvider>().clearData();
-                        context
-                            .read<serviceCenter_serialBookProvider>()
-                            .clearData();
-                        context.read<ServiceCenterByTypeProvider>().clearData();
-                        context
-                            .read<serviceTypeSerialbook_Provider>()
-                            .clearData();
-                      });
-                      if (newValue == null) return;
+                            context.read<OrganizationProvider>().clearData();
+                            context
+                                .read<serviceCenter_serialBookProvider>()
+                                .clearData();
+                            context
+                                .read<ServiceCenterByTypeProvider>()
+                                .clearData();
+                            context
+                                .read<serviceTypeSerialbook_Provider>()
+                                .clearData();
+                          });
+                          if (newValue == null) return;
 
-                      if (newValue.id == 1) {
-                        print(
-                          "Fetching organizations for Business Type ID: ${newValue.id}",
-                        );
+                          if (newValue.id == 1) {
+                            print(
+                              "Fetching organizations for Business Type ID: ${newValue.id}",
+                            );
 
-                        context.read<OrganizationProvider>().get_Organization(
-                          businessTypeId: newValue.id.toString(),
-                        );
-                      } else {
-                        context
-                            .read<ServiceCenterByTypeProvider>()
-                            .fetchServiceCenters(newValue.id.toString());
-                      }
+                            context
+                                .read<OrganizationProvider>()
+                                .get_Organization(
+                                  businessTypeId: newValue.id.toString(),
+                                );
+                          } else {
+                            context
+                                .read<ServiceCenterByTypeProvider>()
+                                .fetchServiceCenters(newValue.id.toString());
+                          }
+                        },
+
+                        itemAsString: (Businesstype type) => type.name,
+                        // validator: (value) {
+                        //       if (value == null)
+                        //         return "Please select a business type";
+                        //       return null;
+                        //     },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade400),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              BusProvider.isLoading
+                                  ? CustomLoading(
+                                      color: AppColor().primariColor,
+                                      size: 20,
+                                      strokeWidth: 2.5,
+                                    )
+                                  : Text(
+                                      _selectedBusinessType?.name ??
+                                          "Select BusinessType",
+                                      style: TextStyle(
+                                        color: _selectedBusinessType != null
+                                            ? Colors.black
+                                            : Colors.grey.shade600,
+                                      ),
+                                    ),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.grey.shade600,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     },
-
-                    itemAsString: (Businesstype type) => type.name,
-                    // validator: (value) {
-                    //       if (value == null)
-                    //         return "Please select a business type";
-                    //       return null;
-                    //     },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            _selectedBusinessType?.name ??
-                                "Select BusinessType",
-                            style: TextStyle(
-                              color: _selectedBusinessType != null
-                                  ? Colors.black
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                   SizedBox(height: 10),
 
@@ -537,7 +552,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  typeServiceCenterProvider.isLoading
+                                  orgServiceCenterProvider.isLoading
                                       ? CustomLoading(
                                           strokeWidth: 2.5,
                                           color: AppColor().primariColor,
@@ -545,7 +560,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                                         )
                                       : Text(
                                           _selectedServiceCenter?.name ??
-                                              "Select BusinessType",
+                                              "Select ServiceCenter ",
                                           style: TextStyle(
                                             color:
                                                 _selectedServiceCenter != null

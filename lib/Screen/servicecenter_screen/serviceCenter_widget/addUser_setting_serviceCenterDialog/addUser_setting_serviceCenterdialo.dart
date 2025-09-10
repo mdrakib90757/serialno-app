@@ -167,10 +167,12 @@ class _AddUser_SettingServiceCenterDialogState
     if (rolesProvider.isLoading) {
       return Scaffold(
         backgroundColor: Colors.white,
-        body: CustomLoading(
-          color: AppColor().primariColor,
-          // size: 20,
-          strokeWidth: 2.5,
+        body: Center(
+          child: CustomLoading(
+            color: AppColor().primariColor,
+            // size: 20,
+            strokeWidth: 2.5,
+          ),
         ),
       );
     }

@@ -67,6 +67,21 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
       debugPrint("  -> Should Show Add Button: $shouldShowAddButton");
     }
 
+    if (getAddButtonProvider.isLoading) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 50.0),
+            child: CustomLoading(
+              color: AppColor().primariColor,
+              //size: 20,
+              strokeWidth: 2.5,
+            ),
+          ),
+        ),
+      );
+    }
     return Form(
       child: Scaffold(
         backgroundColor: Colors.white,
