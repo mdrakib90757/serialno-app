@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton_request/queue_edit_list_request/queue_edit_list_request.dart';
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
@@ -331,13 +332,10 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                                             .serviceTypeList
                                             .isEmpty
                                     ? Center(
-                                        child: SizedBox(
-                                          width: 20.0,
-                                          height: 20.0,
-                                          child: CircularProgressIndicator(
-                                            color: AppColor().primariColor,
-                                            strokeWidth: 2,
-                                          ),
+                                        child: CustomLoading(
+                                          color: AppColor().primariColor,
+                                          size: 20,
+                                          strokeWidth: 2.5,
                                         ),
                                       )
                                     : Text(

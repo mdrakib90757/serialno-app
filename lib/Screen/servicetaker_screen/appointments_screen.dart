@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/serviceTaker_provider/mySerials/mySerial_provider.dart';
 import 'package:serialno_app/utils/color.dart';
 
+import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../utils/date_formatter/date_formatter.dart';
 
 class AppointmentsScreen extends StatefulWidget {
@@ -71,8 +72,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
   Widget _buildBody(MySerialServiceTakerProvider provider) {
     if (provider.isLoading) {
       return Center(
-        child: CircularProgressIndicator(
+        child: CustomLoading(
           color: AppColor().primariColor,
+          //size: 20,
           strokeWidth: 2.5,
         ),
       );
@@ -105,8 +107,9 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
               ? Center(
                   child: Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: CircularProgressIndicator(
+                    child: CustomLoading(
                       color: AppColor().primariColor,
+                      // size: 20,
                       strokeWidth: 2.5,
                     ),
                   ),

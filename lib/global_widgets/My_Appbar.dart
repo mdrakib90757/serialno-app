@@ -241,6 +241,7 @@ class _MyAppbarState extends State<MyAppbar> {
                     icon: Icons.person_outline,
                     text: 'View Profile',
                     onTap: () {
+                      Navigator.of(context).pop();
                       final profileProvider = Provider.of<Getprofileprovider>(
                         context,
                         listen: false,

@@ -6,6 +6,7 @@ import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/update_addUser_serviceCenter/update_addUser_serviceCenter.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/addUser_serviceCenterRequest/editUserRequest/editUserRequest.dart';
 import 'package:serialno_app/utils/color.dart';
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
@@ -168,8 +169,9 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
     if (rolesProvider.isLoading || serviceCenterProvider.isLoading) {
       return Dialog(
         child: Center(
-          child: CircularProgressIndicator(
+          child: CustomLoading(
             color: AppColor().primariColor,
+            //size: 20,
             strokeWidth: 2.5,
           ),
         ),

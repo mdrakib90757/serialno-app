@@ -3,9 +3,11 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/providers/serviceCenter_provider/business_type_provider/business_type_provider.dart';
 import 'package:serialno_app/request_model/seviceTaker_request/bookSerial_request/bookSerial_request.dart';
 import '../../../../api/auth_api/auth_api.dart';
 import '../../../../global_widgets/MyRadio Button.dart';
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
@@ -41,14 +43,15 @@ class _BookSerialButtonState extends State<BookSerialButton> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController DateController = TextEditingController();
-
   UserName? _SelectUserName = UserName.Self;
   List<Businesstype> _businessTypes = [];
+
+
   bool _isLoadingBusinessTypes = true;
   String? _businessTypeError;
   String _FormatedDateTime = "";
-
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+
   UserName? _selectUserName = UserName.Self;
 
   Businesstype? _selectedBusinessType;
@@ -185,7 +188,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
       );
 
       if (!mounted) return;
-
       if (success) {
         await Provider.of<GetBookSerialProvider>(
           context,
@@ -232,10 +234,30 @@ class _BookSerialButtonState extends State<BookSerialButton> {
 
   @override
   Widget build(BuildContext context) {
+
     final bookProvider = Provider.of<bookSerialButton_provider>(context);
+    final businessProvider = Provider.of<BusinessTypeProvider>(context);
+    final orgProvider = Provider.of<OrganizationProvider>(context);
+    final serviceCenterProvider = Provider.of<serviceCenter_serialBookProvider>(context,);
+    final serviceTypeProvider = Provider.of<serviceTypeSerialbook_Provider>(context,);
+
     final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime selectedDialogDate = DateTime.now();
 
+    // if (businessProvider.isLoading ||
+    //     orgProvider.isLoading ||
+    //     serviceCenterProvider.isLoading||serviceTypeProvider.isLoading) {
+    //   return Scaffold(
+    //     backgroundColor: Colors.white,
+    //     body: Center(
+    //       child: CustomLoading(
+    //         color: AppColor().primariColor,
+    //         // size: 20,
+    //         strokeWidth: 2.5,
+    //       ),
+    //     ),
+    //   );
+    // }
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -407,15 +429,21 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  _selectedOrganization?.name ??
-                                      "Select Organization",
-                                  style: TextStyle(
-                                    color: _selectedOrganization != null
-                                        ? Colors.black
-                                        : Colors.grey.shade600,
-                                  ),
-                                ),
+                                orgProvider.isLoading
+                                    ? CustomLoading(
+                                        color: AppColor().primariColor,
+                                        size: 20,
+                                        strokeWidth: 2.5,
+                                      )
+                                    : Text(
+                                        _selectedOrganization?.name ??
+                                            "Select Organization",
+                                        style: TextStyle(
+                                          color: _selectedOrganization != null
+                                              ? Colors.black
+                                              : Colors.grey.shade600,
+                                        ),
+                                      ),
                                 Icon(
                                   Icons.arrow_drop_down,
                                   color: Colors.grey.shade600,
@@ -444,17 +472,18 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                               orgServiceCenterProvider.isLoading ||
                               typeServiceCenterProvider.isLoading;
 
-                          if (isLoading) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: AppColor().primariColor,
-                                  strokeWidth: 2.5,
-                                ),
-                              ),
-                            );
-                          }
+                          // if (isLoading) {
+                          //   return Padding(
+                          //     padding: const EdgeInsets.all(8.0),
+                          //     child: Center(
+                          //       child: CustomLoading(
+                          //         color: AppColor().primariColor,
+                          //         //size: 20,
+                          //         strokeWidth: 2.5,
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
                           return CustomDropdown<ServiceCenterModel>(
                             selectedItem: _selectedServiceCenter,
                             items: allServiceCenters,
@@ -508,15 +537,22 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    _selectedServiceCenter?.name ??
-                                        "Select BusinessType",
-                                    style: TextStyle(
-                                      color: _selectedServiceCenter != null
-                                          ? Colors.black
-                                          : Colors.grey.shade600,
-                                    ),
-                                  ),
+                                  typeServiceCenterProvider.isLoading
+                                      ? CustomLoading(
+                                          strokeWidth: 2.5,
+                                          color: AppColor().primariColor,
+                                          size: 20,
+                                        )
+                                      : Text(
+                                          _selectedServiceCenter?.name ??
+                                              "Select BusinessType",
+                                          style: TextStyle(
+                                            color:
+                                                _selectedServiceCenter != null
+                                                ? Colors.black
+                                                : Colors.grey.shade600,
+                                          ),
+                                        ),
                                   Icon(
                                     Icons.arrow_drop_down,
                                     color: Colors.grey.shade600,
@@ -535,17 +571,18 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
                     builder: (context, serviceTypeProvider, child) {
-                      if (serviceTypeProvider.isLoading) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: AppColor().primariColor,
-                              strokeWidth: 2.5,
-                            ),
-                          ),
-                        );
-                      }
+                      // if (serviceTypeProvider.isLoading) {
+                      //   return Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Center(
+                      //       child: CustomLoading(
+                      //         color: AppColor().primariColor,
+                      //         //size: 20,
+                      //         strokeWidth: 2.5,
+                      //       ),
+                      //     ),
+                      //   );
+                      // }
                       return CustomDropdown<serviceTypeModel>(
                         itemAsString: (serviceTypeModel item) =>
                             item.name ?? "",
@@ -574,15 +611,21 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                _selectedServiceType?.name ??
-                                    "Select ServiceType",
-                                style: TextStyle(
-                                  color: _selectedServiceType != null
-                                      ? Colors.black
-                                      : Colors.grey.shade600,
-                                ),
-                              ),
+                              serviceTypeProvider.isLoading
+                                  ? CustomLoading(
+                                      size: 20,
+                                      color: AppColor().primariColor,
+                                      strokeWidth: 2.5,
+                                    )
+                                  : Text(
+                                      _selectedServiceType?.name ??
+                                          "Select ServiceType",
+                                      style: TextStyle(
+                                        color: _selectedServiceType != null
+                                            ? Colors.black
+                                            : Colors.grey.shade600,
+                                      ),
+                                    ),
                               Icon(
                                 Icons.arrow_drop_down,
                                 color: Colors.grey.shade600,

@@ -11,6 +11,7 @@ import 'package:serialno_app/providers/serviceCenter_provider/company_details_pr
 import 'package:serialno_app/providers/serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import 'package:serialno_app/utils/color.dart';
 
+import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_flushbar.dart';
 import '../../model/company_details_model.dart';
 import '../../model/roles_model.dart';
@@ -74,9 +75,10 @@ class _Servicecenter_SettingscreenState
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
+          child: CustomLoading(
             color: AppColor().primariColor,
+            //size: 20,
+            strokeWidth: 2.5,
           ),
         ),
       );
@@ -392,9 +394,10 @@ class _Servicecenter_SettingscreenState
                   if (getAddUser_Provider.isLoading &&
                       getAddUser_Provider.users.isEmpty) {
                     return Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
+                      child: CustomLoading(
                         color: AppColor().primariColor,
+                        //size: 20,
+                        strokeWidth: 2.5,
                       ),
                     );
                   }
@@ -402,8 +405,9 @@ class _Servicecenter_SettingscreenState
                   final UserList = getAddUser_Provider.users;
                   if (UserList.isEmpty) {
                     return Center(
-                      child: CircularProgressIndicator(
+                      child: CustomLoading(
                         color: AppColor().primariColor,
+                        //size: 20,
                         strokeWidth: 2.5,
                       ),
                     );

@@ -9,6 +9,7 @@ import 'package:serialno_app/Screen/servicetaker_screen/serviceTakerWidget/servi
 import 'package:serialno_app/Screen/servicetaker_screen/serviceTakerWidget/update_bookSerialDialog/update_bookSerialDlalog.dart';
 import 'package:serialno_app/api/auth_api/auth_api.dart';
 import 'package:serialno_app/model/mybooked_model.dart';
+import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../model/user_model.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/serviceTaker_provider/bookSerialButtonProvider/getBookSerial_provider.dart';
@@ -126,8 +127,9 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
         builder: (context) {
           if (authProvider.isLoading) {
             return Center(
-              child: CircularProgressIndicator(
+              child: CustomLoading(
                 color: AppColor().primariColor,
+                //size: 20,
                 strokeWidth: 2.5,
               ),
             );

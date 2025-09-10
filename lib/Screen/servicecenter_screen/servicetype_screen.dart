@@ -8,6 +8,7 @@ import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/deleteServiceTypeProvider/deleteServiceTypeProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import 'package:serialno_app/utils/color.dart';
+import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
@@ -121,8 +122,9 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
             serviceTypeProvider.isLoading
                 ? Expanded(
                     child: Center(
-                      child: CircularProgressIndicator(
+                      child: CustomLoading(
                         color: AppColor().primariColor,
+                        // size: 20,
                         strokeWidth: 2.5,
                       ),
                     ),

@@ -8,6 +8,7 @@ import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/cu
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/new_serial_button_dialog/new_serial_button_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/queue_list_edit_dialog/queue_list_edit_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/statusDialogServiceCenter/statusDialog_serviceCenter.dart';
+import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../global_widgets/custom_flushbar.dart';
 import '../../global_widgets/custom_sanckbar.dart';
@@ -142,9 +143,10 @@ class _HomeScreenState extends State<HomeScreen>
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
+          child: CustomLoading(
             color: AppColor().primariColor,
+            // size: 20,
+            strokeWidth: 2.5,
           ),
         ),
       );
@@ -157,9 +159,10 @@ class _HomeScreenState extends State<HomeScreen>
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
+          child: CustomLoading(
             color: AppColor().primariColor,
+            //size: 20,
+            strokeWidth: 2.5,
           ),
         ),
       );
@@ -744,9 +747,10 @@ class _HomeScreenState extends State<HomeScreen>
       builder: (context, serialProvider, child) {
         if (serialProvider.isLoading) {
           return Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 2.5,
+            child: CustomLoading(
               color: AppColor().primariColor,
+              //size: 20,
+              strokeWidth: 2.5,
             ),
           );
         }
@@ -910,9 +914,10 @@ class _HomeScreenState extends State<HomeScreen>
       builder: (context, serialProvider, child) {
         if (serialProvider.isLoading) {
           return Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 2.5,
+            child: CustomLoading(
               color: AppColor().primariColor,
+              //size: 20,
+              strokeWidth: 2.5,
             ),
           );
         }

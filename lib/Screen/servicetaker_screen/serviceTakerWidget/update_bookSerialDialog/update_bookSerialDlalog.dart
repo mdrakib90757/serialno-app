@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 import 'package:serialno_app/request_model/seviceTaker_request/update_bookSerialRequest/update_bookSerialRequest.dart';
 import '../../../../global_widgets/MyRadio Button.dart';
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
@@ -279,15 +280,16 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                   SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
                     builder: (context, serviceTypeProvider, child) {
-                      if (serviceTypeProvider.isLoading &&
-                          serviceTypeProvider.serviceTypeList.isEmpty) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: AppColor().primariColor,
-                            strokeWidth: 2.5,
-                          ),
-                        );
-                      }
+                      // if (serviceTypeProvider.isLoading &&
+                      //     serviceTypeProvider.serviceTypeList.isEmpty) {
+                      //   return Center(
+                      //     child: CustomLoading(
+                      //       color: AppColor().primariColor,
+                      //       //size: 20,
+                      //       strokeWidth: 2.5,
+                      //     ),
+                      //   );
+                      // }
                       return CustomDropdown<serviceTypeModel>(
                         items: serviceTypeProvider.serviceTypeList,
 
@@ -319,7 +321,11 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               serviceTypeProvider.isLoading
-                                  ? Text("ServiceTypeLoading...")
+                                  ? CustomLoading(
+                                      color: AppColor().primariColor,
+                                      size: 20,
+                                      strokeWidth: 2.5,
+                                    )
                                   : Text(
                                       _selectedServiceType?.name ??
                                           "Select ServiceType",

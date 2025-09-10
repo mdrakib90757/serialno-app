@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 10),
                 GestureDetector(
                   onTap: () async {
-                    await getupdateprofile.fetchProfileData();
+                    //await getupdateprofile.fetchProfileData();
                     final profileProvider = Provider.of<Getprofileprovider>(
                       context,
                       listen: false,
@@ -75,6 +75,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     );
+
+                    Future.microtask(() {
+                      getupdateprofile.fetchProfileData();
+                    });
                   },
 
                   child: Container(
@@ -113,9 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     final profile = profileProvider.profileData;
                     String userType =
                         profile?.userType.toLowerCase().trim() ?? "";
-                    bool isServicetakerUser =
-                        (userType ==
-                        "customer");
+                    bool isServicetakerUser = (userType == "customer");
 
                     Navigator.push(
                       context,

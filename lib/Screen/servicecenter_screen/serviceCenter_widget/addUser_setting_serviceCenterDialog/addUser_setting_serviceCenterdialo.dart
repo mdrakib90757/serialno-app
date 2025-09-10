@@ -11,6 +11,7 @@ import 'package:serialno_app/providers/serviceCenter_provider/roles_service_cent
 import 'package:serialno_app/request_model/serviceCanter_request/addUser_serviceCenterRequest/addUser_ServiceCenter_request.dart';
 import 'package:serialno_app/utils/color.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
@@ -166,11 +167,10 @@ class _AddUser_SettingServiceCenterDialogState
     if (rolesProvider.isLoading) {
       return Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
-            color: AppColor().primariColor,
-          ),
+        body: CustomLoading(
+          color: AppColor().primariColor,
+          // size: 20,
+          strokeWidth: 2.5,
         ),
       );
     }

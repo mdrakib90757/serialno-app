@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/add_service_center_dialog/add_service_center_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_service_center_dialog/edit_service_center_dialog.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/deleteServiceCenter/delete_serviceCenter.dart';
+import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_flushbar.dart';
 import '../../model/serviceCenter_model.dart';
 import '../../model/user_model.dart';
@@ -142,8 +143,9 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 50.0),
-          child: CircularProgressIndicator(
+          child: CustomLoading(
             color: AppColor().primariColor,
+            //size: 20,
             strokeWidth: 2.5,
           ),
         ),

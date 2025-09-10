@@ -5,6 +5,7 @@ import '../../global_widgets/Custom_NavigationBar/custom_servicecenter_navigatio
 import '../../global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 import '../../global_widgets/Custom_NavigationBar/my_bottom_navigationBar/my_bottom_navigationBar.dart';
 import '../../global_widgets/My_Appbar.dart';
+import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../servicecenter_screen/serviceCenter_widget/edit_profile_info_dialog/edit_profile_info_dialog.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
@@ -67,9 +68,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
+          child: CustomLoading(
             color: AppColor().primariColor,
+            //size: 20,
+            strokeWidth: 2.5,
           ),
         ),
       );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import 'package:serialno_app/providers/app_provider/app_provider.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 
 import 'package:serialno_app/routes/app_routes.dart';
+import 'package:serialno_app/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Screen/Auth_screen/login_screen.dart';
@@ -64,8 +66,14 @@ class _AuthWrapperState extends State<AuthWrapper> {
       future: _initializationFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return Scaffold(
+            body: Center(
+              child: CustomLoading(
+                color: AppColor().primariColor,
+                //size: 20,
+                strokeWidth: 2.5,
+              ),
+            ),
           );
         }
 
@@ -73,10 +81,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
         if (authProvider.accessToken != null) {
           final userType = authProvider.userType?.toLowerCase() ?? '';
-          if (userType == 'customer') {
-            return const CustomServicetakerNavigationbar();
-          } else {
+          if (userType == 'company') {
             return const CustomServicecenterNavigationbar();
+          } else {
+            return const CustomServicetakerNavigationbar();
           }
         } else {
           return const LoginScreen();

@@ -5,6 +5,7 @@ import 'package:serialno_app/model/division_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/divisionProvider/divisionProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/update_organization_settingScreen/update_organization_Provider.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/update_orginization_request/update_orginization_request.dart';
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
@@ -243,9 +244,10 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 2.5,
+          child: CustomLoading(
             color: AppColor().primariColor,
+            // size: 20,
+            strokeWidth: 2.5,
           ),
         ),
       );
@@ -368,13 +370,10 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             authProvider.isBusinessTypesLoading
-                                ? SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      color: AppColor().primariColor,
-                                      strokeWidth: 2,
-                                    ),
+                                ? CustomLoading(
+                                    color: AppColor().primariColor,
+                                    size: 20,
+                                    strokeWidth: 2.5,
                                   )
                                 : Text(
                                     _selectedBusinessType?.name ??

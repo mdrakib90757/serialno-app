@@ -8,6 +8,7 @@ import 'package:serialno_app/providers/serviceCenter_provider/newSerialButton_pr
 import 'package:serialno_app/request_model/serviceCanter_request/newSerialButton_request/newSerialButton_request.dart';
 import 'package:serialno_app/utils/color.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
+import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
@@ -283,13 +284,10 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                                 serviceTypeProvider.isLoading
                                     ? Align(
                                         alignment: Alignment.center,
-                                        child: SizedBox(
-                                          width: 20.0,
-                                          height: 20.0,
-                                          child: CircularProgressIndicator(
-                                            color: AppColor().primariColor,
-                                            strokeWidth: 2,
-                                          ),
+                                        child: CustomLoading(
+                                          color: AppColor().primariColor,
+                                          size: 20,
+                                          strokeWidth: 2.5,
                                         ),
                                       )
                                     : Text(
