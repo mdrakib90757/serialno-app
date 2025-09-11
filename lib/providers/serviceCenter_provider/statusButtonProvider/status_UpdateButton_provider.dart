@@ -33,7 +33,7 @@ class statusUpdateButton_provder with ChangeNotifier {
     } catch (e) {
       final errorMessageString = e.toString();
       if (errorMessageString.contains("No Content")) {
-        print("✅ Received 204 No Content. Treating as success.");
+        print("Received 204 No Content. Treating as success.");
         _isLoading = false;
         notifyListeners();
         return true;

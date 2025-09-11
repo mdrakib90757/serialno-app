@@ -143,11 +143,11 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                   ),
                   SizedBox(height: 10),
 
-                  CustomLabeltext("Name"),
+                  CustomLabeltext("Service Types Name"),
                   SizedBox(height: 8),
                   CustomTextField(
                     controller: nameController,
-                    hintText: "Name",
+                    hintText: "Service Types Name",
                     isPassword: false,
                   ),
                   SizedBox(height: 10),

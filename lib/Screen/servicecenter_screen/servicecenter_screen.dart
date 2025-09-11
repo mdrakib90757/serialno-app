@@ -52,21 +52,7 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
 
   @override
   Widget build(BuildContext context) {
-    final getprofile = Provider.of<Getprofileprovider>(context);
-    final profile = getprofile.profileData;
     final getAddButtonProvider = Provider.of<GetAddButtonProvider>(context);
-    final bool shouldShowAddButton =
-        profile?.currentCompany.businessTypeId == 1;
-
-    debugPrint("--- ServiceCenterScreen Build ---");
-    if (profile != null) {
-      debugPrint("  -> Company Name: ${profile.currentCompany.name}");
-      debugPrint(
-        "  -> Business Type ID: ${profile.currentCompany.businessTypeId}",
-      );
-      debugPrint("  -> Should Show Add Button: $shouldShowAddButton");
-    }
-
     if (getAddButtonProvider.isLoading) {
       return Scaffold(
         backgroundColor: Colors.white,

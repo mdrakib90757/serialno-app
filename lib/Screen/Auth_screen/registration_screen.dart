@@ -573,12 +573,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             isDense: true,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.grey.shade400,
+                                color: AppColor().primariColor,
+                                width: 2,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.grey.shade400,
+                                color: AppColor().primariColor,
+                                width: 2,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -606,6 +608,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                             ),
                           ),
+                          cursorColor: Colors.grey.shade500,
                           obscureText: obscureIndex1,
                           obscuringCharacter: "*",
                         ),
@@ -795,7 +798,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             }
                             return null;
                           },
-
+                          cursorColor: Colors.grey.shade500,
                           controller: confirmPassword,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
@@ -810,7 +813,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.grey.shade400,
+                                color: AppColor().primariColor,
+                                width: 2,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(

@@ -45,12 +45,20 @@ class _MyAppbarState extends State<MyAppbar> {
             width: 130,
             child: GestureDetector(
               onTap: () {
-                final profileProvider = Provider.of<Getprofileprovider>(
+                // final profileProvider = Provider.of<Getprofileprovider>(
+                //   context,
+                //   listen: false,
+                // );
+                // final profile = profileProvider.profileData;
+                // String userType = profile?.userType.toLowerCase().trim() ?? "";
+
+                // after add this 2 line code because image onTap navigate problem
+                final authProvider = Provider.of<AuthProvider>(
                   context,
                   listen: false,
                 );
-                final profile = profileProvider.profileData;
-                String userType = profile?.userType.toLowerCase().trim() ?? "";
+                final userType =
+                    authProvider.userType?.toLowerCase().trim() ?? '';
 
                 if (userType == "company") {
                   Navigator.pushAndRemoveUntil(

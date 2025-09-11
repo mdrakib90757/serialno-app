@@ -13,9 +13,7 @@ class get_service_center_service_type_provider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<void> second_fetchGetAddButton_ServiceType(
-    String serviceCenterId,
-  ) async {
+  Future<void> fetch_service_center_service_type(String serviceCenterId) async {
     _isLoading = true;
     notifyListeners();
 
@@ -26,12 +24,10 @@ class get_service_center_service_type_provider with ChangeNotifier {
       notifyListeners();
       return;
     }
-    debugPrint(
-      "🚀 Fetching service types for service center: $serviceCenterId",
-    );
+    debugPrint("Fetching service types for service center: $serviceCenterId");
 
     _serviceTypesOfSelectedCenter = await _secondServiceTypeService
-        .second_getAddButtonServiceType(serviceCenterId);
+        .fetch_serviceCenter_serviceType(serviceCenterId);
     _isLoading = false;
     notifyListeners();
   }

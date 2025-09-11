@@ -18,20 +18,20 @@ import '../../../../providers/serviceCenter_provider/get_serviceCenter_serviceTy
 import '../../../../request_model/serviceCanter_request/addButton_serviceType_request/addButtonServiceType_request.dart';
 import '../../../../utils/color.dart';
 
-class service_center_service_type_dialog extends StatefulWidget {
+class add_service_center_service_type_dialog extends StatefulWidget {
   final ServiceCenterModel? selectedServiceCenter;
-  const service_center_service_type_dialog({
+  const add_service_center_service_type_dialog({
     super.key,
     this.selectedServiceCenter,
   });
 
   @override
-  State<service_center_service_type_dialog> createState() =>
-      _service_center_service_type_dialogState();
+  State<add_service_center_service_type_dialog> createState() =>
+      _add_service_center_service_type_dialogState();
 }
 
-class _service_center_service_type_dialogState
-    extends State<service_center_service_type_dialog> {
+class _add_service_center_service_type_dialogState
+    extends State<add_service_center_service_type_dialog> {
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   final TextEditingController ServiceTypeController = TextEditingController();
   final TextEditingController ServicePriceController = TextEditingController();
@@ -41,10 +41,11 @@ class _service_center_service_type_dialogState
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
+
     ServiceTypeController.dispose();
     ServicePriceController.dispose();
     timeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -55,17 +56,6 @@ class _service_center_service_type_dialogState
 
   Future<void> _saveAddSecondServiceType() async {
     if (!_dialogFormKey.currentState!.validate()) return;
-    final getProfileProvider = Provider.of<Getprofileprovider>(
-      context,
-      listen: false,
-    );
-    final companyId = getProfileProvider.profileData?.currentCompany.id;
-    final getAddButtonServiceType =
-        Provider.of<GetAddButtonServiceType_Provider>(context, listen: false);
-    final addButtonServiceType = Provider.of<AddButtonServiceTypeProvider>(
-      context,
-      listen: false,
-    );
 
     final secondGetServiceType =
         Provider.of<get_service_center_service_type_provider>(
@@ -73,10 +63,6 @@ class _service_center_service_type_dialogState
           listen: false,
         );
     final navigator = Navigator.of(context);
-    if (companyId == null) {
-      // Show error
-      return;
-    }
 
     final secondServiceType =
         Provider.of<add_service_center_service_type_provider>(
@@ -109,7 +95,7 @@ class _service_center_service_type_dialogState
       );
 
       // await getAddButtonServiceType.fetchGetAddButton_ServiceType(companyId);
-      await secondGetServiceType.second_fetchGetAddButton_ServiceType(
+      await secondGetServiceType.fetch_service_center_service_type(
         ServiceCenterId,
       );
     } else {
@@ -118,8 +104,7 @@ class _service_center_service_type_dialogState
           content: CustomSnackBarWidget(
             title: "Error",
             message:
-                addButtonServiceType.errorMessage ??
-                "Failed to Added ServiceType",
+                secondServiceType.errorMessage ?? "Failed to Added ServiceType",
             iconColor: Colors.red.shade400,
             icon: Icons.dangerous_outlined,
           ),
@@ -176,11 +161,14 @@ class _service_center_service_type_dialogState
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close_sharp),
+                      CircleAvatar(
+                        backgroundColor: Colors.grey.shade100,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.close_sharp, weight: 5),
+                        ),
                       ),
                     ],
                   ),
@@ -202,6 +190,16 @@ class _service_center_service_type_dialogState
                             );
                             setState(() {
                               _selectedServiceType = newvalue;
+                              if (newvalue != null) {
+                                ServicePriceController.text =
+                                    newvalue.price?.toString() ?? '';
+                                timeController.text =
+                                    newvalue.defaultAllocatedTime?.toString() ??
+                                    '';
+                              } else {
+                                ServicePriceController.clear();
+                                timeController.clear();
+                              }
                             });
                           },
                           itemAsString: (serviceTypeModel item) =>

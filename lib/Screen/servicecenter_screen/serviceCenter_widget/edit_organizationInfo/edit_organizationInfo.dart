@@ -394,25 +394,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                     );
                   },
                 ),
-
-                // CustomDropdownFormField<BusinessType>(
-                //   hintText: 'Select a service type',
-                //   items: authProvider.businessTypes,
-                //   initialValue: _selectedBusinessType,
-                //   itemAsString: (BusinessType item) =>
-                //   item.name ?? "No Name",
-                //   onChanged: (newValue) {
-                //     setState(() {
-                //       _selectedBusinessType = newValue;
-                //     });
-                //     print('Selected: $newValue');
-                //   },
-                //   validator: (value) {
-                //     if (value == null)
-                //       return "Requried";
-                //     return null;
-                //   },
-                // ),
                 SizedBox(height: 10),
 
                 CustomLabeltext("Division", showStar: false),

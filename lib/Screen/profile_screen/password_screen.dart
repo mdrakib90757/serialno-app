@@ -112,15 +112,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
             children: [
               Row(
                 children: [
-                  // IconButton(
-                  //   onPressed: () {
-                  //     Navigator.pop(context);
-                  //   },
-                  //   icon: Icon(
-                  //     Icons.arrow_back,
-                  //     color: AppColor().primariColor,
-                  //   ),
-                  // ),
                   Text(
                     "Account Password",
                     style: TextStyle(

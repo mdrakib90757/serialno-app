@@ -28,6 +28,7 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
   serviceTypeModel? _selectedServiceType;
   ServiceCenterModel? _selectedServiceCenter;
   List<ServiceCenterModel> serviceCenterList = [];
+  bool _isScreenLoading = true;
 
   @override
   void initState() {
@@ -39,6 +40,11 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
   }
 
   Future<void> _loadInitialData() async {
+    if (mounted) {
+      setState(() {
+        _isScreenLoading = true;
+      });
+    }
     final profileProvider = context.read<Getprofileprovider>();
     final serviceTypeProvider = context
         .read<GetAddButtonServiceType_Provider>();
@@ -68,31 +74,21 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final getProfileProvider = Provider.of<Getprofileprovider>(
-      context,
-      listen: false,
-    );
     final serviceTypeProvider = Provider.of<GetAddButtonServiceType_Provider>(
       context,
     );
-    final companyId = getProfileProvider.profileData?.currentCompany.id;
-    final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
-      context,
-      listen: false,
-    );
-    final companyIdd = getAddButtonProvider.fetchGetAddButton(companyId!);
-    final secondGetServiceType =
+
+    final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
+    final serviceCenterServiceTypeProvider =
         Provider.of<get_service_center_service_type_provider>(context);
 
-    //
-    // if (serviceTypeProvider.isLoading ||
-    //     getAddButtonProvider.isLoading||secondGetServiceType.isLoading) {
+    // // --- Full-screen loading check ---
+    // if (_isScreenLoading || serviceCenterServiceTypeProvider.isLoading) {
     //   return Scaffold(
     //     backgroundColor: Colors.white,
     //     body: Center(
     //       child: CustomLoading(
     //         color: AppColor().primariColor,
-    //         //size: 20,
     //         strokeWidth: 2.5,
     //       ),
     //     ),

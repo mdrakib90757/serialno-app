@@ -38,6 +38,7 @@ class AddButtonApi {
     }
   }
 
+  // delete api
   Future<void> deleteServiceCenter(String companyId, String Id) async {
     try {
       await ApiClient().delete(

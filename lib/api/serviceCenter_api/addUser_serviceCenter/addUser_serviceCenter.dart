@@ -6,6 +6,7 @@ import 'package:serialno_app/request_model/serviceCanter_request/addUser_service
 import 'package:serialno_app/request_model/serviceCanter_request/addUser_serviceCenterRequest/editUserRequest/editUserRequest.dart';
 
 class AddUserServiceCenter {
+  //add api
   Future<dynamic> AddUserButton(
     AddUserRequest userRequest,
     String companyId,
@@ -18,6 +19,7 @@ class AddUserServiceCenter {
     return response;
   }
 
+  //get api
   Future<List<AddUserModel>> fetchAddUser(String companyId) async {
     try {
       final response =

@@ -28,7 +28,7 @@ class getUpdateOrganization with ChangeNotifier {
       );
     } catch (e) {
       _errorMessage = e.toString();
-      debugPrint("❌ Failed to load update organization info : $_errorMessage");
+      debugPrint(" Failed to load update organization info : $_errorMessage");
     } finally {
       _isLoading = false;
       notifyListeners();

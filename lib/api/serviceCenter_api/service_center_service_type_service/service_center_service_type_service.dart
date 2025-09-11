@@ -7,7 +7,8 @@ import '../../../model/service_type_model.dart';
 import '../../../request_model/serviceCanter_request/update_service_center_service_type_request/update_service_center_service_type_request.dart';
 
 class service_center_service_type_service {
-  Future<dynamic> SecondServiceType(
+  //add button service center and service type
+  Future<dynamic> add_service_center_service_type(
     String serviceCenterId,
     add_service_center_service_type_request requestData,
   ) async {
@@ -19,8 +20,8 @@ class service_center_service_type_service {
     return response;
   }
 
-  //Get AddButton
-  Future<List<serviceTypeModel>> second_getAddButtonServiceType(
+  //Get AddButton service center and service type
+  Future<List<serviceTypeModel>> fetch_serviceCenter_serviceType(
     String serviceCenterId,
   ) async {
     try {
@@ -41,6 +42,7 @@ class service_center_service_type_service {
     }
   }
 
+  //update service center and service type
   Future<dynamic> update_service_center_service_type_service(
     update_service_center_service_type_request request,
     String serviceCenterId,
@@ -48,12 +50,30 @@ class service_center_service_type_service {
     try {
       String body = jsonEncode(request.toJson());
       final response = await ApiClient().put(
-        "serial-no/service-centers/$serviceCenterId/service-types",
+        "/serial-no/service-centers/$serviceCenterId/service-types",
         body: body,
       );
       return response;
     } catch (e) {
-      print(e);
+      print(
+        "Error fetching or parsing update_service_center_service_type_service - : $e",
+      );
+      throw Exception(e.toString());
+    }
+  }
+
+  //delete service center and service type
+  Future<void> deleteServiceCenter_serviceType(
+    String serviceCenterId,
+    String serviceTypeId,
+  ) async {
+    try {
+      await ApiClient().delete(
+        "/serial-no/service-centers/$serviceCenterId/service-types/$serviceTypeId",
+      );
+    } catch (e) {
+      print("❌ Error in ServiceCenter deleteUser API: $e");
+      throw Exception(e);
     }
   }
 }

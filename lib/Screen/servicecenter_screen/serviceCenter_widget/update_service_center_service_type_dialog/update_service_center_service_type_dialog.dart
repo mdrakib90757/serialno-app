@@ -20,6 +20,7 @@ import '../../../../request_model/serviceCanter_request/editButtonServiceType_re
 class update_servive_center_service_type_dialog extends StatefulWidget {
   final serviceTypeModel serviceType_model;
   final ServiceCenterModel? selectedServiceCenter;
+
   const update_servive_center_service_type_dialog({
     super.key,
     required this.serviceType_model,
@@ -38,6 +39,7 @@ class _update_servive_center_service_type_dialogState
   late TextEditingController priceController = TextEditingController();
   late TextEditingController timeController = TextEditingController();
   ServiceCenterModel? serviceCenterModel;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -72,7 +74,7 @@ class _update_servive_center_service_type_dialogState
         context,
         listen: false,
       );
-      final updateProvider =
+      final get_addButton =
           Provider.of<get_service_center_service_type_provider>(
             context,
             listen: false,
@@ -89,9 +91,9 @@ class _update_servive_center_service_type_dialogState
 
       update_service_center_service_type_request UpdateRequest =
           update_service_center_service_type_request(
-            id: widget.serviceType_model.id,
-            price: int.parse(priceController.text),
-            defaultAllocatedTime: int.parse(timeController.text),
+            serviceTypeId: widget.serviceType_model.id,
+            price: double.parse(priceController.text).round(),
+            defaultAllocatedTime: double.parse(timeController.text).round(),
           );
 
       final success = await UpdateButton.update_service_center_service_typ(
@@ -106,9 +108,7 @@ class _update_servive_center_service_type_dialogState
           title: "Success",
           message: "Edit ServiceType  Update Successful",
         );
-        await updateProvider.second_fetchGetAddButton_ServiceType(
-          ServiceCenterId,
-        );
+        await get_addButton.fetch_service_center_service_type(ServiceCenterId);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -138,7 +138,7 @@ class _update_servive_center_service_type_dialogState
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -165,45 +165,152 @@ class _update_servive_center_service_type_dialogState
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close_sharp),
+                      CircleAvatar(
+                        backgroundColor: Colors.grey.shade100,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.close_sharp,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  CustomLabeltext("Name"),
-                  SizedBox(height: 8),
-                  CustomTextField(
-                    controller: nameController,
-                    hintText: "Name",
-                    isPassword: false,
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.white),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 15,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomLabeltext("Service Type"),
+                          SizedBox(height: 8),
+                          CustomTextField(
+                            controller: nameController,
+                            hintText: "Service Type",
+                            isPassword: false,
+                          ),
+
+                          SizedBox(height: 10),
+
+                          CustomLabeltext("Service Price", showStar: false),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            hintText: "Price in BDT",
+                            controller: priceController,
+                            isPassword: false,
+                            enableValidation: false,
+                          ),
+                          SizedBox(height: 10),
+
+                          CustomLabeltext(
+                            "Default Allocated Time",
+                            showStar: false,
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            hintText: "Time in minutes",
+                            controller: timeController,
+                            isPassword: false,
+                            enableValidation: false,
+                          ),
+                          SizedBox(height: 10),
+                          TextField(
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 12,
+                              ),
+                              fillColor: Colors.white,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade100,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: AppColor().primariColor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          TextField(
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 12,
+                              ),
+                              fillColor: Colors.white,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade100,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                borderSide: BorderSide(
+                                  color: AppColor().primariColor,
+                                  width: 3,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
 
+                  // SizedBox(height: 20),
+                  // CustomLabeltext("Service Type"),
+                  // SizedBox(height: 8),
+                  // CustomTextField(
+                  //   controller: nameController,
+                  //   hintText: "Name",
+                  //   isPassword: false,
+                  // ),
+                  //
+                  // SizedBox(height: 10),
+                  //
+                  // CustomLabeltext("Service Price", showStar: false),
+                  // const SizedBox(height: 8),
+                  // CustomTextField(
+                  //   hintText: "Price in BDT",
+                  //   controller: priceController,
+                  //   isPassword: false,
+                  //   enableValidation: false,
+                  // ),
+                  // SizedBox(height: 10),
+                  //
+                  // CustomLabeltext("Default Allocated Time", showStar: false),
+                  // const SizedBox(height: 8),
+                  // CustomTextField(
+                  //   hintText: "Time in minutes",
+                  //   controller: timeController,
+                  //   isPassword: false,
+                  //   enableValidation: false,
+                  // ),
+                  // SizedBox(height: 10),
                   SizedBox(height: 10),
-
-                  CustomLabeltext("Service Price", showStar: false),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    hintText: "Price in BDT",
-                    controller: priceController,
-                    isPassword: false,
-                    enableValidation: false,
-                  ),
-                  SizedBox(height: 10),
-
-                  CustomLabeltext("Default Allocated Time", showStar: false),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    hintText: "Time in minutes",
-                    controller: timeController,
-                    isPassword: false,
-                    enableValidation: false,
-                  ),
-                  SizedBox(height: 10),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

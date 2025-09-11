@@ -12,6 +12,7 @@ import '../../../../providers/profile_provider/getprofile_provider.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/deleteServiceTypeProvider/deleteServiceTypeProvider.dart';
 import '../../../../providers/serviceCenter_provider/addButtonServiceType_Provider/getAddButtonServiceType.dart';
 import '../../../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
+import '../../../../providers/serviceCenter_provider/delete_service_type_service_type_provider/delete_service_type_service_type_provider.dart';
 import '../../../../providers/serviceCenter_provider/get_serviceCenter_serviceType_provider/get_service_center_service_type_provider.dart';
 import '../../../../utils/color.dart';
 
@@ -37,7 +38,6 @@ class _service_center_service_type_widgetState
       listen: false,
     );
     final companyId = getProfileProvider.profileData?.currentCompany.id;
-
     // Use a Future.delayed or addPostFrameCallback to ensure provider is ready
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
@@ -45,7 +45,6 @@ class _service_center_service_type_widgetState
         listen: false,
       );
       await getAddButtonProvider.fetchGetAddButton(companyId!);
-
       // Set the first service center as selected after data is fetched
       if (getAddButtonProvider.serviceCenterList.isNotEmpty) {
         setState(() {
@@ -54,7 +53,7 @@ class _service_center_service_type_widgetState
           Provider.of<get_service_center_service_type_provider>(
             context,
             listen: false,
-          ).second_fetchGetAddButton_ServiceType(_selectedServiceCenter!.id!);
+          ).fetch_service_center_service_type(_selectedServiceCenter!.id!);
         });
       }
     });
@@ -64,9 +63,6 @@ class _service_center_service_type_widgetState
   Widget build(BuildContext context) {
     final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
     final String? serviceTypeId = _selectedServiceType?.id;
-    final serviceTypeProvider = Provider.of<GetAddButtonServiceType_Provider>(
-      context,
-    );
     final secondGetServiceType =
         Provider.of<get_service_center_service_type_provider>(context);
 
@@ -100,7 +96,7 @@ class _service_center_service_type_widgetState
                           Provider.of<get_service_center_service_type_provider>(
                             context,
                             listen: false,
-                          ).second_fetchGetAddButton_ServiceType(
+                          ).fetch_service_center_service_type(
                             _selectedServiceCenter!.id!,
                           );
                         } else {
@@ -255,6 +251,7 @@ class _service_center_service_type_widgetState
                                             _showDeleteConfirmationMenu(
                                               context,
                                               serviceType,
+                                              _selectedServiceCenter!,
                                             );
                                           },
                                           child: Text(
@@ -295,7 +292,7 @@ class _service_center_service_type_widgetState
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return service_center_service_type_dialog(
+          return add_service_center_service_type_dialog(
             selectedServiceCenter:
                 _selectedServiceCenter, // Pass the selected model here
           );
@@ -319,6 +316,7 @@ class _service_center_service_type_widgetState
       builder: (context) {
         return update_servive_center_service_type_dialog(
           serviceType_model: serviceTypeModel,
+          selectedServiceCenter: _selectedServiceCenter,
         );
       },
     );
@@ -327,6 +325,7 @@ class _service_center_service_type_widgetState
   void _showDeleteConfirmationMenu(
     BuildContext menuContext,
     serviceTypeModel typeModel,
+    ServiceCenterModel serviceCenterModel,
   ) {
     // menuContext
     final RenderBox renderBox = menuContext.findRenderObject() as RenderBox;
@@ -336,13 +335,18 @@ class _service_center_service_type_widgetState
       context,
       listen: false,
     ).profileData?.currentCompany.id;
-    final deleteProvider = Provider.of<DeleteServiceTypeProvider>(
+    final deleteProvider = Provider.of<DeleteServiceTypeServiceTypeProvider>(
       context,
       listen: false,
     );
-    final getAddButtonServiceType =
-        Provider.of<GetAddButtonServiceType_Provider>(context, listen: false);
+
+    final get_addButton = Provider.of<get_service_center_service_type_provider>(
+      context,
+      listen: false,
+    );
+
     final String ServiceTypeId = typeModel.id;
+    final String ServiceCenterId = serviceCenterModel.id;
 
     showMenu<bool>(
       context: menuContext,
@@ -404,14 +408,16 @@ class _service_center_service_type_widgetState
                   GestureDetector(
                     onTap: () async {
                       Navigator.of(menuContext).pop(true);
-                      if (companyId == null) return;
-                      final success = await deleteProvider.delete_serviceType(
-                        companyId,
-                        ServiceTypeId,
-                      );
+
+                      final success = await deleteProvider
+                          .delete_ServiceCenter_serviceType(
+                            ServiceCenterId,
+                            ServiceTypeId,
+                          );
                       if (mounted && success) {
-                        await getAddButtonServiceType
-                            .fetchGetAddButton_ServiceType(companyId);
+                        await get_addButton.fetch_service_center_service_type(
+                          ServiceCenterId,
+                        );
                         CustomFlushbar.showSuccess(
                           context: context,
                           message: "User deleted successfully.",

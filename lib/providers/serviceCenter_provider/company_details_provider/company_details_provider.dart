@@ -20,10 +20,10 @@ class CompanyDetailsProvider with ChangeNotifier {
 
     try {
       _companyDetails = await _companyDetailsApi.companyInfo(companyId);
-      debugPrint("✅ Company details loaded for: ${_companyDetails?.name}");
+      debugPrint("Company details loaded for: ${_companyDetails?.name}");
     } catch (e) {
       _errorMessage = e.toString();
-      debugPrint("❌ Failed to load company details: $_errorMessage");
+      debugPrint("Failed to load company details: $_errorMessage");
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -57,9 +57,7 @@ class CompanyDetailsModel {
       thana: json['thana'] != null
           ? LocationPart.fromJson(json['thana'])
           : null,
-      area: json['area'] != null
-          ? LocationPart.fromJson(json['area'])
-          : null, // <<< পরিবর্তন
+      area: json['area'] != null ? LocationPart.fromJson(json['area']) : null,
       id: json['id'],
       name: json['name'],
       addressLine1: json['addressLine1'],

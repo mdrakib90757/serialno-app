@@ -31,7 +31,7 @@ class serviceCenter_serialBookProvider with ChangeNotifier {
     _token = prefs.getString("accessToken");
     print("Get_Token ${token}");
     debugPrint(
-      "✅ serviceCenter_serialBookProvider successfully read token: ${_token != null}",
+      "serviceCenter_serialBookProvider successfully read token: ${_token != null}",
     );
   }
 
@@ -42,13 +42,13 @@ class serviceCenter_serialBookProvider with ChangeNotifier {
     await getToken();
 
     if (companyId.isEmpty) {
-      print("❌ Company ID is missing. Can't fetch service centers.");
+      print("Company ID is missing. Can't fetch service centers.");
       _isLoading = false;
       notifyListeners();
       return;
     }
 
-    debugPrint("🚀 Fetching service centers for company: $companyId");
+    debugPrint(" Fetching service centers for company: $companyId");
     _serviceCenterList =
         await _servicecenter_bookserial_service.ServiceCenter_bookserialService(
           companyId,

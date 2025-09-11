@@ -234,16 +234,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
   @override
   Widget build(BuildContext context) {
     final bookProvider = Provider.of<bookSerialButton_provider>(context);
-    final businessProvider = Provider.of<BusinessTypeProvider>(context);
     final orgProvider = Provider.of<OrganizationProvider>(context);
-    final serviceCenterProvider = Provider.of<serviceCenter_serialBookProvider>(
-      context,
-    );
-    final serviceTypeProvider = Provider.of<serviceTypeSerialbook_Provider>(
-      context,
-    );
-
-    final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime selectedDialogDate = DateTime.now();
 
     // if () {
@@ -657,7 +648,8 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   SizedBox(height: 8),
                   CustomTextField(
                     controller: DateController,
-                    hintText: todayDate,
+                    hintText: "Select Date",
+                    readOnly: true,
                     isPassword: false,
                     suffixIcon: IconButton(
                       onPressed: () async {

@@ -25,7 +25,7 @@ class serviceTypeSerialbook_Provider with ChangeNotifier {
     _token = prefs.getString("accessToken");
     print("Get_Token ${token}");
     debugPrint(
-      "✅ serviceTypeSerial_book_Provider successfully read token: ${_token != null}",
+      " serviceTypeSerial_book_Provider successfully read token: ${_token != null}",
     );
   }
 
@@ -36,13 +36,13 @@ class serviceTypeSerialbook_Provider with ChangeNotifier {
     await getToken();
 
     if (companyId.isEmpty) {
-      print("❌ companyId ID is missing. Cannot fetch service types.");
+      print("companyId ID is missing. Cannot fetch service types.");
       _serviceTypeList = [];
       _isLoading = false;
       notifyListeners();
       return;
     }
-    debugPrint("🚀 Fetching service centers with a valid token...");
+    debugPrint("Fetching service centers with a valid token...");
 
     _serviceTypeList = await _typeserialbook_service
         .fetchServiceType_serialbook(companyId);

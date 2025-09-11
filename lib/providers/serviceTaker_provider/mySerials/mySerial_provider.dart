@@ -45,9 +45,7 @@ class MySerialServiceTakerProvider with ChangeNotifier {
 
       _allServices.addAll(newServices);
       _currentPage++;
-
       _groupData();
-      // ---------------------------------
     } catch (e) {
       // Handle error
     } finally {

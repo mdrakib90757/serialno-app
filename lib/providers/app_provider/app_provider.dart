@@ -22,6 +22,7 @@ import '../serviceCenter_provider/addUser_serviceCenter_provider/SingleUserInfoP
 import '../serviceCenter_provider/add_service_center_serviceType_provider/add_service_center_service_type_provider.dart';
 import '../serviceCenter_provider/business_type_provider/business_type_provider.dart';
 import '../serviceCenter_provider/company_details_provider/company_details_provider.dart';
+import '../serviceCenter_provider/delete_service_type_service_type_provider/delete_service_type_service_type_provider.dart';
 import '../serviceCenter_provider/editButtonServiceType_provider/editButtonServiceType_provider.dart';
 import '../serviceCenter_provider/editButtonServiceType_provider/getEditButtonServiceType_Provider.dart';
 import '../serviceCenter_provider/editButton_serviceCenter_provider/edit_Button_serviceCenter_Provider.dart';
@@ -93,6 +94,10 @@ class AppProviders {
         create: (context) => UpdateServiceCenterServiceTypeProvider(),
       ),
 
+      ChangeNotifierProvider(
+        create: (context) => DeleteServiceTypeServiceTypeProvider(),
+      ),
+
       ChangeNotifierProvider(create: (context) => NewSerialButtonProvider()),
       ChangeNotifierProvider(create: (context) => GetNewSerialButtonProvider()),
       ChangeNotifierProvider(create: (context) => QueueListEditProvider()),
@@ -104,6 +109,7 @@ class AppProviders {
       ChangeNotifierProvider(create: (context) => BusinessTypeProvider()),
       ChangeNotifierProvider(create: (context) => CompanyDetailsProvider()),
 
+      ///
       ChangeNotifierProvider(
         create: (context) => serviceTypeSerialbook_Provider(),
       ),

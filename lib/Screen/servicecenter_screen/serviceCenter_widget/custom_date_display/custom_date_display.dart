@@ -40,9 +40,7 @@ class _CustomDateDisplayState extends State<CustomDateDisplay> {
     if (isToday) {
       displayDayText = "Today";
     } else {
-      displayDayText = DateFormat(
-        'EEEE',
-      ).format(widget.selectedDate); // যেমন: "Sunday"
+      displayDayText = DateFormat('EEEE').format(widget.selectedDate);
     }
 
     return Consumer<GetNewSerialButtonProvider>(

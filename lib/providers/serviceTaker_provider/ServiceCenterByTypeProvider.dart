@@ -28,7 +28,7 @@ class ServiceCenterByTypeProvider with ChangeNotifier {
         '${apiConfig.baseUrl}/service-centers?businessTypeId=$businessTypeId',
       );
 
-      print('🚀 [New Provider] Calling: $url');
+      print('New Provider] Calling: $url');
       print("ServiceCenterByTypeProvider - ${businessTypeId}");
       print("--- Starting API call NOW ---");
       final response = await http

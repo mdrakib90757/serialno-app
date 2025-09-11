@@ -83,6 +83,13 @@ class AuthProvider with ChangeNotifier {
     }
 
     try {
+      // after add if condition code because token expire to user navigate login screen and user again login and next workflow
+      if (JwtDecoder.isExpired(token)) {
+        print("Token expired. Logging out...");
+        await logout();
+        return;
+      }
+
       _accessToken = token;
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
 

@@ -53,23 +53,11 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
           authProvider.userModel?.user.mobileNo ?? booking.contactNo ?? '';
       _nameController.text =
           (authProvider.userModel?.user.name ?? booking.name)!;
+      _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     } else {
       _contactNoController.text = booking.contactNo ?? '';
       _nameController.text = booking.name!;
     }
-    // final serviceTypeProvider = Provider.of<serviceTypeSerialbook_Provider>(context, listen: false);
-    // setState(() {
-    //   if (booking.serviceType?.name != null && serviceTypeProvider.serviceTypeList.isNotEmpty) {
-    //     _selectedServiceType = serviceTypeProvider.serviceTypeList.firstWhere(
-    //           (type) => type.name == booking.serviceType!.name,
-    //       orElse: () => serviceTypeProvider.serviceTypeList.first, // Default to the first item
-    //     );
-    //   } else if (serviceTypeProvider.serviceTypeList.isNotEmpty) {
-    //     _selectedServiceType = serviceTypeProvider.serviceTypeList.first; // Default if booking.serviceType is null
-    //   } else {
-    //     _selectedServiceType = null;
-    //   }
-    // });
   }
 
   void _fetchInitialData() {
@@ -92,11 +80,10 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                   .firstWhere(
                     (type) =>
                         type.name == widget.bookingDetails.serviceType!.name,
-                    orElse: () => null!, // Return null if not found
+                    orElse: () => null!,
                   );
             } else {
-              _selectedServiceType =
-                  null; // Set to null if booking.serviceType?.name is null
+              _selectedServiceType = null;
             }
           });
         }
@@ -108,7 +95,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //_initializeFields();
   }
 
   @override
@@ -214,13 +200,11 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
 
   @override
   Widget build(BuildContext context) {
-    final updateProvider = Provider.of<UpdateBookSerialProvider>(context);
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final updateProvider = Provider.of<UpdateBookSerialProvider>(
+      context,
+      listen: false,
+    );
     final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final String selectedDateString = DateFormat(
-      'yyyy-MM-dd',
-    ).format(_selectedDate);
-    final bool isToday = todayString == selectedDateString;
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -280,16 +264,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                   SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
                     builder: (context, serviceTypeProvider, child) {
-                      // if (serviceTypeProvider.isLoading &&
-                      //     serviceTypeProvider.serviceTypeList.isEmpty) {
-                      //   return Center(
-                      //     child: CustomLoading(
-                      //       color: AppColor().primariColor,
-                      //       //size: 20,
-                      //       strokeWidth: 2.5,
-                      //     ),
-                      //   );
-                      // }
                       return CustomDropdown<serviceTypeModel>(
                         items: serviceTypeProvider.serviceTypeList,
 
@@ -449,15 +423,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomLabeltext("Contact No"),
-                        SizedBox(height: 10),
-                        CustomTextField(
-                          enabled: false,
-                          filled: true,
-                          isPassword: false,
-                          controller: _contactNoController,
-                        ),
-                        SizedBox(height: 15),
                         CustomLabeltext("Name"),
                         SizedBox(height: 10),
                         CustomTextField(
@@ -465,6 +430,15 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                           filled: true,
                           isPassword: false,
                           controller: _nameController,
+                        ),
+                        SizedBox(height: 10),
+                        CustomLabeltext("Contact No"),
+                        SizedBox(height: 10),
+                        CustomTextField(
+                          enabled: false,
+                          filled: true,
+                          isPassword: false,
+                          controller: _contactNoController,
                         ),
                       ],
                     ),
