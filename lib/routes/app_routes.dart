@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
 import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 import '../Screen/Auth_screen/login_screen.dart';
+import '../main_layouts/service_center_layout/service_center_layout.dart';
+import '../main_layouts/service_taker_layout/service_taker_layout.dart';
 
 class AppRouteNames {
   static const String login = '/login';
@@ -12,9 +14,7 @@ class AppRouteNames {
 class AppRouter {
   static final Map<String, WidgetBuilder> routes = {
     AppRouteNames.login: (context) => const LoginScreen(),
-    AppRouteNames.companyHome: (context) =>
-        const CustomServicecenterNavigationbar(),
-    AppRouteNames.customerHome: (context) =>
-        const CustomServicetakerNavigationbar(),
+    AppRouteNames.companyHome: (context) => ServiceCenterLayout(),
+    AppRouteNames.customerHome: (context) => const ServiceTakerLayout(),
   };
 }

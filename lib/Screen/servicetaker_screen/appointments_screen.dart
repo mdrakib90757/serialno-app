@@ -3,8 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/serviceTaker_provider/mySerials/mySerial_provider.dart';
 import 'package:serialno_app/utils/color.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
+import '../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
 import '../../utils/date_formatter/date_formatter.dart';
 
 class AppointmentsScreen extends StatefulWidget {
@@ -53,29 +55,42 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Serial History",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: (mySerialProvider.isLoading)
+          ? CustomShimmerList(itemCount: 10)
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Serial History",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Expanded(child: _buildBody(mySerialProvider)),
+                ],
+              ),
             ),
-            Expanded(child: _buildBody(mySerialProvider)),
-          ],
-        ),
-      ),
     );
   }
 
   Widget _buildBody(MySerialServiceTakerProvider provider) {
-    if (provider.isLoading) {
+    // if (provider.isLoading) {
+    //   return CustomShimmerList(itemCount: 10,);
+    // }
+
+    if (provider.sortedDates.isEmpty) {
       return Center(
-        child: CustomLoading(
-          color: AppColor().primariColor,
-          //size: 20,
-          strokeWidth: 2.5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
+            const SizedBox(height: 12),
+            Text(
+              'No Serial Found',
+              style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+            ),
+          ],
         ),
       );
     }
@@ -87,7 +102,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           children: [
             Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
             SizedBox(height: 12),
-
             Text(
               'No Serial Found',
               style: TextStyle(fontSize: 16, color: Colors.grey[300]),
@@ -189,16 +203,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                       border: Border.all(color: Colors.grey.shade300),
                     ),
                     child: ListTile(
-                      // leading: CircleAvatar(
-                      //   backgroundColor: Colors.grey.shade400,
-                      //   child: Text(
-                      //     serialData.serialNo.toString(),
-                      //     style:  TextStyle(
-                      //       fontWeight: FontWeight.bold,
-                      //       color: AppColor().primariColor
-                      //     ),
-                      //   ),
-                      // ),
                       title: Text(
                         serialData.company?.name ?? 'N/A',
                         style: TextStyle(color: Colors.grey.shade700),

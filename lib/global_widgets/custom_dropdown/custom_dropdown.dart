@@ -2,23 +2,25 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdown<T> extends StatefulWidget {
-  final Widget child;
+  final Widget? child;
   final List<T> items;
   final T? value;
   final T? selectedItem;
   final ValueChanged<T> onChanged;
   final String Function(T item) itemAsString;
   final double popupHeight;
+  final Widget Function(BuildContext, T?)? dropdownBuilder;
 
   const CustomDropdown({
     Key? key,
-    required this.child,
+    this.child,
     required this.items,
     this.value,
     required this.onChanged,
     required this.itemAsString,
     this.popupHeight = 200.0,
     this.selectedItem,
+    this.dropdownBuilder,
   }) : super(key: key);
 
   @override
@@ -71,7 +73,9 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             Positioned.fill(
               child: GestureDetector(
                 onTap: _closePopup,
-                child: Container(color: Colors.transparent),
+                child: widget.dropdownBuilder != null
+                    ? widget.dropdownBuilder!(context, widget.value)
+                    : widget.child,
               ),
             ),
             Positioned(

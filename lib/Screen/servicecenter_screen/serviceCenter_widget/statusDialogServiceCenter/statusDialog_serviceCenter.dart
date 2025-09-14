@@ -152,8 +152,8 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               ),
 
               if (_selectedStatus == 'Served') ...[
-                Text("Collected Amount (BDT)"),
-                SizedBox(height: 8),
+                const Text("Collected Amount (BDT)"),
+                const SizedBox(height: 8),
                 CustomTextField(
                   readOnly: false,
                   controller: _amountController,

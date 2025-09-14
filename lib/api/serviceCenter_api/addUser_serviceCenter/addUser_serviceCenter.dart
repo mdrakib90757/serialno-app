@@ -33,7 +33,7 @@ class AddUserServiceCenter {
           .toList();
       return users;
     } catch (e) {
-      print("❌ Error fetching company users: $e");
+      print("Error fetching company users: $e");
       return [];
     }
   }
@@ -49,7 +49,7 @@ class AddUserServiceCenter {
       );
       return AddUserModel.fromJson(response as Map<String, dynamic>);
     } catch (e) {
-      print("❌ Error fetching single user info: $e");
+      print("Error fetching single user info: $e");
       throw Exception('Failed to load user details');
     }
   }
@@ -68,7 +68,7 @@ class AddUserServiceCenter {
       );
       return response;
     } catch (e) {
-      print("❌ Error Update AddUser info: $e");
+      print("Error Update AddUser info: $e");
       throw Exception('Failed to load Adduser details');
     }
   }
@@ -80,7 +80,7 @@ class AddUserServiceCenter {
         "/serial-no/companies/$companyId/service-men/$userId",
       );
     } catch (e) {
-      print("❌ Error in deleteUser API: $e");
+      print("Error in deleteUser API: $e");
       rethrow;
     }
   }

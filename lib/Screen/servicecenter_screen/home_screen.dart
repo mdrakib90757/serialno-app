@@ -8,6 +8,7 @@ import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/cu
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/new_serial_button_dialog/new_serial_button_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/queue_list_edit_dialog/queue_list_edit_dialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/statusDialogServiceCenter/statusDialog_serviceCenter.dart';
+import 'package:serialno_app/global_widgets/custom_shimmer_list/CustomShimmerList%20.dart';
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../global_widgets/custom_flushbar.dart';
@@ -142,37 +143,17 @@ class _HomeScreenState extends State<HomeScreen>
     if (profile == null || getAddButtonProvider.isLoading) {
       return Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: CustomLoading(
-            color: AppColor().primariColor,
-            // size: 20,
-            strokeWidth: 2.5,
-          ),
-        ),
+        body: CustomShimmerList(itemCount: 10),
       );
     }
-    final company = profile.currentCompany;
 
-    if (!_isInitialDataLoaded ||
-        getAddButtonProvider.isLoading ||
-        singleUserInfoProvider.isLoading) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: CustomLoading(
-            color: AppColor().primariColor,
-            //size: 20,
-            strokeWidth: 2.5,
-          ),
-        ),
-      );
-    }
+    final company = profile.currentCompany;
 
     final userInfo = singleUserInfoProvider.userInfo;
     if (userInfo == null) {
       return Scaffold(
         backgroundColor: Colors.white,
-        body: Center(child: Text("Could not load user's service center info.")),
+        body: CustomShimmerList(itemCount: 10),
       );
     }
 
@@ -199,10 +180,12 @@ class _HomeScreenState extends State<HomeScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(company.name, style: GoogleFonts.acme(fontSize: 25)),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
+
             //customToday date and serving circle
             CustomDateDisplay(selectedDate: _selectedDate),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
+
             //service center dropdown
             Container(
               height: 47,
@@ -243,7 +226,8 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
+
             //serviceCenter date
             Row(
               children: [
@@ -325,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
 
             //serial button and next button
             Row(
@@ -688,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen>
                 Tab(text: "Served(${serialProvider.totalServedCount})"),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             //tabBar list
             Expanded(
               child: TabBarView(
@@ -746,13 +730,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Consumer<GetNewSerialButtonProvider>(
       builder: (context, serialProvider, child) {
         if (serialProvider.isLoading) {
-          return Center(
-            child: CustomLoading(
-              color: AppColor().primariColor,
-              //size: 20,
-              strokeWidth: 2.5,
-            ),
-          );
+          return CustomShimmerList(itemCount: 10);
         }
         final queueList = serialProvider.queueSerials;
         if (queueList.isEmpty) {
@@ -818,7 +796,7 @@ class _HomeScreenState extends State<HomeScreen>
                     radius: 22,
                     child: Icon(Icons.person, color: Colors.white),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -837,7 +815,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
 
                                 if (isToday && canBeEdited) ...[
                                   GestureDetector(
@@ -933,7 +911,7 @@ class _HomeScreenState extends State<HomeScreen>
                   size: 60,
                   color: Colors.grey.shade300,
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
 
                 Text(
                   'No items have been served yet',
@@ -1008,13 +986,13 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   CircleAvatar(
                     backgroundColor: Colors.grey.shade500,
                     radius: 22,
                     child: Icon(Icons.person, color: Colors.white),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

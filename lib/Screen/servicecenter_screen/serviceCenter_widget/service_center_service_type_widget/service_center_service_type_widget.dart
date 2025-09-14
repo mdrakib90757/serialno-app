@@ -6,6 +6,7 @@ import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/up
 import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
+import '../../../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
 import '../../../../model/serviceCenter_model.dart';
 import '../../../../model/service_type_model.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
@@ -84,7 +85,7 @@ class _service_center_service_type_widgetState
             children: [
               Expanded(
                 child: Container(
-                  height: 47,
+                  height: 45,
                   child: CustomDropdown<ServiceCenterModel>(
                     selectedItem: _selectedServiceCenter,
                     items: serviceCenterProvider.serviceCenterList,
@@ -180,107 +181,106 @@ class _service_center_service_type_widgetState
             ],
           ),
           SizedBox(height: 10),
-          secondGetServiceType.isLoading
-              ? Center(
-                  child: CustomLoading(
-                    color: AppColor().primariColor,
-                    strokeWidth: 2.5,
-                  ),
-                )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount:
-                      secondGetServiceType.serviceTypesOfSelectedCenter.length,
-                  itemBuilder: (context, index) {
-                    final serviceType = secondGetServiceType
-                        .serviceTypesOfSelectedCenter[index];
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${serviceType.name}",
-                              style: TextStyle(
-                                color: AppColor().primariColor,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "${serviceType.price} BDT",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                  ),
+          Center(
+            child: secondGetServiceType.isLoading
+                ? CustomShimmerList(itemCount: 10)
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: secondGetServiceType
+                        .serviceTypesOfSelectedCenter
+                        .length,
+                    itemBuilder: (context, index) {
+                      final serviceType = secondGetServiceType
+                          .serviceTypesOfSelectedCenter[index];
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${serviceType.name}",
+                                style: TextStyle(
+                                  color: AppColor().primariColor,
+                                  fontSize: 18,
                                 ),
-                                Spacer(),
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        _showDialogBoxEDIT(
-                                          context,
-                                          serviceType,
-                                        );
-                                      },
-                                      child: Text(
-                                        "Edit",
-                                        style: TextStyle(
-                                          color: AppColor().scoenddaryColor,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${serviceType.price} BDT",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          _showDialogBoxEDIT(
+                                            context,
+                                            serviceType,
+                                          );
+                                        },
+                                        child: Text(
+                                          "Edit",
+                                          style: TextStyle(
+                                            color: AppColor().scoenddaryColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Builder(
-                                      builder: (BuildContext context) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            _showDeleteConfirmationMenu(
-                                              context,
-                                              serviceType,
-                                              _selectedServiceCenter!,
-                                            );
-                                          },
-                                          child: Text(
-                                            "Delete",
-                                            style: TextStyle(
-                                              color: AppColor().scoenddaryColor,
-                                              fontSize: 15,
+                                      SizedBox(width: 10),
+                                      Builder(
+                                        builder: (BuildContext context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              _showDeleteConfirmationMenu(
+                                                context,
+                                                serviceType,
+                                                _selectedServiceCenter!,
+                                              );
+                                            },
+                                            child: Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                color:
+                                                    AppColor().scoenddaryColor,
+                                                fontSize: 15,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "${serviceType.defaultAllocatedTime} Minutes",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                              Text(
+                                "${serviceType.defaultAllocatedTime} Minutes",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
+          ),
         ],
       ),
     );

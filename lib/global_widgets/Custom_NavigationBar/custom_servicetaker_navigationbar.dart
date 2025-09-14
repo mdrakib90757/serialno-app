@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:serialno_app/providers/app_provider/app_provider.dart';
-
-import '../../Screen/profile_screen/profile_screen.dart';
-import '../../Screen/servicetaker_screen/appointments_screen.dart';
-import '../../Screen/servicetaker_screen/servicetaker_homescreen.dart';
-import '../../Screen/servicetaker_screen/setting_screen.dart';
 import '../../utils/color.dart';
-import '../my_Appbar.dart';
-import 'my_bottom_navigationBar/my_bottom_navigationBar.dart';
 
 class CustomServicetakerNavigationbar extends StatefulWidget {
-  const CustomServicetakerNavigationbar({super.key});
+  final int currentIndex;
+  final Function(int) onTap;
+  const CustomServicetakerNavigationbar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   State<CustomServicetakerNavigationbar> createState() =>
@@ -20,92 +17,55 @@ class CustomServicetakerNavigationbar extends StatefulWidget {
 
 class _CustomServicetakerNavigationbarState
     extends State<CustomServicetakerNavigationbar> {
-  int _currentIndex = 0;
-  final List<Widget> _screen = [
-    ServicetakerHomescreen(businessTypeId: ''),
-    AppointmentsScreen(),
-    SettingScreen(),
-    ProfileScreen(
-      showAppBar: false,
-      showBottomNavBar: false,
-      isServiceTaker: false,
-    ),
-  ];
-
-  void _onItemTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppbar(
-        onLogotap: () {
-          setState(() {
-            _currentIndex = 0;
-          });
-        },
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 3),
+        ],
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
       ),
-      body: _screen[_currentIndex],
-      bottomNavigationBar: MyBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onItemTap,
-        isServicetaker: true,
-      ),
+      child: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        currentIndex: widget.currentIndex >= 0 ? widget.currentIndex : 0,
+        onTap: widget.onTap,
 
-      // Container(
-      //   height: 70,
-      //   decoration: BoxDecoration(
-      //     boxShadow: [
-      //       BoxShadow(color: Colors.black12, spreadRadius: 2, blurRadius: 3),
-      //     ],
-      //     borderRadius: BorderRadius.only(
-      //       topLeft: Radius.circular(20),
-      //       topRight: Radius.circular(20),
-      //     ),
-      //   ),
-      //   child: BottomNavigationBar(
-      //     backgroundColor: Colors.white,
-      //     currentIndex: _currentIndex,
-      //     onTap: (index) {
-      //       setState(() {
-      //         _currentIndex = index;
-      //       });
-      //     },
-      //
-      //     elevation: 50,
-      //     selectedItemColor: AppColor().primariColor,
-      //     unselectedItemColor: Colors.grey.shade600,
-      //     type: BottomNavigationBarType.fixed,
-      //     iconSize: 25,
-      //     items: [
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.home_outlined, size: 33),
-      //         activeIcon: Icon(Icons.home, size: 33),
-      //
-      //         label: 'Home',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.sync, size: 33),
-      //         activeIcon: Icon(Icons.cloud_sync, size: 33),
-      //         label: "My Serials",
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.settings_outlined, size: 33),
-      //         activeIcon: Icon(Icons.settings, size: 33),
-      //         label: "Settings",
-      //       ),
-      //
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.person_outline, size: 33),
-      //         activeIcon: Icon(Icons.person, size: 33),
-      //         label: "Settings",
-      //       ),
-      //     ],
-      //   ),
-      // ),
+        elevation: 50,
+        selectedItemColor: widget.currentIndex == -1
+            ? Colors.transparent
+            : AppColor().primariColor,
+        unselectedItemColor: Colors.grey.shade600,
+        type: BottomNavigationBarType.fixed,
+        iconSize: 25,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined, size: 33),
+            activeIcon: Icon(Icons.home, size: 33),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.sync, size: 33),
+            activeIcon: Icon(Icons.cloud_sync, size: 33),
+            label: "My Serials",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_outlined, size: 33),
+            activeIcon: Icon(Icons.settings, size: 33),
+            label: "Settings",
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, size: 33),
+            activeIcon: Icon(Icons.person, size: 33),
+            label: "Profile",
+          ),
+        ],
+      ),
     );
   }
 }

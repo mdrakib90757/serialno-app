@@ -2,12 +2,13 @@ import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/weekly_offdays_dropdown/weekly_offdays_dropdown.dart';
+import 'package:serialno_app/global_widgets/My_Appbar.dart';
+import 'package:serialno_app/main_layouts/main_layout/main_layout.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/add_Button_serviceCanter_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/addButton_request/add_Button_request.dart';
 import 'package:serialno_app/utils/color.dart';
-
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
@@ -16,7 +17,7 @@ import '../add_service_center_tab_button/add_service_center_tab_button.dart';
 import '../add_service_center_time_picker/add_service_center_time_picker.dart';
 
 class Add_button_Dialog_serviceCenter_screen extends StatefulWidget {
-  const Add_button_Dialog_serviceCenter_screen({Key? key}) : super(key: key);
+  const Add_button_Dialog_serviceCenter_screen({super.key});
 
   @override
   _Add_button_Dialog_serviceCenter_screenState createState() =>
@@ -169,18 +170,16 @@ class _Add_button_Dialog_serviceCenter_screenState
   @override
   Widget build(BuildContext context) {
     final addButtonProvider = Provider.of<AddButtonProvider>(context);
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        //side: BorderSide(color: AppColor().primariColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        child: Form(
-          key: _dialogFormKey,
-          child: SingleChildScrollView(
+    return MainLayout(
+      currentIndex: 0,
+      onTap: (p0) {},
+      color: Colors.white,
+      userType: UserType.company,
+      child: Form(
+        key: _dialogFormKey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -196,10 +195,10 @@ class _Add_button_Dialog_serviceCenter_screenState
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close_sharp),
-                    ),
+                    // IconButton(
+                    //   onPressed: () => Navigator.pop(context),
+                    //   icon: const Icon(Icons.close_sharp),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -218,20 +217,22 @@ class _Add_button_Dialog_serviceCenter_screenState
                   controller: _hotLineController,
                   hintText: "HotlineNo",
                   isPassword: false,
+                  keyboardType: TextInputType.number,
                 ),
 
                 const SizedBox(height: 10),
-                CustomLabeltext("Email", showStar: false),
+                const CustomLabeltext("Email", showStar: false),
                 const SizedBox(height: 8),
                 CustomTextField(
                   controller: _emailController,
                   hintText: "Email",
                   isPassword: false,
                   enableValidation: false,
+                  keyboardType: TextInputType.emailAddress,
                 ),
 
                 const SizedBox(height: 10),
-                CustomLabeltext("Weekly off-day", showStar: false),
+                const CustomLabeltext("Weekly off-day", showStar: false),
                 const SizedBox(height: 8),
                 WeeklyOff_daysDropdown(
                   availableDays: _availableDays,
@@ -242,7 +243,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                   },
                 ),
 
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomFieldWithTabs(
                   onEndTimeChanged: (time) {
                     setState(() {
@@ -258,8 +259,8 @@ class _Add_button_Dialog_serviceCenter_screenState
                   textController: _customFieldTextController,
                 ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Advance Serials", showStar: false),
+                const SizedBox(height: 10),
+                const CustomLabeltext("Advance Serials", showStar: false),
                 const SizedBox(height: 8),
                 CustomTextField(
                   controller: _advanceSerialController,
@@ -276,11 +277,12 @@ class _Add_button_Dialog_serviceCenter_screenState
                     minWidth: 0,
                     minHeight: 0,
                   ),
+                  keyboardType: TextInputType.number,
                 ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Serial Number Policy", showStar: false),
-                SizedBox(height: 8),
+                const SizedBox(height: 10),
+                const CustomLabeltext("Serial Number Policy", showStar: false),
+                const SizedBox(height: 8),
                 CustomTab(
                   onPolicyChanged: (policy) {
                     setState(() {
@@ -289,9 +291,9 @@ class _Add_button_Dialog_serviceCenter_screenState
                   },
                 ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Reserved Serials", showStar: false),
-                SizedBox(height: 8),
+                const SizedBox(height: 10),
+                const CustomLabeltext("Reserved Serials", showStar: false),
+                const SizedBox(height: 8),
                 TextFormField(
                   cursorColor: Colors.grey.shade400,
                   controller: _reservedController,
@@ -343,19 +345,20 @@ class _Add_button_Dialog_serviceCenter_screenState
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 CustomLabeltext("Daily Quota", showStar: false),
                 const SizedBox(height: 8),
                 CustomTextField(
                   controller: _dailyQuotaController,
                   isPassword: false,
+                  keyboardType: TextInputType.number,
                   enableValidation: false,
                   suffixIcon: Container(
                     width: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Center(child: Text("Day(s)")),
+                    child: const Center(child: Text("Serials")),
                   ),
                   suffixIconConstraints: const BoxConstraints(
                     minWidth: 0,
@@ -365,7 +368,7 @@ class _Add_button_Dialog_serviceCenter_screenState
 
                 const SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -399,6 +402,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                     ),
                   ],
                 ),
+                SizedBox(height: 30),
               ],
             ),
           ),

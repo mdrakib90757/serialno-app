@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/AssignedServiceCenter/AssignedServiceCenter.dart';
+import 'package:serialno_app/global_widgets/custom_shimmer_list/CustomShimmerList%20.dart';
 import 'package:serialno_app/model/roles_model.dart';
 import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
@@ -11,16 +12,27 @@ import 'package:serialno_app/providers/serviceCenter_provider/roles_service_cent
 import 'package:serialno_app/request_model/serviceCanter_request/addUser_serviceCenterRequest/addUser_ServiceCenter_request.dart';
 import 'package:serialno_app/utils/color.dart';
 import 'package:serialno_app/utils/date_formatter/date_formatter.dart';
+import '../../../../global_widgets/My_Appbar.dart';
 import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
 import '../../../../global_widgets/custom_textfield.dart';
+import '../../../../main_layouts/main_layout/main_layout.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 
 class AddUser_SettingServiceCenterDialog extends StatefulWidget {
-  const AddUser_SettingServiceCenterDialog({super.key});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+
+  const AddUser_SettingServiceCenterDialog({
+    super.key,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<AddUser_SettingServiceCenterDialog> createState() =>
@@ -61,7 +73,7 @@ class _AddUser_SettingServiceCenterDialogState
         listen: false,
       ).fetchSerialsButton(_selectedServiceCenter!.id!, formattedDate);
     } else {
-      debugPrint("_fetchDataForUI called but _selectedServiceCenter is null.");
+      debugPrint("fetchDataForUI called but _selectedServiceCenter is null.");
     }
   }
 
@@ -164,312 +176,311 @@ class _AddUser_SettingServiceCenterDialogState
     );
     final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
     final rolesProvider = Provider.of<RolesProvider>(context);
-    if (rolesProvider.isLoading) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: CustomLoading(
-            color: AppColor().primariColor,
-            // size: 20,
-            strokeWidth: 2.5,
-          ),
-        ),
-      );
-    }
-
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        // side: BorderSide(color: AppColor().primariColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Form(
-          key: _fromkey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Add User",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.close, color: Colors.black),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 13),
-
-                CustomLabeltext("Name"),
-                SizedBox(height: 8),
-                CustomTextField(
-                  controller: _nameController,
-                  isPassword: false,
-                  hintText: "Name",
-                  // prefixIcon: Icons.person,
-                  prefixIconConstraints: const BoxConstraints(
-                    minWidth: 0,
-                    minHeight: 0,
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Login Name"),
-                SizedBox(height: 8),
-                CustomTextField(
-                  controller: _loginNameController,
-                  hintText: "Login Name",
-                  isPassword: false,
-                  prefixIconConstraints: const BoxConstraints(
-                    minWidth: 0,
-                    minHeight: 0,
-                  ),
-                  //controller: phone
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Email Address"),
-                SizedBox(height: 8),
-                CustomTextField(
-                  controller: _emailController,
-                  hintText: "Email address",
-                  isPassword: false,
-                  //prefixIcon: Icons.email_outlined,
-                  prefixIconConstraints: const BoxConstraints(
-                    minWidth: 0,
-                    minHeight: 0,
-                  ),
-                  //controller: phone
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Mobile Number"),
-                SizedBox(height: 8),
-                CustomTextField(
-                  controller: _phoneController,
-                  hintText: "Mobile Number",
-                  isPassword: false,
-                  //controller: phone,
-                  //prefixIcon: Icons.call,
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Role"),
-                SizedBox(height: 10),
-                Container(
-                  height: 47,
-                  child: CustomDropdown<Data>(
-                    items: rolesProvider.roles,
-                    value: _selectedRole,
-                    onChanged: (Data? newValue) {
-                      setState(() {
-                        _selectedRole = newValue;
-                      });
-                    },
-                    itemAsString: (Data? item) => item?.name ?? "No name",
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
+    return MainLayout(
+      currentIndex: 0,
+      onTap: (p0) {},
+      color: Colors.white,
+      userType: UserType.company,
+      child: (rolesProvider.isLoading)
+          ? CustomShimmerList(itemCount: 10)
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: Form(
+                key: _fromkey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            _selectedRole?.name ?? "Select Role",
+                            "Add User",
                             style: TextStyle(
-                              color: _selectedRole != null
-                                  ? Colors.black
-                                  : Colors.grey.shade600,
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.pop(context);
+                          //   },
+                          //   child: Icon(Icons.close, color: Colors.black),
+                          // ),
+                        ],
+                      ),
+                      const SizedBox(height: 13),
+
+                      const CustomLabeltext("Name"),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        controller: _nameController,
+                        isPassword: false,
+                        hintText: "Name",
+                        // prefixIcon: Icons.person,
+                        prefixIconConstraints: const BoxConstraints(
+                          minWidth: 0,
+                          minHeight: 0,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Login Name"),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        controller: _loginNameController,
+                        hintText: "Login Name",
+                        isPassword: false,
+                        prefixIconConstraints: const BoxConstraints(
+                          minWidth: 0,
+                          minHeight: 0,
+                        ),
+                        //controller: phone
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Email Address"),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        controller: _emailController,
+                        hintText: "Email address",
+                        isPassword: false,
+                        keyboardType: TextInputType.emailAddress,
+                        //prefixIcon: Icons.email_outlined,
+                        prefixIconConstraints: const BoxConstraints(
+                          minWidth: 0,
+                          minHeight: 0,
+                        ),
+                        //controller: phone
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Mobile Number"),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        controller: _phoneController,
+                        hintText: "Mobile Number",
+                        isPassword: false,
+                        keyboardType: TextInputType.number,
+                        //controller: phone,
+                        //prefixIcon: Icons.call,
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Role"),
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 47,
+                        child: CustomDropdown<Data>(
+                          items: rolesProvider.roles,
+                          value: _selectedRole,
+                          onChanged: (Data? newValue) {
+                            setState(() {
+                              _selectedRole = newValue;
+                            });
+                          },
+                          itemAsString: (Data? item) => item?.name ?? "No name",
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _selectedRole?.name ?? "Select Role",
+                                  style: TextStyle(
+                                    color: _selectedRole != null
+                                        ? Colors.black
+                                        : Colors.grey.shade600,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      CustomLabeltext(
+                        "Assigned Service Center",
+                        showStar: false,
+                      ),
+                      const SizedBox(height: 10),
+                      AssignedServiceCentersDropdown(
+                        availableServiceCenters:
+                            serviceCenterProvider.serviceCenterList,
+                        initialSelectedCenters: _selectedServiceCentersForUser,
+                        onSelectionChanged: (selectedList) {
+                          setState(() {
+                            _selectedServiceCentersForUser = selectedList;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Password"),
+                      const SizedBox(height: 12),
+                      CustomTextField(
+                        controller: _passwordController,
+                        // prefixIcon: Icons.lock,
+                        hintText: "Password",
+                        isPassword: true,
+                        // controller: password,
+                      ),
+
+                      const SizedBox(height: 10),
+                      CustomLabeltext("Confirm Password"),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        onChanged: (value) {
+                          setState(
+                            () => _autovalidateMode = AutovalidateMode.always,
+                          );
+                          _fromkey.currentState?.validate();
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Required";
+                          } else {
+                            if (value != _passwordController.text) {
+                              return "Passwords do not match";
+                            }
+                          }
+                          return null;
+                        },
+
+                        // controller: confirmPassword,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          // prefixIcon: Icon(
+                          //   Icons.lock_outline,
+                          //   color: Colors.grey.shade400,
+                          // ),
+                          hintText: "Confirm password",
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontSize: 15,
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                obscureIndex1 = !obscureIndex1;
+                                _fromkey.currentState?.validate();
+                              });
+                            },
+                            icon: Icon(
+                              obscureIndex1
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ),
+                        cursorColor: Colors.grey.shade500,
+                        obscureText: obscureIndex1,
+                        obscuringCharacter: "*",
+                      ),
+                      SizedBox(height: 10),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _isActive == true ? "Active" : "Inactive",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Transform.scale(
+                            scale: 1,
+                            child: Switch(
+                              padding: EdgeInsets.all(5),
+                              value: _isActive,
+                              onChanged: (bool newValue) {
+                                setState(() {
+                                  _isActive = newValue;
+                                });
+                              },
+                              activeColor: Colors.white,
+                              activeTrackColor: AppColor().primariColor,
+                              inactiveTrackColor: Colors.grey.shade200,
+                            ),
                           ),
                         ],
                       ),
-                    ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusGeometry.circular(5),
+                              ),
+                              backgroundColor: AppColor().primariColor,
+                            ),
+                            onPressed: _saveAddUser,
+                            child: getAddUserButton.isLoading
+                                ? Text(
+                                    "Please Wait",
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                : Text(
+                                    "Save",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                          ),
+                          SizedBox(width: 8),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusGeometry.circular(5),
+                              ),
+                              backgroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "cancel",
+                              style: TextStyle(color: AppColor().primariColor),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                    ],
                   ),
                 ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Assigned Service Center", showStar: false),
-                SizedBox(height: 10),
-                AssignedServiceCentersDropdown(
-                  availableServiceCenters:
-                      serviceCenterProvider.serviceCenterList,
-                  initialSelectedCenters: _selectedServiceCentersForUser,
-                  onSelectionChanged: (selectedList) {
-                    setState(() {
-                      _selectedServiceCentersForUser = selectedList;
-                    });
-                  },
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Password"),
-                SizedBox(height: 12),
-                CustomTextField(
-                  controller: _passwordController,
-                  // prefixIcon: Icons.lock,
-                  hintText: "Password",
-                  isPassword: true,
-                  // controller: password,
-                ),
-
-                SizedBox(height: 10),
-                CustomLabeltext("Confirm Password"),
-                SizedBox(height: 8),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  onChanged: (value) {
-                    setState(() => _autovalidateMode = AutovalidateMode.always);
-                    _fromkey.currentState?.validate();
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Required";
-                    } else {
-                      if (value != _passwordController.text) {
-                        return "Passwords do not match";
-                      }
-                    }
-                    return null;
-                  },
-
-                  // controller: confirmPassword,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
-                    ),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey.shade400),
-                    ),
-                    // prefixIcon: Icon(
-                    //   Icons.lock_outline,
-                    //   color: Colors.grey.shade400,
-                    // ),
-                    hintText: "Confirm password",
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontSize: 15,
-                    ),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscureIndex1 = !obscureIndex1;
-                          _fromkey.currentState?.validate();
-                        });
-                      },
-                      icon: Icon(
-                        obscureIndex1
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_off_outlined,
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ),
-                  obscureText: obscureIndex1,
-                  obscuringCharacter: "*",
-                ),
-                SizedBox(height: 10),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _isActive == true ? "Active" : "Inactive",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: 1,
-                      child: Switch(
-                        padding: EdgeInsets.all(5),
-                        value: _isActive,
-                        onChanged: (bool newValue) {
-                          setState(() {
-                            _isActive = newValue;
-                          });
-                        },
-                        activeColor: Colors.white,
-                        activeTrackColor: AppColor().primariColor,
-                        inactiveTrackColor: Colors.grey.shade200,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(5),
-                        ),
-                        backgroundColor: AppColor().primariColor,
-                      ),
-                      onPressed: _saveAddUser,
-                      child: getAddUserButton.isLoading
-                          ? Text(
-                              "Please Wait",
-                              style: TextStyle(color: Colors.white),
-                            )
-                          : Text("Save", style: TextStyle(color: Colors.white)),
-                    ),
-                    SizedBox(width: 8),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(5),
-                        ),
-                        backgroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "cancel",
-                        style: TextStyle(color: AppColor().primariColor),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

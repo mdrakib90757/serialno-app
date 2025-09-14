@@ -18,7 +18,7 @@ class _SettingScreenState extends State<SettingScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
 
             Text(
               'No Data Found',

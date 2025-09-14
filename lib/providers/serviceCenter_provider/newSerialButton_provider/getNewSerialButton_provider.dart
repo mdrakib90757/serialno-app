@@ -7,9 +7,6 @@ class GetNewSerialButtonProvider with ChangeNotifier {
   final NewSerialButtonService _newSerialButtonService =
       NewSerialButtonService();
 
-  // List<SerialModel> _serials = [];
-  // List<SerialModel> get serials => _serials;
-
   List<SerialModel> _allSerials = [];
 
   bool _isLoading = false;
@@ -17,14 +14,6 @@ class GetNewSerialButtonProvider with ChangeNotifier {
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
-
-  //
-  // List<SerialModel> get queueSerials =>
-  //     _allSerials.where((serial) =>
-  //     serial.status?.toLowerCase() != 'Served' &&
-  //         serial.status?.toLowerCase() != 'Cancelled' &&
-  //         serial.status?.toLowerCase() != 'Absent'
-  //     ).toList()..sort((a, b) => a.serialNo!.compareTo(b.serialNo!));
 
   List<SerialModel> get queueSerials {
     final items = _allSerials

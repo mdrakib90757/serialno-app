@@ -24,6 +24,7 @@ class CustomTextField extends StatefulWidget {
   final bool enableValidation;
   final BoxConstraints? suffixIconConstraints;
   final BoxConstraints? prefixIconConstraints;
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     this.showFocusBorder = true,
@@ -48,6 +49,7 @@ class CustomTextField extends StatefulWidget {
     this.suffixIconConstraints,
     this.prefix,
     this.prefixIconConstraints,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -72,16 +74,35 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
     return TextFormField(
       controller: widget.controller,
-      validator: widget.enableValidation
-          ? widget.validator ??
-                (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Required';
-                  }
-                  return null;
-                }
-          : null,
+      validator: (value) {
+        if ((widget.enableValidation ?? true) &&
+            (value == null || value.isEmpty)) {
+          return 'Required';
+        }
+
+        if (widget.keyboardType == TextInputType.emailAddress &&
+            value != null &&
+            value.isNotEmpty) {
+          final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+          if (!emailRegex.hasMatch(value)) {
+            return 'Enter a valid email';
+          }
+        }
+
+        if (widget.keyboardType == TextInputType.number &&
+            value != null &&
+            value.isNotEmpty) {
+          final numberRegex = RegExp(r'^[0-9]+$');
+          if (!numberRegex.hasMatch(value)) {
+            return 'Enter a valid number';
+          }
+        }
+
+        return null;
+      },
+
       autovalidateMode: autovalidateMode,
+      keyboardType: widget.keyboardType,
       onChanged: (value) {
         if (autovalidateMode != AutovalidateMode.always) {
           setState(() {

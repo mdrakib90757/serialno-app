@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import '../../global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
-import '../../global_widgets/Custom_NavigationBar/my_bottom_navigationBar/my_bottom_navigationBar.dart';
-import '../../global_widgets/My_Appbar.dart';
-import '../../global_widgets/custom_flushbar.dart';
-import '../../global_widgets/custom_labeltext.dart';
-import '../../global_widgets/custom_sanckbar.dart';
-import '../../global_widgets/custom_textfield.dart';
-import '../../providers/auth_provider/password_upadate_provider.dart';
-import '../../request_model/auth_request/update_password_request.dart';
-import '../../utils/color.dart';
+import 'package:serialno_app/main.dart';
+import '../../../global_widgets/My_Appbar.dart';
+import '../../../global_widgets/custom_flushbar.dart';
+import '../../../global_widgets/custom_labeltext.dart';
+import '../../../global_widgets/custom_sanckbar.dart';
+import '../../../global_widgets/custom_textfield.dart';
+import '../../../main_layouts/main_layout/main_layout.dart';
+import '../../../providers/auth_provider/password_upadate_provider.dart';
+import '../../../request_model/auth_request/update_password_request.dart';
+import '../../../utils/color.dart';
 
-class PasswordScreen extends StatefulWidget {
-  final bool showAppBar;
-  final bool showBottomNavBar;
-  final bool isServiceTaker;
-
-  const PasswordScreen({
-    super.key,
-    this.showAppBar = true,
-    this.showBottomNavBar = false,
-    this.isServiceTaker = false,
-  });
+class serviceTaker_PasswordScreen extends StatefulWidget {
+  const serviceTaker_PasswordScreen({super.key});
 
   @override
-  State<PasswordScreen> createState() => _PasswordScreenState();
+  State<serviceTaker_PasswordScreen> createState() =>
+      _serviceTaker_PasswordScreenState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class _serviceTaker_PasswordScreenState
+    extends State<serviceTaker_PasswordScreen> {
   final _formkey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
@@ -100,12 +92,14 @@ class _PasswordScreenState extends State<PasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final changePassword = Provider.of<PasswordUpdateProvider>(context);
-    return Form(
-      key: _formkey,
-      child: Scaffold(
-        appBar: widget.showAppBar ? MyAppbar() : null,
-        backgroundColor: Colors.white,
-        body: Padding(
+    return MainLayout(
+      userType: UserType.customer,
+      currentIndex: 0,
+      onTap: (p0) {},
+      color: Colors.white,
+      child: Form(
+        key: _formkey,
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,27 +116,27 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              CustomLabeltext("Current Password"),
-              SizedBox(height: 12),
+              const SizedBox(height: 20),
+              const CustomLabeltext("Current Password"),
+              const SizedBox(height: 12),
               CustomTextField(
                 controller: password_controller,
                 hintText: "Current Password",
                 isPassword: true,
                 //prefixIcon: Icons.lock_outline,
               ),
-              SizedBox(height: 20),
-              CustomLabeltext("New Password"),
-              SizedBox(height: 12),
+              const SizedBox(height: 20),
+              const CustomLabeltext("New Password"),
+              const SizedBox(height: 12),
               CustomTextField(
                 controller: Newpassword_controller,
                 hintText: "New Password",
                 isPassword: true,
                 //prefixIcon: Icons.lock_outline,
               ),
-              SizedBox(height: 20),
-              CustomLabeltext("Confirm Password"),
-              SizedBox(height: 12),
+              const SizedBox(height: 20),
+              const CustomLabeltext("Confirm Password"),
+              const SizedBox(height: 12),
               CustomTextField(
                 controller: Confirmpassword_controller,
                 hintText: "Confirm Password",
@@ -150,7 +144,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 //prefixIcon: Icons.lock_outline,
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: changePassword.isLoading ? null : _handleChangePassword,
                 child: Container(
@@ -177,30 +171,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: widget.showBottomNavBar
-            ? MyBottomNavigationBar(
-                currentIndex: 0,
-                onTap: (index) {
-                  if (widget.isServiceTaker) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) => CustomServicetakerNavigationbar(),
-                      ),
-                      (route) => false,
-                    );
-                  } else {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CustomServicecenterNavigationbar(),
-                      ),
-                      (route) => false,
-                    );
-                  }
-                },
-                isServicetaker: widget.isServiceTaker,
-              )
-            : null,
       ),
     );
   }

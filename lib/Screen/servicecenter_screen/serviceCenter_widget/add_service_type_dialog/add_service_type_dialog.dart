@@ -141,26 +141,27 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Service Types Name"),
-                  SizedBox(height: 8),
+                  const CustomLabeltext("Service Types Name"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     controller: nameController,
                     hintText: "Service Types Name",
                     isPassword: false,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Service Price", showStar: false),
+                  const CustomLabeltext("Service Price", showStar: false),
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: "Price in BDT",
                     controller: priceController,
                     isPassword: false,
                     enableValidation: false,
+                    keyboardType: TextInputType.number,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   CustomLabeltext("Default Allocated Time", showStar: false),
                   const SizedBox(height: 8),
                   CustomTextField(
@@ -169,7 +170,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                     isPassword: false,
                     enableValidation: false,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

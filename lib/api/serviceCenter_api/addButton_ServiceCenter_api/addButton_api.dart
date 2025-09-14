@@ -45,7 +45,7 @@ class AddButtonApi {
         "/serial-no/companies/$companyId/service-centers/$Id",
       );
     } catch (e) {
-      print("❌ Error in ServiceCenter deleteUser API: $e");
+      print("Error in ServiceCenter deleteUser API: $e");
       rethrow;
     }
   }

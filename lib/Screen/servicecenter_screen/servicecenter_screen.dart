@@ -5,8 +5,10 @@ import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/ed
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/deleteServiceCenter/delete_serviceCenter.dart';
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
 import '../../model/serviceCenter_model.dart';
 import '../../model/user_model.dart';
+import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/profile_provider/getprofile_provider.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 
@@ -53,52 +55,43 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
   @override
   Widget build(BuildContext context) {
     final getAddButtonProvider = Provider.of<GetAddButtonProvider>(context);
-    if (getAddButtonProvider.isLoading) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 50.0),
-            child: CustomLoading(
-              color: AppColor().primariColor,
-              //size: 20,
-              strokeWidth: 2.5,
-            ),
-          ),
-        ),
-      );
-    }
+
     return Form(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // create add button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Service Center",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    _buildAddButton(context),
-                  ],
+        body: getAddButtonProvider.isLoading
+            ? CustomShimmerList(itemCount: 10)
+            : Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 15,
                 ),
-                SizedBox(height: 10),
-                _buildServiceCenterList(),
-              ],
-            ),
-          ),
-        ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // create add button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Service Center",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          _buildAddButton(context),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      _buildServiceCenterList(),
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -111,7 +104,16 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
     );
     return GestureDetector(
       onTap: () {
-        _showDialogBox(context, getAddButtonProvider);
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        bool isServiceTakerUser =
+            authProvider.userType?.toLowerCase().trim() == "customer";
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Add_button_Dialog_serviceCenter_screen(),
+          ),
+        );
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
@@ -122,8 +124,8 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
         child: Row(
           children: [
             Icon(Icons.add, color: Colors.white, size: 15),
-            SizedBox(width: 5),
-            Text(
+            const SizedBox(width: 5),
+            const Text(
               "Add",
               style: TextStyle(
                 color: Colors.white,
@@ -161,7 +163,7 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Text(
                 'No Service Center Found',
                 style: TextStyle(fontSize: 16, color: Colors.grey.shade300),
@@ -222,7 +224,28 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => _showDialogBoxEDIT(context, serviceCenter),
+                      onTap: () {
+                        final authProvider = Provider.of<AuthProvider>(
+                          context,
+                          listen: false,
+                        );
+
+                        bool isServiceTakerUser =
+                            authProvider.userType?.toLowerCase().trim() ==
+                            "customer";
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditServiceCenterDialog(
+                              showAppBar: true,
+                              showBottomNavBar: true,
+                              isServiceTaker: isServiceTakerUser,
+                              serviceCenter: serviceCenter,
+                            ),
+                          ),
+                        );
+                      },
                       child: Text(
                         "Edit",
                         style: TextStyle(
@@ -255,30 +278,6 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
             ),
           ),
         );
-      },
-    );
-  }
-
-  void _showDialogBox(
-    BuildContext context,
-    GetAddButtonProvider getAddButtonProvider,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Add_button_Dialog_serviceCenter_screen();
-      },
-    );
-  }
-
-  void _showDialogBoxEDIT(
-    BuildContext context,
-    ServiceCenterModel serviceCenter,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return EditServiceCenterDialog(serviceCenter: serviceCenter);
       },
     );
   }
@@ -325,19 +324,19 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
               Row(
                 children: [
                   Icon(Icons.warning_rounded, color: Colors.orange, size: 20),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     "Confirmation",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 "Are you sure to delete?",
                 style: TextStyle(color: Colors.grey.shade800, fontSize: 15),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -361,7 +360,7 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () async {
                       Navigator.of(menuContext).pop(true);

@@ -20,13 +20,13 @@ class GetAddButtonServiceType_Provider with ChangeNotifier {
     notifyListeners();
 
     if (companyId.isEmpty) {
-      print("❌ Company ID is missing. Cannot fetch service types.");
+      print("Company ID is missing. Cannot fetch service types.");
       _serviceTypeList = [];
       _isLoading = false;
       notifyListeners();
       return;
     }
-    debugPrint("🚀 Fetching service centers with a valid token...");
+    debugPrint("Fetching service centers with a valid token...");
 
     _serviceTypeList = await _addButtonServiceType.getAddButtonServiceType(
       companyId,

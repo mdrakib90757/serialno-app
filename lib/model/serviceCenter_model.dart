@@ -10,6 +10,7 @@ class ServiceCenterModel {
   int? daysOfAdvanceSerial;
   int? noOfReservedSerials;
   String? serialNoPolicy;
+  int? dailyQuota;
 
   ServiceCenterModel({
     required this.id,
@@ -23,6 +24,7 @@ class ServiceCenterModel {
     this.noOfReservedSerials,
     this.serialNoPolicy,
     this.weeklyOffDays,
+    this.dailyQuota,
   });
 
   factory ServiceCenterModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class ServiceCenterModel {
       daysOfAdvanceSerial: json["daysOfAdvanceSerial"],
       noOfReservedSerials: json["noOfReservedSerials"],
       serialNoPolicy: json["serialNoPolicy"],
+      dailyQuota: json["dailyQuota"],
     );
   }
 
@@ -60,6 +63,7 @@ class ServiceCenterModel {
       "daysOfAdvanceSerial": daysOfAdvanceSerial,
       "noOfReservedSerials": noOfReservedSerials,
       "serialNoPolicy": serialNoPolicy,
+      "dailyQuota": dailyQuota,
     };
   }
 }

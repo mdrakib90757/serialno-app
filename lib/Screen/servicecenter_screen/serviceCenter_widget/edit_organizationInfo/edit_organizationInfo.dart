@@ -5,14 +5,17 @@ import 'package:serialno_app/model/division_model.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/divisionProvider/divisionProvider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/update_organization_settingScreen/update_organization_Provider.dart';
 import 'package:serialno_app/request_model/serviceCanter_request/update_orginization_request/update_orginization_request.dart';
+import '../../../../global_widgets/My_Appbar.dart';
 import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
+import '../../../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
 import '../../../../global_widgets/custom_textfield.dart';
+import '../../../../main_layouts/main_layout/main_layout.dart';
 import '../../../../model/company_details_model.dart';
-import '../../../../model/user_model.dart';
+import '../../../../model/user_model.dart' hide UserType;
 import '../../../../providers/auth_provider/auth_providers.dart';
 import '../../../../providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
 import '../../../../providers/serviceCenter_provider/business_type_provider/business_type_provider.dart';
@@ -25,8 +28,16 @@ import '../google_locationDialog/locationPickerDialogContant/locationPickerDialo
 
 class EditOrganizationInfo extends StatefulWidget {
   final CompanyDetailsModel companyDetails;
-
-  const EditOrganizationInfo({super.key, required this.companyDetails});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+  const EditOrganizationInfo({
+    super.key,
+    required this.companyDetails,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<EditOrganizationInfo> createState() => _EditOrganizationInfoState();
@@ -238,441 +249,445 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       context,
     );
     final companyDetailsProvider = context.watch<CompanyDetailsProvider>();
-    if (companyDetailsProvider.isLoading ||
-        locationProvider.isLoading ||
-        authProvider.isLoading) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: CustomLoading(
-            color: AppColor().primariColor,
-            // size: 20,
-            strokeWidth: 2.5,
-          ),
-        ),
-      );
-    }
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        //side: BorderSide(color: AppColor().primariColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        child: Form(
-          key: _dialogFormKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Edit Information",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+    // if (companyDetailsProvider.isLoading ||
+    //     locationProvider.isLoading ||
+    //     authProvider.isLoading) {
+    //   return CustomShimmerList(itemCount: 10);
+    // }
+    return MainLayout(
+      currentIndex: 0,
+      onTap: (p0) {},
+      color: Colors.white,
+      userType: UserType.company,
+      child:
+          (companyDetailsProvider.isLoading ||
+              locationProvider.isLoading ||
+              authProvider.isLoading)
+          ? const CustomShimmerList(itemCount: 10)
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              child: Form(
+                key: _dialogFormKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Edit Information",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Navigator.pop(context);
+                          //   },
+                          //   child: Icon(Icons.close, color: Colors.black),
+                          // ),
+                        ],
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.close, color: Colors.black),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                CustomLabeltext("Name"),
-                SizedBox(height: 10),
-                CustomTextField(
-                  hintText: "Name",
-                  isPassword: false,
-                  controller: name,
-                ),
+                      const SizedBox(height: 20),
+                      const CustomLabeltext("Name"),
+                      const SizedBox(height: 10),
+                      CustomTextField(
+                        hintText: "Name",
+                        isPassword: false,
+                        controller: name,
+                      ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Address Line 1", showStar: false),
-                SizedBox(height: 8),
-                CustomTextField(
-                  hintText: "Address Line 1",
-                  isPassword: false,
-                  controller: addressLine1,
-                  enableValidation: false,
-                ),
+                      const SizedBox(height: 10),
+                      const CustomLabeltext("Address Line 1", showStar: false),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        hintText: "Address Line 1",
+                        isPassword: false,
+                        controller: addressLine1,
+                        enableValidation: false,
+                      ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Address Line 2", showStar: false),
-                SizedBox(height: 10),
-                CustomTextField(
-                  controller: addressLine2,
-                  enableValidation: false,
-                  hintText: "Address Line 2",
-                  isPassword: false,
-                ),
+                      const SizedBox(height: 10),
+                      const CustomLabeltext("Address Line 2", showStar: false),
+                      const SizedBox(height: 10),
+                      CustomTextField(
+                        controller: addressLine2,
+                        enableValidation: false,
+                        hintText: "Address Line 2",
+                        isPassword: false,
+                      ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Email"),
-                SizedBox(height: 8),
-                CustomTextField(
-                  hintText: "Email",
-                  isPassword: false,
-                  controller: email,
-                ),
+                      const SizedBox(height: 10),
+                      const CustomLabeltext("Email"),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        hintText: "Email",
+                        isPassword: false,
+                        controller: email,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Mobile Number"),
-                SizedBox(height: 8),
-                CustomTextField(
-                  hintText: "Mobile Number",
-                  isPassword: false,
-                  controller: phone,
-                ),
+                      const SizedBox(height: 10),
+                      const CustomLabeltext("Mobile Number"),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        hintText: "Mobile Number",
+                        isPassword: false,
+                        controller: phone,
+                        keyboardType: TextInputType.number,
+                      ),
 
-                SizedBox(height: 10),
-                CustomLabeltext("Business Type"),
-                SizedBox(height: 10),
-                Consumer<AuthProvider>(
-                  builder: (context, authProvider, child) {
-                    return CustomDropdown<Businesstype>(
-                      items: authProvider.businessTypes,
-                      value: _selectedBusinessType,
-                      //   selectedItem: _,
-                      onChanged: (Businesstype? newvalue) {
-                        debugPrint(
-                          "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
-                        );
-                        setState(() {
-                          _selectedBusinessType = newvalue;
-                        });
-                      },
-                      itemAsString: (Businesstype type) => type.name,
-                      // validator: (value) {
-                      //       if (value == null)
-                      //         return "Please select a business type";
-                      //       return null;
-                      //     },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                      const SizedBox(height: 10),
+                      const CustomLabeltext("Business Type"),
+                      const SizedBox(height: 10),
+                      Consumer<AuthProvider>(
+                        builder: (context, authProvider, child) {
+                          return CustomDropdown<Businesstype>(
+                            items: authProvider.businessTypes,
+                            value: _selectedBusinessType,
+                            //   selectedItem: _,
+                            onChanged: (Businesstype? newvalue) {
+                              debugPrint(
+                                "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                              );
+                              setState(() {
+                                _selectedBusinessType = newvalue;
+                              });
+                            },
+                            itemAsString: (Businesstype type) => type.name,
+                            // validator: (value) {
+                            //       if (value == null)
+                            //         return "Please select a business type";
+                            //       return null;
+                            //     },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade400),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  authProvider.isBusinessTypesLoading
+                                      ? CustomLoading(
+                                          color: AppColor().primariColor,
+                                          size: 20,
+                                          strokeWidth: 2.5,
+                                        )
+                                      : Text(
+                                          _selectedBusinessType?.name ??
+                                              "Select Business Type",
+                                          style: TextStyle(
+                                            color: _selectedBusinessType != null
+                                                ? Colors.black
+                                                : Colors.grey.shade600,
+                                          ),
+                                        ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Division", showStar: false),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 47,
+                        child: CustomDropdown<LocationPart>(
+                          itemAsString: (item) => item.name ?? '',
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedDivision = newValue;
+                              _selectedDistrict = null;
+                              _selectedThana = null;
+                              _selectedArea = null;
+                            });
+                            locationProvider.clearDistricts();
+                            locationProvider.clearThanas();
+                            locationProvider.clearAreas();
+
+                            if (newValue != null) {
+                              locationProvider.getDistricts(newValue.id!);
+                            }
+                          },
+                          // validator: (value) {
+                          //       if (value == null)
+                          //         return "Please select a business type";
+                          //       return null;
+                          //     },
+                          selectedItem: _selectedDivision,
+                          items: locationProvider.divisions,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _selectedDivision?.name ?? "Select Division",
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade400),
-                          borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("District", showStar: false),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 47,
+                        child: CustomDropdown<LocationPart>(
+                          itemAsString: (item) => item.name ?? '',
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedDistrict = newValue;
+                              _selectedThana = null;
+                              _selectedArea = null;
+                            });
+                            locationProvider.clearThanas();
+                            locationProvider.clearAreas();
+                            if (newValue != null) {
+                              locationProvider.getThanas(newValue.id!);
+                            }
+                          },
+
+                          // validator: (value) {
+                          //       if (value == null)
+                          //         return "Please select a business type";
+                          //       return null;
+                          //     },
+                          items: locationProvider.districts,
+                          selectedItem: _selectedDistrict,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _selectedDistrict?.name ?? "Select District",
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            authProvider.isBusinessTypesLoading
-                                ? CustomLoading(
-                                    color: AppColor().primariColor,
-                                    size: 20,
-                                    strokeWidth: 2.5,
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Thana", showStar: false),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 47,
+                        child: CustomDropdown<LocationPart>(
+                          itemAsString: (item) => item.name ?? '',
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedThana = newValue;
+                              _selectedArea = null;
+                            });
+                            locationProvider.clearThanas();
+                            locationProvider.clearAreas();
+
+                            if (newValue != null) {
+                              locationProvider.getAreas(newValue.id!);
+                            }
+                          },
+
+                          // validator: (value) {
+                          //       if (value == null)
+                          //         return "Please select a business type";
+                          //       return null;
+                          //     },
+                          items: locationProvider.districts,
+                          selectedItem: _selectedDistrict,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(_selectedThana?.name ?? "Select District"),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+
+                      const CustomLabeltext("Area", showStar: false),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 47,
+                        child: CustomDropdown<LocationPart>(
+                          itemAsString: (item) => item.name ?? '',
+
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedArea = newValue;
+                            });
+                            locationProvider.clearAreas();
+                            if (newValue != null) {
+                              locationProvider.getAreas(newValue.id!);
+                            }
+                          },
+
+                          items: locationProvider.districts,
+                          selectedItem: _selectedDistrict,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(_selectedArea?.name ?? "Select District"),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      const CustomLabeltext("Location", showStar: false),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        hintText: "Location",
+                        isPassword: false,
+                        controller: _locationController,
+                        suffixIcon: Container(
+                          width: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            // borderRadius: BorderRadiusGeometry.circular(8),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: IconButton(
+                            onPressed: () async {
+                              final result = await showDialog(
+                                context: context,
+                                builder: (context) => LocationPickerDialog(),
+                              );
+
+                              if (result != null) {
+                                setState(() {
+                                  _locationController.text =
+                                      '${result.latitude.toStringAsFixed(6)}, ${result.longitude.toStringAsFixed(6)}';
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              Icons.location_on_outlined,
+                              color: AppColor().primariColor,
+                            ),
+                          ),
+                        ),
+                        suffixIconConstraints: const BoxConstraints(
+                          minWidth: 0,
+                          minHeight: 0,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusGeometry.circular(5),
+                              ),
+                              backgroundColor: AppColor().primariColor,
+                            ),
+                            onPressed: _updateOrganizationInfo,
+                            child: UpdateOrgProvider.isLoading
+                                ? Text(
+                                    "please wait...",
+                                    style: TextStyle(color: Colors.white),
                                   )
                                 : Text(
-                                    _selectedBusinessType?.name ??
-                                        "Select Business Type",
-                                    style: TextStyle(
-                                      color: _selectedBusinessType != null
-                                          ? Colors.black
-                                          : Colors.grey.shade600,
-                                    ),
+                                    "Save",
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.grey.shade600,
+                          ),
+                          SizedBox(width: 8),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadiusGeometry.circular(5),
+                              ),
+                              backgroundColor: Colors.white,
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Division", showStar: false),
-                SizedBox(height: 8),
-                Container(
-                  height: 47,
-                  child: CustomDropdown<LocationPart>(
-                    itemAsString: (item) => item.name ?? '',
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedDivision = newValue;
-                        _selectedDistrict = null;
-                        _selectedThana = null;
-                        _selectedArea = null;
-                      });
-                      locationProvider.clearDistricts();
-                      locationProvider.clearThanas();
-                      locationProvider.clearAreas();
-
-                      if (newValue != null) {
-                        locationProvider.getDistricts(newValue.id!);
-                      }
-                    },
-                    // validator: (value) {
-                    //       if (value == null)
-                    //         return "Please select a business type";
-                    //       return null;
-                    //     },
-                    selectedItem: _selectedDivision,
-                    items: locationProvider.divisions,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(_selectedDivision?.name ?? "Select Division"),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "cancel",
+                              style: TextStyle(color: AppColor().primariColor),
+                            ),
                           ),
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("District", showStar: false),
-                SizedBox(height: 8),
-                Container(
-                  height: 47,
-                  child: CustomDropdown<LocationPart>(
-                    itemAsString: (item) => item.name ?? '',
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedDistrict = newValue;
-                        _selectedThana = null;
-                        _selectedArea = null;
-                      });
-                      locationProvider.clearThanas();
-                      locationProvider.clearAreas();
-                      if (newValue != null) {
-                        locationProvider.getThanas(newValue.id!);
-                      }
-                    },
-
-                    // validator: (value) {
-                    //       if (value == null)
-                    //         return "Please select a business type";
-                    //       return null;
-                    //     },
-                    items: locationProvider.districts,
-                    selectedItem: _selectedDistrict,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(_selectedDistrict?.name ?? "Select District"),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Thana", showStar: false),
-                SizedBox(height: 8),
-                Container(
-                  height: 47,
-                  child: CustomDropdown<LocationPart>(
-                    itemAsString: (item) => item.name ?? '',
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedThana = newValue;
-                        _selectedArea = null;
-                      });
-                      locationProvider.clearThanas();
-                      locationProvider.clearAreas();
-
-                      if (newValue != null) {
-                        locationProvider.getAreas(newValue.id!);
-                      }
-                    },
-
-                    // validator: (value) {
-                    //       if (value == null)
-                    //         return "Please select a business type";
-                    //       return null;
-                    //     },
-                    items: locationProvider.districts,
-                    selectedItem: _selectedDistrict,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(_selectedThana?.name ?? "Select District"),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Area", showStar: false),
-                SizedBox(height: 8),
-                Container(
-                  height: 47,
-                  child: CustomDropdown<LocationPart>(
-                    itemAsString: (item) => item.name ?? '',
-
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedArea = newValue;
-                      });
-                      locationProvider.clearAreas();
-                      if (newValue != null) {
-                        locationProvider.getAreas(newValue.id!);
-                      }
-                    },
-
-                    items: locationProvider.districts,
-                    selectedItem: _selectedDistrict,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(_selectedArea?.name ?? "Select District"),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                CustomLabeltext("Location", showStar: false),
-                SizedBox(height: 8),
-                CustomTextField(
-                  hintText: "Location",
-                  isPassword: false,
-                  controller: _locationController,
-                  suffixIcon: Container(
-                    width: 70,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
-                      // borderRadius: BorderRadiusGeometry.circular(8),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: IconButton(
-                      onPressed: () async {
-                        final result = await showDialog(
-                          context: context,
-                          builder: (context) => LocationPickerDialog(),
-                        );
-
-                        if (result != null) {
-                          setState(() {
-                            _locationController.text =
-                                '${result.latitude.toStringAsFixed(6)}, ${result.longitude.toStringAsFixed(6)}';
-                          });
-                        }
-                      },
-                      icon: Icon(
-                        Icons.location_on_outlined,
-                        color: AppColor().primariColor,
-                      ),
-                    ),
-                  ),
-                  suffixIconConstraints: const BoxConstraints(
-                    minWidth: 0,
-                    minHeight: 0,
-                  ),
-                ),
-                SizedBox(height: 12),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(5),
-                        ),
-                        backgroundColor: AppColor().primariColor,
-                      ),
-                      onPressed: _updateOrganizationInfo,
-                      child: UpdateOrgProvider.isLoading
-                          ? Text(
-                              "please wait...",
-                              style: TextStyle(color: Colors.white),
-                            )
-                          : Text("Save", style: TextStyle(color: Colors.white)),
-                    ),
-                    SizedBox(width: 8),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(5),
-                        ),
-                        backgroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "cancel",
-                        style: TextStyle(color: AppColor().primariColor),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

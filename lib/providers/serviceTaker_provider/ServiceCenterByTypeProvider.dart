@@ -1,79 +1,46 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../model/serviceCenter_model.dart';
-import '../../utils/config/api.dart';
+import '../../../model/serviceCenter_model.dart';
+import '../../api/serviceTaker_api/serviceTaker_businessType/serviceTaker_businessType.dart';
 
 class ServiceCenterByTypeProvider with ChangeNotifier {
-  List<ServiceCenterModel> _serviceCenters = [];
-  bool _isLoading = false;
+  final ServiceTakerBusinessTypeApi _api = ServiceTakerBusinessTypeApi();
 
+  List<ServiceCenterModel> _serviceCenters = [];
   List<ServiceCenterModel> get serviceCenters => _serviceCenters;
+
+  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<void> fetchServiceCenters(String businessTypeId) async {
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+  /// Fetch service centers from API using ServiceTakerApi
+  Future<bool> fetchServiceCenters(String businessTypeId) async {
     _isLoading = true;
+    _errorMessage = null;
     _serviceCenters = [];
     notifyListeners();
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('accessToken');
-      print(" ServiceCenterByTypeProvider - ${token}");
+      final data = await _api.fetchBusinessType(businessTypeId);
 
-      final url = Uri.parse(
-        '${apiConfig.baseUrl}/service-centers?businessTypeId=$businessTypeId',
-      );
-
-      print('New Provider] Calling: $url');
-      print("ServiceCenterByTypeProvider - ${businessTypeId}");
-      print("--- Starting API call NOW ---");
-      final response = await http
-          .get(
-            url,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer $token',
-            },
-          )
-          .timeout(
-            const Duration(seconds: 30),
-            onTimeout: () {
-              print("API Call TIMED OUT after 30 seconds!");
-              return http.Response(
-                'Server took too long to respond.',
-                408,
-              ); // Request Timeout status code
-            },
-          );
-      print("--- API call FINISHED ---");
-      print("Response Status: ${response.statusCode}");
-      print("Response Body: ${response.body}");
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        _serviceCenters = data
-            .map((json) => ServiceCenterModel.fromJson(json))
-            .toList();
-        print(
-          "✅ Data successfully parsed: ${_serviceCenters.length} items found.",
-        );
-      } else {
-        throw Exception(
-          'Failed to load service centers. Status: ${response.statusCode}, Body: ${response.body}',
-        );
-      }
+      _serviceCenters = data;
+      _isLoading = false;
+      notifyListeners();
+      return true;
     } catch (e) {
-      print('CRITICAL ERROR in ServiceCenterByTypeProvider: $e ');
+      _serviceCenters = [];
+      _errorMessage = e.toString().replaceAll("Exception: ", "").trim();
+      _isLoading = false;
+      notifyListeners();
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
+  /// Clear provider state
   void clearData() {
     _serviceCenters = [];
     notifyListeners();

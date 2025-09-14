@@ -2,6 +2,7 @@ import 'package:day_night_time_picker/lib/state/time.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/global_widgets/My_Appbar.dart';
 import 'package:serialno_app/model/serviceCenter_model.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
@@ -10,6 +11,7 @@ import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
 import '../../../../global_widgets/custom_textfield.dart';
+import '../../../../main_layouts/main_layout/main_layout.dart';
 import '../../../../providers/serviceCenter_provider/editButton_serviceCenter_provider/edit_Button_serviceCenter_Provider.dart';
 import '../../../../providers/serviceCenter_provider/editButton_serviceCenter_provider/get_EditButton_provider.dart';
 import '../../../../request_model/serviceCanter_request/editButton_request_serviceCenter/edit_Button_request.dart';
@@ -19,7 +21,16 @@ import '../weekly_offdays_dropdown/weekly_offdays_dropdown.dart';
 
 class EditServiceCenterDialog extends StatefulWidget {
   final ServiceCenterModel serviceCenter;
-  const EditServiceCenterDialog({super.key, required this.serviceCenter});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+  const EditServiceCenterDialog({
+    super.key,
+    required this.serviceCenter,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<EditServiceCenterDialog> createState() =>
@@ -73,7 +84,9 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
     _reservedController = TextEditingController(
       text: serviceCenter.noOfReservedSerials?.toString() ?? '0',
     );
-    _dailyQuotaController = TextEditingController();
+    _dailyQuotaController = TextEditingController(
+      text: serviceCenter.dailyQuota?.toString() ?? "0",
+    );
     _selectedPolicy = serviceCenter.serialNoPolicy;
 
     _customFieldTextController = TextEditingController(
@@ -208,257 +221,239 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
   @override
   Widget build(BuildContext context) {
     final editButtonProvider = Provider.of<EditButtonProvider>(context);
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        //side: BorderSide(color: AppColor().primariColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        child: Container(
-          //height: 410,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Form(
-            key: _dialogFormKey,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Edit Service Center",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+    return MainLayout(
+      currentIndex: 0,
+      onTap: (p0) {},
+      color: Colors.white,
+      userType: UserType.company,
+      child: Form(
+        key: _dialogFormKey,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Edit Service Center",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close_sharp),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 13),
+                const CustomLabeltext("ServiceCenter Name"),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: nameController,
+                  hintText: "Name",
+                  isPassword: false,
+                ),
+
+                const SizedBox(height: 13),
+                const CustomLabeltext("Hotline No."),
+                const SizedBox(height: 10),
+                CustomTextField(
+                  controller: hotlinenoController,
+                  hintText: "Hotline No",
+                  isPassword: false,
+                ),
+
+                const SizedBox(height: 10),
+                const CustomLabeltext("Email", showStar: false),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: emailController,
+                  hintText: "Email",
+                  isPassword: false,
+                  enableValidation: false,
+                ),
+
+                const SizedBox(height: 10),
+                const CustomLabeltext("Weekly off-day", showStar: false),
+                const SizedBox(height: 8),
+                WeeklyOff_daysDropdown(
+                  initialSelectedDays: _selectedOffDays,
+                  availableDays: _availableDays,
+                  onSelectionChanged: (selectedDays) {
+                    setState(() {
+                      _selectedOffDays = selectedDays;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 10),
+                CustomFieldWithTabs(
+                  initialEndTime: _dialogEndTime,
+                  initialStartTime: _dialogStartTime,
+                  onEndTimeChanged: (time) {
+                    setState(() {
+                      _dialogEndTime = time;
+                    });
+                  },
+                  onStartTimeChanged: (time) {
+                    setState(() {
+                      _dialogStartTime = time;
+                    });
+                  },
+                  tabController: _tabControllerForDialog,
+                  textController: _customFieldTextController,
+                ),
+
+                const SizedBox(height: 10),
+                const CustomLabeltext("Advance Serials", showStar: false),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: _advanceSerialController,
+                  isPassword: false,
+                  enableValidation: false,
+                  suffixIcon: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(child: Text("Day(s)")),
+                  ),
+                  suffixIconConstraints: const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+                const CustomLabeltext("Serial Number Policy", showStar: false),
+                const SizedBox(height: 8),
+                CustomTab(
+                  initialPolicy: _selectedPolicy,
+                  onPolicyChanged: (policy) {
+                    setState(() {
+                      _selectedPolicy = policy;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 10),
+                const CustomLabeltext("Reserved Serials", showStar: false),
+                const SizedBox(height: 8),
+                TextFormField(
+                  cursorColor: Colors.grey.shade400,
+                  controller: _reservedController,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.left,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColor().primariColor,
+                        width: 2,
                       ),
-                    ],
-                  ),
-
-                  SizedBox(height: 13),
-                  CustomLabeltext("Name"),
-                  SizedBox(height: 8),
-                  CustomTextField(
-                    controller: nameController,
-                    hintText: "Name",
-                    isPassword: false,
-                  ),
-
-                  SizedBox(height: 13),
-                  CustomLabeltext("Hotline No."),
-                  SizedBox(height: 10),
-                  CustomTextField(
-                    controller: hotlinenoController,
-                    hintText: "Hotline No",
-                    isPassword: false,
-                  ),
-
-                  SizedBox(height: 10),
-                  CustomLabeltext("Email", showStar: false),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: emailController,
-                    hintText: "Email",
-                    isPassword: false,
-                    enableValidation: false,
-                  ),
-
-                  const SizedBox(height: 10),
-                  CustomLabeltext("Weekly off-day", showStar: false),
-                  const SizedBox(height: 8),
-                  WeeklyOff_daysDropdown(
-                    initialSelectedDays: _selectedOffDays,
-                    availableDays: _availableDays,
-                    onSelectionChanged: (selectedDays) {
-                      setState(() {
-                        _selectedOffDays = selectedDays;
-                      });
-                    },
-                  ),
-
-                  SizedBox(height: 10),
-                  CustomFieldWithTabs(
-                    initialEndTime: _dialogEndTime,
-                    initialStartTime: _dialogStartTime,
-                    onEndTimeChanged: (time) {
-                      setState(() {
-                        _dialogEndTime = time;
-                      });
-                    },
-                    onStartTimeChanged: (time) {
-                      setState(() {
-                        _dialogStartTime = time;
-                      });
-                    },
-                    tabController: _tabControllerForDialog,
-                    textController: _customFieldTextController,
-                  ),
-
-                  SizedBox(height: 10),
-                  CustomLabeltext("Advance Serials", showStar: false),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: _advanceSerialController,
-                    isPassword: false,
-                    enableValidation: false,
-                    suffixIcon: Container(
-                      width: 50,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    prefixIcon: Container(
+                      width: 80,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadiusGeometry.circular(8),
                       ),
-                      child: const Center(child: Text("Day(s)")),
+                      child: const Center(child: Text("First")),
+                    ),
+                    suffixIcon: Container(
+                      width: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadiusGeometry.circular(8),
+                      ),
+                      child: const Center(child: Text("Serial(s)")),
+                    ),
+                    prefixIconConstraints: const BoxConstraints(
+                      minWidth: 0,
+                      minHeight: 0,
                     ),
                     suffixIconConstraints: const BoxConstraints(
                       minWidth: 0,
                       minHeight: 0,
                     ),
                   ),
+                ),
+                SizedBox(height: 10),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Serial Number Policy", showStar: false),
-                  SizedBox(height: 8),
-                  CustomTab(
-                    initialPolicy: _selectedPolicy,
-                    onPolicyChanged: (policy) {
-                      setState(() {
-                        _selectedPolicy = policy;
-                      });
-                    },
+                const CustomLabeltext("Daily Quota", showStar: false),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: _dailyQuotaController,
+                  isPassword: false,
+                  enableValidation: false,
+                  suffixIcon: Container(
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(child: Text("Day(s)")),
                   ),
+                  suffixIconConstraints: const BoxConstraints(
+                    minWidth: 0,
+                    minHeight: 0,
+                  ),
+                ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Reserved Serials", showStar: false),
-                  SizedBox(height: 8),
-                  TextFormField(
-                    cursorColor: Colors.grey.shade400,
-                    controller: _reservedController,
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 12,
-                      ),
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColor().primariColor,
-                          width: 2,
+                const SizedBox(height: 10),
+                //Button Logic
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor().primariColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                      ),
-                      prefixIcon: Container(
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadiusGeometry.circular(8),
+                      onPressed: _UpdateServiceCenter,
+                      child: editButtonProvider.isLoading
+                          ? Text(
+                              "Please wait...",
+                              style: TextStyle(color: Colors.white),
+                            )
+                          : Text("Save", style: TextStyle(color: Colors.white)),
+                    ),
+
+                    SizedBox(width: 10),
+
+                    //cancel Button
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        child: const Center(child: Text("First")),
                       ),
-                      suffixIcon: Container(
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadiusGeometry.circular(8),
-                        ),
-                        child: const Center(child: Text("Serial(s)")),
-                      ),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 0,
-                        minHeight: 0,
-                      ),
-                      suffixIconConstraints: const BoxConstraints(
-                        minWidth: 0,
-                        minHeight: 0,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(color: AppColor().primariColor),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-
-                  CustomLabeltext("Daily Quota", showStar: false),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: _dailyQuotaController,
-                    isPassword: false,
-                    enableValidation: false,
-                    suffixIcon: Container(
-                      width: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(child: Text("Day(s)")),
-                    ),
-                    suffixIconConstraints: const BoxConstraints(
-                      minWidth: 0,
-                      minHeight: 0,
-                    ),
-                  ),
-
-                  SizedBox(height: 10),
-                  //Button Logic
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor().primariColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        onPressed: _UpdateServiceCenter,
-                        child: editButtonProvider.isLoading
-                            ? Text(
-                                "Please wait...",
-                                style: TextStyle(color: Colors.white),
-                              )
-                            : Text(
-                                "Save",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                      ),
-
-                      SizedBox(width: 10),
-
-                      //cancel Button
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(color: AppColor().primariColor),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+              ],
             ),
           ),
         ),

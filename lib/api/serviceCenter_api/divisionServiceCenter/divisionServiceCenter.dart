@@ -23,7 +23,7 @@ class DivisionServiceCenter {
         throw Exception('Failed to load divisions: Unexpected response format');
       }
     } catch (e) {
-      print("❌ Error fetching divisions: $e");
+      print("Error fetching divisions: $e");
       rethrow;
     }
   }

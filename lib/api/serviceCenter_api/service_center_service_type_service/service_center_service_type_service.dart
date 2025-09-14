@@ -72,7 +72,7 @@ class service_center_service_type_service {
         "/serial-no/service-centers/$serviceCenterId/service-types/$serviceTypeId",
       );
     } catch (e) {
-      print("❌ Error in ServiceCenter deleteUser API: $e");
+      print("Error in ServiceCenter deleteUser API: $e");
       throw Exception(e);
     }
   }

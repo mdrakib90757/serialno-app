@@ -2,19 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/Auth_screen/login_screen.dart';
-import 'package:serialno_app/Screen/profile_screen/profile_screen.dart';
+import 'package:serialno_app/Screen/profile_screen/serviceCenter_profile_screen/serviceCenter_profile_screen.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
+import '../main_layouts/service_center_layout/service_center_layout.dart';
+import '../main_layouts/service_taker_layout/service_taker_layout.dart';
 import '../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
 import '../utils/color.dart';
-import 'Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import 'Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
-import 'custom_sanckbar.dart';
 
 class MyAppbar extends StatefulWidget implements PreferredSizeWidget {
   final VoidCallback? onLogotap;
+  final VoidCallback? onNotificationTap;
 
-  const MyAppbar({super.key, this.onLogotap});
+  const MyAppbar({super.key, this.onLogotap, this.onNotificationTap});
 
   @override
   State<MyAppbar> createState() => _MyAppbarState();
@@ -45,14 +45,6 @@ class _MyAppbarState extends State<MyAppbar> {
             width: 130,
             child: GestureDetector(
               onTap: () {
-                // final profileProvider = Provider.of<Getprofileprovider>(
-                //   context,
-                //   listen: false,
-                // );
-                // final profile = profileProvider.profileData;
-                // String userType = profile?.userType.toLowerCase().trim() ?? "";
-
-                // after add this 2 line code because image onTap navigate problem
                 final authProvider = Provider.of<AuthProvider>(
                   context,
                   listen: false,
@@ -64,7 +56,7 @@ class _MyAppbarState extends State<MyAppbar> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CustomServicecenterNavigationbar(),
+                      builder: (context) => ServiceCenterLayout(),
                     ),
                     (route) => false,
                   );
@@ -72,7 +64,7 @@ class _MyAppbarState extends State<MyAppbar> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CustomServicetakerNavigationbar(),
+                      builder: (context) => ServiceTakerLayout(),
                     ),
                     (route) => false,
                   );
@@ -123,71 +115,6 @@ class _MyAppbarState extends State<MyAppbar> {
           ),
           SizedBox(width: 7),
 
-          // PopupMenuButton<String>(
-          //   // menuPadding: EdgeInsets.symmetric(horizontal: 30),
-          //   elevation: 4,
-          //   color: Colors.white,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(5),
-          //     side: BorderSide(color: Colors.grey.shade400),
-          //   ),
-          //   offset: const Offset(30, 55),
-          //   itemBuilder: (BuildContext context) => [
-          //     PopupMenuItem<String>(
-          //       height: 35,
-          //       padding: EdgeInsets.symmetric(horizontal: 16),
-          //       onTap: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(builder: (context) => ProfileScreen()),
-          //         );
-          //       },
-          //       child: Text(
-          //         'Account profile',
-          //         style: TextStyle(
-          //           fontSize: 19,
-          //           color: Colors.black.withOpacity(0.8),
-          //         ),
-          //       ),
-          //     ),
-          //
-          //     PopupMenuItem<String>(
-          //       height: 35,
-          //       padding: EdgeInsets.symmetric(horizontal: 16),
-          //       onTap: () async {
-          //         final navigator = Navigator.of(context);
-          //
-          //         print("--- Clearing all provider states ---");
-          //         context.read<GetNewSerialButtonProvider>().clearData();
-          //
-          //         final authProvider = Provider.of<AuthProvider>(
-          //           context,
-          //           listen: false,
-          //         );
-          //         await authProvider.logout();
-          //
-          //         navigator.pushAndRemoveUntil(
-          //           MaterialPageRoute(builder: (context) => LoginScreen()),
-          //           (Route<dynamic> route) => false,
-          //         );
-          //       },
-          //
-          //       child: Text(
-          //         'Logout',
-          //         style: TextStyle(
-          //           color: Colors.black.withOpacity(0.8),
-          //           fontSize: 19,
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          //
-          //   child: const CircleAvatar(
-          //     radius: 25,
-          //     backgroundColor: Colors.grey,
-          //     child: Icon(CupertinoIcons.person, size: 20, color: Colors.white),
-          //   ),
-          // ),
           GestureDetector(
             onTap: () => _showAccountDialog(context),
             child: CircleAvatar(
@@ -206,6 +133,7 @@ class _MyAppbarState extends State<MyAppbar> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final String userName = authProvider.userModel?.user.name ?? "Loading...";
     final String userEmail = authProvider.userModel?.user.email ?? "Loading...";
+    final userType = authProvider.userType?.toLowerCase().trim() ?? '';
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -245,32 +173,26 @@ class _MyAppbarState extends State<MyAppbar> {
                     thickness: 2,
                     color: Colors.grey.shade200,
                   ),
-                  _buildDialogOption(
-                    icon: Icons.person_outline,
-                    text: 'View Profile',
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      final profileProvider = Provider.of<Getprofileprovider>(
-                        context,
-                        listen: false,
-                      );
-                      final profile = profileProvider.profileData;
-                      String userType =
-                          profile?.userType.toLowerCase().trim() ?? "";
-                      bool isServicetakerUser = (userType == "customer");
+                  if (userType == "company") ...[
+                    _buildDialogOption(
+                      icon: Icons.person_outline,
+                      text: 'View Profile',
+                      onTap: () {
+                        Navigator.of(context).pop();
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(
-                            showAppBar: true,
-                            showBottomNavBar: true,
-                            isServiceTaker: isServicetakerUser,
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => serviceCenter_profile_screen(
+                              onTap: (p0) {},
+                              currentIndex: 0,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
+                  ],
+
                   _buildDialogOption(
                     icon: Icons.settings_outlined,
                     text: 'App Settings',

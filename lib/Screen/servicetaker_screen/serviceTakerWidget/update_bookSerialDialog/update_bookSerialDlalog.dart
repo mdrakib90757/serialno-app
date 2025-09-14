@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 import 'package:serialno_app/request_model/seviceTaker_request/update_bookSerialRequest/update_bookSerialRequest.dart';
 import '../../../../global_widgets/MyRadio Button.dart';
+import '../../../../global_widgets/My_Appbar.dart';
 import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
 import '../../../../global_widgets/custom_textfield.dart';
+import '../../../../main_layouts/main_layout/main_layout.dart';
 import '../../../../model/mybooked_model.dart';
 
 import '../../../../model/service_type_model.dart';
@@ -23,7 +25,17 @@ import '../../servicetaker_homescreen.dart';
 
 class UpdateBookSerialDlalog extends StatefulWidget {
   final MybookedModel bookingDetails;
-  const UpdateBookSerialDlalog({super.key, required this.bookingDetails});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+
+  const UpdateBookSerialDlalog({
+    super.key,
+    required this.bookingDetails,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<UpdateBookSerialDlalog> createState() => _UpdateBookSerialDlalogState();
@@ -206,13 +218,11 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
     );
     final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
+    return MainLayout(
+      currentIndex: 0,
+      onTap: (p0) {},
+      color: Colors.white,
+      userType: UserType.customer,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Container(
@@ -240,17 +250,17 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close_sharp),
-                      ),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      //   icon: Icon(Icons.close_sharp),
+                      // ),
                     ],
                   ),
-
-                  CustomLabeltext("Service Center"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("Service Center"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     controller: _serviceCenterController,
                     fillColor: Colors.red,
@@ -259,9 +269,9 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     enabled: false,
                   ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Service Type"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("Service Type"),
+                  const SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
                     builder: (context, serviceTypeProvider, child) {
                       return CustomDropdown<serviceTypeModel>(
@@ -319,10 +329,10 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                       );
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Date"),
-                  SizedBox(height: 8),
+                  const CustomLabeltext("Date"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     fillColor: Colors.red.shade50,
                     filled: true,
@@ -379,7 +389,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Text(
                     "For",
@@ -415,7 +425,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     itemTitleBuilder: (value) =>
                         value == UserName.Self ? "Self" : "Other",
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Visibility(
                     visible: _selectUserName == UserName.Self,
@@ -439,12 +449,13 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                           filled: true,
                           isPassword: false,
                           controller: _contactNoController,
+                          keyboardType: TextInputType.number,
                         ),
                       ],
                     ),
                   ),
 
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
 
                   Visibility(
                     visible: _selectUserName == UserName.Other,
@@ -452,25 +463,27 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomLabeltext("Contact No"),
-                        SizedBox(height: 10),
-                        CustomTextField(
-                          isPassword: false,
-                          controller: _contactNoController,
-                        ),
-                        SizedBox(height: 15),
                         CustomLabeltext("Name"),
                         SizedBox(height: 10),
                         CustomTextField(
                           isPassword: false,
                           controller: _nameController,
                         ),
+                        SizedBox(height: 10),
+                        CustomLabeltext("Contact No"),
+                        SizedBox(height: 10),
+                        CustomTextField(
+                          isPassword: false,
+                          controller: _contactNoController,
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: 15),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(

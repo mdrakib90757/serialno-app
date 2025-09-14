@@ -131,7 +131,7 @@ class _update_servive_center_service_type_dialogState
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade300,
       insetPadding: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
         //side: BorderSide(color: AppColor().primariColor),
@@ -179,138 +179,53 @@ class _update_servive_center_service_type_dialogState
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Colors.white),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 15,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
-                        vertical: 15,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomLabeltext("Service Type"),
-                          SizedBox(height: 8),
-                          CustomTextField(
-                            controller: nameController,
-                            hintText: "Service Type",
-                            isPassword: false,
-                          ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CustomLabeltext("Service Type"),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          controller: nameController,
+                          hintText: "Service Type",
+                          isPassword: false,
+                        ),
 
-                          SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
-                          CustomLabeltext("Service Price", showStar: false),
-                          const SizedBox(height: 8),
-                          CustomTextField(
-                            hintText: "Price in BDT",
-                            controller: priceController,
-                            isPassword: false,
-                            enableValidation: false,
-                          ),
-                          SizedBox(height: 10),
+                        const CustomLabeltext("Service Price", showStar: false),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          hintText: "Price in BDT",
+                          controller: priceController,
+                          isPassword: false,
+                          enableValidation: false,
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 10),
 
-                          CustomLabeltext(
-                            "Default Allocated Time",
-                            showStar: false,
-                          ),
-                          const SizedBox(height: 8),
-                          CustomTextField(
-                            hintText: "Time in minutes",
-                            controller: timeController,
-                            isPassword: false,
-                            enableValidation: false,
-                          ),
-                          SizedBox(height: 10),
-                          TextField(
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 12,
-                              ),
-                              fillColor: Colors.white,
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade100,
-                                  width: 2,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: AppColor().primariColor,
-                                  width: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          TextField(
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 12,
-                              ),
-                              fillColor: Colors.white,
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade100,
-                                  width: 2,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                  color: AppColor().primariColor,
-                                  width: 3,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        const CustomLabeltext(
+                          "Default Allocated Time",
+                          showStar: false,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextField(
+                          hintText: "Time in minutes",
+                          controller: timeController,
+                          isPassword: false,
+                          enableValidation: false,
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                     ),
                   ),
 
-                  // SizedBox(height: 20),
-                  // CustomLabeltext("Service Type"),
-                  // SizedBox(height: 8),
-                  // CustomTextField(
-                  //   controller: nameController,
-                  //   hintText: "Name",
-                  //   isPassword: false,
-                  // ),
-                  //
-                  // SizedBox(height: 10),
-                  //
-                  // CustomLabeltext("Service Price", showStar: false),
-                  // const SizedBox(height: 8),
-                  // CustomTextField(
-                  //   hintText: "Price in BDT",
-                  //   controller: priceController,
-                  //   isPassword: false,
-                  //   enableValidation: false,
-                  // ),
-                  // SizedBox(height: 10),
-                  //
-                  // CustomLabeltext("Default Allocated Time", showStar: false),
-                  // const SizedBox(height: 8),
-                  // CustomTextField(
-                  //   hintText: "Time in minutes",
-                  //   controller: timeController,
-                  //   isPassword: false,
-                  //   enableValidation: false,
-                  // ),
-                  // SizedBox(height: 10),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -327,7 +242,7 @@ class _update_servive_center_service_type_dialogState
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

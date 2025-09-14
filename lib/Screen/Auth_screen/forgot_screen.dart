@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:serialno_app/global_widgets/custom_textfield.dart';
 
 import '../../utils/color.dart';
 
@@ -15,7 +16,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 35),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,15 +24,6 @@ class _ForgotScreenState extends State<ForgotScreen> {
               SizedBox(height: 15),
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: AppColor().primariColor,
-                    ),
-                  ),
                   Text(
                     "Forgot Password",
                     style: TextStyle(
@@ -58,35 +50,10 @@ class _ForgotScreenState extends State<ForgotScreen> {
                 ),
               ),
               SizedBox(height: 15),
-              TextField(
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 12,
-                  ),
-                  isDense: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.grey.shade400),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.grey.shade400),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.grey.shade400),
-                  ),
-                  // prefixIcon: Icon(
-                  //   Icons.email_outlined,
-                  //   color: Colors.grey.shade600,
-                  // ),
-                  hintText: "Email address",
-                  hintStyle: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+              CustomTextField(
+                isPassword: false,
+                keyboardType: TextInputType.emailAddress,
+                hintText: "Email address",
               ),
               SizedBox(height: 20),
               Container(

@@ -162,7 +162,7 @@ class _CommentCancelButtonDialogState extends State<CommentCancelButtonDialog> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   "Please enter the reason or comment",
                   style: TextStyle(
@@ -171,7 +171,7 @@ class _CommentCancelButtonDialogState extends State<CommentCancelButtonDialog> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextField(
                   controller: _commentController,
                   keyboardType: TextInputType.multiline,
@@ -200,7 +200,7 @@ class _CommentCancelButtonDialogState extends State<CommentCancelButtonDialog> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

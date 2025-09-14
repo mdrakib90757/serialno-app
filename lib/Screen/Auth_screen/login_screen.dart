@@ -5,6 +5,8 @@ import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicec
 import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 import 'package:serialno_app/global_widgets/custom_sanckbar.dart';
 import '../../global_widgets/custom_textfield.dart';
+import '../../main_layouts/service_center_layout/service_center_layout.dart';
+import '../../main_layouts/service_taker_layout/service_taker_layout.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../request_model/auth_request/login_request.dart';
 
@@ -61,16 +63,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userType == "company") {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => CustomServicecenterNavigationbar(),
-          ),
+          MaterialPageRoute(builder: (context) => ServiceCenterLayout()),
         );
       } else if (userType == "customer") {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => CustomServicetakerNavigationbar(),
-          ),
+          MaterialPageRoute(builder: (context) => ServiceTakerLayout()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

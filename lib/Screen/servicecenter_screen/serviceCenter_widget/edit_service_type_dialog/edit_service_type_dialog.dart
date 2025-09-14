@@ -163,18 +163,18 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  CustomLabeltext("Name"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 20),
+                  const CustomLabeltext("Name"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     controller: nameController,
                     hintText: "Name",
                     isPassword: false,
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Service Price", showStar: false),
+                  const CustomLabeltext("Service Price", showStar: false),
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: "Price in BDT",
@@ -182,9 +182,12 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                     isPassword: false,
                     enableValidation: false,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Default Allocated Time", showStar: false),
+                  const CustomLabeltext(
+                    "Default Allocated Time",
+                    showStar: false,
+                  ),
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: "Time in minutes",
@@ -192,7 +195,7 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                     isPassword: false,
                     enableValidation: false,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

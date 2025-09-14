@@ -11,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Screen/Auth_screen/login_screen.dart';
 import 'global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
 import 'global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
+import 'main_layouts/service_center_layout/service_center_layout.dart';
+import 'main_layouts/service_taker_layout/service_taker_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,9 +84,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
         if (authProvider.accessToken != null) {
           final userType = authProvider.userType?.toLowerCase() ?? '';
           if (userType == 'company') {
-            return const CustomServicecenterNavigationbar();
+            return ServiceCenterLayout();
           } else {
-            return const CustomServicetakerNavigationbar();
+            return const ServiceTakerLayout();
           }
         } else {
           return const LoginScreen();

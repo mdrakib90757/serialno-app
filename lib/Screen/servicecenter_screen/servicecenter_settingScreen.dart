@@ -13,8 +13,10 @@ import 'package:serialno_app/utils/color.dart';
 
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
 import '../../model/company_details_model.dart';
 import '../../model/roles_model.dart';
+import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../../providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
 
@@ -74,13 +76,7 @@ class _Servicecenter_SettingscreenState
     if (companyDetails.isLoading || businessType.isLoading) {
       return Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: CustomLoading(
-            color: AppColor().primariColor,
-            //size: 20,
-            strokeWidth: 2.5,
-          ),
-        ),
+        body: CustomShimmerList(itemCount: 10),
       );
     }
 
@@ -96,7 +92,7 @@ class _Servicecenter_SettingscreenState
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Text(
                 'Could not load company info.',
                 style: TextStyle(fontSize: 16, color: Colors.grey[300]),
@@ -135,9 +131,25 @@ class _Servicecenter_SettingscreenState
                   ),
                   IconButton(
                     onPressed: () {
-                      _showDialogBoxEDit(
+                      final authProvider = Provider.of<AuthProvider>(
                         context,
-                        companyDetails.companyDetails!,
+                        listen: false,
+                      );
+
+                      bool isServiceTakerUser =
+                          authProvider.userType?.toLowerCase().trim() ==
+                          "customer";
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditOrganizationInfo(
+                            showAppBar: true,
+                            showBottomNavBar: true,
+                            isServiceTaker: isServiceTakerUser,
+                            companyDetails: company_man,
+                          ),
+                        ),
                       );
                     },
                     icon: Icon(Icons.edit, color: AppColor().primariColor),
@@ -156,7 +168,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -169,7 +181,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -182,7 +194,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -195,7 +207,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -208,7 +220,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -221,7 +233,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -234,7 +246,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -247,7 +259,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -260,7 +272,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -273,7 +285,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Text(
@@ -286,7 +298,7 @@ class _Servicecenter_SettingscreenState
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
 
               //add user Button
               Column(
@@ -306,7 +318,26 @@ class _Servicecenter_SettingscreenState
                       ),
                       GestureDetector(
                         onTap: () {
-                          _showDialogBox(context);
+                          final authProvider = Provider.of<AuthProvider>(
+                            context,
+                            listen: false,
+                          );
+
+                          bool isServiceTakerUser =
+                              authProvider.userType?.toLowerCase().trim() ==
+                              "customer";
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AddUser_SettingServiceCenterDialog(
+                                    showAppBar: true,
+                                    showBottomNavBar: true,
+                                    isServiceTaker: isServiceTakerUser,
+                                  ),
+                            ),
+                          );
                         },
                         child: Container(
                           height: 35,
@@ -341,13 +372,13 @@ class _Servicecenter_SettingscreenState
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Name",
                           style: TextStyle(
                             color: Colors.black,
@@ -355,7 +386,7 @@ class _Servicecenter_SettingscreenState
                             fontSize: 15,
                           ),
                         ),
-                        Text(
+                        const Text(
                           "Role",
                           style: TextStyle(
                             color: Colors.black,
@@ -364,7 +395,7 @@ class _Servicecenter_SettingscreenState
                           ),
                         ),
 
-                        Text(
+                        const Text(
                           "Active",
                           style: TextStyle(
                             color: Colors.black,
@@ -373,7 +404,7 @@ class _Servicecenter_SettingscreenState
                           ),
                         ),
 
-                        Text(
+                        const Text(
                           "Action",
                           style: TextStyle(
                             color: Colors.black,
@@ -387,7 +418,7 @@ class _Servicecenter_SettingscreenState
                 ],
               ),
 
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
               Consumer<GetAdduserServiceCenterProvider>(
                 builder: (context, getAddUser_Provider, child) {
@@ -453,14 +484,14 @@ class _Servicecenter_SettingscreenState
                                 color: Colors.white,
                               ),
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(child: Text(user.name)),
-                                  SizedBox(width: 20),
+                                  const SizedBox(width: 20),
                                   Expanded(child: Text(roleName)),
                                   Expanded(
                                     child: Text(
@@ -483,16 +514,17 @@ class _Servicecenter_SettingscreenState
                                                 context,
                                                 listen: false,
                                               ).roles;
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return EditAdduserSettingDialog(
-                                                userModel: user,
-                                                availableServiceCenters:
-                                                    allServiceCenters,
-                                                availableRoles: allRoles,
-                                              );
-                                            },
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditAdduserSettingDialog(
+                                                    userModel: user,
+                                                    availableServiceCenters:
+                                                        allServiceCenters,
+                                                    availableRoles: allRoles,
+                                                  ),
+                                            ),
                                           );
                                         },
                                         child: Text(
@@ -504,7 +536,7 @@ class _Servicecenter_SettingscreenState
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                       Builder(
                                         builder: (BuildContext context) {
                                           return GestureDetector(
@@ -542,46 +574,6 @@ class _Servicecenter_SettingscreenState
         ),
       ),
     );
-  }
-
-  void _showDialogBox(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AddUser_SettingServiceCenterDialog();
-      },
-    );
-  }
-
-  void _showDialogBoxEDit(
-    BuildContext context,
-    CompanyDetailsModel companyInfo,
-  ) {
-    final companyDetailsProvider = Provider.of<CompanyDetailsProvider>(
-      context,
-      listen: false,
-    );
-    showDialog(
-      context: context,
-      builder: (context) {
-        return EditOrganizationInfo(companyDetails: companyInfo);
-      },
-    ).then((wasSuccessful) {
-      if (wasSuccessful == true) {
-        debugPrint(
-          " DIALOG RETURNED SUCCESS, NOW REFRESHING COMPANY DETAILS... ",
-        );
-
-        companyDetailsProvider.fetchDetails(companyInfo.id!);
-
-        CustomFlushbar.showSuccess(
-          context: context,
-          title: "Success",
-          message: "Organization information updated successfully.",
-        );
-      }
-    });
-    ;
   }
 
   void _showDeleteConfirmationMenu(
@@ -624,19 +616,19 @@ class _Servicecenter_SettingscreenState
               Row(
                 children: [
                   Icon(Icons.warning_rounded, color: Colors.orange, size: 20),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     "Confirmation",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 "Are you sure to delete?",
                 style: TextStyle(color: Colors.grey.shade800, fontSize: 15),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -660,7 +652,7 @@ class _Servicecenter_SettingscreenState
                       ),
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () async {
                       Navigator.of(menuContext).pop(true);

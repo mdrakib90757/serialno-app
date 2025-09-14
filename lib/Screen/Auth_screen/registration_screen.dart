@@ -8,6 +8,7 @@ import '../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../global_widgets/custom_flushbar.dart';
 import '../../global_widgets/custom_labeltext.dart';
 import '../../global_widgets/custom_sanckbar.dart';
+import '../../global_widgets/custom_tab_selector/custom_tab_selector.dart';
 import '../../global_widgets/custom_textfield.dart';
 import '../../model/user_model.dart';
 import '../../providers/auth_provider/auth_providers.dart';
@@ -64,6 +65,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _loadSaveItems();
   }
 
+  // Helper to clear all form controllers
   @override
   void dispose() {
     name.dispose();
@@ -203,7 +205,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 35),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -231,11 +233,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ],
                 ),
                 SizedBox(height: 20),
-                //Custom Radio Button
-                CustomRadioGroup<UserType>(
-                  groupValue: _SelectUserType,
-                  items: [UserType.ServiceCenter, UserType.ServiceTaker],
-                  onChanged: (UserType? newValue) {
+                // Custom Tab Selector
+                CustomTabSelector<UserType>(
+                  selectedValue: _SelectUserType,
+                  items: const [UserType.ServiceCenter, UserType.ServiceTaker],
+                  onChanged: (UserType newValue) {
                     setState(() {
                       _SelectUserType = newValue;
                     });
@@ -243,13 +245,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   itemTitleBuilder: (value) {
                     switch (value) {
                       case UserType.ServiceCenter:
-                        return 'AS Service Center';
+                        return 'As Service Center';
                       case UserType.ServiceTaker:
-                        return 'AS Service Taker';
+                        return 'As Service Taker';
                     }
                   },
+                  selectedIcon:
+                      Icons.check, // Add a check icon to the selected tab
                 ),
-
                 //Service Center
                 Visibility(
                   visible: _SelectUserType == UserType.ServiceCenter,
@@ -305,6 +308,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: email,
                           enableValidation: false,
+                          keyboardType: TextInputType.emailAddress,
                         ),
 
                         SizedBox(height: 10),
@@ -314,6 +318,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           hintText: "Mobile Number",
                           isPassword: false,
                           controller: phone,
+                          keyboardType: TextInputType.number,
                         ),
 
                         SizedBox(height: 10),
@@ -665,44 +670,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
 
                         SizedBox(height: 10),
-                        Text(
-                          "Email Address",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17.50,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        TextFormField(
+                        CustomLabeltext("Email"),
+                        SizedBox(height: 10),
+                        CustomTextField(
                           controller: email,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 12,
-                            ),
-                            isDense: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-
-                            hintText: "Email Address",
-                            hintStyle: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontSize: 15,
-                            ),
-                          ),
+                          hintText: "Email",
+                          enableValidation: false,
+                          isPassword: false,
+                          keyboardType: TextInputType.emailAddress,
                         ),
 
                         SizedBox(height: 10),

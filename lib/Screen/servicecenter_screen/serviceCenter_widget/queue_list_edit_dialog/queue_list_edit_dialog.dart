@@ -257,8 +257,8 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                     ],
                   ),
 
-                  CustomLabeltext("Service Center"),
-                  SizedBox(height: 8),
+                  const CustomLabeltext("Service Center"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     enabled: false,
                     fillColor: Colors.red.shade50,
@@ -267,20 +267,11 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                     isPassword: false,
                   ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Service Type"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("Service Type"),
+                  const SizedBox(height: 8),
                   Consumer<GetAddButtonServiceType_Provider>(
                     builder: (context, serviceTypeProvider, child) {
-                      // if (serviceTypeProvider.isLoading &&
-                      //     serviceTypeProvider.serviceTypeList.isEmpty) {
-                      //   return Center(
-                      //     child: CircularProgressIndicator(
-                      //       color: AppColor().primariColor,
-                      //       strokeWidth: 2.5,
-                      //     ),
-                      //   );
-                      // }
                       if (_selectedServiceType == null &&
                           widget.serialToEdit.serviceType != null) {
                         try {
@@ -359,10 +350,10 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                     },
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Date"),
-                  SizedBox(height: 8),
+                  const CustomLabeltext("Date"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     onTap: _selectDate,
                     hintText: DateFormatter.formatForApi(_selectedDate),
@@ -420,22 +411,23 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Name"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("Name"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     controller: _nameController,
                     hintText: "Name",
                     isPassword: false,
                   ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Contact No"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("Contact No"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     controller: _contactController,
                     hintText: "Contact",
                     isPassword: false,
+                    keyboardType: TextInputType.number,
                   ),
                   SizedBox(height: 10),
 

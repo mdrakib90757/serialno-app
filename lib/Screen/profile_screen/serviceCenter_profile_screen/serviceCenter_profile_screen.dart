@@ -1,40 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/Screen/profile_screen/profile_edit_screen.dart';
-import '../../global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import '../../global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
-import '../../global_widgets/Custom_NavigationBar/my_bottom_navigationBar/my_bottom_navigationBar.dart';
-import '../../global_widgets/My_Appbar.dart';
-import '../../providers/auth_provider/auth_providers.dart';
-import '../../providers/profile_provider/getprofile_provider.dart';
-import 'password_screen.dart';
+import 'package:serialno_app/Screen/profile_screen/service_taker_profileEdit_screen/serviceTaker_profile_edit_screen.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final bool showAppBar;
-  final bool showBottomNavBar;
-  final bool isServiceTaker;
-  const ProfileScreen({
+import '../../../main_layouts/main_layout/main_layout.dart';
+import '../../../providers/auth_provider/auth_providers.dart';
+import '../../../providers/profile_provider/getprofile_provider.dart';
+import '../service_center_password_screen/service_center_password_screen.dart';
+import '../service_center_profileEdit_screen/service_center_profileEdit_screen.dart';
+import '../service_taker_password_screen/service_taker_password_screen.dart';
+
+class serviceCenter_profile_screen extends StatefulWidget {
+  final int currentIndex;
+  final Function(int) onTap;
+  const serviceCenter_profile_screen({
     super.key,
-    this.showAppBar = true,
-    this.showBottomNavBar = false,
-    this.isServiceTaker = false,
+    required this.currentIndex,
+    required this.onTap,
   });
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<serviceCenter_profile_screen> createState() =>
+      _serviceCenter_profile_screenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _serviceCenter_profile_screenState
+    extends State<serviceCenter_profile_screen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final getupdateprofile = Provider.of<Getprofileprovider>(context);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: widget.showAppBar ? MyAppbar() : null,
-      body: Padding(
+    return MainLayout(
+      userType: UserType.company,
+      color: Colors.white,
+      currentIndex: widget.currentIndex,
+      onTap: widget.onTap,
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 80),
         child: Center(
           child: Padding(
@@ -50,36 +52,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Divider(height: 3),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () async {
-                    //await getupdateprofile.fetchProfileData();
-                    // final profileProvider = Provider.of<Getprofileprovider>(
-                    //   context,
-                    //   listen: false,
-                    // );
-                    // final profile = profileProvider.profileData;
-                    // String userType = profile?.userType.toLowerCase().trim() ?? "";
-                    // bool isServiceTakerUser = (userType == "customer");
                     final authProvider = Provider.of<AuthProvider>(
                       context,
                       listen: false,
                     );
-
-                    bool isServiceTakerUser =
+                    final profileProvider = Provider.of<Getprofileprovider>(
+                      context,
+                      listen: false,
+                    );
+                    final profile = profileProvider.profileData;
+                    bool isCompanyUser =
                         authProvider.userType?.toLowerCase().trim() ==
-                        "customer";
+                        "company";
 
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfileEditScreen(
-                          showAppBar: true,
-                          showBottomNavBar: true,
-                          isServiceTaker: isServiceTakerUser,
-                        ),
+                        builder: (context) => serviceCenter_ProfileEditScreen(),
                       ),
                     );
 
@@ -114,35 +108,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () async {
-                    // final profileProvider = Provider.of<Getprofileprovider>(
-                    //   context,
-                    //   listen: false,
-                    // );
-                    // final profile = profileProvider.profileData;
-                    // String userType =
-                    //     profile?.userType.toLowerCase().trim() ?? "";
-                    // bool isServicetakerUser = (userType == "customer");
-
                     final authProvider = Provider.of<AuthProvider>(
                       context,
                       listen: false,
                     );
 
-                    bool isServiceTakerUser =
-                        authProvider.userType?.toLowerCase().trim() ==
-                        "customer";
+                    final profileProvider = Provider.of<Getprofileprovider>(
+                      context,
+                      listen: false,
+                    );
+                    final profile = profileProvider.profileData;
+                    bool CompanyuserType =
+                        profile?.userType.toLowerCase().trim() == "company";
 
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PasswordScreen(
-                          showAppBar: true,
-                          showBottomNavBar: true,
-                          isServiceTaker: isServiceTakerUser,
-                        ),
+                        builder: (context) => serviceCenter_PasswordScreen(),
                       ),
                     );
                   },
@@ -177,30 +162,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-
-      bottomNavigationBar: widget.showBottomNavBar
-          ? MyBottomNavigationBar(
-              currentIndex: 0,
-              onTap: (index) {
-                if (widget.isServiceTaker) {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => CustomServicetakerNavigationbar(),
-                    ),
-                    (route) => false,
-                  );
-                } else {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => CustomServicecenterNavigationbar(),
-                    ),
-                    (route) => false,
-                  );
-                }
-              },
-              isServicetaker: widget.isServiceTaker,
-            )
-          : null,
     );
   }
 }

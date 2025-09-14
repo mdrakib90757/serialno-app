@@ -26,13 +26,13 @@ class GetAddButtonProvider with ChangeNotifier {
     notifyListeners();
 
     if (companyId.isEmpty) {
-      print("❌ Company ID is missing. Can't fetch service centers.");
+      print(" Company ID is missing. Can't fetch service centers.");
       _isLoading = false;
       notifyListeners();
       return;
     }
 
-    debugPrint("🚀 Fetching service centers for company: $companyId");
+    debugPrint("Fetching service centers for company: $companyId");
     _serviceCenterList = await _addButtonApi.GetAddButton(companyId);
 
     _isLoading = false;

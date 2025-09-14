@@ -8,6 +8,7 @@ import 'package:serialno_app/Screen/servicetaker_screen/serviceTakerWidget/comme
 import 'package:serialno_app/Screen/servicetaker_screen/serviceTakerWidget/serviceTakerBookSerialButton/bookSerialButtonDialog.dart';
 import 'package:serialno_app/Screen/servicetaker_screen/serviceTakerWidget/update_bookSerialDialog/update_bookSerialDlalog.dart';
 import 'package:serialno_app/api/auth_api/auth_api.dart';
+import 'package:serialno_app/global_widgets/custom_shimmer_list/CustomShimmerList%20.dart';
 import 'package:serialno_app/model/mybooked_model.dart';
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../model/user_model.dart';
@@ -125,15 +126,6 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
       backgroundColor: Colors.white,
       body: Builder(
         builder: (context) {
-          if (authProvider.isLoading) {
-            return Center(
-              child: CustomLoading(
-                color: AppColor().primariColor,
-                //size: 20,
-                strokeWidth: 2.5,
-              ),
-            );
-          }
           if (authProvider.userModel == null) {
             return Center(child: Text("No User Data found. Please try again."));
           }
@@ -143,323 +135,373 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
             NameController.text = authProvider.userModel!.user.name;
             _controllersInitialized = true;
           }
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        Timedate,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _showDialogBox(context);
-                        },
-                        child: Container(
-                          width: 130,
-                          decoration: BoxDecoration(
-                            color: AppColor().primariColor,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 7,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add, color: Colors.white, size: 15),
-                                SizedBox(width: 7),
-                                Text(
-                                  "Book Serial",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+          return authProvider.isLoading
+              ? CustomShimmerList(itemCount: 10)
+              : Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 15,
                   ),
-                  SizedBox(height: 8),
-
-                  Expanded(
-                    child: Consumer<GetBookSerialProvider>(
-                      builder: (context, bookSerialProvider, child) {
-                        if (bookSerialProvider.isLoading) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: AppColor().primariColor,
-                              strokeWidth: 2.5,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              Timedate,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          );
-                        }
+                            GestureDetector(
+                              onTap: () {
+                                final authProvider = Provider.of<AuthProvider>(
+                                  context,
+                                  listen: false,
+                                );
 
-                        if (bookSerialProvider.bookSerialList.isEmpty) {
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.inbox_outlined,
-                                  size: 60,
-                                  color: Colors.grey.shade300,
+                                bool isServiceTakerUser =
+                                    authProvider.userType
+                                        ?.toLowerCase()
+                                        .trim() ==
+                                    "customer";
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BookSerialButton(
+                                      showAppBar: true,
+                                      showBottomNavBar: true,
+                                      isServiceTaker: isServiceTakerUser,
+                                      businessTypeId: '',
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: 130,
+                                decoration: BoxDecoration(
+                                  color: AppColor().primariColor,
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                SizedBox(height: 12),
-
-                                Text(
-                                  'No appointment for today',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[300],
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 7,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                        size: 15,
+                                      ),
+                                      const SizedBox(width: 7),
+                                      const Text(
+                                        "Book Serial",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          );
-                        }
-
-                        return ListView.builder(
-                          itemCount: bookSerialButton.bookSerialList.length,
-                          itemBuilder: (context, index) {
-                            final bookSerial =
-                                bookSerialProvider.bookSerialList[index];
-                            // S/L Time
-                            final String slTime =
-                                DateFormatter.formatForStatusTime(
-                                  bookSerial.createdTime,
-                                );
-                            // Status Time
-                            final String statusTime =
-                                DateFormatter.formatForStatusTime(
-                                  bookSerial.statusTime,
-                                );
-
-                            // ApproxTime
-                            final String ApproxTime =
-                                DateFormatter.formatForApproxTime(
-                                  bookSerial.approxServeTime,
-                                );
-
-                            return Container(
-                              //padding: EdgeInsets.all(5),
-                              margin: EdgeInsets.symmetric(vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: Colors.grey.shade300),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          bookSerial.company?.name ??
-                                              "No Company Name",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 5,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              5,
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              bookSerial.status.toString(),
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: AppColor.getStatusColor(
-                                                  bookSerial.status,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          bookSerial.serviceCenter?.name ??
-                                              "No serviceCenter Name",
-                                          style: TextStyle(
-                                            color: AppColor().primariColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        Text(
-                                          statusTime,
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                      ],
-                                    ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
 
-                                    Visibility(
-                                      visible: bookSerial.forSelf == false,
-                                      child: Text(
-                                        "For ${bookSerial.name ?? "Other"}",
+                        Expanded(
+                          child: Consumer<GetBookSerialProvider>(
+                            builder: (context, bookSerialProvider, child) {
+                              if (bookSerialProvider.isLoading) {
+                                return CustomShimmerList(itemCount: 10);
+                              }
+
+                              if (bookSerialProvider.bookSerialList.isEmpty) {
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.inbox_outlined,
+                                        size: 60,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      SizedBox(height: 12),
+
+                                      Text(
+                                        'No appointment for today',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[300],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+
+                              return ListView.builder(
+                                itemCount:
+                                    bookSerialButton.bookSerialList.length,
+                                itemBuilder: (context, index) {
+                                  final bookSerial =
+                                      bookSerialProvider.bookSerialList[index];
+                                  // S/L Time
+                                  final String slTime =
+                                      DateFormatter.formatForStatusTime(
+                                        bookSerial.createdTime,
+                                      );
+                                  // Status Time
+                                  final String statusTime =
+                                      DateFormatter.formatForStatusTime(
+                                        bookSerial.statusTime,
+                                      );
+
+                                  // ApproxTime
+                                  final String ApproxTime =
+                                      DateFormatter.formatForApproxTime(
+                                        bookSerial.approxServeTime,
+                                      );
+
+                                  return Container(
+                                    //padding: EdgeInsets.all(5),
+                                    margin: EdgeInsets.symmetric(vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              bookSerial.serviceType?.name ??
-                                                  "No ServiceType Name",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                bookSerial.company?.name ??
+                                                    "No Company Name",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              "(${bookSerial.serialNo})",
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Visibility(
-                                          visible:
-                                              bookSerial.status !=
-                                                  "Cancelled" &&
-                                              bookSerial.status != "Serving",
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 17,
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return CommentCancelButtonDialog(
-                                                      bookingDetails:
-                                                          bookSerial,
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Visibility(
-                                                    visible:
-                                                        bookSerial.status !=
-                                                            "Cancelled" &&
-                                                        bookSerial.status !=
-                                                            "Serving",
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                            right: 17,
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 5,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.grey,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    bookSerial.status
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color:
+                                                          AppColor.getStatusColor(
+                                                            bookSerial.status,
                                                           ),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          _showEdit_ialogBox(
-                                                            context,
-                                                            bookSerial,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                bookSerial
+                                                        .serviceCenter
+                                                        ?.name ??
+                                                    "No serviceCenter Name",
+                                                style: TextStyle(
+                                                  color:
+                                                      AppColor().primariColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              Text(
+                                                statusTime,
+                                                style: TextStyle(fontSize: 10),
+                                              ),
+                                            ],
+                                          ),
+
+                                          Visibility(
+                                            visible:
+                                                bookSerial.forSelf == false,
+                                            child: Text(
+                                              "For ${bookSerial.name ?? "Other"}",
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    bookSerial
+                                                            .serviceType
+                                                            ?.name ??
+                                                        "No ServiceType Name",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    "(${bookSerial.serialNo})",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Visibility(
+                                                visible:
+                                                    bookSerial.status !=
+                                                        "Cancelled" &&
+                                                    bookSerial.status !=
+                                                        "Serving",
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                        right: 17,
+                                                      ),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return CommentCancelButtonDialog(
+                                                            bookingDetails:
+                                                                bookSerial,
                                                           );
                                                         },
-                                                        child: Icon(
-                                                          Icons.edit,
+                                                      );
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Visibility(
+                                                          visible:
+                                                              bookSerial
+                                                                      .status !=
+                                                                  "Cancelled" &&
+                                                              bookSerial
+                                                                      .status !=
+                                                                  "Serving",
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.only(
+                                                                  right: 17,
+                                                                ),
+                                                            child: GestureDetector(
+                                                              onTap: () {
+                                                                final authProvider =
+                                                                    Provider.of<
+                                                                      AuthProvider
+                                                                    >(
+                                                                      context,
+                                                                      listen:
+                                                                          false,
+                                                                    );
+
+                                                                bool
+                                                                isServiceTakerUser =
+                                                                    authProvider
+                                                                        .userType
+                                                                        ?.toLowerCase()
+                                                                        .trim() ==
+                                                                    "customer";
+
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder: (context) => UpdateBookSerialDlalog(
+                                                                      showAppBar:
+                                                                          true,
+                                                                      showBottomNavBar:
+                                                                          true,
+                                                                      isServiceTaker:
+                                                                          isServiceTakerUser,
+                                                                      bookingDetails:
+                                                                          bookSerial,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: Icon(
+                                                                Icons.edit,
+                                                                size: 19,
+                                                                color: AppColor()
+                                                                    .primariColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Icon(
+                                                          Icons.close,
                                                           size: 19,
                                                           color: AppColor()
                                                               .primariColor,
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  Icon(
-                                                    Icons.close,
-                                                    size: 19,
-                                                    color:
-                                                        AppColor().primariColor,
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(height: 5),
+                                          Text("Approx Time : ${ApproxTime}"),
+                                        ],
+                                      ),
                                     ),
-                                    SizedBox(height: 5),
-                                    Text("Approx Time : ${ApproxTime}"),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          );
+                );
         },
       ),
-    );
-  }
-
-  // Book Serial DialogBox
-  void _showDialogBox(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return BookSerialButton(businessTypeId: '');
-      },
-    );
-  }
-
-  // Edit Book Serial DialogBox
-  void _showEdit_ialogBox(BuildContext context, MybookedModel mybook_Serial) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return UpdateBookSerialDlalog(bookingDetails: mybook_Serial);
-      },
     );
   }
 }

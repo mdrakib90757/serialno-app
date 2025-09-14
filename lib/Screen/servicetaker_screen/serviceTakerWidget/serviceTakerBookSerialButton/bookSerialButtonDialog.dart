@@ -7,23 +7,25 @@ import 'package:serialno_app/providers/serviceCenter_provider/business_type_prov
 import 'package:serialno_app/request_model/seviceTaker_request/bookSerial_request/bookSerial_request.dart';
 import '../../../../api/auth_api/auth_api.dart';
 import '../../../../global_widgets/MyRadio Button.dart';
+import '../../../../global_widgets/My_Appbar.dart';
 import '../../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../../../global_widgets/custom_dropdown/custom_dropdown.dart';
 import '../../../../global_widgets/custom_flushbar.dart';
 import '../../../../global_widgets/custom_labeltext.dart';
 import '../../../../global_widgets/custom_sanckbar.dart';
 import '../../../../global_widgets/custom_textfield.dart';
+import '../../../../main_layouts/main_layout/main_layout.dart';
 import '../../../../model/organization_model.dart';
 import '../../../../model/serviceCenter_model.dart';
 import '../../../../model/service_type_model.dart';
-import '../../../../model/user_model.dart';
+import '../../../../model/user_model.dart' hide UserType;
 import '../../../../providers/auth_provider/auth_providers.dart';
 import '../../../../providers/serviceTaker_provider/ServiceCenterByTypeProvider.dart';
 import '../../../../providers/serviceTaker_provider/bookSerialButtonProvider/bookSerialButton_provider.dart';
 import '../../../../providers/serviceTaker_provider/bookSerialButtonProvider/getBookSerial_provider.dart';
 //import '../../../../providers/serviceTaker_provider/getBookSerialButtonProvider/getBookSerial_provider.dart';
 import '../../../../providers/serviceTaker_provider/organaizationProvider/organization_provider.dart';
-import '../../../../providers/serviceTaker_provider/serviceCenter_serialBook.dart';
+import '../../../../providers/serviceTaker_provider/serviceCenter_serialBookProvider/serviceCenter_serialBookProvider.dart';
 import '../../../../providers/serviceTaker_provider/serviceType_serialbook_provider.dart';
 import '../../../../utils/color.dart';
 import '../../../../utils/date_formatter/date_formatter.dart';
@@ -31,7 +33,17 @@ import '../../servicetaker_homescreen.dart';
 
 class BookSerialButton extends StatefulWidget {
   final String businessTypeId;
-  const BookSerialButton({super.key, required this.businessTypeId});
+  final bool showAppBar;
+  final bool showBottomNavBar;
+  final bool isServiceTaker;
+
+  const BookSerialButton({
+    super.key,
+    required this.businessTypeId,
+    this.showAppBar = true,
+    this.showBottomNavBar = false,
+    this.isServiceTaker = false,
+  });
 
   @override
   State<BookSerialButton> createState() => _BookSerialButtonState();
@@ -237,26 +249,11 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     final orgProvider = Provider.of<OrganizationProvider>(context);
     DateTime selectedDialogDate = DateTime.now();
 
-    // if () {
-    //   return Scaffold(
-    //     backgroundColor: Colors.white,
-    //     body: Center(
-    //       child: CustomLoading(
-    //         color: AppColor().primariColor,
-    //         // size: 20,
-    //         strokeWidth: 2.5,
-    //       ),
-    //     ),
-    //   );
-    // }
-
-    return Dialog(
-      backgroundColor: Colors.white,
-      insetPadding: EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: AppColor().primariColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
+    return MainLayout(
+      currentIndex: 0,
+      onTap: (p0) {},
+      color: Colors.white,
+      userType: UserType.customer,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Container(
@@ -284,18 +281,18 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close_sharp),
-                      ),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      //   icon: Icon(Icons.close_sharp),
+                      // ),
                     ],
                   ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("ServiceType Provider Type"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("ServiceType Provider Type"),
+                  const SizedBox(height: 10),
                   Consumer<BusinessTypeProvider>(
                     builder: (context, BusProvider, child) {
                       return CustomDropdown<Businesstype>(
@@ -381,11 +378,11 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       );
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   if (_selectedBusinessType?.id == 1) ...[
-                    CustomLabeltext("Organization"),
-                    SizedBox(height: 8),
+                    const CustomLabeltext("Organization"),
+                    const SizedBox(height: 8),
                     Consumer<OrganizationProvider>(
                       builder: (context, OrgProvider, child) {
                         return CustomDropdown<OrganizationModel>(
@@ -463,8 +460,8 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     SizedBox(height: 10),
                   ],
 
-                  CustomLabeltext("Service Center"),
-                  SizedBox(height: 8),
+                  const CustomLabeltext("Service Center"),
+                  const SizedBox(height: 8),
                   Consumer<serviceCenter_serialBookProvider>(
                     builder: (context, orgServiceCenterProvider, child) {
                       return Consumer<ServiceCenterByTypeProvider>(
@@ -478,18 +475,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                               orgServiceCenterProvider.isLoading ||
                               typeServiceCenterProvider.isLoading;
 
-                          // if (isLoading) {
-                          //   return Padding(
-                          //     padding: const EdgeInsets.all(8.0),
-                          //     child: Center(
-                          //       child: CustomLoading(
-                          //         color: AppColor().primariColor,
-                          //         //size: 20,
-                          //         strokeWidth: 2.5,
-                          //       ),
-                          //     ),
-                          //   );
-                          // }
                           return CustomDropdown<ServiceCenterModel>(
                             selectedItem: _selectedServiceCenter,
                             items: allServiceCenters,
@@ -525,11 +510,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
 
                             itemAsString: (ServiceCenterModel item) =>
                                 item.name ?? "",
-                            // validator: (value) {
-                            //       if (value == null)
-                            //         return "Please select a business type";
-                            //       return null;
-                            //     },
+
                             child: Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -572,23 +553,11 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     },
                   ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Service Type"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("Service Type"),
+                  const SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
                     builder: (context, serviceTypeProvider, child) {
-                      // if (serviceTypeProvider.isLoading) {
-                      //   return Padding(
-                      //     padding: const EdgeInsets.all(8.0),
-                      //     child: Center(
-                      //       child: CustomLoading(
-                      //         color: AppColor().primariColor,
-                      //         //size: 20,
-                      //         strokeWidth: 2.5,
-                      //       ),
-                      //     ),
-                      //   );
-                      // }
                       return CustomDropdown<serviceTypeModel>(
                         itemAsString: (serviceTypeModel item) =>
                             item.name ?? "",
@@ -643,9 +612,9 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     },
                   ),
 
-                  SizedBox(height: 10),
-                  CustomLabeltext("Date"),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext("Date"),
+                  const SizedBox(height: 8),
                   CustomTextField(
                     controller: DateController,
                     hintText: "Select Date",
@@ -700,7 +669,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     "For",
                     style: TextStyle(
@@ -750,11 +719,12 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           filled: true,
                           isPassword: false,
                           controller: _contactNoController,
+                          keyboardType: TextInputType.number,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
 
                   Visibility(
                     visible: _SelectUserName == UserName.Other,
@@ -790,10 +760,10 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(

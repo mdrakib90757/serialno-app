@@ -172,10 +172,10 @@ class _add_service_center_service_type_dialogState
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Service Type"),
-                  SizedBox(height: 8),
+                  const CustomLabeltext("Service Type"),
+                  const SizedBox(height: 8),
                   Consumer<GetAddButtonServiceType_Provider>(
                     builder: (context, serviceTypeProvider, child) {
                       return Container(
@@ -245,9 +245,9 @@ class _add_service_center_service_type_dialogState
                       );
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-                  CustomLabeltext("Service Price", showStar: false),
+                  const CustomLabeltext("Service Price", showStar: false),
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: "Price in BDT",
@@ -255,8 +255,11 @@ class _add_service_center_service_type_dialogState
                     isPassword: false,
                     enableValidation: false,
                   ),
-                  SizedBox(height: 10),
-                  CustomLabeltext("Default Allocated Time", showStar: false),
+                  const SizedBox(height: 10),
+                  const CustomLabeltext(
+                    "Default Allocated Time",
+                    showStar: false,
+                  ),
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: "Time in minutes",
@@ -264,7 +267,7 @@ class _add_service_center_service_type_dialogState
                     isPassword: false,
                     enableValidation: false,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
