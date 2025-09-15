@@ -20,12 +20,14 @@ class StatusUpdateButtonService {
     return response;
   }
 
+
+
   Future<List<SerialModel>> GetStatusButtonService(
     String serviceCenterId,
     String? date,
   ) async {
     try {
-      final Map<String, String> queryParameters = {'date': ?date};
+      final Map<String, String> queryParameters = {'date':date?.toString() ?? ''};
       var response =
           await ApiClient().get(
                 "/serial-no/service-centers/$serviceCenterId/services",

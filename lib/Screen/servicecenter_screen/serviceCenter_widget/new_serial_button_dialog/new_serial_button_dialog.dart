@@ -253,7 +253,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                                         ),
                                       ),
                                       child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           serviceTypeProvider.isLoading
                                               ? Align(
@@ -364,7 +364,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   ),
 
                   const SizedBox(height: 10),
-                  CustomLabeltext("Name"),
+                  const CustomLabeltext("Name"),
                   const SizedBox(height: 8),
                   CustomTextField(
                     controller: _nameController,
@@ -373,7 +373,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   ),
 
                   const SizedBox(height: 10),
-                  CustomLabeltext("Contact No"),
+                  const CustomLabeltext("Contact No"),
                   const SizedBox(height: 8),
                   CustomTextField(
                     keyboardType: TextInputType.number,
