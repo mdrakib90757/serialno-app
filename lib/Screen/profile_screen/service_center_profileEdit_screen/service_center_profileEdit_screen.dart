@@ -38,7 +38,6 @@ class _serviceCenter_ProfileEditScreenState
     }
   }
 
-
   void _showDialog(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final result = await showDialog(
@@ -46,7 +45,6 @@ class _serviceCenter_ProfileEditScreenState
       builder: (context) =>
           edit_profile_info_dialog(user: authProvider.userModel!),
     );
-
 
     if (result == true) {
       setState(() {});
@@ -87,14 +85,31 @@ class _serviceCenter_ProfileEditScreenState
                         const SizedBox(width: 15),
                         IconButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => edit_profile_info_dialog(
-                                  user: authProvider.userModel!,
-                                ),
+                              PageRouteBuilder(
+                                pageBuilder: (_, __, ___) =>
+                                    edit_profile_info_dialog(
+                                      user: authProvider.userModel!,
+                                    ),
+                                transitionsBuilder: (_, anim, __, child) {
+                                  return FadeTransition(
+                                    opacity: anim,
+                                    child: child,
+                                  );
+                                },
+                                fullscreenDialog: true,
                               ),
                             );
+
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => edit_profile_info_dialog(
+                            //       user: authProvider.userModel!,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           icon: Icon(
                             Icons.edit_sharp,

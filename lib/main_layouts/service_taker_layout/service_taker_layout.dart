@@ -40,7 +40,7 @@ class _ServiceTakerLayoutState extends State<ServiceTakerLayout> {
           });
         },
       ),
-      body: _serviceTakerScreens[_currentIndex],
+      body: IndexedStack(index: _currentIndex, children: _serviceTakerScreens),
       bottomNavigationBar: CustomServicetakerNavigationbar(
         currentIndex: _currentIndex,
         onTap: _onNavTapped,

@@ -70,12 +70,24 @@ class _serviceCenter_profile_screenState
                         authProvider.userType?.toLowerCase().trim() ==
                         "company";
 
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => serviceCenter_ProfileEditScreen(),
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            serviceCenter_ProfileEditScreen(),
+                        transitionsBuilder: (_, anim, __, child) {
+                          return FadeTransition(opacity: anim, child: child);
+                        },
+                        fullscreenDialog: true,
                       ),
                     );
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => serviceCenter_ProfileEditScreen(),
+                    //   ),
+                    // );
 
                     Future.microtask(() {
                       getupdateprofile.fetchProfileData();
@@ -124,12 +136,24 @@ class _serviceCenter_profile_screenState
                     bool CompanyuserType =
                         profile?.userType.toLowerCase().trim() == "company";
 
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => serviceCenter_PasswordScreen(),
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            serviceCenter_PasswordScreen(),
+                        transitionsBuilder: (_, anim, __, child) {
+                          return FadeTransition(opacity: anim, child: child);
+                        },
+                        fullscreenDialog: true,
                       ),
                     );
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => serviceCenter_PasswordScreen(),
+                    //   ),
+                    // );
                   },
                   child: Container(
                     height: 50,

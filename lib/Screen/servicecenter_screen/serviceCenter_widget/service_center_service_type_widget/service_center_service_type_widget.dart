@@ -46,11 +46,11 @@ class _service_center_service_type_widgetState
         listen: false,
       );
       await getAddButtonProvider.fetchGetAddButton(companyId!);
-      // Set the first service center as selected after data is fetched
+
+      if (!mounted) return; // <-- ADD THIS
       if (getAddButtonProvider.serviceCenterList.isNotEmpty) {
         setState(() {
           _selectedServiceCenter = getAddButtonProvider.serviceCenterList.first;
-          // Also fetch service types for the initially selected service center
           Provider.of<get_service_center_service_type_provider>(
             context,
             listen: false,

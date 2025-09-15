@@ -88,16 +88,34 @@ class _MainLayoutState extends State<MainLayout> {
     //   ),
     //   (route) => false,
     // );\
-    Navigator.pushReplacement(
+    ///
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => MainLayout(
+    //       onTap: (p0) {},
+    //       color: Colors.white,
+    //       child: targetScreen,
+    //       currentIndex: index,
+    //       userType: widget.userType,
+    //     ),
+    //   ),
+    // );
+
+    Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => MainLayout(
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => MainLayout(
           onTap: (p0) {},
           color: Colors.white,
           child: targetScreen,
           currentIndex: index,
           userType: widget.userType,
         ),
+        transitionsBuilder: (_, anim, __, child) {
+          return FadeTransition(opacity: anim, child: child);
+        },
+        fullscreenDialog: true,
       ),
     );
   }

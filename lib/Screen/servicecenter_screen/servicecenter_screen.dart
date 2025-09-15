@@ -38,13 +38,13 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
         listen: false,
       );
       final companyId = profileProvider.profileData?.currentCompany.id;
-
       if (companyId != null && companyId.isNotEmpty) {
         Provider.of<GetAddButtonProvider>(
           context,
           listen: false,
         ).fetchGetAddButton(companyId);
       } else {
+        print("companyid-$companyId");
         debugPrint(
           " ServicecenterScreen: Company ID not found on init. Cannot fetch list.",
         );
@@ -54,8 +54,24 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<Getprofileprovider>(context);
+    final companyId = profileProvider.profileData?.currentCompany.id;
+
+    if (companyId == null) {
+      return Scaffold(
+        body: Center(child: CustomLoading(color: AppColor().primariColor)),
+      );
+    }
+
     final getAddButtonProvider = Provider.of<GetAddButtonProvider>(context);
 
+    if (getAddButtonProvider.serviceCenterList.isEmpty &&
+        !getAddButtonProvider.isLoading) {
+      // Fetch once companyId is ready
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getAddButtonProvider.fetchGetAddButton(companyId);
+      });
+    }
     return Form(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -110,8 +126,13 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
 
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => Add_button_Dialog_serviceCenter_screen(),
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) =>
+                Add_button_Dialog_serviceCenter_screen(),
+            transitionsBuilder: (_, anim, __, child) {
+              return FadeTransition(opacity: anim, child: child);
+            },
+            fullscreenDialog: true,
           ),
         );
       },
@@ -233,18 +254,37 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                         bool isServiceTakerUser =
                             authProvider.userType?.toLowerCase().trim() ==
                             "customer";
-
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => EditServiceCenterDialog(
-                              showAppBar: true,
-                              showBottomNavBar: true,
-                              isServiceTaker: isServiceTakerUser,
-                              serviceCenter: serviceCenter,
-                            ),
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) =>
+                                EditServiceCenterDialog(
+                                  showAppBar: true,
+                                  showBottomNavBar: true,
+                                  isServiceTaker: isServiceTakerUser,
+                                  serviceCenter: serviceCenter,
+                                ),
+                            transitionsBuilder: (_, anim, __, child) {
+                              return FadeTransition(
+                                opacity: anim,
+                                child: child,
+                              );
+                            },
+                            fullscreenDialog: true,
                           ),
                         );
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => EditServiceCenterDialog(
+                        //       showAppBar: true,
+                        //       showBottomNavBar: true,
+                        //       isServiceTaker: isServiceTakerUser,
+                        //       serviceCenter: serviceCenter,
+                        //     ),
+                        //   ),
+                        // );
                       },
                       child: Text(
                         "Edit",

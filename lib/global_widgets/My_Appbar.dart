@@ -179,16 +179,32 @@ class _MyAppbarState extends State<MyAppbar> {
                       text: 'View Profile',
                       onTap: () {
                         Navigator.of(context).pop();
-
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => serviceCenter_profile_screen(
-                              onTap: (p0) {},
-                              currentIndex: 0,
-                            ),
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) =>
+                                serviceCenter_profile_screen(
+                                  currentIndex: 0,
+                                  onTap: (int) {},
+                                ),
+                            transitionsBuilder: (_, anim, __, child) {
+                              return FadeTransition(
+                                opacity: anim,
+                                child: child,
+                              );
+                            },
+                            fullscreenDialog: true,
                           ),
                         );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => serviceCenter_profile_screen(
+                        //       onTap: (p0) {},
+                        //       currentIndex: 0,
+                        //     ),
+                        //   ),
+                        // );
                       },
                     ),
                   ],

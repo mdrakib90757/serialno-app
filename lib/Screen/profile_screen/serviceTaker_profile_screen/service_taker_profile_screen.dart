@@ -53,12 +53,25 @@ class _serviceTaker_profile_screenState
                     bool CustomeruserType =
                         authProvider.userType?.toLowerCase().trim() ==
                         "customer";
-                    Navigator.pushReplacement(
+
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => serviceTakerProfileEditScreen(),
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            serviceTakerProfileEditScreen(),
+                        transitionsBuilder: (_, anim, __, child) {
+                          return FadeTransition(opacity: anim, child: child);
+                        },
+                        fullscreenDialog: true,
                       ),
                     );
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => serviceTakerProfileEditScreen(),
+                    //   ),
+                    // );
                     Future.microtask(() {
                       getupdateprofile.fetchProfileData();
                     });
@@ -99,12 +112,24 @@ class _serviceTaker_profile_screenState
                     final profile = profileProvider.profileData;
                     bool CustomerUserType =
                         profile?.userType.toLowerCase().trim() == "customer";
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => serviceTaker_PasswordScreen(),
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                            serviceTaker_PasswordScreen(),
+                        transitionsBuilder: (_, anim, __, child) {
+                          return FadeTransition(opacity: anim, child: child);
+                        },
+                        fullscreenDialog: true,
                       ),
                     );
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => serviceTaker_PasswordScreen(),
+                    //   ),
+                    // );
                   },
                   child: Container(
                     height: 50,

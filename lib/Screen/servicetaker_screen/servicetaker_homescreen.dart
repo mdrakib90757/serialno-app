@@ -169,18 +169,37 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                         ?.toLowerCase()
                                         .trim() ==
                                     "customer";
-
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BookSerialButton(
-                                      showAppBar: true,
-                                      showBottomNavBar: true,
-                                      isServiceTaker: isServiceTakerUser,
-                                      businessTypeId: '',
-                                    ),
+                                  PageRouteBuilder(
+                                    pageBuilder: (_, __, ___) =>
+                                        BookSerialButton(
+                                          showAppBar: true,
+                                          showBottomNavBar: true,
+                                          isServiceTaker: isServiceTakerUser,
+                                          businessTypeId: '',
+                                        ),
+                                    transitionsBuilder: (_, anim, __, child) {
+                                      return FadeTransition(
+                                        opacity: anim,
+                                        child: child,
+                                      );
+                                    },
+                                    fullscreenDialog: true,
                                   ),
                                 );
+
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => BookSerialButton(
+                                //       showAppBar: true,
+                                //       showBottomNavBar: true,
+                                //       isServiceTaker: isServiceTakerUser,
+                                //       businessTypeId: '',
+                                //     ),
+                                //   ),
+                                // );
                               },
                               child: Container(
                                 width: 130,

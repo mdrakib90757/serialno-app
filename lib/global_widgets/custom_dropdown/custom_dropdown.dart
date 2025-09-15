@@ -9,7 +9,6 @@ class CustomDropdown<T> extends StatefulWidget {
   final ValueChanged<T> onChanged;
   final String Function(T item) itemAsString;
   final double popupHeight;
-  final Widget Function(BuildContext, T?)? dropdownBuilder;
 
   const CustomDropdown({
     Key? key,
@@ -20,7 +19,6 @@ class CustomDropdown<T> extends StatefulWidget {
     required this.itemAsString,
     this.popupHeight = 200.0,
     this.selectedItem,
-    this.dropdownBuilder,
   }) : super(key: key);
 
   @override
@@ -71,12 +69,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
         return Stack(
           children: [
             Positioned.fill(
-              child: GestureDetector(
-                onTap: _closePopup,
-                child: widget.dropdownBuilder != null
-                    ? widget.dropdownBuilder!(context, widget.value)
-                    : widget.child,
-              ),
+              child: GestureDetector(onTap: _closePopup, child: widget.child),
             ),
             Positioned(
               width: size.width,

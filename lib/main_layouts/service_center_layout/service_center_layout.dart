@@ -44,7 +44,7 @@ class _ServiceCenterLayoutState extends State<ServiceCenterLayout> {
           });
         },
       ),
-      body: _serviceCenterScreens[_currentIndex],
+      body: IndexedStack(index: _currentIndex, children: _serviceCenterScreens),
       bottomNavigationBar: CustomServicecenterNavigationbar(
         currentIndex: _currentIndex,
         onTap: _onNavTapped,
