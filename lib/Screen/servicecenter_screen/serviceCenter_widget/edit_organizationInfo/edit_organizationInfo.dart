@@ -215,7 +215,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
         );
 
         if (success) {
-          // await getUpdateOrgProvider.fetchDetails(companyId);
+          await getUpdateOrgProvider.fetchDetails(companyId);
 
           navigator.pop(true);
           await CustomFlushbar.showSuccess(
@@ -249,21 +249,17 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       context,
     );
     final companyDetailsProvider = context.watch<CompanyDetailsProvider>();
-    // if (companyDetailsProvider.isLoading ||
-    //     locationProvider.isLoading ||
-    //     authProvider.isLoading) {
-    //   return CustomShimmerList(itemCount: 10);
-    // }
+
     return MainLayout(
       currentIndex: 0,
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.company,
       child:
-          (companyDetailsProvider.isLoading ||
+          companyDetailsProvider.isLoading ||
               locationProvider.isLoading ||
-              authProvider.isLoading)
-          ? const CustomShimmerList(itemCount: 10)
+              authProvider.isLoading
+          ? Center(child: CustomShimmerList(itemCount: 10)) // Show loading here
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
               child: Form(
@@ -284,12 +280,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Navigator.pop(context);
-                          //   },
-                          //   child: Icon(Icons.close, color: Colors.black),
-                          // ),
                         ],
                       ),
                       const SizedBox(height: 20),

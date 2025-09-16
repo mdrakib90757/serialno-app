@@ -78,6 +78,7 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
     final serviceTypeProvider = Provider.of<GetAddButtonServiceType_Provider>(
       context,
     );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: serviceTypeProvider.isLoading

@@ -15,7 +15,7 @@ class CustomFlushbar {
       icon: Icon(Icons.check_circle, color: AppColor().primariColor),
       message: message,
       messageColor: Colors.black,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
       backgroundColor: Colors.white,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),

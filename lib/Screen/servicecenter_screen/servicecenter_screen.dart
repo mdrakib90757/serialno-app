@@ -32,24 +32,24 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final profileProvider = Provider.of<Getprofileprovider>(
-        context,
-        listen: false,
-      );
-      final companyId = profileProvider.profileData?.currentCompany.id;
-      if (companyId != null && companyId.isNotEmpty) {
-        Provider.of<GetAddButtonProvider>(
-          context,
-          listen: false,
-        ).fetchGetAddButton(companyId);
-      } else {
-        print("companyid-$companyId");
-        debugPrint(
-          " ServicecenterScreen: Company ID not found on init. Cannot fetch list.",
-        );
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final profileProvider = Provider.of<Getprofileprovider>(
+    //     context,
+    //     listen: false,
+    //   );
+    //   final companyId = profileProvider.profileData?.currentCompany.id;
+    //   if (companyId != null && companyId.isNotEmpty) {
+    //     Provider.of<GetAddButtonProvider>(
+    //       context,
+    //       listen: false,
+    //     ).fetchGetAddButton(companyId);
+    //   } else {
+    //     print("companyid-$companyId");
+    //     debugPrint(
+    //       " ServicecenterScreen: Company ID not found on init. Cannot fetch list.",
+    //     );
+    //   }
+    // });
   }
 
   @override
@@ -72,6 +72,13 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
         getAddButtonProvider.fetchGetAddButton(companyId);
       });
     }
+    if (companyId == null) {
+      // If companyId is still null, show a loading indicator or a message
+      return Scaffold(
+        body: Center(child: CustomLoading(color: AppColor().primariColor)),
+      );
+    }
+
     return Form(
       child: Scaffold(
         backgroundColor: Colors.white,

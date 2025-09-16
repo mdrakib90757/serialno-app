@@ -196,15 +196,6 @@ class _MyAppbarState extends State<MyAppbar> {
                             fullscreenDialog: true,
                           ),
                         );
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => serviceCenter_profile_screen(
-                        //       onTap: (p0) {},
-                        //       currentIndex: 0,
-                        //     ),
-                        //   ),
-                        // );
                       },
                     ),
                   ],

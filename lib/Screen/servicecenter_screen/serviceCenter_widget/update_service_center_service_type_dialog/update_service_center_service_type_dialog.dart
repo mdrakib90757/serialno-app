@@ -130,6 +130,12 @@ class _update_servive_center_service_type_dialogState
 
   @override
   Widget build(BuildContext context) {
+    final UpdateButton = Provider.of<UpdateServiceCenterServiceTypeProvider>(
+      context,
+    );
+    final get_addButton = Provider.of<get_service_center_service_type_provider>(
+      context,
+    );
     return Dialog(
       backgroundColor: Colors.grey.shade300,
       insetPadding: EdgeInsets.all(10),
@@ -205,7 +211,6 @@ class _update_servive_center_service_type_dialogState
                           controller: priceController,
                           isPassword: false,
                           enableValidation: false,
-                          keyboardType: TextInputType.number,
                         ),
                         const SizedBox(height: 10),
 
@@ -237,10 +242,15 @@ class _update_servive_center_service_type_dialogState
                           ),
                         ),
                         onPressed: _saveEditServiceType,
-                        child: Text(
-                          "Save",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: UpdateButton.isLoading
+                            ? Text(
+                                "Please wait...",
+                                style: TextStyle(color: Colors.white),
+                              )
+                            : Text(
+                                "Save",
+                                style: TextStyle(color: Colors.white),
+                              ),
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(

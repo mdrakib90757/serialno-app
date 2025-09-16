@@ -355,6 +355,7 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
                   CustomTextField(
+                    readOnly: false,
                     onTap: _selectDate,
                     hintText: DateFormatter.formatForApi(_selectedDate),
                     textStyle: TextStyle(color: Colors.grey.shade400),

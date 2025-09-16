@@ -176,12 +176,12 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
           formattedDate = dateKey;
         }
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                padding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
                 child: Text(
                   formattedDate,
                   style: TextStyle(

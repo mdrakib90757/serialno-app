@@ -253,7 +253,8 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                                         ),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           serviceTypeProvider.isLoading
                                               ? Align(
@@ -311,7 +312,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                     hintText: "Select Date",
                     isPassword: false,
                     controller: _serviceDateDisplayController,
-                    readOnly: true,
+                    readOnly: false,
                     suffixIcon: IconButton(
                       onPressed: () async {
                         DateTime? newDate = await showDatePicker(

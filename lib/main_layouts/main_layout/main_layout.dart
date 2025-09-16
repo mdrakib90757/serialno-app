@@ -75,33 +75,6 @@ class _MainLayoutState extends State<MainLayout> {
       }
     }
 
-    // Navigator.pushAndRemoveUntil(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (_) => MainLayout(
-    //       onTap: (p0) {},
-    //       color: Colors.white,
-    //       child: targetScreen,
-    //       currentIndex: index,
-    //       userType: widget.userType,
-    //     ),
-    //   ),
-    //   (route) => false,
-    // );\
-    ///
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => MainLayout(
-    //       onTap: (p0) {},
-    //       color: Colors.white,
-    //       child: targetScreen,
-    //       currentIndex: index,
-    //       userType: widget.userType,
-    //     ),
-    //   ),
-    // );
-
     Navigator.push(
       context,
       PageRouteBuilder(

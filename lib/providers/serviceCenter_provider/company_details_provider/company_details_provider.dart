@@ -20,6 +20,7 @@ class CompanyDetailsProvider with ChangeNotifier {
 
     try {
       _companyDetails = await _companyDetailsApi.companyInfo(companyId);
+      debugPrint("CompanyId loaded for: ${_companyDetails?.id}");
       debugPrint("Company details loaded for: ${_companyDetails?.name}");
     } catch (e) {
       _errorMessage = e.toString();

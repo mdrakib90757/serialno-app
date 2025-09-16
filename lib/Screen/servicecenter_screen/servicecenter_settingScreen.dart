@@ -13,12 +13,14 @@ import 'package:serialno_app/utils/color.dart';
 
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_flushbar.dart';
+import '../../global_widgets/custom_sanckbar.dart';
 import '../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
 import '../../model/company_details_model.dart';
 import '../../model/roles_model.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../../providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
+import '../../providers/serviceCenter_provider/update_organization_settingScreen/get_update_organization/get_update_organization_provider.dart';
 
 class Servicecenter_Settingscreen extends StatefulWidget {
   const Servicecenter_Settingscreen({super.key});
@@ -66,6 +68,7 @@ class _Servicecenter_SettingscreenState
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final rolesProvider = Provider.of<RolesProvider>(context);
@@ -106,549 +109,504 @@ class _Servicecenter_SettingscreenState
     final company_man = companyDetails.companyDetails!;
     final String businessTypeName =
         businessType.getBusinessTypeNameById(company_man.businessTypeId) ??
-        'N/A';
+            'N/A';
     print("businessTypeName ${businessTypeName}");
-
     return Scaffold(
       backgroundColor: Colors.white,
-      body: companyDetails.isLoading
-          ? CustomShimmerList(itemCount: 10)
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Organization info",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Organization info",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      final authProvider = Provider.of<AuthProvider>(
+                        context,
+                        listen: false,
+                      );
+
+                      bool isServiceTakerUser =
+                          authProvider.userType?.toLowerCase().trim() ==
+                          "customer";
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => EditOrganizationInfo(
+                            showAppBar: true,
+                            showBottomNavBar: true,
+                            isServiceTaker: isServiceTakerUser,
+                            companyDetails: company_man,
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            final authProvider = Provider.of<AuthProvider>(
-                              context,
-                              listen: false,
-                            );
-
-                            bool isServiceTakerUser =
-                                authProvider.userType?.toLowerCase().trim() ==
-                                "customer";
-
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (_, __, ___) =>
-                                    EditOrganizationInfo(
-                                      showAppBar: true,
-                                      showBottomNavBar: true,
-                                      isServiceTaker: isServiceTakerUser,
-                                      companyDetails: company_man,
-                                    ),
-                                transitionsBuilder: (_, anim, __, child) {
-                                  return FadeTransition(
-                                    opacity: anim,
-                                    child: child,
-                                  );
-                                },
-                                fullscreenDialog: true,
-                              ),
-                            );
-
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => EditOrganizationInfo(
-                            //       showAppBar: true,
-                            //       showBottomNavBar: true,
-                            //       isServiceTaker: isServiceTakerUser,
-                            //       companyDetails: company_man,
-                            //     ),
-                            //   ),
-                            // );
+                          transitionsBuilder: (_, anim, __, child) {
+                            return FadeTransition(opacity: anim, child: child);
                           },
-                          icon: Icon(
-                            Icons.edit,
-                            color: AppColor().primariColor,
-                          ),
+                          fullscreenDialog: true,
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Name : ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.name}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Address Line1 : ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.addressLine1} ",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "AddressLine2: ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.addressLine2}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Email: ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.email}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Phone : ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.phone} ",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Business Type : ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${companyDetails.companyDetails?.businessType?.name}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Division : ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.division?.name}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "District :",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.district?.name}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Thana : ",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.thana?.name} ",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Area : -",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          "${company_man.area?.name}",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Text(
-                          "Location : -",
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        Text(
-                          company_man.location ?? "N/A",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
+                      );
+                    },
+                    icon: Icon(Icons.edit, color: AppColor().primariColor),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Name : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Address Line1 : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.addressLine1} ",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "AddressLine2: ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.addressLine2}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Email: ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.email}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Phone : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.phone} ",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Business Type : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${companyDetails.companyDetails?.businessType?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Division : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.division?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "District :",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.district?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Thana : ",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.thana?.name} ",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Area : -",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    "${company_man.area?.name}",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Text(
+                    "Location : -",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    company_man.location ?? "N/A",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
 
-                    //add user Button
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Service Man",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                final authProvider = Provider.of<AuthProvider>(
-                                  context,
-                                  listen: false,
-                                );
+              //add user Button
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Service Man",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          final authProvider = Provider.of<AuthProvider>(
+                            context,
+                            listen: false,
+                          );
 
-                                bool isServiceTakerUser =
-                                    authProvider.userType
-                                        ?.toLowerCase()
-                                        .trim() ==
-                                    "customer";
+                          bool isServiceTakerUser =
+                              authProvider.userType?.toLowerCase().trim() ==
+                              "customer";
 
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (_, __, ___) =>
-                                        AddUser_SettingServiceCenterDialog(
-                                          showAppBar: true,
-                                          showBottomNavBar: true,
-                                          isServiceTaker: isServiceTakerUser,
-                                        ),
-                                    transitionsBuilder: (_, anim, __, child) {
-                                      return FadeTransition(
-                                        opacity: anim,
-                                        child: child,
-                                      );
-                                    },
-                                    fullscreenDialog: true,
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (_, __, ___) =>
+                                  AddUser_SettingServiceCenterDialog(
+                                    showAppBar: true,
+                                    showBottomNavBar: true,
+                                    isServiceTaker: isServiceTakerUser,
                                   ),
+                              transitionsBuilder: (_, anim, __, child) {
+                                return FadeTransition(
+                                  opacity: anim,
+                                  child: child,
                                 );
-
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) =>
-                                //         AddUser_SettingServiceCenterDialog(
-                                //           showAppBar: true,
-                                //           showBottomNavBar: true,
-                                //           isServiceTaker: isServiceTakerUser,
-                                //         ),
-                                //   ),
-                                // );
                               },
-                              child: Container(
-                                height: 35,
-                                width: 110,
-                                decoration: BoxDecoration(
-                                  color: AppColor().primariColor,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                      size: 18,
-                                      weight: 8,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Center(
-                                      child: Text(
-                                        "Add user",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              fullscreenDialog: true,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          );
+                        },
+                        child: Container(
+                          height: 35,
+                          width: 110,
+                          decoration: BoxDecoration(
+                            color: AppColor().primariColor,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                "Name",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                ),
+                              Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 18,
+                                weight: 8,
                               ),
-                              const Text(
-                                "Role",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                ),
-                              ),
-
-                              const Text(
-                                "Active",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                ),
-                              ),
-
-                              const Text(
-                                "Action",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
+                              SizedBox(width: 5),
+                              Center(
+                                child: Text(
+                                  "Add user",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Name",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const Text(
+                          "Role",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+
+                        const Text(
+                          "Active",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+
+                        const Text(
+                          "Action",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
                       ],
                     ),
+                  ),
+                ],
+              ),
 
-                    const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-                    Consumer<GetAdduserServiceCenterProvider>(
-                      builder: (context, getAddUser_Provider, child) {
-                        if (getAddUser_Provider.isLoading &&
-                            getAddUser_Provider.users.isEmpty) {
-                          return Center(
-                            child: CustomLoading(
-                              color: AppColor().primariColor,
-                              //size: 20,
-                              strokeWidth: 2.5,
-                            ),
+              Consumer<GetAdduserServiceCenterProvider>(
+                builder: (context, getAddUser_Provider, child) {
+                  if (getAddUser_Provider.isLoading &&
+                      getAddUser_Provider.users.isEmpty) {
+                    return Center(
+                      child: CustomLoading(
+                        color: AppColor().primariColor,
+                        //size: 20,
+                        strokeWidth: 2.5,
+                      ),
+                    );
+                  }
+
+                  final UserList = getAddUser_Provider.users;
+                  if (UserList.isEmpty) {
+                    return Center(
+                      child: CustomLoading(
+                        color: AppColor().primariColor,
+                        //size: 20,
+                        strokeWidth: 2.5,
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: UserList.length,
+                    itemBuilder: (context, index) {
+                      final user = UserList[index];
+
+                      final String? userRoleId = user.roleId;
+                      String roleName = 'N/A';
+
+                      if (userRoleId != null &&
+                          rolesProvider.roles.isNotEmpty) {
+                        try {
+                          final foundRole = rolesProvider.roles.firstWhere(
+                            (role) => role.id == userRoleId,
                           );
+                          roleName = foundRole.name ?? 'N/A';
+                        } catch (e) {
+                          roleName = 'Unknown Role';
                         }
+                      }
 
-                        final UserList = getAddUser_Provider.users;
-                        if (UserList.isEmpty) {
-                          return Center(
-                            child: CustomLoading(
-                              color: AppColor().primariColor,
-                              //size: 20,
-                              strokeWidth: 2.5,
-                            ),
-                          );
-                        }
-
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: UserList.length,
-                          itemBuilder: (context, index) {
-                            final user = UserList[index];
-
-                            final String? userRoleId = user.roleId;
-                            String roleName = 'N/A';
-
-                            if (userRoleId != null &&
-                                rolesProvider.roles.isNotEmpty) {
-                              try {
-                                final foundRole = rolesProvider.roles
-                                    .firstWhere(
-                                      (role) => role.id == userRoleId,
-                                    );
-                                roleName = foundRole.name ?? 'N/A';
-                              } catch (e) {
-                                roleName = 'Unknown Role';
-                              }
-                            }
-
-                            return Container(
-                              padding: EdgeInsets.all(8),
-                              margin: EdgeInsets.symmetric(vertical: 2),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(5),
+                      return Container(
+                        padding: EdgeInsets.all(8),
+                        margin: EdgeInsets.symmetric(vertical: 2),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.grey.shade400,
+                              child: Icon(
+                                Icons.person_outline_rounded,
                                 color: Colors.white,
                               ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
                               child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  CircleAvatar(
-                                    radius: 18,
-                                    backgroundColor: Colors.grey.shade400,
-                                    child: Icon(
-                                      Icons.person_outline_rounded,
-                                      color: Colors.white,
+                                  Expanded(child: Text(user.name)),
+                                  const SizedBox(width: 20),
+                                  Expanded(child: Text(roleName)),
+                                  Expanded(
+                                    child: Text(
+                                      user.isActive == true ? "Yes" : "No",
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(child: Text(user.name)),
-                                        const SizedBox(width: 20),
-                                        Expanded(child: Text(roleName)),
-                                        Expanded(
-                                          child: Text(
-                                            user.isActive == true
-                                                ? "Yes"
-                                                : "No",
-                                          ),
-                                        ),
 
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                final allServiceCenters =
-                                                    Provider.of<
-                                                          GetAddButtonProvider
-                                                        >(
-                                                          context,
-                                                          listen: false,
-                                                        )
-                                                        .serviceCenterList;
-                                                final allRoles =
-                                                    Provider.of<RolesProvider>(
-                                                      context,
-                                                      listen: false,
-                                                    ).roles;
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          final allServiceCenters =
+                                              Provider.of<GetAddButtonProvider>(
+                                                context,
+                                                listen: false,
+                                              ).serviceCenterList;
+                                          final allRoles =
+                                              Provider.of<RolesProvider>(
+                                                context,
+                                                listen: false,
+                                              ).roles;
 
-                                                Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (_, __, ___) =>
-                                                        EditAdduserSettingDialog(
-                                                          userModel: user,
-                                                          availableServiceCenters:
-                                                              allServiceCenters,
-                                                          availableRoles:
-                                                              allRoles,
-                                                        ),
-                                                    transitionsBuilder:
-                                                        (_, anim, __, child) {
-                                                          return FadeTransition(
-                                                            opacity: anim,
-                                                            child: child,
-                                                          );
-                                                        },
-                                                    fullscreenDialog: true,
+                                          Navigator.push(
+                                            context,
+                                            PageRouteBuilder(
+                                              pageBuilder: (_, __, ___) =>
+                                                  EditAdduserSettingDialog(
+                                                    userModel: user,
+                                                    availableServiceCenters:
+                                                        allServiceCenters,
+                                                    availableRoles: allRoles,
                                                   ),
-                                                );
-
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //     builder: (context) =>
-                                                //         EditAdduserSettingDialog(
-                                                //           userModel: user,
-                                                //           availableServiceCenters:
-                                                //               allServiceCenters,
-                                                //           availableRoles: allRoles,
-                                                //         ),
-                                                //   ),
-                                                // );
-                                              },
-                                              child: Text(
-                                                "Edit",
-                                                style: TextStyle(
-                                                  color: AppColor()
-                                                      .scoenddaryColor,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Builder(
-                                              builder: (BuildContext context) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    _showDeleteConfirmationMenu(
-                                                      context,
-                                                      user,
+                                              transitionsBuilder:
+                                                  (_, anim, __, child) {
+                                                    return FadeTransition(
+                                                      opacity: anim,
+                                                      child: child,
                                                     );
                                                   },
-                                                  child: Text(
-                                                    "Delete",
-                                                    style: TextStyle(
-                                                      color: AppColor()
-                                                          .scoenddaryColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
+                                              fullscreenDialog: true,
                                             ),
-                                          ],
+                                          );
+
+                                          // Navigator.push(
+                                          //   context,
+                                          //   MaterialPageRoute(
+                                          //     builder: (context) =>
+                                          //         EditAdduserSettingDialog(
+                                          //           userModel: user,
+                                          //           availableServiceCenters:
+                                          //               allServiceCenters,
+                                          //           availableRoles: allRoles,
+                                          //         ),
+                                          //   ),
+                                          // );
+                                        },
+                                        child: Text(
+                                          "Edit",
+                                          style: TextStyle(
+                                            color: AppColor().scoenddaryColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Builder(
+                                        builder: (BuildContext context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              _showDeleteConfirmationMenu(
+                                                context,
+                                                user,
+                                              );
+                                            },
+                                            child: Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                color:
+                                                    AppColor().scoenddaryColor,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

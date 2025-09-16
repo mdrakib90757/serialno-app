@@ -197,11 +197,14 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(Icons.close, color: Colors.black),
+                          CircleAvatar(
+                            backgroundColor: Colors.grey.shade100,
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.close_sharp, weight: 5),
+                            ),
                           ),
                         ],
                       ),

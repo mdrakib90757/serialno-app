@@ -155,11 +155,14 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close_sharp),
+                      CircleAvatar(
+                        backgroundColor: Colors.grey.shade100,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.close_sharp, weight: 5),
+                        ),
                       ),
                     ],
                   ),

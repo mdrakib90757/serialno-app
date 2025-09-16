@@ -188,18 +188,6 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                     fullscreenDialog: true,
                                   ),
                                 );
-
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => BookSerialButton(
-                                //       showAppBar: true,
-                                //       showBottomNavBar: true,
-                                //       isServiceTaker: isServiceTakerUser,
-                                //       businessTypeId: '',
-                                //     ),
-                                //   ),
-                                // );
                               },
                               child: Container(
                                 width: 130,
@@ -351,7 +339,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                               ),
                                             ],
                                           ),
-                                          SizedBox(height: 5),
+                                          const SizedBox(height: 5),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,

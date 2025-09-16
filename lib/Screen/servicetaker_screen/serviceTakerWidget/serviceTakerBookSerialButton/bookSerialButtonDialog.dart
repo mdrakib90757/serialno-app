@@ -281,12 +281,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      // IconButton(
-                      //   onPressed: () {
-                      //     Navigator.pop(context);
-                      //   },
-                      //   icon: Icon(Icons.close_sharp),
-                      // ),
                     ],
                   ),
 
@@ -415,11 +409,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           },
                           itemAsString: (OrganizationModel type) =>
                               type.name ?? "",
-                          // validator: (value) {
-                          //       if (value == null)
-                          //         return "Please select a business type";
-                          //       return null;
-                          //     },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 16,
@@ -618,7 +607,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   CustomTextField(
                     controller: DateController,
                     hintText: "Select Date",
-                    readOnly: true,
+                    readOnly: false,
                     isPassword: false,
                     suffixIcon: IconButton(
                       onPressed: () async {

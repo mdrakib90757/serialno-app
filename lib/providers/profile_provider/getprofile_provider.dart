@@ -5,6 +5,7 @@ import '../../model/profile_user_model.dart';
 
 class Getprofileprovider with ChangeNotifier {
   final ProfileApi _profileApi = ProfileApi();
+
   profile_UserModel? _profileData;
   bool _isLoading = false;
 

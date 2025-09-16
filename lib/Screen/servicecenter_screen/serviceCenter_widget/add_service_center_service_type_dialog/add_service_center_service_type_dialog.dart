@@ -72,12 +72,21 @@ class _add_service_center_service_type_dialogState
 
     final ServiceCenterId = widget.selectedServiceCenter?.id ?? "";
     final ServiceTypeId = _selectedServiceType?.id ?? "";
+    final price =
+        int.tryParse(ServicePriceController.text) ??
+        double.tryParse(ServicePriceController.text)?.toInt() ??
+        0;
+
+    final time =
+        int.tryParse(timeController.text) ??
+        double.tryParse(timeController.text)?.toInt() ??
+        0;
 
     add_service_center_service_type_request serviceTypeRequest =
         add_service_center_service_type_request(
           id: ServiceTypeId,
-          price: int.parse(ServicePriceController.text),
-          defaultAllocatedTime: int.parse(timeController.text),
+          price: price,
+          defaultAllocatedTime: time,
         );
 
     final success = await secondServiceType.postServiceType(
@@ -119,12 +128,10 @@ class _add_service_center_service_type_dialogState
 
   @override
   Widget build(BuildContext context) {
-    final addButtonServiceType = Provider.of<AddButtonServiceTypeProvider>(
-      context,
-    );
     final getAddButton_serviceType_Provider =
         Provider.of<GetAddButtonServiceType_Provider>(context);
-
+    final secondServiceType =
+        Provider.of<add_service_center_service_type_provider>(context);
     return Dialog(
       backgroundColor: Colors.white,
       insetPadding: EdgeInsets.all(10),
@@ -280,7 +287,7 @@ class _add_service_center_service_type_dialogState
                         ),
                         onPressed: _saveAddSecondServiceType,
 
-                        child: addButtonServiceType.isLoading
+                        child: secondServiceType.isLoading
                             ? Text(
                                 "Please Wait",
                                 style: TextStyle(color: Colors.white),

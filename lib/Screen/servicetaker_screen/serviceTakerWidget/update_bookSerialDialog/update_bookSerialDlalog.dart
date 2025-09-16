@@ -172,12 +172,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
         context,
         listen: false,
       ).fetchgetBookSerial(isoDate);
-
-      await Provider.of<GetBookSerialProvider>(
-        context,
-        listen: false,
-      ).fetchgetBookSerial(isoDate);
-
       Navigator.pop(context);
       await CustomFlushbar.showSuccess(
         context: context,
@@ -186,11 +180,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
       );
     } else {
       if (!mounted) return;
-      final updateProvider = Provider.of<UpdateBookSerialProvider>(
-        context,
-        listen: false,
-      );
-
       Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -212,10 +201,8 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
 
   @override
   Widget build(BuildContext context) {
-    final updateProvider = Provider.of<UpdateBookSerialProvider>(
-      context,
-      listen: false,
-    );
+    final updateProvider = Provider.of<UpdateBookSerialProvider>(context);
+    final getUpdateProvider = Provider.of<GetBookSerialProvider>(context);
     final String todayString = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     return MainLayout(
@@ -250,12 +237,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      // IconButton(
-                      //   onPressed: () {
-                      //     Navigator.pop(context);
-                      //   },
-                      //   icon: Icon(Icons.close_sharp),
-                      // ),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -495,7 +476,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                         onPressed: () async {
                           _UpdateBook_serial();
                         },
-                        child: updateProvider.isLoading
+                        child: getUpdateProvider.isLoading
                             ? Text(
                                 "Please wait...",
                                 style: TextStyle(color: Colors.white),
