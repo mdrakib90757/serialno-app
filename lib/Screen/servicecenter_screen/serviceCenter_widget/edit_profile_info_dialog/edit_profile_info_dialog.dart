@@ -31,8 +31,7 @@ class edit_profile_info_dialog extends StatefulWidget {
 }
 
 class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
-  DateTime date = DateTime(2022, 12, 24);
-  DateTime _selectedDate = DateTime(01 - 01 - 2000);
+  DateTime? _selectedDate;
   bool isSelect = false;
   String? _selectGenter;
   final _formkey = GlobalKey<FormState>();
@@ -59,81 +58,36 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
   @override
   void initState() {
     super.initState();
-    // final user = widget.user;
-    // name.text = user.user.name;
-    // loginName.text = user.user.loginName;
-    // email.text = user.user.email;
-    // mobileNo.text = user.user.mobileNo;
-    // final profileData = widget.serviceTaker?.serviceTaker?.profileData
-    //     ?? user.user.profileData;
-    //
-    // if (profileData != null) {
-    //   if (genderList.contains(profileData.gender)) {
-    //     _selectGenter = profileData.gender;
-    //   }
-    //
-    //   if (profileData.dateOfBirth != null) {
-    //     dateOfBirth.text = profileData.dateOfBirth!;
-    //   }
-    // }
-    _initializeProfileData();
-  }
-
-  void _initializeProfileData() {
     final user = widget.user;
     name.text = user.user.name;
     loginName.text = user.user.loginName;
     email.text = user.user.email;
     mobileNo.text = user.user.mobileNo;
+    final profileData =
+        widget.serviceTaker?.serviceTaker?.profileData ?? user.user.profileData;
 
-    final profileDataToUse =
-        widget.serviceTaker?.user.profileData ?? user.user.profileData;
-
-    if (profileDataToUse != null) {
-      // 1. Initialize Gender
-      if (profileDataToUse.gender != null &&
-          genderList.contains(profileDataToUse.gender!)) {
-        _selectGenter = profileDataToUse.gender!;
-      } else {
+    if (profileData != null) {
+      // Set Gender
+      if (profileData.gender != null &&
+          genderList.contains(profileData.gender!.trim())) {
         _selectGenter =
-            null; // Ensure it's explicitly null if no match or null in profile
+            profileData.gender!.trim(); // Trim for robust comparison
       }
-      debugPrint("Initialized Gender: $_selectGenter");
 
-      // 2. Initialize Date of Birth
-      if (profileDataToUse.dateOfBirth != null &&
-          profileDataToUse.dateOfBirth!.isNotEmpty) {
+      // Set Date of Birth
+      if (profileData.dateOfBirth != null &&
+          profileData.dateOfBirth!.isNotEmpty) {
+        dateOfBirth.text = profileData.dateOfBirth!; // Set text field
         try {
-          _selectedDate = DateFormat(
-            'dd-MM-yyyy',
-          ).parse(profileDataToUse.dateOfBirth!);
-          dateOfBirth.text = DateFormat(
-            'dd-MM-yyyy',
-          ).format(_selectedDate); // Display in YYYY-MM-DD in TextField
-          debugPrint("Initialized Date of Birth (Parsed): ${dateOfBirth.text}");
+          // Parse string date to DateTime object for the date picker's initialDate
+          _selectedDate =
+              DateFormat('yyyy-MM-dd').parse(profileData.dateOfBirth!);
         } catch (e) {
-          debugPrint(
-            "Error parsing dateOfBirth '${profileDataToUse.dateOfBirth}' from profile: $e",
-          );
-          // Fallback if parsing fails
-          _selectedDate = DateTime(2000, 1, 1);
-          dateOfBirth.text = DateFormat('dd-MM-yyyy').format(_selectedDate);
+          print("Error parsing date of birth from profileData: $e");
+          _selectedDate = null; // Reset if parsing fails
         }
-      } else {
-        // If profileDataToUse.dateOfBirth is null or empty
-        _selectedDate = DateTime(2000, 1, 1);
-        dateOfBirth.text = DateFormat('dd-MM-yyyy').format(_selectedDate);
-        debugPrint("Initialized Date of Birth (Default): ${dateOfBirth.text}");
       }
-    } else {
-      // If no profileData is available at all
-      _selectGenter = null;
-      _selectedDate = DateTime(2000, 1, 1);
-      dateOfBirth.text = DateFormat('dd-MM-yyyy').format(_selectedDate);
-      debugPrint("No profileData available. All fields set to defaults.");
     }
-
-    setState(() {});
   }
 
   @override
@@ -192,7 +146,6 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                   isPassword: false,
                 ),
                 const SizedBox(height: 10),
-
                 const CustomLabeltext("Login Name"),
                 const SizedBox(height: 10),
                 CustomTextField(
@@ -204,7 +157,6 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                   isPassword: false,
                 ),
                 const SizedBox(height: 10),
-
                 const CustomLabeltext("Mobile No"),
                 const SizedBox(height: 10),
                 CustomTextField(
@@ -271,14 +223,13 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 10),
                 const CustomLabeltext("Date of Birth"),
                 const SizedBox(height: 10),
                 CustomTextField(
                   controller: dateOfBirth,
                   hintText: "Select Date of Birth",
-                  textStyle: TextStyle(color: Colors.grey.shade400),
+                  textStyle: TextStyle(color: Colors.grey.shade300),
                   isPassword: false,
                   suffixIcon: IconButton(
                     onPressed: () async {
@@ -310,7 +261,7 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                           );
                         },
                         context: context,
-                        initialDate: _selectedDate,
+                        initialDate: _selectedDate ?? DateTime.now(),
                         firstDate: DateTime(1900),
                         lastDate: DateTime.now(),
                       );
@@ -319,20 +270,17 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                       setState(() {
                         _selectedDate = newDate; // Update the DateTime state
                         dateOfBirth.text = DateFormat(
-                          'dd-MM-yyyy',
-                        ).format(newDate); //
+                          'yyyy-MM-dd',
+                        ).format(newDate!); //
                       });
                     },
-
                     icon: Icon(
                       Icons.date_range_outlined,
                       color: Colors.grey.shade400,
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -350,19 +298,19 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                               : () async {
                                   UpdateProfileRequest request =
                                       UpdateProfileRequest(
-                                        name: name.text,
-                                        mobileNo: mobileNo.text,
-                                        email: email.text,
-                                        gender: _selectGenter,
-                                        dateOfBirth: dateOfBirth.text.isNotEmpty
-                                            ? dateOfBirth.text
-                                            : null,
-                                      );
+                                    name: name.text,
+                                    mobileNo: mobileNo.text,
+                                    email: email.text,
+                                    gender: _selectGenter,
+                                    dateOfBirth: dateOfBirth.text.isNotEmpty
+                                        ? dateOfBirth.text
+                                        : null,
+                                  );
 
                                   final success =
                                       await UpdateProfile.updateUserProfile(
-                                        request,
-                                      );
+                                    request,
+                                  );
 
                                   if (success) {
                                     await Provider.of<Getprofileprovider>(
@@ -380,8 +328,7 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                                       SnackBar(
                                         content: CustomSnackBarWidget(
                                           title: "Error",
-                                          message:
-                                              UpdateProfile.errorMessage ??
+                                          message: UpdateProfile.errorMessage ??
                                               "Profile Update Failed",
                                           iconColor: Colors.red.shade400,
                                           icon: Icons.dangerous_outlined,
@@ -416,7 +363,6 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                         );
                       },
                     ),
-
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(

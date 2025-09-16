@@ -272,9 +272,10 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                                                   style: TextStyle(
                                                     color:
                                                         _selectedServiceType !=
-                                                            null
-                                                        ? Colors.black
-                                                        : Colors.grey.shade600,
+                                                                null
+                                                            ? Colors.black
+                                                            : Colors
+                                                                .grey.shade600,
                                                   ),
                                                 ),
                                           Icon(

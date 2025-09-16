@@ -260,17 +260,14 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
 
                         bool isServiceTakerUser =
                             authProvider.userType?.toLowerCase().trim() ==
-                            "customer";
+                                "customer";
                         Navigator.push(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (_, __, ___) =>
                                 EditServiceCenterDialog(
-                                  showAppBar: true,
-                                  showBottomNavBar: true,
-                                  isServiceTaker: isServiceTakerUser,
-                                  serviceCenter: serviceCenter,
-                                ),
+                              serviceCenter: serviceCenter,
+                            ),
                             transitionsBuilder: (_, anim, __, child) {
                               return FadeTransition(
                                 opacity: anim,
@@ -427,8 +424,7 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
                       } else if (mounted) {
                         CustomFlushbar.showSuccess(
                           context: context,
-                          message:
-                              deleteProvider.errorMessage ??
+                          message: deleteProvider.errorMessage ??
                               "Failed to delete user.",
                           title: 'Failed',
                         );

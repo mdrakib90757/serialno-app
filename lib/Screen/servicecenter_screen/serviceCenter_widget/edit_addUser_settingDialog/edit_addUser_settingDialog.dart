@@ -129,9 +129,8 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
       email: _emailController.text,
       mobileNo: _phoneController.text,
       roleId: _selectedRole!.id!,
-      serviceCenterIds: _selectedServiceCentersForUser
-          .map((sc) => sc.id!)
-          .toList(),
+      serviceCenterIds:
+          _selectedServiceCentersForUser.map((sc) => sc.id!).toList(),
       isActive: _isActive,
     );
     final success = await updateAddUserProvider.UpdateAddUserButton(
@@ -209,7 +208,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         ],
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Name"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -219,7 +217,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         //  prefixIcon: Icons.person,
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Login Name"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -229,7 +226,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         //controller: phone
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Email Address"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -241,7 +237,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Mobile Number"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -253,7 +248,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Role"),
                       const SizedBox(height: 10),
                       Container(
@@ -297,11 +291,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         ),
                       ),
                       SizedBox(height: 10),
-
-                      Text(
-                        "Assigned Service Center",
-                        style: TextStyle(color: Colors.black, fontSize: 15.20),
-                      ),
                       CustomLabeltext(
                         "Assigned Service Center",
                         showStar: false,
@@ -317,7 +306,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         },
                       ),
                       SizedBox(height: 13),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

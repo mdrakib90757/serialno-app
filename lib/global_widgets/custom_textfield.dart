@@ -100,7 +100,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
         return null;
       },
-
       autovalidateMode: autovalidateMode,
       keyboardType: widget.keyboardType,
       onChanged: (value) {
@@ -150,22 +149,21 @@ class _CustomTextFieldState extends State<CustomTextField> {
         suffixIcon: widget.suffixIcon != null
             ? widget.suffixIcon
             : widget.isPassword
-            ? IconButton(
-                onPressed: () {
-                  setState(() {
-                    obscureText = !obscureText;
-                  });
-                },
-                icon: Icon(
-                  obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.grey.shade400,
-                ),
-              )
-            : null,
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        obscureText = !obscureText;
+                      });
+                    },
+                    icon: Icon(
+                      obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey.shade400,
+                    ),
+                  )
+                : null,
         suffixIconConstraints: widget.suffixIconConstraints,
         prefixIconConstraints: widget.prefixIconConstraints,
       ),
-
       cursorColor: Colors.grey.shade500,
     );
   }

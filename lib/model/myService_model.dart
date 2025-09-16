@@ -54,9 +54,8 @@ class MyService {
           ? DateTime.tryParse(json['createdTime'])
           : null,
       approxServeTime: json['approxServeTime'],
-      company: json['company'] != null
-          ? Company.fromJson(json['company'])
-          : null,
+      company:
+          json['company'] != null ? Company.fromJson(json['company']) : null,
       serviceCenter: json['serviceCenter'] != null
           ? ServiceCenter.fromJson(json['serviceCenter'])
           : null,

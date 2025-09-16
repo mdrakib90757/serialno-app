@@ -6,11 +6,9 @@ class Servicecenter_Bookserial_service {
     String companyId,
   ) async {
     try {
-      var response =
-          await ApiClient().get(
-                "/serial-no/companies/$companyId/service-centers",
-              )
-              as List;
+      var response = await ApiClient().get(
+        "/serial-no/companies/$companyId/service-centers",
+      ) as List;
       List<ServiceCenterModel> ButtonData = response
           .map(
             (data) => ServiceCenterModel.fromJson(data as Map<String, dynamic>),

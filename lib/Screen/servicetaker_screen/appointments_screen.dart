@@ -113,7 +113,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
 
     return ListView.builder(
       controller: _scrollController,
-
       itemCount: provider.sortedDates.length + (provider.hasMore ? 1 : 0),
       itemBuilder: (context, index) {
         if (index >= provider.sortedDates.length) {
@@ -140,7 +139,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                               color: Colors.grey.shade400,
                             ),
                           ),
-
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8.0,
@@ -150,7 +148,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                               style: TextStyle(color: Colors.grey.shade600),
                             ),
                           ),
-
                           Expanded(
                             child: Divider(
                               thickness: 1,
@@ -191,7 +188,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                   ),
                 ),
               ),
-
               Column(
                 children: servicesForDate.map((serialData) {
                   return Container(
@@ -225,7 +221,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen>
                               color: Colors.grey.shade700,
                             ),
                           ),
-
                           Text(
                             'Booked at ${DateFormatter.formatForStatus(serialData.createdTime)}',
                             style: TextStyle(

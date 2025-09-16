@@ -34,7 +34,6 @@ class _ForgotScreenState extends State<ForgotScreen> {
                   ),
                 ],
               ),
-
               SizedBox(height: 20),
               Text(
                 "Please select your email for receiving password recovery code",

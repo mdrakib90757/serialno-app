@@ -19,7 +19,6 @@ class _SettingScreenState extends State<SettingScreen> {
           children: [
             Icon(Icons.inbox_outlined, size: 60, color: Colors.grey.shade300),
             const SizedBox(height: 12),
-
             Text(
               'No Data Found',
               style: TextStyle(fontSize: 16, color: Colors.grey[300]),

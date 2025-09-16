@@ -16,9 +16,8 @@ class GetNewSerialButtonProvider with ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   List<SerialModel> get queueSerials {
-    final items = _allSerials
-        .where((s) => s.status?.toLowerCase() != 'served')
-        .toList();
+    final items =
+        _allSerials.where((s) => s.status?.toLowerCase() != 'served').toList();
     items.sort((a, b) => (a.serialNo ?? 0).compareTo(b.serialNo ?? 0));
     return items;
   }

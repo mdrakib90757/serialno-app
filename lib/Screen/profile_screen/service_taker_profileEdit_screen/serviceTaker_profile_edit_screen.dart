@@ -93,8 +93,8 @@ class _serviceTakerProfileEditScreenState
                               PageRouteBuilder(
                                 pageBuilder: (_, __, ___) =>
                                     edit_profile_info_dialog(
-                                      user: authProvider.userModel!,
-                                    ),
+                                  user: authProvider.userModel!,
+                                ),
                                 transitionsBuilder: (_, anim, __, child) {
                                   return FadeTransition(
                                     opacity: anim,
@@ -298,7 +298,6 @@ class _serviceTakerProfileEditScreenState
                         border: Border.all(color: Colors.grey.shade400),
                         borderRadius: BorderRadius.circular(10),
                       ),
-
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15,
@@ -315,7 +314,6 @@ class _serviceTakerProfileEditScreenState
                                 fontSize: 15,
                               ),
                             ),
-
                             Text(
                               profile?.profileData?.gender ?? "",
                               style: TextStyle(

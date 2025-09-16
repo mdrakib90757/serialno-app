@@ -164,8 +164,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                   listen: false,
                                 );
 
-                                bool isServiceTakerUser =
-                                    authProvider.userType
+                                bool isServiceTakerUser = authProvider.userType
                                         ?.toLowerCase()
                                         .trim() ==
                                     "customer";
@@ -174,11 +173,11 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                   PageRouteBuilder(
                                     pageBuilder: (_, __, ___) =>
                                         BookSerialButton(
-                                          showAppBar: true,
-                                          showBottomNavBar: true,
-                                          isServiceTaker: isServiceTakerUser,
-                                          businessTypeId: '',
-                                        ),
+                                      showAppBar: true,
+                                      showBottomNavBar: true,
+                                      isServiceTaker: isServiceTakerUser,
+                                      businessTypeId: '',
+                                    ),
                                     transitionsBuilder: (_, anim, __, child) {
                                       return FadeTransition(
                                         opacity: anim,
@@ -225,7 +224,6 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                           ],
                         ),
                         const SizedBox(height: 8),
-
                         Expanded(
                           child: Consumer<GetBookSerialProvider>(
                             builder: (context, bookSerialProvider, child) {
@@ -244,7 +242,6 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                         color: Colors.grey.shade300,
                                       ),
                                       SizedBox(height: 12),
-
                                       Text(
                                         'No appointment for today',
                                         style: TextStyle(
@@ -266,19 +263,19 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                   // S/L Time
                                   final String slTime =
                                       DateFormatter.formatForStatusTime(
-                                        bookSerial.createdTime,
-                                      );
+                                    bookSerial.createdTime,
+                                  );
                                   // Status Time
                                   final String statusTime =
                                       DateFormatter.formatForStatusTime(
-                                        bookSerial.statusTime,
-                                      );
+                                    bookSerial.statusTime,
+                                  );
 
                                   // ApproxTime
                                   final String ApproxTime =
                                       DateFormatter.formatForApproxTime(
-                                        bookSerial.approxServeTime,
-                                      );
+                                    bookSerial.approxServeTime,
+                                  );
 
                                   return Container(
                                     //padding: EdgeInsets.all(5),
@@ -329,10 +326,10 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                         .toString(),
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      color:
-                                                          AppColor.getStatusColor(
-                                                            bookSerial.status,
-                                                          ),
+                                                      color: AppColor
+                                                          .getStatusColor(
+                                                        bookSerial.status,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -346,8 +343,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                             children: [
                                               Text(
                                                 bookSerial
-                                                        .serviceCenter
-                                                        ?.name ??
+                                                        .serviceCenter?.name ??
                                                     "No serviceCenter Name",
                                                 style: TextStyle(
                                                   color:
@@ -362,7 +358,6 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                               ),
                                             ],
                                           ),
-
                                           Visibility(
                                             visible:
                                                 bookSerial.forSelf == false,
@@ -378,8 +373,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    bookSerial
-                                                            .serviceType
+                                                    bookSerial.serviceType
                                                             ?.name ??
                                                         "No ServiceType Name",
                                                     style: TextStyle(
@@ -398,16 +392,15 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                 ],
                                               ),
                                               Visibility(
-                                                visible:
-                                                    bookSerial.status !=
+                                                visible: bookSerial.status !=
                                                         "Cancelled" &&
                                                     bookSerial.status !=
                                                         "Serving",
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                        right: 17,
-                                                      ),
+                                                    right: 17,
+                                                  ),
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       showDialog(
@@ -423,8 +416,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                     child: Row(
                                                       children: [
                                                         Visibility(
-                                                          visible:
-                                                              bookSerial
+                                                          visible: bookSerial
                                                                       .status !=
                                                                   "Cancelled" &&
                                                               bookSerial
@@ -432,23 +424,21 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                                   "Serving",
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets.only(
-                                                                  right: 17,
-                                                                ),
-                                                            child: GestureDetector(
+                                                                const EdgeInsets
+                                                                    .only(
+                                                              right: 17,
+                                                            ),
+                                                            child:
+                                                                GestureDetector(
                                                               onTap: () {
                                                                 final authProvider =
                                                                     Provider.of<
-                                                                      AuthProvider
-                                                                    >(
-                                                                      context,
-                                                                      listen:
-                                                                          false,
-                                                                    );
+                                                                        AuthProvider>(
+                                                                  context,
+                                                                  listen: false,
+                                                                );
 
-                                                                bool
-                                                                isServiceTakerUser =
-                                                                    authProvider
+                                                                bool isServiceTakerUser = authProvider
                                                                         .userType
                                                                         ?.toLowerCase()
                                                                         .trim() ==
@@ -457,7 +447,9 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                                 Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                    builder: (context) => UpdateBookSerialDlalog(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            UpdateBookSerialDlalog(
                                                                       showAppBar:
                                                                           true,
                                                                       showBottomNavBar:

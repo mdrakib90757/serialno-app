@@ -183,9 +183,8 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
     bool hasSpaceBelow =
         (screenHeight - fieldBottomY) > (widget.popupHeight + 10);
 
-    var yOffset = hasSpaceBelow
-        ? size.height + 5.0
-        : -(widget.popupHeight + 5.0);
+    var yOffset =
+        hasSpaceBelow ? size.height + 5.0 : -(widget.popupHeight + 5.0);
 
     return OverlayEntry(
       builder: (context) {

@@ -89,7 +89,6 @@ class _WeeklyOff_daysDropdownState extends State<WeeklyOff_daysDropdown> {
           );
         },
       ),
-
       items: widget.availableDays.map((day) {
         return DropdownMenuItem<String>(
           value: day,
@@ -125,9 +124,7 @@ class _WeeklyOff_daysDropdownState extends State<WeeklyOff_daysDropdown> {
           ),
         );
       }).toList(),
-
       onChanged: (value) {},
-
       dropdownStyleData: DropdownStyleData(
         maxHeight: 250,
         decoration: BoxDecoration(
@@ -136,7 +133,6 @@ class _WeeklyOff_daysDropdownState extends State<WeeklyOff_daysDropdown> {
         ),
         offset: const Offset(0, -5),
       ),
-
       menuItemStyleData: const MenuItemStyleData(
         padding: EdgeInsets.zero,
         height: 40,

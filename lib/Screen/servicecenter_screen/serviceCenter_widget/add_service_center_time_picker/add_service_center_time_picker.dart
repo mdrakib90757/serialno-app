@@ -49,15 +49,14 @@ class _CustomFieldWithTabsState extends State<CustomFieldWithTabs> {
   void _onTabTapped(int index) {
     Time initialTime = index == 0
         ? (_startTime ??
-              Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute))
+            Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute))
         : (_endTime ??
-              Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute));
+            Time(hour: TimeOfDay.now().hour, minute: TimeOfDay.now().minute));
 
     Navigator.of(context).push(
       showPicker(
         context: context,
         value: initialTime,
-
         onChange: (newTime) {
           setState(() {
             if (index == 0) {

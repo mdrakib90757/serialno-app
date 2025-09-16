@@ -42,7 +42,6 @@ class _serviceTaker_profile_screenState
                 const SizedBox(height: 20),
                 Divider(height: 3),
                 const SizedBox(height: 10),
-
                 GestureDetector(
                   onTap: () async {
                     final profileProvider = Provider.of<Getprofileprovider>(
@@ -52,7 +51,7 @@ class _serviceTaker_profile_screenState
                     final profile = profileProvider.profileData;
                     bool CustomeruserType =
                         authProvider.userType?.toLowerCase().trim() ==
-                        "customer";
+                            "customer";
 
                     Navigator.push(
                       context,

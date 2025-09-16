@@ -23,15 +23,8 @@ import '../../../../main_layouts/main_layout/main_layout.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 
 class AddUser_SettingServiceCenterDialog extends StatefulWidget {
-  final bool showAppBar;
-  final bool showBottomNavBar;
-  final bool isServiceTaker;
-
   const AddUser_SettingServiceCenterDialog({
     super.key,
-    this.showAppBar = true,
-    this.showBottomNavBar = false,
-    this.isServiceTaker = false,
   });
 
   @override
@@ -97,6 +90,7 @@ class _AddUser_SettingServiceCenterDialogState
     super.dispose();
   }
 
+  // save adduser setting screen
   Future<void> _saveAddUser() async {
     final addUserButton = Provider.of<AddUserServiceCenterProvider>(
       context,
@@ -135,9 +129,8 @@ class _AddUser_SettingServiceCenterDialogState
       password: _passwordController.text,
       confirmPassword: _confirmPasswordController.text,
       roleId: _selectedRole!.id!,
-      serviceCenterIds: _selectedServiceCentersForUser
-          .map((sc) => sc.id!)
-          .toList(),
+      serviceCenterIds:
+          _selectedServiceCentersForUser.map((sc) => sc.id!).toList(),
       isActive: _isActive,
     );
     final success = await addUserButton.addUserButtonProvider(
@@ -203,16 +196,9 @@ class _AddUser_SettingServiceCenterDialogState
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     Navigator.pop(context);
-                          //   },
-                          //   child: Icon(Icons.close, color: Colors.black),
-                          // ),
                         ],
                       ),
                       const SizedBox(height: 13),
-
                       const CustomLabeltext("Name"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -226,7 +212,6 @@ class _AddUser_SettingServiceCenterDialogState
                         ),
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Login Name"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -240,7 +225,6 @@ class _AddUser_SettingServiceCenterDialogState
                         //controller: phone
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Email Address"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -256,7 +240,6 @@ class _AddUser_SettingServiceCenterDialogState
                         //controller: phone
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Mobile Number"),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -268,7 +251,6 @@ class _AddUser_SettingServiceCenterDialogState
                         //prefixIcon: Icons.call,
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Role"),
                       const SizedBox(height: 10),
                       Container(
@@ -312,7 +294,6 @@ class _AddUser_SettingServiceCenterDialogState
                         ),
                       ),
                       const SizedBox(height: 10),
-
                       CustomLabeltext(
                         "Assigned Service Center",
                         showStar: false,
@@ -329,7 +310,6 @@ class _AddUser_SettingServiceCenterDialogState
                         },
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Password"),
                       const SizedBox(height: 12),
                       CustomTextField(
@@ -339,7 +319,6 @@ class _AddUser_SettingServiceCenterDialogState
                         isPassword: true,
                         // controller: password,
                       ),
-
                       const SizedBox(height: 10),
                       CustomLabeltext("Confirm Password"),
                       const SizedBox(height: 8),
@@ -407,7 +386,6 @@ class _AddUser_SettingServiceCenterDialogState
                         obscuringCharacter: "*",
                       ),
                       SizedBox(height: 10),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

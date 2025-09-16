@@ -25,10 +25,10 @@ class serviceCenter_serialBookProvider with ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     try {
-      _serviceCenterList =
-          await _servicecenter_bookserial_service.ServicecenterBookserialService(
-            companyId,
-          );
+      _serviceCenterList = await _servicecenter_bookserial_service
+          .ServicecenterBookserialService(
+        companyId,
+      );
       _isLoading = false;
       notifyListeners();
       return true;

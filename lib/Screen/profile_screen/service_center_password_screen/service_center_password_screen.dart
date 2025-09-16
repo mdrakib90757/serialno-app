@@ -74,9 +74,7 @@ class _serviceCenter_PasswordScreenState
         SnackBar(
           content: CustomSnackBarWidget(
             title: "Error",
-
-            message:
-                changePasswordProvider.errorMessage ??
+            message: changePasswordProvider.errorMessage ??
                 "Password update failed.",
             iconColor: Colors.red.shade400,
             icon: Icons.dangerous_outlined,
@@ -99,7 +97,6 @@ class _serviceCenter_PasswordScreenState
       userType: UserType.company,
       child: Form(
         key: _formkey,
-
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
@@ -144,7 +141,6 @@ class _serviceCenter_PasswordScreenState
                 isPassword: true,
                 //prefixIcon: Icons.lock_outline,
               ),
-
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: changePassword.isLoading ? null : _handleChangePassword,

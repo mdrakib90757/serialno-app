@@ -83,17 +83,16 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
           // Ensure the widget is still in the tree
           final serviceTypeProvider =
               Provider.of<serviceTypeSerialbook_Provider>(
-                context,
-                listen: false,
-              );
+            context,
+            listen: false,
+          );
           setState(() {
             if (widget.bookingDetails.serviceType?.name != null) {
-              _selectedServiceType = serviceTypeProvider.serviceTypeList
-                  .firstWhere(
-                    (type) =>
-                        type.name == widget.bookingDetails.serviceType!.name,
-                    orElse: () => null!,
-                  );
+              _selectedServiceType =
+                  serviceTypeProvider.serviceTypeList.firstWhere(
+                (type) => type.name == widget.bookingDetails.serviceType!.name,
+                orElse: () => null!,
+              );
             } else {
               _selectedServiceType = null;
             }
@@ -249,7 +248,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     isPassword: false,
                     enabled: false,
                   ),
-
                   const SizedBox(height: 10),
                   const CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
@@ -311,7 +309,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     },
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
                   CustomTextField(
@@ -371,7 +368,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     ),
                   ),
                   const SizedBox(height: 10),
-
                   Text(
                     "For",
                     style: TextStyle(
@@ -380,7 +376,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-
                   CustomRadioGroup<UserName>(
                     groupValue: _selectUserName,
                     items: const [UserName.Self, UserName.Other],
@@ -407,7 +402,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                         value == UserName.Self ? "Self" : "Other",
                   ),
                   const SizedBox(height: 10),
-
                   Visibility(
                     visible: _selectUserName == UserName.Self,
                     child: Column(
@@ -435,9 +429,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                       ],
                     ),
                   ),
-
                   const SizedBox(width: 10),
-
                   Visibility(
                     visible: _selectUserName == UserName.Other,
                     child: Column(

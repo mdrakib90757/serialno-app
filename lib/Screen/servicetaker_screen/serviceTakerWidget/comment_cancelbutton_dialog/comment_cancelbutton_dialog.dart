@@ -192,7 +192,6 @@ class _CommentCancelButtonDialogState extends State<CommentCancelButtonDialog> {
                       borderSide: BorderSide(color: Colors.grey.shade300),
                     ),
                     contentPadding: EdgeInsets.all(12),
-
                     hintText: "Reason or comment",
                     hintStyle: TextStyle(
                       color: Colors.grey.shade300,

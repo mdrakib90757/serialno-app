@@ -34,8 +34,8 @@ class profile_UserModel {
     return profile_UserModel(
       userCompanies: json["userCompanies"] != null
           ? (json["userCompanies"] as List)
-                .map((e) => UserCompany.fromJson(e))
-                .toList()
+              .map((e) => UserCompany.fromJson(e))
+              .toList()
           : [],
       currentCompany: json["currentCompany"] != null
           ? Company.fromJson(json["currentCompany"])
@@ -50,7 +50,6 @@ class profile_UserModel {
               isActive: false,
               businessTypeId: 0,
             ),
-
       id: json["id"],
       name: json["name"],
       email: json["email"],
@@ -62,7 +61,6 @@ class profile_UserModel {
       profileData: json["profileData"] != null
           ? ProfileData.fromJson(json["profileData"])
           : null,
-
       roleId: json['roleId'],
       serviceCenterIds: json['serviceCenterIds'] != null
           ? List<String>.from(json['serviceCenterIds'])

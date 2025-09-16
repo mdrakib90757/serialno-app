@@ -32,11 +32,9 @@ class AddButtonRequest {
       "name": name,
       "hotlineNo": hotlineNo,
       "email": email,
-
       "weeklyOffDays": weeklyOffDays ?? [],
       "workingStartTime": workingStartTime?.toIso8601String(),
       "workingEndTime": workingEndTime?.toIso8601String(),
-
       "daysOfAdvanceSerial": daysOfAdvanceSerial,
       "noOfReservedSerials": noOfReservedSerials,
       "serialNoPolicy": serialNoPolicy,

@@ -5,9 +5,8 @@ import '../../../model/service_type_model.dart';
 class serviceTypeSerialBook_service {
   Future<List<serviceTypeModel>> serviceTypeSerialBook(String companyId) async {
     try {
-      var response =
-          await ApiClient().get("/serial-no/companies/$companyId/service-types")
-              as List;
+      var response = await ApiClient()
+          .get("/serial-no/companies/$companyId/service-types") as List;
       List<serviceTypeModel> ButtonData = response
           .map(
             (data) => serviceTypeModel.fromJson(data as Map<String, dynamic>),

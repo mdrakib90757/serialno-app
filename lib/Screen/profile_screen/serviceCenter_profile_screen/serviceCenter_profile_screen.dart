@@ -68,7 +68,7 @@ class _serviceCenter_profile_screenState
                     final profile = profileProvider.profileData;
                     bool isCompanyUser =
                         authProvider.userType?.toLowerCase().trim() ==
-                        "company";
+                            "company";
 
                     Navigator.push(
                       context,
@@ -93,7 +93,6 @@ class _serviceCenter_profile_screenState
                       getupdateprofile.fetchProfileData();
                     });
                   },
-
                   child: Container(
                     height: 50,
                     width: double.infinity,

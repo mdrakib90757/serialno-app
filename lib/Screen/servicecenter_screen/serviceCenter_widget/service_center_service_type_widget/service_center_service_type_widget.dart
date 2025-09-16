@@ -110,7 +110,6 @@ class _service_center_service_type_widgetState
                       });
                     },
                     itemAsString: (ServiceCenterModel item) => item.name ?? "",
-
                     child: Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 16,
@@ -150,7 +149,6 @@ class _service_center_service_type_widgetState
                 ),
               ),
               SizedBox(width: 5),
-
               GestureDetector(
                 onTap: () {
                   // Second ServiceType add Button
@@ -188,8 +186,7 @@ class _service_center_service_type_widgetState
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: secondGetServiceType
-                        .serviceTypesOfSelectedCenter
-                        .length,
+                        .serviceTypesOfSelectedCenter.length,
                     itemBuilder: (context, index) {
                       final serviceType = secondGetServiceType
                           .serviceTypesOfSelectedCenter[index];
@@ -409,11 +406,11 @@ class _service_center_service_type_widgetState
                     onTap: () async {
                       Navigator.of(menuContext).pop(true);
 
-                      final success = await deleteProvider
-                          .delete_ServiceCenter_serviceType(
-                            ServiceCenterId,
-                            ServiceTypeId,
-                          );
+                      final success =
+                          await deleteProvider.delete_ServiceCenter_serviceType(
+                        ServiceCenterId,
+                        ServiceTypeId,
+                      );
                       if (mounted && success) {
                         await get_addButton.fetch_service_center_service_type(
                           ServiceCenterId,
@@ -426,8 +423,7 @@ class _service_center_service_type_widgetState
                       } else if (mounted) {
                         CustomFlushbar.showSuccess(
                           context: context,
-                          message:
-                              deleteProvider.errorMessage ??
+                          message: deleteProvider.errorMessage ??
                               "Failed to delete user.",
                           title: 'Failed',
                         );

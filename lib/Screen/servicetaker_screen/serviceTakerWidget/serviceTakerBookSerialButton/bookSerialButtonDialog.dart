@@ -149,8 +149,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     final String? serviceCenterId = _selectedServiceCenter?.id;
     final String? serviceTypeId = _selectedServiceType?.id;
 
-    bool isIdMissing =
-        businessTypeId == null ||
+    bool isIdMissing = businessTypeId == null ||
         serviceCenterId == null ||
         serviceTypeId == null;
     if (_selectedBusinessType?.id == 1 && organizationId == null) {
@@ -283,7 +282,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 10),
                   const CustomLabeltext("ServiceType Provider Type"),
                   const SizedBox(height: 10),
@@ -373,7 +371,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     },
                   ),
                   const SizedBox(height: 10),
-
                   if (_selectedBusinessType?.id == 1) ...[
                     const CustomLabeltext("Organization"),
                     const SizedBox(height: 8),
@@ -448,7 +445,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     ),
                     SizedBox(height: 10),
                   ],
-
                   const CustomLabeltext("Service Center"),
                   const SizedBox(height: 8),
                   Consumer<serviceCenter_serialBookProvider>(
@@ -457,12 +453,11 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                         builder: (context, typeServiceCenterProvider, child) {
                           final List<ServiceCenterModel> allServiceCenters = [
                             ...orgServiceCenterProvider.serviceCenterList,
-
                             ...typeServiceCenterProvider.serviceCenters,
                           ];
                           final bool isLoading =
                               orgServiceCenterProvider.isLoading ||
-                              typeServiceCenterProvider.isLoading;
+                                  typeServiceCenterProvider.isLoading;
 
                           return CustomDropdown<ServiceCenterModel>(
                             selectedItem: _selectedServiceCenter,
@@ -496,10 +491,8 @@ class _BookSerialButtonState extends State<BookSerialButton> {
 
                               print(newValue?.name);
                             },
-
                             itemAsString: (ServiceCenterModel item) =>
                                 item.name ?? "",
-
                             child: Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -525,8 +518,8 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                                           style: TextStyle(
                                             color:
                                                 _selectedServiceCenter != null
-                                                ? Colors.black
-                                                : Colors.grey.shade600,
+                                                    ? Colors.black
+                                                    : Colors.grey.shade600,
                                           ),
                                         ),
                                   Icon(
@@ -541,7 +534,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       );
                     },
                   ),
-
                   const SizedBox(height: 10),
                   const CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
@@ -600,7 +592,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       );
                     },
                   ),
-
                   const SizedBox(height: 10),
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
@@ -667,7 +658,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-
                   CustomRadioGroup<UserName>(
                     groupValue: _SelectUserName,
                     items: [UserName.Self, UserName.Other],
@@ -685,7 +675,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       }
                     },
                   ),
-
                   Visibility(
                     visible: _SelectUserName == UserName.Self,
                     child: Column(
@@ -714,7 +703,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     ),
                   ),
                   const SizedBox(width: 10),
-
                   Visibility(
                     visible: _SelectUserName == UserName.Other,
                     child: Column(
@@ -750,7 +738,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     ),
                   ),
                   const SizedBox(height: 10),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -761,7 +748,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-
                         onPressed: () async {
                           await _saveBookSerialRequest();
                         },

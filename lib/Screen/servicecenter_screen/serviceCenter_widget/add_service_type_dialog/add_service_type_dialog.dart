@@ -32,6 +32,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
     timeController.dispose();
   }
 
+  // save serviceType first Option
   Future<void> _saveAddServiceType() async {
     if (!_dialogFormKey.currentState!.validate()) return;
     final getProfileProvider = Provider.of<Getprofileprovider>(
@@ -53,11 +54,11 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
 
     AddButtonServiceTypeRequest serviceTypeRequest =
         AddButtonServiceTypeRequest(
-          name: nameController.text,
-          price: priceController.text,
-          defaultAllocatedTime: timeController.text,
-          companyId: companyId,
-        );
+      name: nameController.text,
+      price: priceController.text,
+      defaultAllocatedTime: timeController.text,
+      companyId: companyId,
+    );
 
     final success = await addButtonServiceType.addButtonServiceType(
       serviceTypeRequest,
@@ -79,8 +80,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
         SnackBar(
           content: CustomSnackBarWidget(
             title: "Error",
-            message:
-                addButtonServiceType.errorMessage ??
+            message: addButtonServiceType.errorMessage ??
                 "Failed to Added ServiceType",
             iconColor: Colors.red.shade400,
             icon: Icons.dangerous_outlined,
@@ -145,7 +145,6 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                     ],
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Service Types Name"),
                   const SizedBox(height: 8),
                   CustomTextField(
@@ -154,7 +153,6 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                     isPassword: false,
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Service Price", showStar: false),
                   const SizedBox(height: 8),
                   CustomTextField(
@@ -185,7 +183,6 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                           ),
                         ),
                         onPressed: _saveAddServiceType,
-
                         child: addButtonServiceType.isLoading
                             ? Text(
                                 "Please Wait",

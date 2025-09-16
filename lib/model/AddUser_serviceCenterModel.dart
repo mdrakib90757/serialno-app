@@ -34,7 +34,6 @@ class AddUserModel {
       companyId: json['companyId'],
       userId: json['userId'],
       roleId: json['roleId'],
-
       serviceCenterIds: json['serviceCenterIds'] != null
           ? List<String>.from(json['serviceCenterIds'])
           : [],

@@ -22,7 +22,6 @@ class CustomRadioGroup<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: items.map((item) {

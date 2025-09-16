@@ -76,7 +76,6 @@ class _MyAppbarState extends State<MyAppbar> {
               ),
             ),
           ),
-
           SizedBox(width: 35),
           Padding(
             padding: const EdgeInsets.only(top: 5),
@@ -102,7 +101,6 @@ class _MyAppbarState extends State<MyAppbar> {
                     fontSize: 14,
                   ),
                 ),
-
                 Text(
                   userEmail,
                   style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
@@ -114,7 +112,6 @@ class _MyAppbarState extends State<MyAppbar> {
             ),
           ),
           SizedBox(width: 7),
-
           GestureDetector(
             onTap: () => _showAccountDialog(context),
             child: CircleAvatar(
@@ -184,9 +181,9 @@ class _MyAppbarState extends State<MyAppbar> {
                           PageRouteBuilder(
                             pageBuilder: (_, __, ___) =>
                                 serviceCenter_profile_screen(
-                                  currentIndex: 0,
-                                  onTap: (int) {},
-                                ),
+                              currentIndex: 0,
+                              onTap: (int) {},
+                            ),
                             transitionsBuilder: (_, anim, __, child) {
                               return FadeTransition(
                                 opacity: anim,
@@ -199,7 +196,6 @@ class _MyAppbarState extends State<MyAppbar> {
                       },
                     ),
                   ],
-
                   _buildDialogOption(
                     icon: Icons.settings_outlined,
                     text: 'App Settings',
@@ -212,7 +208,6 @@ class _MyAppbarState extends State<MyAppbar> {
                     icon: Icons.logout,
                     text: 'Logout',
                     textColor: AppColor().primariColor,
-
                     onTap: () async {
                       final navigator = Navigator.of(context);
 

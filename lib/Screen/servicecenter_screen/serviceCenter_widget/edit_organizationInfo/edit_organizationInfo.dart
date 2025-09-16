@@ -28,15 +28,10 @@ import '../google_locationDialog/locationPickerDialogContant/locationPickerDialo
 
 class EditOrganizationInfo extends StatefulWidget {
   final CompanyDetailsModel companyDetails;
-  final bool showAppBar;
-  final bool showBottomNavBar;
-  final bool isServiceTaker;
+
   const EditOrganizationInfo({
     super.key,
     required this.companyDetails,
-    this.showAppBar = true,
-    this.showBottomNavBar = false,
-    this.isServiceTaker = false,
   });
 
   @override
@@ -88,6 +83,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
     });
   }
 
+  // fetch initial data
   Future<void> _fetchInitialData() async {
     final divisionProvider = Provider.of<DivisionProvider>(
       context,
@@ -140,6 +136,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
     }
   }
 
+  // load initial dropdown lists
   Future<void> _loadInitialDropdownLists() async {
     final locationProvider = context.read<LocationProvider>();
     final authProvider = context.read<AuthProvider>();
@@ -187,6 +184,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
     super.dispose();
   }
 
+  // save organization data
   Future<void> _updateOrganizationInfo() async {
     if (_dialogFormKey.currentState!.validate()) {
       _dialogFormKey.currentState!.save();
@@ -255,8 +253,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.company,
-      child:
-          companyDetailsProvider.isLoading ||
+      child: companyDetailsProvider.isLoading ||
               locationProvider.isLoading ||
               authProvider.isLoading
           ? Center(child: CustomShimmerList(itemCount: 10)) // Show loading here
@@ -290,7 +287,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         isPassword: false,
                         controller: name,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("Address Line 1", showStar: false),
                       const SizedBox(height: 8),
@@ -300,7 +296,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         controller: addressLine1,
                         enableValidation: false,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("Address Line 2", showStar: false),
                       const SizedBox(height: 10),
@@ -310,7 +305,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         hintText: "Address Line 2",
                         isPassword: false,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("Email"),
                       const SizedBox(height: 8),
@@ -320,7 +314,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         controller: email,
                         keyboardType: TextInputType.emailAddress,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("Mobile Number"),
                       const SizedBox(height: 8),
@@ -330,7 +323,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         controller: phone,
                         keyboardType: TextInputType.number,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("Business Type"),
                       const SizedBox(height: 10),
@@ -393,7 +385,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         },
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Division", showStar: false),
                       const SizedBox(height: 8),
                       Container(
@@ -447,7 +438,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         ),
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("District", showStar: false),
                       const SizedBox(height: 8),
                       Container(
@@ -499,7 +489,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         ),
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Thana", showStar: false),
                       const SizedBox(height: 8),
                       Container(
@@ -549,14 +538,12 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         ),
                       ),
                       SizedBox(height: 10),
-
                       const CustomLabeltext("Area", showStar: false),
                       const SizedBox(height: 8),
                       Container(
                         height: 47,
                         child: CustomDropdown<LocationPart>(
                           itemAsString: (item) => item.name ?? '',
-
                           onChanged: (newValue) {
                             setState(() {
                               _selectedArea = newValue;
@@ -566,7 +553,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                               locationProvider.getAreas(newValue.id!);
                             }
                           },
-
                           items: locationProvider.districts,
                           selectedItem: _selectedDistrict,
                           child: Container(
@@ -592,7 +578,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         ),
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Location", showStar: false),
                       const SizedBox(height: 8),
                       CustomTextField(
@@ -632,7 +617,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         ),
                       ),
                       const SizedBox(height: 12),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

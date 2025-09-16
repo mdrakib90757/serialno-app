@@ -90,8 +90,8 @@ class _serviceCenter_ProfileEditScreenState
                               PageRouteBuilder(
                                 pageBuilder: (_, __, ___) =>
                                     edit_profile_info_dialog(
-                                      user: authProvider.userModel!,
-                                    ),
+                                  user: authProvider.userModel!,
+                                ),
                                 transitionsBuilder: (_, anim, __, child) {
                                   return FadeTransition(
                                     opacity: anim,
@@ -295,7 +295,6 @@ class _serviceCenter_ProfileEditScreenState
                         border: Border.all(color: Colors.grey.shade400),
                         borderRadius: BorderRadius.circular(10),
                       ),
-
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15,
@@ -312,7 +311,6 @@ class _serviceCenter_ProfileEditScreenState
                                 fontSize: 15,
                               ),
                             ),
-
                             Text(
                               profile?.profileData?.gender ?? "",
                               style: TextStyle(

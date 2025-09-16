@@ -97,13 +97,15 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                               maxHeight: 170,
                                             ),
                                           ),
-                                          dropdownDecoratorProps: DropDownDecoratorProps(
-                                            dropdownSearchDecoration: InputDecoration(
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
                                               contentPadding:
                                                   EdgeInsets.symmetric(
-                                                    horizontal: 16,
-                                                    vertical: 12,
-                                                  ),
+                                                horizontal: 16,
+                                                vertical: 12,
+                                              ),
                                               // suffixIcon: divisionProvider.isLoading
                                               //     ? Container(
                                               //   padding: EdgeInsets.all(12),
@@ -144,15 +146,14 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                               ),
                                               disabledBorder:
                                                   OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          5,
-                                                        ),
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          Colors.grey.shade300,
-                                                    ),
-                                                  ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  5,
+                                                ),
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey.shade300,
+                                                ),
+                                              ),
                                               border: OutlineInputBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(5),
@@ -169,8 +170,8 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                             if (data != null) {
                                               final latLng = await _mapsService
                                                   .getLatLngFromPlaceId(
-                                                    data.placeId,
-                                                  );
+                                                data.placeId,
+                                              );
                                               setState(() {
                                                 _selectedPlace = data;
                                                 _locationFromDropdown = latLng;
@@ -184,7 +185,6 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                             return null;
                                           },
                                         ),
-
                                         SizedBox(height: 10),
                                         Expanded(
                                           child: LocationPickerDialogContent(
@@ -192,20 +192,18 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                                                 _locationFromDropdown,
                                             onLocationSelected:
                                                 (selectedLatLng) async {
-                                                  final placeDetails =
-                                                      await _mapsService
-                                                          .getPlaceDetailsFromLatLng(
-                                                            selectedLatLng,
-                                                          );
-                                                  setState(() {
-                                                    _selectedLocation =
-                                                        selectedLatLng;
-                                                    _selectedPlace =
-                                                        placeDetails;
-                                                    _locationFromDropdown =
-                                                        null;
-                                                  });
-                                                },
+                                              final placeDetails =
+                                                  await _mapsService
+                                                      .getPlaceDetailsFromLatLng(
+                                                selectedLatLng,
+                                              );
+                                              setState(() {
+                                                _selectedLocation =
+                                                    selectedLatLng;
+                                                _selectedPlace = placeDetails;
+                                                _locationFromDropdown = null;
+                                              });
+                                            },
                                           ),
                                         ),
                                         Row(
@@ -302,7 +300,6 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                   },
                   itemAsString: (s) => s.locationName ?? s.description,
                   selectedItem: _selectedPlace,
-
                   popupProps: PopupProps.menu(
                     menuProps: MenuProps(
                       backgroundColor: Colors.white,
@@ -316,7 +313,6 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                         horizontal: 16,
                         vertical: 12,
                       ),
-
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide(color: Colors.grey.shade400),
@@ -359,7 +355,6 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
                     return null;
                   },
                 ),
-
                 SizedBox(height: 8),
                 SizedBox(
                   height: 500,

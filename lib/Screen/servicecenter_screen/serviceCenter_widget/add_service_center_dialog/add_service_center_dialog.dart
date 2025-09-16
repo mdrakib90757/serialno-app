@@ -75,6 +75,7 @@ class _Add_button_Dialog_serviceCenter_screenState
     super.dispose();
   }
 
+  //save service center
   Future<void> _saveServiceCenter() async {
     if (!_dialogFormKey.currentState!.validate()) {
       return;
@@ -234,6 +235,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                 const SizedBox(height: 10),
                 const CustomLabeltext("Weekly off-day", showStar: false),
                 const SizedBox(height: 8),
+                //custom weekly off days dropdown
                 WeeklyOff_daysDropdown(
                   availableDays: _availableDays,
                   onSelectionChanged: (selectedDays) {
@@ -244,6 +246,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                 ),
 
                 const SizedBox(height: 10),
+                // custom tab button
                 CustomFieldWithTabs(
                   onEndTimeChanged: (time) {
                     setState(() {
@@ -283,6 +286,7 @@ class _Add_button_Dialog_serviceCenter_screenState
                 const SizedBox(height: 10),
                 const CustomLabeltext("Serial Number Policy", showStar: false),
                 const SizedBox(height: 8),
+                //custom policy dropdown
                 CustomTab(
                   onPolicyChanged: (policy) {
                     setState(() {
@@ -377,7 +381,6 @@ class _Add_button_Dialog_serviceCenter_screenState
                         ),
                         backgroundColor: AppColor().primariColor,
                       ),
-
                       onPressed: _saveServiceCenter,
                       child: addButtonProvider.isLoading
                           ? Text(

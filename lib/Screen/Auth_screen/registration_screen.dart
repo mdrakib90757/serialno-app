@@ -271,7 +271,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: name,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Address Line 1"),
                         SizedBox(height: 10),
@@ -280,7 +279,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: addressLine1,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Address Line 2", showStar: false),
                         SizedBox(height: 10),
@@ -290,7 +288,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           hintText: "Address Line 2",
                           isPassword: false,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Contact Name"),
                         SizedBox(height: 10),
@@ -299,7 +296,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: contactName,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Email Address", showStar: false),
                         SizedBox(height: 10),
@@ -310,7 +306,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           enableValidation: false,
                           keyboardType: TextInputType.emailAddress,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Mobile Number"),
                         SizedBox(height: 10),
@@ -320,7 +315,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           controller: phone,
                           keyboardType: TextInputType.number,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Business Type"),
                         SizedBox(height: 10),
@@ -370,7 +364,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                         ),
-
                         SizedBox(height: 10),
                         if (_selectedBusinessType?.id == 1) ...[
                           Text(
@@ -387,15 +380,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                             optionsBuilder:
                                 (TextEditingValue textEditingValue) {
-                                  if (textEditingValue.text.isEmpty) {
-                                    return _saveItems;
-                                  }
-                                  return _saveItems.where((String option) {
-                                    return option.toLowerCase().contains(
+                              if (textEditingValue.text.isEmpty) {
+                                return _saveItems;
+                              }
+                              return _saveItems.where((String option) {
+                                return option.toLowerCase().contains(
                                       textEditingValue.text.toLowerCase(),
                                     );
-                                  });
-                                },
+                              });
+                            },
                             onSelected: (String selection) {
                               // _textEditingController.text = selection;
                               setState(() {
@@ -405,73 +398,66 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               debugPrint('You just selected $selection');
                               FocusScope.of(context).unfocus();
                             },
-                            fieldViewBuilder:
-                                (
-                                  BuildContext context,
-                                  TextEditingController
-                                  fieldTextEditingController,
+                            fieldViewBuilder: (
+                              BuildContext context,
+                              TextEditingController fieldTextEditingController,
+                              FocusNode focusNode,
+                              VoidCallback onFieldSubmitted,
+                            ) {
+                              if (organization.text.isNotEmpty &&
+                                  fieldTextEditingController.text !=
+                                      organization.text) {
+                                fieldTextEditingController.text =
+                                    organization.text;
+                              }
 
-                                  FocusNode focusNode,
-                                  VoidCallback onFieldSubmitted,
-                                ) {
-                                  if (organization.text.isNotEmpty &&
-                                      fieldTextEditingController.text !=
-                                          organization.text) {
-                                    fieldTextEditingController.text =
-                                        organization.text;
-                                  }
-
-                                  return TextField(
-                                    controller: fieldTextEditingController,
-                                    focusNode: focusNode,
-                                    cursorColor: Colors.grey.shade500,
-
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 14,
-                                      ),
-                                      isDense: true,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: AppColor().primariColor,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      hintText: "Organization",
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey.shade400,
-                                      ),
-
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade400,
-                                        ),
-                                      ),
-                                      border: OutlineInputBorder(),
+                              return TextField(
+                                controller: fieldTextEditingController,
+                                focusNode: focusNode,
+                                cursorColor: Colors.grey.shade500,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 14,
+                                  ),
+                                  isDense: true,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: AppColor().primariColor,
+                                      width: 2,
                                     ),
+                                  ),
+                                  hintText: "Organization",
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                  border: OutlineInputBorder(),
+                                ),
+                                onSubmitted: (String value) {
+                                  final trimmerValue = value.trim();
+                                  if (trimmerValue.isNotEmpty) {
+                                    _saveNewItem(value);
 
-                                    onSubmitted: (String value) {
-                                      final trimmerValue = value.trim();
-                                      if (trimmerValue.isNotEmpty) {
-                                        _saveNewItem(value);
+                                    fieldTextEditingController.clear();
 
-                                        fieldTextEditingController.clear();
-
-                                        setState(() {
-                                          organization.clear();
-                                          //Organization.text = value;
-                                        });
-                                      }
-                                      onFieldSubmitted();
-                                    },
-
-                                    onChanged: (value) {
-                                      // _textEditingController.text = value;
-                                      organization.text = value;
-                                    },
-                                  );
+                                    setState(() {
+                                      organization.clear();
+                                      //Organization.text = value;
+                                    });
+                                  }
+                                  onFieldSubmitted();
                                 },
+                                onChanged: (value) {
+                                  // _textEditingController.text = value;
+                                  organization.text = value;
+                                },
+                              );
+                            },
                             optionsViewBuilder: (context, onSelected, options) {
                               return Align(
                                 alignment: Alignment.topLeft,
@@ -479,8 +465,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   elevation: 4.0,
                                   child: Container(
                                     height: 150,
-                                    width:
-                                        MediaQuery.of(context).size.width *
+                                    width: MediaQuery.of(context).size.width *
                                         0.86,
                                     constraints: BoxConstraints(maxWidth: 600),
                                     child: Scrollbar(
@@ -505,8 +490,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               title: Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                      horizontal: 16.0,
-                                                    ),
+                                                  horizontal: 16.0,
+                                                ),
                                                 child: Text(option),
                                               ),
                                               hoverColor: Colors.grey.shade200,
@@ -515,12 +500,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         },
                                         separatorBuilder:
                                             (BuildContext context, int index) {
-                                              return Divider(
-                                                height: 1,
-                                                thickness: 1,
-                                                color: Colors.grey.shade200,
-                                              );
-                                            },
+                                          return Divider(
+                                            height: 1,
+                                            thickness: 1,
+                                            color: Colors.grey.shade200,
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
@@ -529,7 +514,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             },
                           ),
                         ],
-
                         SizedBox(height: 10),
                         CustomLabeltext("Login Name"),
                         SizedBox(height: 10),
@@ -538,7 +522,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: loginName,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Password"),
                         SizedBox(height: 10),
@@ -547,7 +530,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: true,
                           controller: password,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Confirm Password"),
                         SizedBox(height: 10),
@@ -568,7 +550,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             }
                             return null;
                           },
-
                           controller: confirmPassword,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
@@ -617,13 +598,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           obscureText: obscureIndex1,
                           obscuringCharacter: "*",
                         ),
-
                         SizedBox(height: 20),
                         GestureDetector(
                           onTap: authProvider.isLoading
                               ? null
                               : _handleServiceCenterRegistration,
-
                           child: Container(
                             height: 43,
                             width: double.infinity,
@@ -668,7 +647,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: name,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Email"),
                         SizedBox(height: 10),
@@ -679,7 +657,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           keyboardType: TextInputType.emailAddress,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Mobile Number"),
                         SizedBox(height: 12),
@@ -688,7 +665,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: phone,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Gender"),
                         SizedBox(height: 12),
@@ -734,7 +710,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                           ),
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Login Name"),
                         SizedBox(height: 12),
@@ -743,7 +718,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: false,
                           controller: loginName,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Password"),
                         SizedBox(height: 12),
@@ -752,7 +726,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           isPassword: true,
                           controller: password,
                         ),
-
                         SizedBox(height: 10),
                         CustomLabeltext("Confirm Password"),
                         SizedBox(height: 12),
@@ -819,13 +792,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           obscureText: obscureIndex1,
                           obscuringCharacter: "*",
                         ),
-
                         SizedBox(height: 20),
                         GestureDetector(
                           onTap: authProvider.isLoading
                               ? null
                               : _handleServiceTakerRegistration,
-
                           child: Container(
                             height: 43,
                             width: double.infinity,

@@ -54,40 +54,39 @@ class _add_service_center_service_type_dialogState
     serviceCenterModel = widget.selectedServiceCenter;
   }
 
+  // save serviceCenter ServiceType second Option
   Future<void> _saveAddSecondServiceType() async {
     if (!_dialogFormKey.currentState!.validate()) return;
 
     final secondGetServiceType =
         Provider.of<get_service_center_service_type_provider>(
-          context,
-          listen: false,
-        );
+      context,
+      listen: false,
+    );
     final navigator = Navigator.of(context);
 
     final secondServiceType =
         Provider.of<add_service_center_service_type_provider>(
-          context,
-          listen: false,
-        );
+      context,
+      listen: false,
+    );
 
     final ServiceCenterId = widget.selectedServiceCenter?.id ?? "";
     final ServiceTypeId = _selectedServiceType?.id ?? "";
-    final price =
-        int.tryParse(ServicePriceController.text) ??
+    final price = int.tryParse(ServicePriceController.text) ??
         double.tryParse(ServicePriceController.text)?.toInt() ??
         0;
 
-    final time =
-        int.tryParse(timeController.text) ??
+    final time = int.tryParse(timeController.text) ??
         double.tryParse(timeController.text)?.toInt() ??
         0;
 
     add_service_center_service_type_request serviceTypeRequest =
         add_service_center_service_type_request(
-          id: ServiceTypeId,
-          price: price,
-          defaultAllocatedTime: time,
-        );
+      id: ServiceTypeId,
+      price: price,
+      defaultAllocatedTime: time,
+    );
 
     final success = await secondServiceType.postServiceType(
       ServiceCenterId,
@@ -180,7 +179,6 @@ class _add_service_center_service_type_dialogState
                     ],
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
                   Consumer<GetAddButtonServiceType_Provider>(
@@ -202,7 +200,7 @@ class _add_service_center_service_type_dialogState
                                     newvalue.price?.toString() ?? '';
                                 timeController.text =
                                     newvalue.defaultAllocatedTime?.toString() ??
-                                    '';
+                                        '';
                               } else {
                                 ServicePriceController.clear();
                                 timeController.clear();
@@ -253,7 +251,6 @@ class _add_service_center_service_type_dialogState
                     },
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Service Price", showStar: false),
                   const SizedBox(height: 8),
                   CustomTextField(
@@ -286,7 +283,6 @@ class _add_service_center_service_type_dialogState
                           ),
                         ),
                         onPressed: _saveAddSecondServiceType,
-
                         child: secondServiceType.isLoading
                             ? Text(
                                 "Please Wait",

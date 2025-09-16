@@ -275,13 +275,11 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                       if (_selectedServiceType == null &&
                           widget.serialToEdit.serviceType != null) {
                         try {
-                          _selectedServiceType = serviceTypeProvider
-                              .serviceTypeList
-                              .firstWhere(
-                                (item) =>
-                                    item.id ==
-                                    widget.serialToEdit.serviceType!.id,
-                              );
+                          _selectedServiceType =
+                              serviceTypeProvider.serviceTypeList.firstWhere(
+                            (item) =>
+                                item.id == widget.serialToEdit.serviceType!.id,
+                          );
                         } catch (e) {
                           print(
                             "Default service type not found in the list: $e",
@@ -320,8 +318,7 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                               children: [
                                 serviceTypeProvider.isLoading &&
                                         serviceTypeProvider
-                                            .serviceTypeList
-                                            .isEmpty
+                                            .serviceTypeList.isEmpty
                                     ? Center(
                                         child: CustomLoading(
                                           color: AppColor().primariColor,

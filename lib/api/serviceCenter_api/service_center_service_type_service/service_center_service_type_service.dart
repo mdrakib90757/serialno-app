@@ -25,11 +25,9 @@ class service_center_service_type_service {
     String serviceCenterId,
   ) async {
     try {
-      var response =
-          await ApiClient().get(
-                "/serial-no/service-centers/$serviceCenterId/service-types",
-              )
-              as List;
+      var response = await ApiClient().get(
+        "/serial-no/service-centers/$serviceCenterId/service-types",
+      ) as List;
       List<serviceTypeModel> ButtonData = response
           .map(
             (data) => serviceTypeModel.fromJson(data as Map<String, dynamic>),

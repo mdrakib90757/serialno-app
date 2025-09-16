@@ -113,7 +113,6 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
                   color: Colors.black,
                 ),
               ),
-
               Wrap(
                 spacing: 5.0,
                 // runSpacing: 5.0,
@@ -135,7 +134,6 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
                         });
                       }
                     },
-
                     backgroundColor: Colors.white,
                     selectedColor: AppColor().primariColor,
                     showCheckmark: false,
@@ -150,7 +148,6 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
                   );
                 }).toList(),
               ),
-
               if (_selectedStatus == 'Served') ...[
                 const Text("Collected Amount (BDT)"),
                 const SizedBox(height: 8),
@@ -166,7 +163,6 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
                   ),
                 ),
               ],
-
               SizedBox(height: 8),
               const Text(
                 'Comment',
@@ -274,7 +270,6 @@ class _ManageSerialDialogState extends State<ManageSerialDialog> {
               ? Text('Please wait...')
               : Text('Update'),
         ),
-
         OutlinedButton(
           onPressed: () => Navigator.of(context).pop(),
           style: OutlinedButton.styleFrom(

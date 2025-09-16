@@ -43,9 +43,8 @@ class _CustomServicecenterNavigationbarState
         // selectedItemColor: widget.currentIndex == -1
         //     ? Colors.transparent
         //     : AppColor().primariColor,
-        selectedItemColor: widget.currentIndex == null
-            ? Colors.grey
-            : AppColor().primariColor,
+        selectedItemColor:
+            widget.currentIndex == null ? Colors.grey : AppColor().primariColor,
         unselectedItemColor: Colors.grey[600],
         // showUnselectedLabels: true,
         selectedFontSize: 12.0,
@@ -55,13 +54,11 @@ class _CustomServicecenterNavigationbarState
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined, size: 33),
             activeIcon: Icon(Icons.home, size: 33),
-
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.corporate_fare_outlined, size: 33),
             activeIcon: Icon(Icons.corporate_fare_rounded, size: 33),
-
             label: "Service-Center",
           ),
           BottomNavigationBarItem(

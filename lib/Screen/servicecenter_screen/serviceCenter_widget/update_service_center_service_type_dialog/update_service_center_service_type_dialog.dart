@@ -76,9 +76,9 @@ class _update_servive_center_service_type_dialogState
       );
       final get_addButton =
           Provider.of<get_service_center_service_type_provider>(
-            context,
-            listen: false,
-          );
+        context,
+        listen: false,
+      );
 
       final companyId = Provider.of<Getprofileprovider>(
         context,
@@ -91,10 +91,10 @@ class _update_servive_center_service_type_dialogState
 
       update_service_center_service_type_request UpdateRequest =
           update_service_center_service_type_request(
-            serviceTypeId: widget.serviceType_model.id,
-            price: double.parse(priceController.text).round(),
-            defaultAllocatedTime: double.parse(timeController.text).round(),
-          );
+        serviceTypeId: widget.serviceType_model.id,
+        price: double.parse(priceController.text).round(),
+        defaultAllocatedTime: double.parse(timeController.text).round(),
+      );
 
       final success = await UpdateButton.update_service_center_service_typ(
         UpdateRequest,
@@ -201,9 +201,7 @@ class _update_servive_center_service_type_dialogState
                           hintText: "Service Type",
                           isPassword: false,
                         ),
-
                         const SizedBox(height: 10),
-
                         const CustomLabeltext("Service Price", showStar: false),
                         const SizedBox(height: 8),
                         CustomTextField(
@@ -213,7 +211,6 @@ class _update_servive_center_service_type_dialogState
                           enableValidation: false,
                         ),
                         const SizedBox(height: 10),
-
                         const CustomLabeltext(
                           "Default Allocated Time",
                           showStar: false,
@@ -229,7 +226,6 @@ class _update_servive_center_service_type_dialogState
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

@@ -74,12 +74,12 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
 
       EditButtonServiceTypeRequest editButtonRequest =
           EditButtonServiceTypeRequest(
-            companyId: companyId,
-            id: widget.serviceType_model.id,
-            name: nameController.text,
-            price: priceController.text,
-            defaultAllocatedTime: timeController.text,
-          );
+        companyId: companyId,
+        id: widget.serviceType_model.id,
+        name: nameController.text,
+        price: priceController.text,
+        defaultAllocatedTime: timeController.text,
+      );
 
       final success = await editButton.editButtonServiceType(
         editButtonRequest,
@@ -174,9 +174,7 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                     hintText: "Name",
                     isPassword: false,
                   ),
-
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Service Price", showStar: false),
                   const SizedBox(height: 8),
                   CustomTextField(
@@ -186,7 +184,6 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                     enableValidation: false,
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext(
                     "Default Allocated Time",
                     showStar: false,
@@ -199,7 +196,6 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                     enableValidation: false,
                   ),
                   const SizedBox(height: 10),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

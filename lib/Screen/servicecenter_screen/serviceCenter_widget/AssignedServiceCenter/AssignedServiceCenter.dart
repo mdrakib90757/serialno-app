@@ -65,7 +65,6 @@ class _AssignedServiceCentersDropdownState
                       : Wrap(
                           spacing: 2.0,
                           runSpacing: 2.0,
-
                           children: _selectedCenters.map((center) {
                             return Chip(
                               label: Text(
@@ -96,7 +95,6 @@ class _AssignedServiceCentersDropdownState
           );
         },
       ),
-
       items: widget.availableServiceCenters.map((center) {
         return DropdownMenuItem<ServiceCenterModel>(
           value: center,
@@ -133,9 +131,7 @@ class _AssignedServiceCentersDropdownState
           ),
         );
       }).toList(),
-
       onChanged: (value) {},
-
       dropdownStyleData: DropdownStyleData(
         maxHeight: 250,
         decoration: BoxDecoration(
@@ -144,7 +140,6 @@ class _AssignedServiceCentersDropdownState
         ),
         offset: const Offset(0, -5),
       ),
-
       menuItemStyleData: const MenuItemStyleData(
         padding: EdgeInsets.zero,
         height: 40,
