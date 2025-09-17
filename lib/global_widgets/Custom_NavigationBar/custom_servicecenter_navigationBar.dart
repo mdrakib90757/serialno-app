@@ -33,18 +33,11 @@ class _CustomServicecenterNavigationbarState
       ),
       child: BottomNavigationBar(
         backgroundColor: Colors.white,
-        //currentIndex: widget.currentIndex >= 0 ? widget.currentIndex : 0,
-        currentIndex: widget.currentIndex ?? 0,
+        currentIndex: widget.currentIndex >= 0 ? widget.currentIndex : 0,
         onTap: widget.onTap,
-
         type: BottomNavigationBarType.fixed,
-
         //backgroundColor: Colors.white,
-        // selectedItemColor: widget.currentIndex == -1
-        //     ? Colors.transparent
-        //     : AppColor().primariColor,
-        selectedItemColor:
-            widget.currentIndex == null ? Colors.grey : AppColor().primariColor,
+        selectedItemColor: AppColor().primariColor,
         unselectedItemColor: Colors.grey[600],
         // showUnselectedLabels: true,
         selectedFontSize: 12.0,

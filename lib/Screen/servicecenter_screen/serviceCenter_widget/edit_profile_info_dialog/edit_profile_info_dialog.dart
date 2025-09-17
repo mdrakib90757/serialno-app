@@ -70,8 +70,8 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
       // Set Gender
       if (profileData.gender != null &&
           genderList.contains(profileData.gender!.trim())) {
-        _selectGenter =
-            profileData.gender!.trim(); // Trim for robust comparison
+        _selectGenter = profileData.gender!
+            .trim(); // Trim for robust comparison
       }
 
       // Set Date of Birth
@@ -80,8 +80,9 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
         dateOfBirth.text = profileData.dateOfBirth!; // Set text field
         try {
           // Parse string date to DateTime object for the date picker's initialDate
-          _selectedDate =
-              DateFormat('yyyy-MM-dd').parse(profileData.dateOfBirth!);
+          _selectedDate = DateFormat(
+            'yyyy-MM-dd',
+          ).parse(profileData.dateOfBirth!);
         } catch (e) {
           print("Error parsing date of birth from profileData: $e");
           _selectedDate = null; // Reset if parsing fails
@@ -177,52 +178,24 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                 const SizedBox(height: 10),
                 const CustomLabeltext("Gender"),
                 const SizedBox(height: 12),
-                Container(
-                  height: 45,
-                  child: CustomDropdown<String>(
-                    items: genderList,
-                    value: _selectGenter,
-                    itemAsString: (item) => item,
-                    // validator: (value) {
-                    //   if (value == null)
-                    //     return "Please select a Gender";
-                    //   return null;
-                    // },
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectGenter = newValue;
-                      });
-                    },
-                    selectedItem: _selectGenter,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            _selectGenter ?? "Select Gender",
-                            style: TextStyle(
-                              color: _selectGenter != null
-                                  ? Colors.black
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                CustomDropdown<String>(
+                  hinText: "Select Gender",
+                  items: genderList,
+                  value: _selectGenter,
+                  itemAsString: (item) => item,
+                  // validator: (value) {
+                  //   if (value == null)
+                  //     return "Please select a Gender";
+                  //   return null;
+                  // },
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectGenter = newValue;
+                    });
+                  },
+                  selectedItem: _selectGenter,
                 ),
+
                 const SizedBox(height: 10),
                 const CustomLabeltext("Date of Birth"),
                 const SizedBox(height: 10),
@@ -298,19 +271,19 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                               : () async {
                                   UpdateProfileRequest request =
                                       UpdateProfileRequest(
-                                    name: name.text,
-                                    mobileNo: mobileNo.text,
-                                    email: email.text,
-                                    gender: _selectGenter,
-                                    dateOfBirth: dateOfBirth.text.isNotEmpty
-                                        ? dateOfBirth.text
-                                        : null,
-                                  );
+                                        name: name.text,
+                                        mobileNo: mobileNo.text,
+                                        email: email.text,
+                                        gender: _selectGenter,
+                                        dateOfBirth: dateOfBirth.text.isNotEmpty
+                                            ? dateOfBirth.text
+                                            : null,
+                                      );
 
                                   final success =
                                       await UpdateProfile.updateUserProfile(
-                                    request,
-                                  );
+                                        request,
+                                      );
 
                                   if (success) {
                                     await Provider.of<Getprofileprovider>(
@@ -328,7 +301,8 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                                       SnackBar(
                                         content: CustomSnackBarWidget(
                                           title: "Error",
-                                          message: UpdateProfile.errorMessage ??
+                                          message:
+                                              UpdateProfile.errorMessage ??
                                               "Profile Update Failed",
                                           iconColor: Colors.red.shade400,
                                           icon: Icons.dangerous_outlined,

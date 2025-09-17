@@ -5,6 +5,7 @@ import 'package:serialno_app/Screen/Auth_screen/login_screen.dart';
 import 'package:serialno_app/Screen/profile_screen/serviceCenter_profile_screen/serviceCenter_profile_screen.dart';
 import 'package:serialno_app/providers/auth_provider/auth_providers.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
+import '../Screen/profile_screen/profile_screen.dart';
 import '../main_layouts/service_center_layout/service_center_layout.dart';
 import '../main_layouts/service_taker_layout/service_taker_layout.dart';
 import '../providers/serviceCenter_provider/newSerialButton_provider/getNewSerialButton_provider.dart';
@@ -179,8 +180,7 @@ class _MyAppbarState extends State<MyAppbar> {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (_, __, ___) =>
-                                serviceCenter_profile_screen(
+                            pageBuilder: (_, __, ___) => profile_screen(
                               currentIndex: 0,
                               onTap: (int) {},
                             ),

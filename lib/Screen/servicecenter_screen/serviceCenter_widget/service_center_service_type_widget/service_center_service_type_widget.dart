@@ -39,7 +39,7 @@ class _service_center_service_type_widgetState
       listen: false,
     );
     final companyId = getProfileProvider.profileData?.currentCompany.id;
-    // Use a Future.delayed or addPostFrameCallback to ensure provider is ready
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final getAddButtonProvider = Provider.of<GetAddButtonProvider>(
         context,
@@ -47,7 +47,7 @@ class _service_center_service_type_widgetState
       );
       await getAddButtonProvider.fetchGetAddButton(companyId!);
 
-      if (!mounted) return; // <-- ADD THIS
+      if (!mounted) return;
       if (getAddButtonProvider.serviceCenterList.isNotEmpty) {
         setState(() {
           _selectedServiceCenter = getAddButtonProvider.serviceCenterList.first;
@@ -84,68 +84,29 @@ class _service_center_service_type_widgetState
           Row(
             children: [
               Expanded(
-                child: Container(
-                  height: 45,
-                  child: CustomDropdown<ServiceCenterModel>(
-                    selectedItem: _selectedServiceCenter,
-                    items: serviceCenterProvider.serviceCenterList,
-                    onChanged: (ServiceCenterModel? newValue) {
-                      setState(() {
-                        _selectedServiceCenter = newValue;
-                        if (_selectedServiceCenter != null) {
-                          // Fetch service types for the newly selected service center
-                          Provider.of<get_service_center_service_type_provider>(
-                            context,
-                            listen: false,
-                          ).fetch_service_center_service_type(
-                            _selectedServiceCenter!.id!,
-                          );
-                        } else {
-                          // Clear the list if no service center is selected
-                          Provider.of<get_service_center_service_type_provider>(
-                            context,
-                            listen: false,
-                          ).clearData(); // You'll need to add this method to your provider
-                        }
-                      });
-                    },
-                    itemAsString: (ServiceCenterModel item) => item.name ?? "",
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          serviceCenterProvider.isLoading
-                              ? CustomLoading(
-                                  strokeWidth: 2.5,
-                                  color: AppColor().primariColor,
-                                  size: 20,
-                                )
-                              : Text(
-                                  _selectedServiceCenter == null
-                                      ? "Select Service Center"
-                                      : _selectedServiceCenter!.name ?? "",
-                                  style: TextStyle(
-                                    color: _selectedServiceCenter != null
-                                        ? Colors.black
-                                        : Colors.grey.shade600,
-                                  ),
-                                ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.grey.shade600,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                child: CustomDropdown<ServiceCenterModel>(
+                  selectedItem: _selectedServiceCenter,
+                  items: serviceCenterProvider.serviceCenterList,
+                  onChanged: (ServiceCenterModel? newValue) {
+                    setState(() {
+                      _selectedServiceCenter = newValue;
+                      if (_selectedServiceCenter != null) {
+                        Provider.of<get_service_center_service_type_provider>(
+                          context,
+                          listen: false,
+                        ).fetch_service_center_service_type(
+                          _selectedServiceCenter!.id!,
+                        );
+                      } else {
+                        Provider.of<get_service_center_service_type_provider>(
+                          context,
+                          listen: false,
+                        ).clearData();
+                      }
+                    });
+                  },
+                  itemAsString: (ServiceCenterModel item) => item.name ?? "",
+                  hinText: "Select MultiType",
                 ),
               ),
               SizedBox(width: 5),
@@ -186,7 +147,8 @@ class _service_center_service_type_widgetState
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: secondGetServiceType
-                        .serviceTypesOfSelectedCenter.length,
+                        .serviceTypesOfSelectedCenter
+                        .length,
                     itemBuilder: (context, index) {
                       final serviceType = secondGetServiceType
                           .serviceTypesOfSelectedCenter[index];
@@ -290,8 +252,7 @@ class _service_center_service_type_widgetState
         context: context,
         builder: (BuildContext context) {
           return add_service_center_service_type_dialog(
-            selectedServiceCenter:
-                _selectedServiceCenter, // Pass the selected model here
+            selectedServiceCenter: _selectedServiceCenter,
           );
         },
       );
@@ -406,11 +367,11 @@ class _service_center_service_type_widgetState
                     onTap: () async {
                       Navigator.of(menuContext).pop(true);
 
-                      final success =
-                          await deleteProvider.delete_ServiceCenter_serviceType(
-                        ServiceCenterId,
-                        ServiceTypeId,
-                      );
+                      final success = await deleteProvider
+                          .delete_ServiceCenter_serviceType(
+                            ServiceCenterId,
+                            ServiceTypeId,
+                          );
                       if (mounted && success) {
                         await get_addButton.fetch_service_center_service_type(
                           ServiceCenterId,
@@ -423,7 +384,8 @@ class _service_center_service_type_widgetState
                       } else if (mounted) {
                         CustomFlushbar.showSuccess(
                           context: context,
-                          message: deleteProvider.errorMessage ??
+                          message:
+                              deleteProvider.errorMessage ??
                               "Failed to delete user.",
                           title: 'Failed',
                         );

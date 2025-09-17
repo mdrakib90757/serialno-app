@@ -38,8 +38,9 @@ class CustomTabSelector<T> extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
-                color:
-                    isSelected ? AppColor().primariColor : Colors.transparent,
+                color: isSelected
+                    ? AppColor().primariColor
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(5.0),
                 // No border for unselected, a subtle border for selected
                 border: isSelected

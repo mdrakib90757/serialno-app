@@ -35,9 +35,7 @@ class _CustomServicetakerNavigationbarState
         currentIndex: widget.currentIndex >= 0 ? widget.currentIndex : 0,
         onTap: widget.onTap,
         elevation: 50,
-        selectedItemColor: widget.currentIndex == -1
-            ? Colors.transparent
-            : AppColor().primariColor,
+        selectedItemColor: AppColor().primariColor,
         unselectedItemColor: Colors.grey.shade600,
         type: BottomNavigationBarType.fixed,
         iconSize: 25,

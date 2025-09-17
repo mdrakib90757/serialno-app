@@ -45,8 +45,9 @@ class MybookedModel {
 
   MybookedModel.fromJson(Map<String, dynamic> json) {
     user = json['user'];
-    company =
-        json['company'] != null ? new Company.fromJson(json['company']) : null;
+    company = json['company'] != null
+        ? new Company.fromJson(json['company'])
+        : null;
     serviceCenter = json['serviceCenter'] != null
         ? new ServiceCenter.fromJson(json['serviceCenter'])
         : null;

@@ -30,12 +30,15 @@ class NextButtonService {
   ) async {
     try {
       final Map<String, String> queryParameters = {'date': date};
-      var response = await ApiClient().get(
-        "/serial-no/service-centers/$serviceCenterId/services",
-        queryParameters: queryParameters,
-      ) as List;
-      List<SerialModel> NewButtonData =
-          response.map((data) => SerialModel.fromJson(data)).toList();
+      var response =
+          await ApiClient().get(
+                "/serial-no/service-centers/$serviceCenterId/services",
+                queryParameters: queryParameters,
+              )
+              as List;
+      List<SerialModel> NewButtonData = response
+          .map((data) => SerialModel.fromJson(data))
+          .toList();
       return NewButtonData;
     } catch (e) {
       print("Error fetching or parsing NewButtonData - : $e");

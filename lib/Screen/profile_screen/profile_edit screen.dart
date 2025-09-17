@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:serialno_app/global_widgets/custom_shimmer_list/CustomShimmerList%20.dart';
 import 'package:serialno_app/main_layouts/main_layout/main_layout.dart';
-import '../../../global_widgets/Custom_NavigationBar/custom_servicecenter_navigationBar.dart';
-import '../../../global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
-import '../../../global_widgets/My_Appbar.dart';
+
 import '../../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
-import '../../servicecenter_screen/serviceCenter_widget/edit_profile_info_dialog/edit_profile_info_dialog.dart';
+import '../../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
 import '../../../providers/auth_provider/auth_providers.dart';
 import '../../../providers/profile_provider/getprofile_provider.dart';
 import '../../../utils/color.dart';
+import '../servicecenter_screen/serviceCenter_widget/edit_profile_info_dialog/edit_profile_info_dialog.dart';
 
-class serviceTakerProfileEditScreen extends StatefulWidget {
-  const serviceTakerProfileEditScreen({super.key});
+class ProfileEditScreen extends StatefulWidget {
+  const ProfileEditScreen({super.key});
 
   @override
-  State<serviceTakerProfileEditScreen> createState() =>
-      _serviceTakerProfileEditScreenState();
+  State<ProfileEditScreen> createState() => _ProfileEditScreenState();
 }
 
-class _serviceTakerProfileEditScreenState
-    extends State<serviceTakerProfileEditScreen> {
+class _ProfileEditScreenState extends State<ProfileEditScreen> {
   @override
   void initState() {
     // TODO: implement initState
@@ -40,19 +36,6 @@ class _serviceTakerProfileEditScreenState
     }
   }
 
-  void _showDialog(BuildContext context) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final result = await showDialog(
-      context: context,
-      builder: (context) =>
-          edit_profile_info_dialog(user: authProvider.userModel!),
-    );
-
-    if (result == true) {
-      setState(() {}); // force UI rebuild
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: true);
@@ -60,11 +43,20 @@ class _serviceTakerProfileEditScreenState
     final profile = getprofileProvider.profileData;
     final String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
+    final authProviderr = Provider.of<AuthProvider>(context);
+    UserType currentUserLayoutType;
+    if (authProviderr.userType?.toLowerCase().trim() == "customer") {
+      currentUserLayoutType = UserType.customer;
+    } else {
+      currentUserLayoutType = UserType.company;
+    }
+
     return MainLayout(
-      userType: UserType.customer,
       currentIndex: 0,
       onTap: (p0) {},
       color: Colors.white,
+      userType: currentUserLayoutType,
+      // userType: UserType.company,
       child: (profile == null)
           ? CustomShimmerList(itemCount: 10)
           : Padding(
@@ -105,7 +97,7 @@ class _serviceTakerProfileEditScreenState
                               ),
                             );
 
-                            // Navigator.pushReplacement(
+                            // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
                             //     builder: (context) => edit_profile_info_dialog(

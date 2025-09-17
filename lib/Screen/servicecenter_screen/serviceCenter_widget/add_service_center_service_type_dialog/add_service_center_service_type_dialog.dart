@@ -56,37 +56,43 @@ class _add_service_center_service_type_dialogState
 
   // save serviceCenter ServiceType second Option
   Future<void> _saveAddSecondServiceType() async {
-    if (!_dialogFormKey.currentState!.validate()) return;
+    if (!_dialogFormKey.currentState!.validate()) {
+      debugPrint("Form is invalid!");
+      return;
+    }
+    debugPrint("Form is valid, proceeding to save...");
 
     final secondGetServiceType =
         Provider.of<get_service_center_service_type_provider>(
-      context,
-      listen: false,
-    );
+          context,
+          listen: false,
+        );
     final navigator = Navigator.of(context);
 
     final secondServiceType =
         Provider.of<add_service_center_service_type_provider>(
-      context,
-      listen: false,
-    );
+          context,
+          listen: false,
+        );
 
     final ServiceCenterId = widget.selectedServiceCenter?.id ?? "";
     final ServiceTypeId = _selectedServiceType?.id ?? "";
-    final price = int.tryParse(ServicePriceController.text) ??
+    final price =
+        int.tryParse(ServicePriceController.text) ??
         double.tryParse(ServicePriceController.text)?.toInt() ??
         0;
 
-    final time = int.tryParse(timeController.text) ??
+    final time =
+        int.tryParse(timeController.text) ??
         double.tryParse(timeController.text)?.toInt() ??
         0;
 
     add_service_center_service_type_request serviceTypeRequest =
         add_service_center_service_type_request(
-      id: ServiceTypeId,
-      price: price,
-      defaultAllocatedTime: time,
-    );
+          id: ServiceTypeId,
+          price: price,
+          defaultAllocatedTime: time,
+        );
 
     final success = await secondServiceType.postServiceType(
       ServiceCenterId,
@@ -183,73 +189,41 @@ class _add_service_center_service_type_dialogState
                   const SizedBox(height: 8),
                   Consumer<GetAddButtonServiceType_Provider>(
                     builder: (context, serviceTypeProvider, child) {
-                      return Container(
-                        height: 45,
-                        child: CustomDropdown<serviceTypeModel>(
-                          items:
-                              getAddButton_serviceType_Provider.serviceTypeList,
-                          value: _selectedServiceType,
-                          onChanged: (serviceTypeModel? newvalue) {
-                            debugPrint(
-                              "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
-                            );
-                            setState(() {
-                              _selectedServiceType = newvalue;
-                              if (newvalue != null) {
-                                ServicePriceController.text =
-                                    newvalue.price?.toString() ?? '';
-                                timeController.text =
-                                    newvalue.defaultAllocatedTime?.toString() ??
-                                        '';
-                              } else {
-                                ServicePriceController.clear();
-                                timeController.clear();
-                              }
-                            });
-                          },
-                          itemAsString: (serviceTypeModel item) =>
-                              item.name ?? "No Name",
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                serviceTypeProvider.isLoading
-                                    ? Align(
-                                        alignment: Alignment.center,
-                                        child: CustomLoading(
-                                          color: AppColor().primariColor,
-                                          size: 20,
-                                          strokeWidth: 2.5,
-                                        ),
-                                      )
-                                    : Text(
-                                        _selectedServiceType?.name ??
-                                            "Select Service Center",
-                                        style: TextStyle(
-                                          color: _selectedServiceType != null
-                                              ? Colors.black
-                                              : Colors.grey.shade600,
-                                        ),
-                                      ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      return CustomDropdown<serviceTypeModel>(
+                        hinText: "Select ServiceType",
+                        items:
+                            getAddButton_serviceType_Provider.serviceTypeList,
+                        value: _selectedServiceType,
+                        selectedItem: _selectedServiceType,
+                        onChanged: (serviceTypeModel? newvalue) {
+                          debugPrint(
+                            "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                          );
+                          setState(() {
+                            _selectedServiceType = newvalue;
+                            if (newvalue != null) {
+                              ServicePriceController.text =
+                                  newvalue.price?.toString() ?? '';
+                              timeController.text =
+                                  newvalue.defaultAllocatedTime?.toString() ??
+                                  '';
+                            } else {
+                              ServicePriceController.clear();
+                              timeController.clear();
+                            }
+                          });
+                        },
+                        itemAsString: (serviceTypeModel item) =>
+                            item.name ?? "No Name",
+                        validator: (value) {
+                          if (value == null)
+                            return "Please select a Service Type";
+                          return null;
+                        },
                       );
                     },
                   ),
+
                   const SizedBox(height: 10),
                   const CustomLabeltext("Service Price", showStar: false),
                   const SizedBox(height: 8),
@@ -257,9 +231,17 @@ class _add_service_center_service_type_dialogState
                     hintText: "Price in BDT",
                     controller: ServicePriceController,
                     isPassword: false,
-                    enableValidation: false,
+                    enableValidation: true,
+                    suffixIcon: Container(
+                      width: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(child: Text("BDT")),
+                    ),
                   ),
                   const SizedBox(height: 10),
+
                   const CustomLabeltext(
                     "Default Allocated Time",
                     showStar: false,
@@ -270,6 +252,13 @@ class _add_service_center_service_type_dialogState
                     controller: timeController,
                     isPassword: false,
                     enableValidation: false,
+                    suffixIcon: Container(
+                      width: 65,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(child: Text("Minutes")),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Row(

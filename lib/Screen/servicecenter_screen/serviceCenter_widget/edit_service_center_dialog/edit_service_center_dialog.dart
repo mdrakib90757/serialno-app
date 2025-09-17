@@ -22,10 +22,7 @@ import '../weekly_offdays_dropdown/weekly_offdays_dropdown.dart';
 class EditServiceCenterDialog extends StatefulWidget {
   final ServiceCenterModel serviceCenter;
 
-  const EditServiceCenterDialog({
-    super.key,
-    required this.serviceCenter,
-  });
+  const EditServiceCenterDialog({super.key, required this.serviceCenter});
 
   @override
   State<EditServiceCenterDialog> createState() =>
@@ -197,7 +194,8 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
           SnackBar(
             content: CustomSnackBarWidget(
               title: "Error",
-              message: editButtonProvider.errorMessage ??
+              message:
+                  editButtonProvider.errorMessage ??
                   "Failed to Edit Service Center Update",
               iconColor: Colors.red.shade400,
               icon: Icons.dangerous_outlined,

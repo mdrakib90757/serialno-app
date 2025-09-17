@@ -188,44 +188,20 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 5),
 
             //service center dropdown
-            Container(
-              height: 47,
-              child: CustomDropdown<ServiceCenterModel>(
-                items: userAssignedServiceCenters,
-                value: _selectedServiceCenter,
-                onChanged: (ServiceCenterModel? newvalue) {
-                  debugPrint(
-                    "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
-                  );
-                  setState(() {
-                    _selectedServiceCenter = newvalue;
-                  });
-                  _fetchDataForUI();
-                },
-                itemAsString: (ServiceCenterModel item) =>
-                    item.name ?? "No Name",
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade400),
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        _selectedServiceCenter?.name ?? "Select Service Center",
-                        style: TextStyle(
-                          color: _selectedServiceCenter != null
-                              ? Colors.black
-                              : Colors.grey.shade600,
-                        ),
-                      ),
-                      Icon(Icons.arrow_drop_down, color: Colors.grey.shade600),
-                    ],
-                  ),
-                ),
-              ),
+            CustomDropdown<ServiceCenterModel>(
+              items: userAssignedServiceCenters,
+              value: _selectedServiceCenter,
+              selectedItem: _selectedServiceCenter,
+              onChanged: (ServiceCenterModel? newvalue) {
+                debugPrint(
+                  "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                );
+                setState(() {
+                  _selectedServiceCenter = newvalue;
+                });
+                _fetchDataForUI();
+              },
+              itemAsString: (ServiceCenterModel item) => item.name ?? "No Name",
             ),
             const SizedBox(height: 5),
 
@@ -322,9 +298,9 @@ class _HomeScreenState extends State<HomeScreen>
                       ? () async {
                           final NewSerialButton =
                               Provider.of<NewSerialButtonProvider>(
-                            context,
-                            listen: false,
-                          );
+                                context,
+                                listen: false,
+                              );
 
                           if (_selectedServiceCenter == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -364,7 +340,8 @@ class _HomeScreenState extends State<HomeScreen>
                                   behavior: SnackBarBehavior.floating,
                                   content: CustomSnackBarWidget(
                                     title: "Error",
-                                    message: NewSerialButton.errorMessage ??
+                                    message:
+                                        NewSerialButton.errorMessage ??
                                         "Failed to create new serial. Please try again.",
                                   ),
                                 ),
@@ -398,16 +375,18 @@ class _HomeScreenState extends State<HomeScreen>
                         children: [
                           Icon(
                             Icons.add,
-                            color:
-                                isToday ? Colors.white : Colors.grey.shade400,
+                            color: isToday
+                                ? Colors.white
+                                : Colors.grey.shade400,
                             size: 15,
                           ),
                           SizedBox(width: 5),
                           Text(
                             "New Serial",
                             style: TextStyle(
-                              color:
-                                  isToday ? Colors.white : Colors.grey.shade400,
+                              color: isToday
+                                  ? Colors.white
+                                  : Colors.grey.shade400,
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
@@ -424,14 +403,14 @@ class _HomeScreenState extends State<HomeScreen>
                       ? () async {
                           final serialProvider =
                               Provider.of<GetNewSerialButtonProvider>(
-                            context,
-                            listen: false,
-                          );
+                                context,
+                                listen: false,
+                              );
                           final statusUpdateProvider =
                               Provider.of<statusUpdateButton_provder>(
-                            context,
-                            listen: false,
-                          );
+                                context,
+                                listen: false,
+                              );
 
                           if (statusUpdateProvider.isLoading ||
                               serialProvider.isLoading) {
@@ -459,18 +438,18 @@ class _HomeScreenState extends State<HomeScreen>
                           ].contains(currentStatus)) {
                             StatusButtonRequest servingRequest =
                                 StatusButtonRequest(
-                              serviceId: nextSerial.id!,
-                              serviceCenterId: nextSerial.serviceCenterId!,
-                              status: "Serving",
-                              isPresent: true,
-                            );
+                                  serviceId: nextSerial.id!,
+                                  serviceCenterId: nextSerial.serviceCenterId!,
+                                  status: "Serving",
+                                  isPresent: true,
+                                );
 
                             final bool servingSuccess =
                                 await statusUpdateProvider.updateStatus(
-                              servingRequest,
-                              nextSerial.serviceCenterId!,
-                              nextSerial.id!,
-                            );
+                                  servingRequest,
+                                  nextSerial.serviceCenterId!,
+                                  nextSerial.id!,
+                                );
 
                             if (!servingSuccess) {
                               if (mounted) {
@@ -500,22 +479,23 @@ class _HomeScreenState extends State<HomeScreen>
                                 DateFormat('yyyy-MM-dd').format(_selectedDate),
                               );
 
-                              final nextWaitingCandidate =
-                                  serialProvider.queueSerials.firstWhereOrNull(
-                                (s) =>
-                                    s.serialNo! > nextSerial.serialNo! &&
-                                    s.status?.toLowerCase() == 'booked',
-                              );
+                              final nextWaitingCandidate = serialProvider
+                                  .queueSerials
+                                  .firstWhereOrNull(
+                                    (s) =>
+                                        s.serialNo! > nextSerial.serialNo! &&
+                                        s.status?.toLowerCase() == 'booked',
+                                  );
 
                               if (nextWaitingCandidate != null) {
                                 StatusButtonRequest waitingRequest =
                                     StatusButtonRequest(
-                                  serviceId: nextWaitingCandidate.id!,
-                                  serviceCenterId:
-                                      nextWaitingCandidate.serviceCenterId!,
-                                  status: "Waiting",
-                                  isPresent: false,
-                                );
+                                      serviceId: nextWaitingCandidate.id!,
+                                      serviceCenterId:
+                                          nextWaitingCandidate.serviceCenterId!,
+                                      status: "Waiting",
+                                      isPresent: false,
+                                    );
                                 await statusUpdateProvider.updateStatus(
                                   waitingRequest,
                                   nextWaitingCandidate.serviceCenterId!,
@@ -557,19 +537,19 @@ class _HomeScreenState extends State<HomeScreen>
                               if (newNextSerial != null) {
                                 StatusButtonRequest newServingRequest =
                                     StatusButtonRequest(
-                                  serviceId: newNextSerial.id!,
-                                  serviceCenterId:
-                                      newNextSerial.serviceCenterId!,
-                                  status: "Serving",
-                                  isPresent: true,
-                                );
+                                      serviceId: newNextSerial.id!,
+                                      serviceCenterId:
+                                          newNextSerial.serviceCenterId!,
+                                      status: "Serving",
+                                      isPresent: true,
+                                    );
 
                                 final newServingSuccess =
                                     await statusUpdateProvider.updateStatus(
-                                  newServingRequest,
-                                  newNextSerial.serviceCenterId!,
-                                  newNextSerial.id!,
-                                );
+                                      newServingRequest,
+                                      newNextSerial.serviceCenterId!,
+                                      newNextSerial.id!,
+                                    );
 
                                 if (newServingSuccess) {
                                   await serialProvider.fetchSerialsButton(
@@ -582,20 +562,21 @@ class _HomeScreenState extends State<HomeScreen>
                                   final finalNextWaiting = serialProvider
                                       .queueSerials
                                       .firstWhereOrNull(
-                                    (s) =>
-                                        s.serialNo! > newNextSerial.serialNo! &&
-                                        s.status?.toLowerCase() == 'booked',
-                                  );
+                                        (s) =>
+                                            s.serialNo! >
+                                                newNextSerial.serialNo! &&
+                                            s.status?.toLowerCase() == 'booked',
+                                      );
 
                                   if (finalNextWaiting != null) {
                                     StatusButtonRequest finalWaitingRequest =
                                         StatusButtonRequest(
-                                      serviceId: finalNextWaiting.id!,
-                                      serviceCenterId:
-                                          finalNextWaiting.serviceCenterId!,
-                                      status: "Waiting",
-                                      isPresent: false,
-                                    );
+                                          serviceId: finalNextWaiting.id!,
+                                          serviceCenterId:
+                                              finalNextWaiting.serviceCenterId!,
+                                          status: "Waiting",
+                                          isPresent: false,
+                                        );
                                     await statusUpdateProvider.updateStatus(
                                       finalWaitingRequest,
                                       finalNextWaiting.serviceCenterId!,
@@ -630,7 +611,8 @@ class _HomeScreenState extends State<HomeScreen>
                           child: Text(
                             "Next",
                             style: TextStyle(
-                              color: !isToday ||
+                              color:
+                                  !isToday ||
                                       serialProvider.queueSerials.isEmpty
                                   ? Colors.grey.shade400
                                   : Colors.white,

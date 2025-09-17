@@ -29,10 +29,7 @@ import '../google_locationDialog/locationPickerDialogContant/locationPickerDialo
 class EditOrganizationInfo extends StatefulWidget {
   final CompanyDetailsModel companyDetails;
 
-  const EditOrganizationInfo({
-    super.key,
-    required this.companyDetails,
-  });
+  const EditOrganizationInfo({super.key, required this.companyDetails});
 
   @override
   State<EditOrganizationInfo> createState() => _EditOrganizationInfoState();
@@ -253,7 +250,8 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.company,
-      child: companyDetailsProvider.isLoading ||
+      child:
+          companyDetailsProvider.isLoading ||
               locationProvider.isLoading ||
               authProvider.isLoading
           ? Center(child: CustomShimmerList(itemCount: 10)) // Show loading here
@@ -323,15 +321,17 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         controller: phone,
                         keyboardType: TextInputType.number,
                       ),
+
                       const SizedBox(height: 10),
                       const CustomLabeltext("Business Type"),
                       const SizedBox(height: 10),
                       Consumer<AuthProvider>(
                         builder: (context, authProvider, child) {
                           return CustomDropdown<Businesstype>(
+                            hinText: "Select BusinessType",
                             items: authProvider.businessTypes,
                             value: _selectedBusinessType,
-                            //   selectedItem: _,
+                            selectedItem: _selectedBusinessType,
                             onChanged: (Businesstype? newvalue) {
                               debugPrint(
                                 "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
@@ -341,241 +341,117 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                               });
                             },
                             itemAsString: (Businesstype type) => type.name,
-                            // validator: (value) {
-                            //       if (value == null)
-                            //         return "Please select a business type";
-                            //       return null;
-                            //     },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade400),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  authProvider.isBusinessTypesLoading
-                                      ? CustomLoading(
-                                          color: AppColor().primariColor,
-                                          size: 20,
-                                          strokeWidth: 2.5,
-                                        )
-                                      : Text(
-                                          _selectedBusinessType?.name ??
-                                              "Select Business Type",
-                                          style: TextStyle(
-                                            color: _selectedBusinessType != null
-                                                ? Colors.black
-                                                : Colors.grey.shade600,
-                                          ),
-                                        ),
-                                  Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            validator: (value) {
+                              if (value == null)
+                                return "Please select a business type";
+                              return null;
+                            },
                           );
                         },
                       ),
                       const SizedBox(height: 10),
+
                       const CustomLabeltext("Division", showStar: false),
                       const SizedBox(height: 8),
-                      Container(
-                        height: 47,
-                        child: CustomDropdown<LocationPart>(
-                          itemAsString: (item) => item.name ?? '',
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedDivision = newValue;
-                              _selectedDistrict = null;
-                              _selectedThana = null;
-                              _selectedArea = null;
-                            });
-                            locationProvider.clearDistricts();
-                            locationProvider.clearThanas();
-                            locationProvider.clearAreas();
+                      CustomDropdown<LocationPart>(
+                        itemAsString: (item) => item.name ?? '',
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedDivision = newValue;
+                            _selectedDistrict = null;
+                            _selectedThana = null;
+                            _selectedArea = null;
+                          });
+                          locationProvider.clearDistricts();
+                          locationProvider.clearThanas();
+                          locationProvider.clearAreas();
 
-                            if (newValue != null) {
-                              locationProvider.getDistricts(newValue.id!);
-                            }
-                          },
-                          // validator: (value) {
-                          //       if (value == null)
-                          //         return "Please select a business type";
-                          //       return null;
-                          //     },
-                          selectedItem: _selectedDivision,
-                          items: locationProvider.divisions,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _selectedDivision?.name ?? "Select Division",
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                          if (newValue != null) {
+                            locationProvider.getDistricts(newValue.id!);
+                          }
+                        },
+                        // validator: (value) {
+                        //       if (value == null)
+                        //         return "Please select a business type";
+                        //       return null;
+                        //     },
+                        selectedItem: _selectedDivision,
+                        items: locationProvider.divisions,
                       ),
+
                       const SizedBox(height: 10),
                       const CustomLabeltext("District", showStar: false),
                       const SizedBox(height: 8),
-                      Container(
-                        height: 47,
-                        child: CustomDropdown<LocationPart>(
-                          itemAsString: (item) => item.name ?? '',
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedDistrict = newValue;
-                              _selectedThana = null;
-                              _selectedArea = null;
-                            });
-                            locationProvider.clearThanas();
-                            locationProvider.clearAreas();
-                            if (newValue != null) {
-                              locationProvider.getThanas(newValue.id!);
-                            }
-                          },
+                      CustomDropdown<LocationPart>(
+                        hinText: "Select District",
+                        itemAsString: (item) => item.name ?? '',
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedDistrict = newValue;
+                            _selectedThana = null;
+                            _selectedArea = null;
+                          });
+                          locationProvider.clearThanas();
+                          locationProvider.clearAreas();
+                          if (newValue != null) {
+                            locationProvider.getThanas(newValue.id!);
+                          }
+                        },
 
-                          // validator: (value) {
-                          //       if (value == null)
-                          //         return "Please select a business type";
-                          //       return null;
-                          //     },
-                          items: locationProvider.districts,
-                          selectedItem: _selectedDistrict,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _selectedDistrict?.name ?? "Select District",
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // validator: (value) {
+                        //       if (value == null)
+                        //         return "Please select a business type";
+                        //       return null;
+                        //     },
+                        items: locationProvider.districts,
+                        selectedItem: _selectedDistrict,
                       ),
+
                       const SizedBox(height: 10),
                       const CustomLabeltext("Thana", showStar: false),
                       const SizedBox(height: 8),
-                      Container(
-                        height: 47,
-                        child: CustomDropdown<LocationPart>(
-                          itemAsString: (item) => item.name ?? '',
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedThana = newValue;
-                              _selectedArea = null;
-                            });
-                            locationProvider.clearThanas();
-                            locationProvider.clearAreas();
+                      CustomDropdown<LocationPart>(
+                        hinText: "Select Thana",
+                        itemAsString: (item) => item.name ?? '',
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedThana = newValue;
+                            _selectedArea = null;
+                          });
+                          locationProvider.clearThanas();
+                          locationProvider.clearAreas();
 
-                            if (newValue != null) {
-                              locationProvider.getAreas(newValue.id!);
-                            }
-                          },
+                          if (newValue != null) {
+                            locationProvider.getAreas(newValue.id!);
+                          }
+                        },
 
-                          // validator: (value) {
-                          //       if (value == null)
-                          //         return "Please select a business type";
-                          //       return null;
-                          //     },
-                          items: locationProvider.districts,
-                          selectedItem: _selectedDistrict,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(_selectedThana?.name ?? "Select District"),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // validator: (value) {
+                        //       if (value == null)
+                        //         return "Please select a business type";
+                        //       return null;
+                        //     },
+                        items: locationProvider.districts,
+                        selectedItem: _selectedDistrict,
                       ),
+
                       SizedBox(height: 10),
                       const CustomLabeltext("Area", showStar: false),
                       const SizedBox(height: 8),
-                      Container(
-                        height: 47,
-                        child: CustomDropdown<LocationPart>(
-                          itemAsString: (item) => item.name ?? '',
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedArea = newValue;
-                            });
-                            locationProvider.clearAreas();
-                            if (newValue != null) {
-                              locationProvider.getAreas(newValue.id!);
-                            }
-                          },
-                          items: locationProvider.districts,
-                          selectedItem: _selectedDistrict,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(_selectedArea?.name ?? "Select District"),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      CustomDropdown<LocationPart>(
+                        hinText: "Select Area",
+                        itemAsString: (item) => item.name ?? '',
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedArea = newValue;
+                          });
+                          locationProvider.clearAreas();
+                          if (newValue != null) {
+                            locationProvider.getAreas(newValue.id!);
+                          }
+                        },
+                        items: locationProvider.districts,
+                        selectedItem: _selectedDistrict,
                       ),
                       const SizedBox(height: 10),
                       const CustomLabeltext("Location", showStar: false),

@@ -74,12 +74,12 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
 
       EditButtonServiceTypeRequest editButtonRequest =
           EditButtonServiceTypeRequest(
-        companyId: companyId,
-        id: widget.serviceType_model.id,
-        name: nameController.text,
-        price: priceController.text,
-        defaultAllocatedTime: timeController.text,
-      );
+            companyId: companyId,
+            id: widget.serviceType_model.id,
+            name: nameController.text,
+            price: priceController.text,
+            defaultAllocatedTime: timeController.text,
+          );
 
       final success = await editButton.editButtonServiceType(
         editButtonRequest,

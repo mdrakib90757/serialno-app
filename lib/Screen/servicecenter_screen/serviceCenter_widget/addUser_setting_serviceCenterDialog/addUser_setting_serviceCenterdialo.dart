@@ -23,9 +23,7 @@ import '../../../../main_layouts/main_layout/main_layout.dart';
 import '../../../../providers/profile_provider/getprofile_provider.dart';
 
 class AddUser_SettingServiceCenterDialog extends StatefulWidget {
-  const AddUser_SettingServiceCenterDialog({
-    super.key,
-  });
+  const AddUser_SettingServiceCenterDialog({super.key});
 
   @override
   State<AddUser_SettingServiceCenterDialog> createState() =>
@@ -129,8 +127,9 @@ class _AddUser_SettingServiceCenterDialogState
       password: _passwordController.text,
       confirmPassword: _confirmPasswordController.text,
       roleId: _selectedRole!.id!,
-      serviceCenterIds:
-          _selectedServiceCentersForUser.map((sc) => sc.id!).toList(),
+      serviceCenterIds: _selectedServiceCentersForUser
+          .map((sc) => sc.id!)
+          .toList(),
       isActive: _isActive,
     );
     final success = await addUserButton.addUserButtonProvider(
@@ -167,6 +166,7 @@ class _AddUser_SettingServiceCenterDialogState
     final getAddUserButton = Provider.of<GetAdduserServiceCenterProvider>(
       context,
     );
+    final addUserButton = Provider.of<AddUserServiceCenterProvider>(context);
     final serviceCenterProvider = Provider.of<GetAddButtonProvider>(context);
     final rolesProvider = Provider.of<RolesProvider>(context);
     return MainLayout(
@@ -253,45 +253,21 @@ class _AddUser_SettingServiceCenterDialogState
                       const SizedBox(height: 10),
                       const CustomLabeltext("Role"),
                       const SizedBox(height: 10),
-                      Container(
-                        height: 47,
-                        child: CustomDropdown<Data>(
-                          items: rolesProvider.roles,
-                          value: _selectedRole,
-                          onChanged: (Data? newValue) {
-                            setState(() {
-                              _selectedRole = newValue;
-                            });
-                          },
-                          itemAsString: (Data? item) => item?.name ?? "No name",
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _selectedRole?.name ?? "Select Role",
-                                  style: TextStyle(
-                                    color: _selectedRole != null
-                                        ? Colors.black
-                                        : Colors.grey.shade600,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      CustomDropdown<Data>(
+                        hinText: "Select Role",
+                        items: rolesProvider.roles,
+                        value: _selectedRole,
+                        selectedItem: _selectedRole,
+                        onChanged: (Data? newValue) {
+                          setState(() {
+                            _selectedRole = newValue;
+                          });
+                        },
+                        itemAsString: (Data? item) => item?.name ?? "No name",
+                        validator: (value) {
+                          if (value == null) return "Please select a Role";
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 10),
                       CustomLabeltext(
@@ -425,7 +401,7 @@ class _AddUser_SettingServiceCenterDialogState
                               backgroundColor: AppColor().primariColor,
                             ),
                             onPressed: _saveAddUser,
-                            child: getAddUserButton.isLoading
+                            child: addUserButton.isLoading
                                 ? Text(
                                     "Please Wait",
                                     style: TextStyle(color: Colors.white),

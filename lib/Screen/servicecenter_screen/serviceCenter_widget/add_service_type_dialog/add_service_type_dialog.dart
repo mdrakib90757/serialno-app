@@ -54,11 +54,11 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
 
     AddButtonServiceTypeRequest serviceTypeRequest =
         AddButtonServiceTypeRequest(
-      name: nameController.text,
-      price: priceController.text,
-      defaultAllocatedTime: timeController.text,
-      companyId: companyId,
-    );
+          name: nameController.text,
+          price: priceController.text,
+          defaultAllocatedTime: timeController.text,
+          companyId: companyId,
+        );
 
     final success = await addButtonServiceType.addButtonServiceType(
       serviceTypeRequest,
@@ -80,7 +80,8 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
         SnackBar(
           content: CustomSnackBarWidget(
             title: "Error",
-            message: addButtonServiceType.errorMessage ??
+            message:
+                addButtonServiceType.errorMessage ??
                 "Failed to Added ServiceType",
             iconColor: Colors.red.shade400,
             icon: Icons.dangerous_outlined,
@@ -161,6 +162,13 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                     isPassword: false,
                     enableValidation: false,
                     keyboardType: TextInputType.number,
+                    suffixIcon: Container(
+                      width: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(child: Text("BDT")),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   CustomLabeltext("Default Allocated Time", showStar: false),
@@ -170,6 +178,13 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
                     controller: timeController,
                     isPassword: false,
                     enableValidation: false,
+                    suffixIcon: Container(
+                      width: 65,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(child: Text("Minutes")),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Row(

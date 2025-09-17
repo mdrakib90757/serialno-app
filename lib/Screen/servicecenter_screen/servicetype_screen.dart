@@ -47,8 +47,8 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
       });
     }
     final profileProvider = context.read<Getprofileprovider>();
-    final serviceTypeProvider =
-        context.read<GetAddButtonServiceType_Provider>();
+    final serviceTypeProvider = context
+        .read<GetAddButtonServiceType_Provider>();
     final serviceCenterProvider = context.read<GetAddButtonProvider>();
 
     if (profileProvider.profileData == null) {
@@ -223,8 +223,7 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                                               ),
                                               const SizedBox(width: 10),
                                               Builder(
-                                                builder:
-                                                    (BuildContext context) {
+                                                builder: (BuildContext context) {
                                                   return GestureDetector(
                                                     onTap: () {
                                                       _showDeleteConfirmationMenu(
@@ -386,7 +385,8 @@ class _ServicetypeScreenState extends State<ServicetypeScreen> {
                       } else if (mounted) {
                         CustomFlushbar.showSuccess(
                           context: context,
-                          message: deleteProvider.errorMessage ??
+                          message:
+                              deleteProvider.errorMessage ??
                               "Failed to delete user.",
                           title: 'Failed',
                         );

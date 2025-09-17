@@ -83,16 +83,17 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
           // Ensure the widget is still in the tree
           final serviceTypeProvider =
               Provider.of<serviceTypeSerialbook_Provider>(
-            context,
-            listen: false,
-          );
+                context,
+                listen: false,
+              );
           setState(() {
             if (widget.bookingDetails.serviceType?.name != null) {
-              _selectedServiceType =
-                  serviceTypeProvider.serviceTypeList.firstWhere(
-                (type) => type.name == widget.bookingDetails.serviceType!.name,
-                orElse: () => null!,
-              );
+              _selectedServiceType = serviceTypeProvider.serviceTypeList
+                  .firstWhere(
+                    (type) =>
+                        type.name == widget.bookingDetails.serviceType!.name,
+                    orElse: () => null!,
+                  );
             } else {
               _selectedServiceType = null;
             }
@@ -254,6 +255,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                   Consumer<serviceTypeSerialbook_Provider>(
                     builder: (context, serviceTypeProvider, child) {
                       return CustomDropdown<serviceTypeModel>(
+                        hinText: "select serviceType",
                         items: serviceTypeProvider.serviceTypeList,
 
                         onChanged: (serviceTypeModel? newValue) {
@@ -266,45 +268,11 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                         itemAsString: (serviceTypeModel item) =>
                             item.name ?? "no data",
                         selectedItem: _selectedServiceType,
-                        // validator: (value) {
-                        //       if (value == null)
-                        //         return "Please select a business type";
-                        //       return null;
-                        //     },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade400),
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              serviceTypeProvider.isLoading
-                                  ? CustomLoading(
-                                      color: AppColor().primariColor,
-                                      size: 20,
-                                      strokeWidth: 2.5,
-                                    )
-                                  : Text(
-                                      _selectedServiceType?.name ??
-                                          "Select ServiceType",
-                                      style: TextStyle(
-                                        color: _selectedServiceType != null
-                                            ? Colors.black
-                                            : Colors.grey.shade600,
-                                      ),
-                                    ),
-                              Icon(
-                                Icons.arrow_drop_down,
-                                color: Colors.grey.shade600,
-                              ),
-                            ],
-                          ),
-                        ),
+                        validator: (value) {
+                          if (value == null)
+                            return "Please select a Service Type";
+                          return null;
+                        },
                       );
                     },
                   ),

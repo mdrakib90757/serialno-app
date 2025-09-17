@@ -129,8 +129,9 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
       email: _emailController.text,
       mobileNo: _phoneController.text,
       roleId: _selectedRole!.id!,
-      serviceCenterIds:
-          _selectedServiceCentersForUser.map((sc) => sc.id!).toList(),
+      serviceCenterIds: _selectedServiceCentersForUser
+          .map((sc) => sc.id!)
+          .toList(),
       isActive: _isActive,
     );
     final success = await updateAddUserProvider.UpdateAddUserButton(
@@ -250,46 +251,19 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                       const SizedBox(height: 10),
                       const CustomLabeltext("Role"),
                       const SizedBox(height: 10),
-                      Container(
-                        height: 47,
-                        child: CustomDropdown<Data>(
-                          items: widget.availableRoles,
-                          value: _selectedRole,
-                          onChanged: (Data? newValue) {
-                            setState(() {
-                              _selectedRole = newValue;
-                            });
-                          },
-                          itemAsString: (Data? item) => item?.name ?? "No name",
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _selectedRole?.name ?? "Select Role",
-                                  style: TextStyle(
-                                    color: _selectedRole != null
-                                        ? Colors.black
-                                        : Colors.grey.shade600,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      CustomDropdown<Data>(
+                        items: widget.availableRoles,
+                        value: _selectedRole,
+                        selectedItem: _selectedRole,
+                        onChanged: (Data? newValue) {
+                          setState(() {
+                            _selectedRole = newValue;
+                          });
+                        },
+                        itemAsString: (Data? item) => item?.name ?? "No name",
+                        hinText: "Select Role",
                       ),
+
                       SizedBox(height: 10),
                       CustomLabeltext(
                         "Assigned Service Center",

@@ -149,7 +149,8 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     final String? serviceCenterId = _selectedServiceCenter?.id;
     final String? serviceTypeId = _selectedServiceType?.id;
 
-    bool isIdMissing = businessTypeId == null ||
+    bool isIdMissing =
+        businessTypeId == null ||
         serviceCenterId == null ||
         serviceTypeId == null;
     if (_selectedBusinessType?.id == 1 && organizationId == null) {
@@ -289,6 +290,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     builder: (context, BusProvider, child) {
                       return CustomDropdown<Businesstype>(
                         selectedItem: _selectedBusinessType,
+                        value: _selectedBusinessType,
                         items: _businessTypes,
                         onChanged: (newValue) {
                           setState(() {
@@ -328,48 +330,16 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                         },
 
                         itemAsString: (Businesstype type) => type.name,
-                        // validator: (value) {
-                        //       if (value == null)
-                        //         return "Please select a business type";
-                        //       return null;
-                        //     },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade400),
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BusProvider.isLoading
-                                  ? CustomLoading(
-                                      color: AppColor().primariColor,
-                                      size: 20,
-                                      strokeWidth: 2.5,
-                                    )
-                                  : Text(
-                                      _selectedBusinessType?.name ??
-                                          "Select BusinessType",
-                                      style: TextStyle(
-                                        color: _selectedBusinessType != null
-                                            ? Colors.black
-                                            : Colors.grey.shade600,
-                                      ),
-                                    ),
-                              Icon(
-                                Icons.arrow_drop_down,
-                                color: Colors.grey.shade600,
-                              ),
-                            ],
-                          ),
-                        ),
+                        hinText: "Select BusinessType",
+                        validator: (value) {
+                          if (value == null)
+                            return "Please select a business type";
+                          return null;
+                        },
                       );
                     },
                   ),
+
                   const SizedBox(height: 10),
                   if (_selectedBusinessType?.id == 1) ...[
                     const CustomLabeltext("Organization"),
@@ -377,6 +347,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     Consumer<OrganizationProvider>(
                       builder: (context, OrgProvider, child) {
                         return CustomDropdown<OrganizationModel>(
+                          hinText: "Select Organization",
                           selectedItem: _selectedOrganization,
                           items: OrgProvider.organizations,
                           onChanged: (OrganizationModel? Newvalue) {
@@ -406,45 +377,17 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           },
                           itemAsString: (OrganizationModel type) =>
                               type.name ?? "",
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                orgProvider.isLoading
-                                    ? CustomLoading(
-                                        color: AppColor().primariColor,
-                                        size: 20,
-                                        strokeWidth: 2.5,
-                                      )
-                                    : Text(
-                                        _selectedOrganization?.name ??
-                                            "Select Organization",
-                                        style: TextStyle(
-                                          color: _selectedOrganization != null
-                                              ? Colors.black
-                                              : Colors.grey.shade600,
-                                        ),
-                                      ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
+                          validator: (value) {
+                            if (value == null)
+                              return "Please select aOrganization";
+                            return null;
+                          },
                         );
                       },
                     ),
                     SizedBox(height: 10),
                   ],
+
                   const CustomLabeltext("Service Center"),
                   const SizedBox(height: 8),
                   Consumer<serviceCenter_serialBookProvider>(
@@ -457,9 +400,10 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           ];
                           final bool isLoading =
                               orgServiceCenterProvider.isLoading ||
-                                  typeServiceCenterProvider.isLoading;
+                              typeServiceCenterProvider.isLoading;
 
                           return CustomDropdown<ServiceCenterModel>(
+                            hinText: "select serviceCenter",
                             selectedItem: _selectedServiceCenter,
                             items: allServiceCenters,
                             onChanged: (ServiceCenterModel? newValue) {
@@ -493,53 +437,24 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                             },
                             itemAsString: (ServiceCenterModel item) =>
                                 item.name ?? "",
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade400),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  orgServiceCenterProvider.isLoading
-                                      ? CustomLoading(
-                                          strokeWidth: 2.5,
-                                          color: AppColor().primariColor,
-                                          size: 20,
-                                        )
-                                      : Text(
-                                          _selectedServiceCenter?.name ??
-                                              "Select ServiceCenter ",
-                                          style: TextStyle(
-                                            color:
-                                                _selectedServiceCenter != null
-                                                    ? Colors.black
-                                                    : Colors.grey.shade600,
-                                          ),
-                                        ),
-                                  Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            validator: (value) {
+                              if (value == null)
+                                return "Please select a Service Center";
+                              return null;
+                            },
                           );
                         },
                       );
                     },
                   ),
                   const SizedBox(height: 10),
+
                   const CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
                     builder: (context, serviceTypeProvider, child) {
                       return CustomDropdown<serviceTypeModel>(
+                        hinText: "select ServiceType",
                         itemAsString: (serviceTypeModel item) =>
                             item.name ?? "",
                         selectedItem: _selectedServiceType,
@@ -550,51 +465,19 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           });
                           print(newValue?.name);
                         },
-                        // validator: (value) {
-                        //       if (value == null)
-                        //         return "Please select a business type";
-                        //       return null;
-                        //     },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade400),
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              serviceTypeProvider.isLoading
-                                  ? CustomLoading(
-                                      size: 20,
-                                      color: AppColor().primariColor,
-                                      strokeWidth: 2.5,
-                                    )
-                                  : Text(
-                                      _selectedServiceType?.name ??
-                                          "Select ServiceType",
-                                      style: TextStyle(
-                                        color: _selectedServiceType != null
-                                            ? Colors.black
-                                            : Colors.grey.shade600,
-                                      ),
-                                    ),
-                              Icon(
-                                Icons.arrow_drop_down,
-                                color: Colors.grey.shade600,
-                              ),
-                            ],
-                          ),
-                        ),
+                        validator: (value) {
+                          if (value == null)
+                            return "Please select a Service Type";
+                          return null;
+                        },
                       );
                     },
                   ),
                   const SizedBox(height: 10),
+
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
+
                   CustomTextField(
                     controller: DateController,
                     hintText: "Select Date",

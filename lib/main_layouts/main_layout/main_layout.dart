@@ -79,7 +79,7 @@ class _MainLayoutState extends State<MainLayout> {
       context,
       PageRouteBuilder(
         pageBuilder: (_, __, ___) => MainLayout(
-          onTap: (p0) {},
+          onTap: (_) {},
           color: Colors.white,
           child: targetScreen,
           currentIndex: index,
@@ -96,7 +96,9 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppbar(onLogotap: () => widget.onTap(0)),
+      appBar: MyAppbar(
+        //onLogotap: () => widget.onTap(0)
+      ),
       body: widget.child,
       backgroundColor: widget.color,
       bottomNavigationBar: widget.userType == UserType.customer

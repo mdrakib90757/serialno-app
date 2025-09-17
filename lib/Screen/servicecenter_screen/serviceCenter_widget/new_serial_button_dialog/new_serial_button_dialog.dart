@@ -207,103 +207,30 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   const SizedBox(height: 10),
                   CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
-                  Form(
-                    key: _serviceTypeKey,
-                    child: Consumer<GetAddButtonServiceType_Provider>(
-                      builder: (context, serviceTypeProvider, child) {
-                        return FormField<serviceTypeModel>(
-                          validator: (value) {
-                            if (_selectedServiceType == null) {
-                              return "Please select a service type";
-                            }
-                            return null;
-                          },
-                          builder: (formFieldState) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 45,
-                                  child: CustomDropdown<serviceTypeModel>(
-                                    items: getAddButton_serviceType_Provider
-                                        .serviceTypeList,
-                                    value: _selectedServiceType,
-                                    onChanged: (serviceTypeModel? newvalue) {
-                                      debugPrint(
-                                        "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
-                                      );
-                                      setState(() {
-                                        _selectedServiceType = newvalue;
-                                        formFieldState.didChange(newvalue);
-                                      });
-                                    },
-                                    itemAsString: (serviceTypeModel item) =>
-                                        item.name ?? "No Name",
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 15,
-                                        vertical: 12,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey.shade400,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          5.0,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          serviceTypeProvider.isLoading
-                                              ? Align(
-                                                  alignment: Alignment.center,
-                                                  child: CustomLoading(
-                                                    color:
-                                                        AppColor().primariColor,
-                                                    size: 20,
-                                                    strokeWidth: 2.5,
-                                                  ),
-                                                )
-                                              : Text(
-                                                  _selectedServiceType?.name ??
-                                                      "Select Service Center",
-                                                  style: TextStyle(
-                                                    color:
-                                                        _selectedServiceType !=
-                                                                null
-                                                            ? Colors.black
-                                                            : Colors
-                                                                .grey.shade600,
-                                                  ),
-                                                ),
-                                          Icon(
-                                            Icons.arrow_drop_down,
-                                            color: Colors.grey.shade600,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (formFieldState.hasError)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Text(
-                                      formFieldState.errorText!,
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
+                  Consumer<GetAddButtonServiceType_Provider>(
+                    builder: (context, serviceTypeProvider, child) {
+                      return CustomDropdown<serviceTypeModel>(
+                        hinText: "Select ServiceType",
+                        items:
+                            getAddButton_serviceType_Provider.serviceTypeList,
+                        value: _selectedServiceType,
+                        onChanged: (serviceTypeModel? newvalue) {
+                          debugPrint(
+                            "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
+                          );
+                          setState(() {
+                            _selectedServiceType = newvalue;
+                          });
+                        },
+                        itemAsString: (serviceTypeModel item) =>
+                            item.name ?? "No Name",
+                        validator: (value) {
+                          if (value == null)
+                            return "Please select a Service Type";
+                          return null;
+                        },
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 10),
@@ -313,7 +240,6 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                     hintText: "Select Date",
                     isPassword: false,
                     controller: _serviceDateDisplayController,
-                    readOnly: false,
                     suffixIcon: IconButton(
                       onPressed: () async {
                         DateTime? newDate = await showDatePicker(

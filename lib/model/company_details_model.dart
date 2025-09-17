@@ -54,8 +54,9 @@ class CompanyDetailsModel {
       district: json['district'] != null
           ? LocationPart.fromJson(json['district'])
           : null,
-      thana:
-          json['thana'] != null ? LocationPart.fromJson(json['thana']) : null,
+      thana: json['thana'] != null
+          ? LocationPart.fromJson(json['thana'])
+          : null,
       area: json['area'] != null ? LocationPart.fromJson(json['area']) : null,
       id: json['id'],
       name: json['name'],
@@ -107,8 +108,9 @@ class LocationPart {
       name: json['name'],
       type: json['type'],
       parentId: json['parentId'],
-      parent:
-          json['parent'] != null ? LocationPart.fromJson(json['parent']) : null,
+      parent: json['parent'] != null
+          ? LocationPart.fromJson(json['parent'])
+          : null,
     );
   }
 }

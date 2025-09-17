@@ -28,10 +28,12 @@ class StatusUpdateButtonService {
       final Map<String, String> queryParameters = {
         'date': date?.toString() ?? '',
       };
-      var response = await ApiClient().get(
-        "/serial-no/service-centers/$serviceCenterId/services",
-        queryParameters: queryParameters,
-      ) as List;
+      var response =
+          await ApiClient().get(
+                "/serial-no/service-centers/$serviceCenterId/services",
+                queryParameters: queryParameters,
+              )
+              as List;
       List<SerialModel> StatusButtonData = response
           .map((data) => SerialModel.fromJson(data as Map<String, dynamic>))
           .toList();

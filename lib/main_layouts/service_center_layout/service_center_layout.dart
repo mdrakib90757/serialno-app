@@ -25,7 +25,6 @@ class _ServiceCenterLayoutState extends State<ServiceCenterLayout> {
     ServicecenterScreen(),
     ServicetypeScreen(),
     Servicecenter_Settingscreen(),
-    serviceCenter_profile_screen(currentIndex: 0, onTap: (int) {}),
   ];
 
   void _onNavTapped(int index) {
@@ -38,11 +37,11 @@ class _ServiceCenterLayoutState extends State<ServiceCenterLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppbar(
-        onLogotap: () {
-          setState(() {
-            _currentIndex = 0;
-          });
-        },
+        // onLogotap: () {
+        //   setState(() {
+        //     _currentIndex = 0;
+        //   });
+        // },
       ),
       body: IndexedStack(index: _currentIndex, children: _serviceCenterScreens),
       bottomNavigationBar: CustomServicecenterNavigationbar(

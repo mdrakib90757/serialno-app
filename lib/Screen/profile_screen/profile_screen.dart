@@ -1,43 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serialno_app/Screen/profile_screen/password_screen.dart';
+import 'package:serialno_app/Screen/profile_screen/profile_edit%20screen.dart';
 import 'package:serialno_app/Screen/profile_screen/service_taker_profileEdit_screen/serviceTaker_profile_edit_screen.dart';
 
 import '../../../main_layouts/main_layout/main_layout.dart';
 import '../../../providers/auth_provider/auth_providers.dart';
 import '../../../providers/profile_provider/getprofile_provider.dart';
-import '../service_center_password_screen/service_center_password_screen.dart';
-import '../service_center_profileEdit_screen/service_center_profileEdit_screen.dart';
-import '../service_taker_password_screen/service_taker_password_screen.dart';
 
-class serviceCenter_profile_screen extends StatefulWidget {
+class profile_screen extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
-  const serviceCenter_profile_screen({
+  const profile_screen({
     super.key,
     required this.currentIndex,
     required this.onTap,
   });
 
   @override
-  State<serviceCenter_profile_screen> createState() =>
-      _serviceCenter_profile_screenState();
+  State<profile_screen> createState() => _profile_screenState();
 }
 
-class _serviceCenter_profile_screenState
-    extends State<serviceCenter_profile_screen> {
+class _profile_screenState extends State<profile_screen> {
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final getupdateprofile = Provider.of<Getprofileprovider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
 
-    return MainLayout(
-      userType: UserType.company,
-      color: Colors.white,
-      currentIndex: widget.currentIndex,
-      onTap: widget.onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 80),
+    bool isCompanyUser =
+        authProvider.userType?.toLowerCase().trim() == "company";
+
+    // Define the core content of the profile screen
+    Widget profileContent = Scaffold(
+      // Use Scaffold here to provide a basic structure
+      backgroundColor: Colors.white, // Match the background color
+
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 20,
+        ), // Adjust vertical padding as needed
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -57,38 +59,16 @@ class _serviceCenter_profile_screenState
                 const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () async {
-                    final authProvider = Provider.of<AuthProvider>(
-                      context,
-                      listen: false,
-                    );
-                    final profileProvider = Provider.of<Getprofileprovider>(
-                      context,
-                      listen: false,
-                    );
-                    final profile = profileProvider.profileData;
-                    bool isCompanyUser =
-                        authProvider.userType?.toLowerCase().trim() ==
-                        "company";
-
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (_, __, ___) =>
-                            serviceCenter_ProfileEditScreen(),
+                        pageBuilder: (_, __, ___) => ProfileEditScreen(),
                         transitionsBuilder: (_, anim, __, child) {
                           return FadeTransition(opacity: anim, child: child);
                         },
                         fullscreenDialog: true,
                       ),
                     );
-
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => serviceCenter_ProfileEditScreen(),
-                    //   ),
-                    // );
-
                     Future.microtask(() {
                       getupdateprofile.fetchProfileData();
                     });
@@ -122,37 +102,16 @@ class _serviceCenter_profile_screenState
                 const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () async {
-                    final authProvider = Provider.of<AuthProvider>(
-                      context,
-                      listen: false,
-                    );
-
-                    final profileProvider = Provider.of<Getprofileprovider>(
-                      context,
-                      listen: false,
-                    );
-                    final profile = profileProvider.profileData;
-                    bool CompanyuserType =
-                        profile?.userType.toLowerCase().trim() == "company";
-
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        pageBuilder: (_, __, ___) =>
-                            serviceCenter_PasswordScreen(),
+                        pageBuilder: (_, __, ___) => PasswordScreen(),
                         transitionsBuilder: (_, anim, __, child) {
                           return FadeTransition(opacity: anim, child: child);
                         },
                         fullscreenDialog: true,
                       ),
                     );
-
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => serviceCenter_PasswordScreen(),
-                    //   ),
-                    // );
                   },
                   child: Container(
                     height: 50,
@@ -186,5 +145,23 @@ class _serviceCenter_profile_screenState
         ),
       ),
     );
+
+    // Conditionally wrap with MainLayout
+    if (isCompanyUser) {
+      UserType currentUserLayoutType =
+          UserType.company; // For company, it's always company type
+
+      return MainLayout(
+        userType: currentUserLayoutType,
+        color: Colors.white,
+        currentIndex: widget.currentIndex,
+        onTap: widget.onTap,
+        child: profileContent, // Pass the core content as child
+      );
+    } else {
+      // If customer, return the profileContent directly
+      // Assuming the navigation bar and app bar are handled by the parent route/screen
+      return profileContent;
+    }
   }
 }

@@ -21,10 +21,12 @@ class UpdateBookSerialService {
   Future<List<MybookedModel>> get_UpdateBookSerial(String date) async {
     try {
       final Map<String, String> queryParameters = {'date': date};
-      var response = await ApiClient().get(
-        "/my-booked-services",
-        queryParameters: queryParameters,
-      ) as List;
+      var response =
+          await ApiClient().get(
+                "/my-booked-services",
+                queryParameters: queryParameters,
+              )
+              as List;
       List<MybookedModel> ButtonData = response
           .map((data) => MybookedModel.fromJson(data as Map<String, dynamic>))
           .toList();

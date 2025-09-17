@@ -275,11 +275,13 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                       if (_selectedServiceType == null &&
                           widget.serialToEdit.serviceType != null) {
                         try {
-                          _selectedServiceType =
-                              serviceTypeProvider.serviceTypeList.firstWhere(
-                            (item) =>
-                                item.id == widget.serialToEdit.serviceType!.id,
-                          );
+                          _selectedServiceType = serviceTypeProvider
+                              .serviceTypeList
+                              .firstWhere(
+                                (item) =>
+                                    item.id ==
+                                    widget.serialToEdit.serviceType!.id,
+                              );
                         } catch (e) {
                           print(
                             "Default service type not found in the list: $e",
@@ -287,62 +289,28 @@ class _QueueListEditDialogState extends State<QueueListEditDialog> {
                           _selectedServiceType = null;
                         }
                       }
-                      return Container(
-                        height: 47,
-                        child: CustomDropdown<serviceTypeModel>(
-                          items:
-                              getAddButton_serviceType_Provider.serviceTypeList,
-                          value: _selectedServiceType,
-                          onChanged: (serviceTypeModel? newValue) {
-                            setState(() {
-                              _selectedServiceType = newValue;
-                              // if (newValue != null) {
-                              //   _serviceTypeHasError = false;
-                              // }
-                            });
-                            print(newValue?.name);
-                          },
-                          itemAsString: (serviceTypeModel item) =>
-                              item.name ?? "No Name",
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade400),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                serviceTypeProvider.isLoading &&
-                                        serviceTypeProvider
-                                            .serviceTypeList.isEmpty
-                                    ? Center(
-                                        child: CustomLoading(
-                                          color: AppColor().primariColor,
-                                          size: 20,
-                                          strokeWidth: 2.5,
-                                        ),
-                                      )
-                                    : Text(
-                                        _selectedServiceType?.name ??
-                                            "Select Service Type",
-                                        style: TextStyle(
-                                          color: _selectedServiceType != null
-                                              ? Colors.black
-                                              : Colors.grey.shade600,
-                                        ),
-                                      ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                      return CustomDropdown<serviceTypeModel>(
+                        hinText: "Select ServiceType",
+                        items:
+                            getAddButton_serviceType_Provider.serviceTypeList,
+                        value: _selectedServiceType,
+                        selectedItem: _selectedServiceType,
+                        onChanged: (serviceTypeModel? newValue) {
+                          setState(() {
+                            _selectedServiceType = newValue;
+                            // if (newValue != null) {
+                            //   _serviceTypeHasError = false;
+                            // }
+                          });
+                          print(newValue?.name);
+                        },
+                        itemAsString: (serviceTypeModel item) =>
+                            item.name ?? "No Name",
+                        validator: (value) {
+                          if (value == null)
+                            return "Please select a Service Type";
+                          return null;
+                        },
                       );
                     },
                   ),

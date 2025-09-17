@@ -10,17 +10,12 @@ import 'package:serialno_app/providers/serviceCenter_provider/business_type_prov
 import 'package:serialno_app/providers/serviceCenter_provider/company_details_provider/company_details_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/roles_service_center_provider/roles_service_center_provider.dart';
 import 'package:serialno_app/utils/color.dart';
-
 import '../../global_widgets/custom_circle_progress_indicator/custom_circle_progress_indicator.dart';
 import '../../global_widgets/custom_flushbar.dart';
-import '../../global_widgets/custom_sanckbar.dart';
-import '../../global_widgets/custom_shimmer_list/CustomShimmerList .dart';
-import '../../model/company_details_model.dart';
 import '../../model/roles_model.dart';
 import '../../providers/auth_provider/auth_providers.dart';
 import '../../providers/serviceCenter_provider/addButton_provider/get_AddButton_provider.dart';
 import '../../providers/serviceCenter_provider/addUser_serviceCenter_provider/deleteUserProvider/deleteUserProvider.dart';
-import '../../providers/serviceCenter_provider/update_organization_settingScreen/get_update_organization/get_update_organization_provider.dart';
 
 class Servicecenter_Settingscreen extends StatefulWidget {
   const Servicecenter_Settingscreen({super.key});
@@ -40,55 +35,25 @@ class _Servicecenter_SettingscreenState
   void initState() {
     // TODO: implement initState
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   final profileProvider = Provider.of<Getprofileprovider>(
-    //     context,
-    //     listen: false,
-    //   );
-    //
-    //   final companyId = profileProvider.profileData?.currentCompany.id;
-    //   if (companyId != null && companyId.isNotEmpty) {
-    //     debugPrint(" Calling fetchDetails for Company ID: $companyId");
-    //     Provider.of<CompanyDetailsProvider>(
-    //       context,
-    //       listen: false,
-    //     ).fetchDetails(companyId);
-    //     Provider.of<BusinessTypeProvider>(
-    //       context,
-    //       listen: false,
-    //     ).fetchBusinessTypes();
-    //
-    //     Provider.of<GetAdduserServiceCenterProvider>(
-    //       context,
-    //       listen: false,
-    //     ).fetchUsers(companyId);
-    //     Provider.of<RolesProvider>(context, listen: false).fetchRoles();
-    //   } else {
-    //     debugPrint("initState: Company ID is null. Cannot fetch details.");
-    //   }
-    // });
   }
 
   Future<void> _fetchScreenData(String companyId) async {
-    // Check if we are already fetching for this company ID
-    if (_lastFetchedCompanyId == companyId) {
-      // Potentially, if you want to prevent duplicate fetches if one is already in progress
-      // return; // Uncomment this if you want to strictly prevent duplicate fetches
-    }
+    if (_lastFetchedCompanyId == companyId) {}
 
-    _lastFetchedCompanyId =
-        companyId; // Mark that we are attempting to fetch for this ID
+    _lastFetchedCompanyId = companyId;
 
-    final companyDetailsProvider =
-        Provider.of<CompanyDetailsProvider>(context, listen: false);
-    final businessTypeProvider =
-        Provider.of<BusinessTypeProvider>(context, listen: false);
+    final companyDetailsProvider = Provider.of<CompanyDetailsProvider>(
+      context,
+      listen: false,
+    );
+    final businessTypeProvider = Provider.of<BusinessTypeProvider>(
+      context,
+      listen: false,
+    );
     final addUserServiceCenterProvider =
         Provider.of<GetAdduserServiceCenterProvider>(context, listen: false);
     final rolesProvider = Provider.of<RolesProvider>(context, listen: false);
 
-    // Call fetch methods on providers.
-    // Ensure these methods call notifyListeners() when they start loading and finish loading.
     debugPrint("Triggering all data fetches for Company ID: $companyId");
     await Future.wait([
       companyDetailsProvider.fetchDetails(companyId),
@@ -101,104 +66,100 @@ class _Servicecenter_SettingscreenState
   @override
   Widget build(BuildContext context) {
     return Consumer<Getprofileprovider>(
-        builder: (context, profileProvider, child) {
-      final companyId = profileProvider.profileData?.currentCompany.id;
+      builder: (context, profileProvider, child) {
+        final companyId = profileProvider.profileData?.currentCompany.id;
+        if (companyId != null && _lastFetchedCompanyId != companyId) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _fetchScreenData(companyId);
+          });
+        }
 
-      // **IMPORTANT CHANGE HERE:**
-      // We only trigger _fetchScreenData if companyId is available
-      // AND it's a new companyId OR we haven't fetched for it yet.
-      // This is the core fix for "setState() or markNeedsBuild() called during build".
-      if (companyId != null && _lastFetchedCompanyId != companyId) {
-        // Defer the fetch until after the current build cycle
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _fetchScreenData(companyId);
-        });
-      }
-      // If companyId is null, show initial loading for profile data
-      if (companyId == null) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomLoading(
-                  color: AppColor().primariColor,
-                  strokeWidth: 2.5,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Loading company information...',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ],
+        if (companyId == null) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomLoading(
+                    color: AppColor().primariColor,
+                    strokeWidth: 2.5,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Loading company information...',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
             ),
-          ),
+          );
+        }
+
+        final rolesProvider = Provider.of<RolesProvider>(context);
+        final getAdduser = Provider.of<GetAdduserServiceCenterProvider>(
+          context,
         );
-      }
-
-      // Now that we have companyId (and _fetchScreenData will be called soon),
-      // we can safely listen to other providers.
-      // The UI will update when these providers call notifyListeners().
-
-      final rolesProvider = Provider.of<RolesProvider>(context);
-      final getAdduser = Provider.of<GetAdduserServiceCenterProvider>(context);
-      final businessType = Provider.of<BusinessTypeProvider>(context);
-      final companyDetails = Provider.of<CompanyDetailsProvider>(context);
-
-      // Check if any of the main data providers are loading
-      // and if companyDetails are still null (initial load, or after refresh before data comes)
-      if ((companyDetails.isLoading && companyDetails.companyDetails == null) ||
-          (businessType.isLoading && businessType.businessTypes.isEmpty) ||
-          (rolesProvider.isLoading && rolesProvider.roles.isEmpty) ||
-          (getAdduser.isLoading && getAdduser.users.isEmpty)) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: CustomLoading(
-              color: AppColor().primariColor,
-              strokeWidth: 2.5,
+        final businessType = Provider.of<BusinessTypeProvider>(context);
+        final companyDetails = Provider.of<CompanyDetailsProvider>(context);
+        if ((companyDetails.isLoading &&
+                companyDetails.companyDetails == null) ||
+            (businessType.isLoading && businessType.businessTypes.isEmpty) ||
+            (rolesProvider.isLoading && rolesProvider.roles.isEmpty) ||
+            (getAdduser.isLoading && getAdduser.users.isEmpty)) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: CustomLoading(
+                color: AppColor().primariColor,
+                strokeWidth: 2.5,
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
 
-      // Error handling for company details
-      if (companyDetails.errorMessage != null) {
-        return Scaffold(
-            body: Center(child: Text(companyDetails.errorMessage!)));
-      }
+        // Error handling for company details
+        if (companyDetails.errorMessage != null) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(child: Text(companyDetails.errorMessage!)),
+          );
+        }
 
-      if (companyDetails.companyDetails == null) {
-        // This should ideally only happen if there's no data even after loading finishes
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.inbox_outlined,
-                    size: 60, color: Colors.grey.shade300),
-                const SizedBox(height: 12),
-                Text(
-                  'No company info available.',
-                  style: TextStyle(fontSize: 16, color: Colors.grey[300]),
-                ),
-              ],
+        if (companyDetails.companyDetails == null) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.inbox_outlined,
+                    size: 60,
+                    color: Colors.grey.shade300,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'No company info available.',
+                    style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
 
-      final company_man = companyDetails.companyDetails!;
-      final String businessTypeName =
-          businessType.getBusinessTypeNameById(company_man.businessTypeId) ??
-              'N/A';
-      print("businessTypeName ${businessTypeName}");
+        final company_man = companyDetails.companyDetails!;
+        final String businessTypeName =
+            businessType.getBusinessTypeNameById(company_man.businessTypeId) ??
+            'N/A';
+        print("businessTypeName ${businessTypeName}");
 
-      return Scaffold(
+        return Scaffold(
           backgroundColor: Colors.white,
           body: RefreshIndicator(
+            backgroundColor: Colors.white,
+            color: AppColor().primariColor,
             onRefresh: () =>
                 _fetchScreenData(companyId!), // companyId is non-null here
             child: Padding(
@@ -231,22 +192,22 @@ class _Servicecenter_SettingscreenState
                               PageRouteBuilder(
                                 pageBuilder: (_, __, ___) =>
                                     EditOrganizationInfo(
-                                  companyDetails: company_man,
-                                ),
+                                      companyDetails: company_man,
+                                    ),
                                 transitionsBuilder: (_, anim, __, child) {
                                   return FadeTransition(
-                                      opacity: anim, child: child);
+                                    opacity: anim,
+                                    child: child,
+                                  );
                                 },
                                 fullscreenDialog: true,
                               ),
                             );
-
-                            // Navigator.push(context, MaterialPageRoute(builder: (context) => EditOrganizationInfo(
-                            //             companyDetails: company_man,
-                            //           ),));
                           },
-                          icon:
-                              Icon(Icons.edit, color: AppColor().primariColor),
+                          icon: Icon(
+                            Icons.edit,
+                            color: AppColor().primariColor,
+                          ),
                         ),
                       ],
                     ),
@@ -417,7 +378,8 @@ class _Servicecenter_SettingscreenState
                                   listen: false,
                                 );
 
-                                bool isServiceTakerUser = authProvider.userType
+                                bool isServiceTakerUser =
+                                    authProvider.userType
                                         ?.toLowerCase()
                                         .trim() ==
                                     "customer";
@@ -436,9 +398,6 @@ class _Servicecenter_SettingscreenState
                                     fullscreenDialog: true,
                                   ),
                                 );
-
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) =>AddUser_SettingServiceCenterDialog(
-                                // ) ,));
                               },
                               child: Container(
                                 height: 35,
@@ -556,10 +515,10 @@ class _Servicecenter_SettingscreenState
                             if (userRoleId != null &&
                                 rolesProvider.roles.isNotEmpty) {
                               try {
-                                final foundRole =
-                                    rolesProvider.roles.firstWhere(
-                                  (role) => role.id == userRoleId,
-                                );
+                                final foundRole = rolesProvider.roles
+                                    .firstWhere(
+                                      (role) => role.id == userRoleId,
+                                    );
                                 roleName = foundRole.name ?? 'N/A';
                               } catch (e) {
                                 roleName = 'Unknown Role';
@@ -607,49 +566,39 @@ class _Servicecenter_SettingscreenState
                                               onTap: () {
                                                 final allServiceCenters =
                                                     Provider.of<
-                                                        GetAddButtonProvider>(
-                                                  context,
-                                                  listen: false,
-                                                ).serviceCenterList;
+                                                          GetAddButtonProvider
+                                                        >(
+                                                          context,
+                                                          listen: false,
+                                                        )
+                                                        .serviceCenterList;
                                                 final allRoles =
                                                     Provider.of<RolesProvider>(
-                                                  context,
-                                                  listen: false,
-                                                ).roles;
+                                                      context,
+                                                      listen: false,
+                                                    ).roles;
 
                                                 Navigator.push(
                                                   context,
                                                   PageRouteBuilder(
                                                     pageBuilder: (_, __, ___) =>
                                                         EditAdduserSettingDialog(
-                                                      userModel: user,
-                                                      availableServiceCenters:
-                                                          allServiceCenters,
-                                                      availableRoles: allRoles,
-                                                    ),
+                                                          userModel: user,
+                                                          availableServiceCenters:
+                                                              allServiceCenters,
+                                                          availableRoles:
+                                                              allRoles,
+                                                        ),
                                                     transitionsBuilder:
                                                         (_, anim, __, child) {
-                                                      return FadeTransition(
-                                                        opacity: anim,
-                                                        child: child,
-                                                      );
-                                                    },
+                                                          return FadeTransition(
+                                                            opacity: anim,
+                                                            child: child,
+                                                          );
+                                                        },
                                                     fullscreenDialog: true,
                                                   ),
                                                 );
-
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //     builder: (context) =>
-                                                //         EditAdduserSettingDialog(
-                                                //           userModel: user,
-                                                //           availableServiceCenters:
-                                                //               allServiceCenters,
-                                                //           availableRoles: allRoles,
-                                                //         ),
-                                                //   ),
-                                                // );
                                               },
                                               child: Text(
                                                 "Edit",
@@ -698,8 +647,10 @@ class _Servicecenter_SettingscreenState
                 ),
               ),
             ),
-          ));
-    });
+          ),
+        );
+      },
+    );
   }
 
   void _showDeleteConfirmationMenu(
@@ -797,7 +748,8 @@ class _Servicecenter_SettingscreenState
                       } else if (mounted) {
                         CustomFlushbar.showSuccess(
                           context: context,
-                          message: deleteProvider.errorMessage ??
+                          message:
+                              deleteProvider.errorMessage ??
                               "Failed to delete user.",
                           title: 'Failed',
                         );

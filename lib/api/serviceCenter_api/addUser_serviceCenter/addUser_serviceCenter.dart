@@ -22,8 +22,9 @@ class AddUserServiceCenter {
   //get api
   Future<List<AddUserModel>> fetchAddUser(String companyId) async {
     try {
-      final response = await ApiClient()
-          .get("/serial-no/companies/$companyId/service-men") as List;
+      final response =
+          await ApiClient().get("/serial-no/companies/$companyId/service-men")
+              as List;
       List<AddUserModel> users = response
           .map(
             (userJson) =>

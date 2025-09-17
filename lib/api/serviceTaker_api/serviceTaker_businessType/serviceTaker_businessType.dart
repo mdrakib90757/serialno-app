@@ -7,10 +7,12 @@ class ServiceTakerBusinessTypeApi {
     String businessTypeId,
   ) async {
     try {
-      var response = await ApiClient().get(
-        "/serial-no/service-centers",
-        queryParameters: {'businessTypeId': businessTypeId.toString()},
-      ) as List;
+      var response =
+          await ApiClient().get(
+                "/serial-no/service-centers",
+                queryParameters: {'businessTypeId': businessTypeId.toString()},
+              )
+              as List;
       List<ServiceCenterModel> types = response
           .map(
             (item) => ServiceCenterModel.fromJson(item as Map<String, dynamic>),

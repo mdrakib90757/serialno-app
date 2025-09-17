@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:serialno_app/Screen/profile_screen/serviceTaker_profile_screen/service_taker_profile_screen.dart';
 import 'package:serialno_app/global_widgets/Custom_NavigationBar/custom_servicetaker_navigationbar.dart';
 
+import '../../Screen/profile_screen/profile_screen.dart';
 import '../../Screen/servicetaker_screen/appointments_screen.dart';
 import '../../Screen/servicetaker_screen/servicetaker_homescreen.dart';
 import '../../Screen/servicetaker_screen/setting_screen.dart';
@@ -21,7 +22,7 @@ class _ServiceTakerLayoutState extends State<ServiceTakerLayout> {
     ServicetakerHomescreen(businessTypeId: ''),
     AppointmentsScreen(),
     SettingScreen(),
-    serviceTaker_profile_screen(),
+    profile_screen(currentIndex: 0, onTap: (_) {}),
   ];
 
   void _onNavTapped(int index) {

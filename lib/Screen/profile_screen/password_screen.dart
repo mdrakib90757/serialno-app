@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serialno_app/main.dart';
-import '../../../global_widgets/My_Appbar.dart';
+
 import '../../../global_widgets/custom_flushbar.dart';
 import '../../../global_widgets/custom_labeltext.dart';
 import '../../../global_widgets/custom_sanckbar.dart';
@@ -10,17 +10,16 @@ import '../../../main_layouts/main_layout/main_layout.dart';
 import '../../../providers/auth_provider/password_upadate_provider.dart';
 import '../../../request_model/auth_request/update_password_request.dart';
 import '../../../utils/color.dart';
+import '../../providers/auth_provider/auth_providers.dart';
 
-class serviceTaker_PasswordScreen extends StatefulWidget {
-  const serviceTaker_PasswordScreen({super.key});
+class PasswordScreen extends StatefulWidget {
+  const PasswordScreen({super.key});
 
   @override
-  State<serviceTaker_PasswordScreen> createState() =>
-      _serviceTaker_PasswordScreenState();
+  State<PasswordScreen> createState() => _PasswordScreenState();
 }
 
-class _serviceTaker_PasswordScreenState
-    extends State<serviceTaker_PasswordScreen> {
+class _PasswordScreenState extends State<PasswordScreen> {
   final _formkey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
@@ -91,11 +90,19 @@ class _serviceTaker_PasswordScreenState
   @override
   Widget build(BuildContext context) {
     final changePassword = Provider.of<PasswordUpdateProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+    UserType currentUserLayoutType;
+    if (authProvider.userType?.toLowerCase().trim() == "customer") {
+      currentUserLayoutType = UserType.customer;
+    } else {
+      currentUserLayoutType = UserType.company;
+    }
     return MainLayout(
-      userType: UserType.customer,
       currentIndex: 0,
       onTap: (p0) {},
       color: Colors.white,
+      userType: currentUserLayoutType,
+      // userType: UserType.company,
       child: Form(
         key: _formkey,
         child: Padding(

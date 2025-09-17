@@ -9,8 +9,7 @@ import '../../../core/api_client.dart';
 
 class UpdateServiceCenterServiceTypeProvider with ChangeNotifier {
   final service_center_service_type_service
-      _service_center_service_type_service =
-      service_center_service_type_service();
+  _service_center_service_type_service = service_center_service_type_service();
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -30,9 +29,9 @@ class UpdateServiceCenterServiceTypeProvider with ChangeNotifier {
     try {
       await _service_center_service_type_service
           .update_service_center_service_type_service(
-        requestData,
-        serviceCenterId,
-      );
+            requestData,
+            serviceCenterId,
+          );
       _isLoading = false;
       notifyListeners();
       return true;
