@@ -91,6 +91,47 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
     }
   }
 
+  Future<void> _SelectDate(BuildContext context) async {
+   final DateTime? newDate = await showDatePicker(
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            useMaterial3: false,
+            colorScheme: ColorScheme.light(
+              primary: AppColor().primariColor,
+              // Header color
+              onPrimary: Colors.white,
+              // Header text color
+              onSurface: Colors.black, // Body text color
+            ),
+            dialogTheme: DialogThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColor()
+                    .primariColor, // Button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (newDate != null && newDate != _selectedDate) {
+      setState(() {
+        _selectedDate =newDate;
+        dateOfBirth.text = DateFormat('yyyy-MM-dd').format(newDate);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final UpdateProfile = Provider.of<ProfileProvider>(context, listen: false);
@@ -110,6 +151,7 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
       onTap: (p0) {},
       color: Colors.white,
       userType: currentUserLayoutType,
+      isExtraScreen: true,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         child: Container(
@@ -199,57 +241,20 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                 const SizedBox(height: 10),
                 const CustomLabeltext("Date of Birth"),
                 const SizedBox(height: 10),
-                CustomTextField(
-                  controller: dateOfBirth,
-                  hintText: "Select Date of Birth",
-                  textStyle: TextStyle(color: Colors.grey.shade300),
-                  isPassword: false,
-                  suffixIcon: IconButton(
-                    onPressed: () async {
-                      DateTime? newDate = await showDatePicker(
-                        builder: (context, child) {
-                          return Theme(
-                            data: Theme.of(context).copyWith(
-                              useMaterial3: false,
-                              colorScheme: ColorScheme.light(
-                                primary: AppColor().primariColor,
-                                // Header color
-                                onPrimary: Colors.white,
-                                // Header text color
-                                onSurface: Colors.black, // Body text color
-                              ),
-                              dialogTheme: DialogThemeData(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                              ),
-                              textButtonTheme: TextButtonThemeData(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: AppColor()
-                                      .primariColor, // Button text color
-                                ),
-                              ),
-                            ),
-                            child: child!,
-                          );
-                        },
-                        context: context,
-                        initialDate: _selectedDate ?? DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now(),
-                      );
-
-                      if (newDate == null) return;
-                      setState(() {
-                        _selectedDate = newDate; // Update the DateTime state
-                        dateOfBirth.text = DateFormat(
-                          'yyyy-MM-dd',
-                        ).format(newDate!); //
-                      });
-                    },
-                    icon: Icon(
-                      Icons.date_range_outlined,
-                      color: Colors.grey.shade400,
+                GestureDetector(
+                  onTap: () {
+                    _SelectDate(context);
+                  },
+                  child: AbsorbPointer(
+                    child: CustomTextField(
+                      readOnly: true,
+                      controller: dateOfBirth,
+                      hintText: "Select Date of Birth",
+                      textStyle: TextStyle(color: Colors.black),
+                      isPassword: false,
+                      suffixIcon:Icon(
+                        Icons.calendar_month,color: Colors.grey.shade400,
+                      )
                     ),
                   ),
                 ),

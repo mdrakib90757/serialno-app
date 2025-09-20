@@ -35,11 +35,11 @@ class _ServiceTakerLayoutState extends State<ServiceTakerLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppbar(
-        onLogotap: () {
-          setState(() {
-            _currentIndex = 0;
-          });
-        },
+        // onLogotap: () {
+        //   setState(() {
+        //     _currentIndex = 0;
+        //   });
+        // },
       ),
       body: IndexedStack(index: _currentIndex, children: _serviceTakerScreens),
       bottomNavigationBar: CustomServicetakerNavigationbar(

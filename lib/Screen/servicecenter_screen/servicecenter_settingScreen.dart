@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/addUser_setting_serviceCenterDialog/addUser_setting_serviceCenterdialo.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_addUser_settingDialog/edit_addUser_settingDialog.dart';
 import 'package:serialno_app/Screen/servicecenter_screen/serviceCenter_widget/edit_organizationInfo/edit_organizationInfo.dart';
+import 'package:serialno_app/global_widgets/custom_shimmer_list/CustomShimmerList%20.dart';
 import 'package:serialno_app/model/AddUser_serviceCenterModel.dart';
 import 'package:serialno_app/providers/profile_provider/getprofile_provider.dart';
 import 'package:serialno_app/providers/serviceCenter_provider/addUser_serviceCenter_provider/getAddUser_serviceCenterProvider.dart';
@@ -109,12 +110,7 @@ class _Servicecenter_SettingscreenState
             (getAdduser.isLoading && getAdduser.users.isEmpty)) {
           return Scaffold(
             backgroundColor: Colors.white,
-            body: Center(
-              child: CustomLoading(
-                color: AppColor().primariColor,
-                strokeWidth: 2.5,
-              ),
-            ),
+            body: CustomShimmerList(itemCount: 10,)
           );
         }
 
@@ -377,7 +373,6 @@ class _Servicecenter_SettingscreenState
                                   context,
                                   listen: false,
                                 );
-
                                 bool isServiceTakerUser =
                                     authProvider.userType
                                         ?.toLowerCase()

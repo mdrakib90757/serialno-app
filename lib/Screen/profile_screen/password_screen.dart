@@ -103,6 +103,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       color: Colors.white,
       userType: currentUserLayoutType,
       // userType: UserType.company,
+      isExtraScreen: true,
       child: Form(
         key: _formkey,
         child: Padding(

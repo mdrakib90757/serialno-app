@@ -31,7 +31,6 @@ class _ServicecenterScreenState extends State<ServicecenterScreen>
   @override
   void initState() {
     super.initState();
-
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   final profileProvider = Provider.of<Getprofileprovider>(
     //     context,

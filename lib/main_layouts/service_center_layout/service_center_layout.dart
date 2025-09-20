@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../Screen/profile_screen/serviceCenter_profile_screen/serviceCenter_profile_screen.dart';
-import '../../Screen/profile_screen/service_center_password_screen/service_center_password_screen.dart';
 import '../../Screen/servicecenter_screen/home_screen.dart';
-import '../../Screen/servicecenter_screen/serviceCenter_widget/add_service_center_dialog/add_service_center_dialog.dart';
 import '../../Screen/servicecenter_screen/servicecenter_screen.dart';
 import '../../Screen/servicecenter_screen/servicecenter_settingScreen.dart';
 import '../../Screen/servicecenter_screen/servicetype_screen.dart';
@@ -37,11 +33,7 @@ class _ServiceCenterLayoutState extends State<ServiceCenterLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppbar(
-        // onLogotap: () {
-        //   setState(() {
-        //     _currentIndex = 0;
-        //   });
-        // },
+
       ),
       body: IndexedStack(index: _currentIndex, children: _serviceCenterScreens),
       bottomNavigationBar: CustomServicecenterNavigationbar(

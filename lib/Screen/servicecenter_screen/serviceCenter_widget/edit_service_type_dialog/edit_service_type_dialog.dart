@@ -161,7 +161,7 @@ class _EditServiceTypeDialogState extends State<EditServiceTypeDialog> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          icon: Icon(Icons.close_sharp, weight: 5),
+                          icon: Icon(Icons.close_sharp, weight: 5,color: Colors.grey.shade600,),
                         ),
                       ),
                     ],

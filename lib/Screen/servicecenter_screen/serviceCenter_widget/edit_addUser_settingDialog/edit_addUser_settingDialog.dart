@@ -174,6 +174,7 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.company,
+      isExtraScreen: true,
       child: (rolesProvider.isLoading || serviceCenterProvider.isLoading)
           ? CustomShimmerList(itemCount: 10)
           : Padding(

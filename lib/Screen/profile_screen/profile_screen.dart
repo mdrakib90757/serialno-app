@@ -154,13 +154,12 @@ class _profile_screenState extends State<profile_screen> {
       return MainLayout(
         userType: currentUserLayoutType,
         color: Colors.white,
-        currentIndex: widget.currentIndex,
+        currentIndex: null,
         onTap: widget.onTap,
-        child: profileContent, // Pass the core content as child
+        child: profileContent,
+        isExtraScreen: true,
       );
     } else {
-      // If customer, return the profileContent directly
-      // Assuming the navigation bar and app bar are handled by the parent route/screen
       return profileContent;
     }
   }

@@ -147,15 +147,16 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                 hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 14),
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 12.0,
-                  vertical: 12,
+                  vertical: 8,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5.0),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor().primariColor),
                 ),
-                suffixIcon: Icon(Icons.arrow_drop_down),
+                suffixIcon: Icon(Icons.arrow_drop_down,),
                 errorText: state.errorText,
               ),
               isEmpty: state.value == null,

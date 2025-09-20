@@ -62,9 +62,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
   String? _businessTypeError;
   String _FormatedDateTime = "";
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
-
   UserName? _selectUserName = UserName.Self;
-
   Businesstype? _selectedBusinessType;
   OrganizationModel? _selectedOrganization;
   ServiceCenterModel? _selectedServiceCenter;
@@ -95,6 +93,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     });
   }
 
+  // load business types
   Future<void> _loadBusinessTypes() async {
     try {
       final types = await AuthApi().fetchBusinessType();
@@ -136,6 +135,8 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     }
   }
 
+
+  // save book serial request
   Future<void> _saveBookSerialRequest() async {
     if (!_dialogFormKey.currentState!.validate()) {
       setState(() {
@@ -243,17 +244,64 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     super.dispose();
   }
 
+
+  // date picker
+  Future<void> _SelectDate(BuildContext context) async {
+    final DateTime? newDate = await showDatePicker(
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            useMaterial3: false,
+            colorScheme: ColorScheme.light(
+              primary: AppColor().primariColor,
+              // Header color
+              onPrimary: Colors.white,
+              // Header text color
+              onSurface: Colors.black, // Body text color
+            ),
+            dialogTheme: DialogThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColor()
+                    .primariColor, // Button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (newDate != null) {
+      setState(() {
+        _selectedDate = newDate;
+        DateController.text = DateFormat(
+          "yyyy-MM-dd",
+        ).format(newDate);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final bookProvider = Provider.of<bookSerialButton_provider>(context);
     final orgProvider = Provider.of<OrganizationProvider>(context);
     DateTime selectedDialogDate = DateTime.now();
 
+
+
     return MainLayout(
       currentIndex: 0,
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.customer,
+      isExtraScreen: true,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Container(
@@ -475,63 +523,28 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   ),
                   const SizedBox(height: 10),
 
+
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
-
-                  CustomTextField(
-                    controller: DateController,
-                    hintText: "Select Date",
-                    readOnly: false,
-                    isPassword: false,
-                    suffixIcon: IconButton(
-                      onPressed: () async {
-                        DateTime? newDate = await showDatePicker(
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                useMaterial3: false,
-                                colorScheme: ColorScheme.light(
-                                  primary: AppColor().primariColor,
-                                  // Header color
-                                  onPrimary: Colors.white,
-                                  // Header text color
-                                  onSurface: Colors.black, // Body text color
-                                ),
-                                dialogTheme: DialogThemeData(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColor()
-                                        .primariColor, // Button text color
-                                  ),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                          context: context,
-                          initialDate: selectedDialogDate,
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100),
-                        );
-                        if (newDate != null) {
-                          setState(() {
-                            selectedDialogDate = newDate;
-                            DateController.text = DateFormat(
-                              "yyyy-MM-dd",
-                            ).format(newDate);
-                          });
-                        }
-                      },
-                      icon: Icon(
-                        Icons.date_range_outlined,
-                        color: Colors.grey.shade400,
+                  GestureDetector(
+                    onTap: () {
+                      _SelectDate(context);
+                    },
+                    child: AbsorbPointer(
+                      child: CustomTextField(
+                        controller: DateController,
+                        hintText: "Select Date",
+                        readOnly: true,
+                        isPassword: false,
+                        suffixIcon: Icon(
+                            Icons.date_range_outlined,
+                            color: Colors.grey.shade400,
+                          ),
                       ),
                     ),
                   ),
+
+
                   const SizedBox(height: 10),
                   Text(
                     "For",

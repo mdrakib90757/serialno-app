@@ -42,12 +42,12 @@ class UpdateBookSerialDlalog extends StatefulWidget {
 }
 
 class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
+
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   final TextEditingController _contactNoController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _serviceCenterController =
-      TextEditingController();
+  final TextEditingController _serviceCenterController = TextEditingController();
 
   serviceTypeModel? _selectedServiceType;
   UserName? _selectUserName = UserName.Self;
@@ -56,6 +56,8 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
   final Date = DateTime.now();
   DateTime _selectedDate = DateTime.now();
 
+
+  // initialize fields
   void _initializeFields() {
     final booking = widget.bookingDetails;
     _serviceCenterController.text = booking.serviceCenter?.name ?? 'N/A';
@@ -72,6 +74,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
     }
   }
 
+  // fetch initial data
   void _fetchInitialData() {
     final companyId = widget.bookingDetails.company?.id;
     if (companyId != null) {
@@ -119,6 +122,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
     }
   }
 
+  // save book serial request
   Future<void> _UpdateBook_serial() async {
     if (!_dialogFormKey.currentState!.validate()) {
       setState(() {
@@ -199,6 +203,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     final updateProvider = Provider.of<UpdateBookSerialProvider>(context);
@@ -210,6 +215,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.customer,
+      isExtraScreen: true,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Container(
@@ -250,6 +256,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     enabled: false,
                   ),
                   const SizedBox(height: 10),
+
                   const CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
@@ -277,6 +284,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     },
                   ),
                   const SizedBox(height: 10),
+
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
                   CustomTextField(

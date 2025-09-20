@@ -174,6 +174,7 @@ class _AddUser_SettingServiceCenterDialogState
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.company,
+      isExtraScreen: true,
       child: (rolesProvider.isLoading)
           ? CustomShimmerList(itemCount: 10)
           : Padding(

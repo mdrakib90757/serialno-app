@@ -57,6 +57,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       color: Colors.white,
       userType: currentUserLayoutType,
       // userType: UserType.company,
+      isExtraScreen: true,
       child: (profile == null)
           ? CustomShimmerList(itemCount: 10)
           : Padding(
@@ -97,14 +98,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               ),
                             );
 
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => edit_profile_info_dialog(
-                            //       user: authProvider.userModel!,
-                            //     ),
-                            //   ),
-                            // );
                           },
                           icon: Icon(
                             Icons.edit_sharp,

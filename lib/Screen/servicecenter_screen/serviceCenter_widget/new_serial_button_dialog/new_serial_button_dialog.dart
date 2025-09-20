@@ -143,6 +143,50 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       );
     }
   }
+  //service date
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? newDate = await showDatePicker(
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            useMaterial3: false,
+            colorScheme: ColorScheme.light(
+              primary: AppColor().primariColor,
+              // Header color
+              onPrimary: Colors.white,
+              // Header text color
+              onSurface: Colors.black, // Body text color
+            ),
+            dialogTheme: DialogThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColor()
+                    .primariColor, // Button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (newDate != null) {
+      setState(() {
+        _selectedDate = newDate;
+        _serviceDateDisplayController.text = DateFormat(
+          "yyyy-MM-dd",
+        ).format(_selectedDate);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -236,57 +280,18 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                   const SizedBox(height: 10),
                   CustomLabeltext("Date"),
                   const SizedBox(height: 8),
-                  CustomTextField(
-                    hintText: "Select Date",
-                    isPassword: false,
-                    controller: _serviceDateDisplayController,
-                    suffixIcon: IconButton(
-                      onPressed: () async {
-                        DateTime? newDate = await showDatePicker(
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                useMaterial3: false,
-                                colorScheme: ColorScheme.light(
-                                  primary: AppColor().primariColor,
-                                  // Header color
-                                  onPrimary: Colors.white,
-                                  // Header text color
-                                  onSurface: Colors.black, // Body text color
-                                ),
-                                dialogTheme: DialogThemeData(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                  ),
-                                ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColor()
-                                        .primariColor, // Button text color
-                                  ),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                          context: context,
-                          initialDate: _selectedDate,
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100),
-                        );
-
-                        if (newDate != null) {
-                          setState(() {
-                            _selectedDate = newDate;
-                            _serviceDateDisplayController.text = DateFormat(
-                              "yyyy-MM-dd",
-                            ).format(_selectedDate);
-                          });
-                        }
-                      },
-                      icon: Icon(
-                        Icons.date_range_outlined,
-                        color: Colors.grey.shade400,
+                  GestureDetector(
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: AbsorbPointer(
+                      child: CustomTextField(
+                        hintText: "Select Date",
+                        textStyle: TextStyle(color: Colors.black),
+                        isPassword: false,
+                        readOnly: true,
+                        controller: _serviceDateDisplayController,
+                        suffixIcon:Icon(Icons.calendar_month_outlined,color: Colors.grey.shade600,)
                       ),
                     ),
                   ),

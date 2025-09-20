@@ -250,6 +250,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.company,
+      isExtraScreen: true,
       child:
           companyDetailsProvider.isLoading ||
               locationProvider.isLoading ||

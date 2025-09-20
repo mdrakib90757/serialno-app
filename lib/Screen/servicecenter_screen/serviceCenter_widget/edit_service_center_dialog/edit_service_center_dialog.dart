@@ -218,6 +218,7 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
       onTap: (p0) {},
       color: Colors.white,
       userType: UserType.company,
+      isExtraScreen: true,
       child: Form(
         key: _dialogFormKey,
         child: SingleChildScrollView(
