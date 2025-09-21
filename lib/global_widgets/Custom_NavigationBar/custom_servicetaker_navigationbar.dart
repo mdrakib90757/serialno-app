@@ -22,9 +22,8 @@ class _CustomServicetakerNavigationbarState
   @override
   Widget build(BuildContext context) {
     // Define colors based on whether it's an extra screen
-    final Color selectedColor = widget.isExtraScreen
-        ? Colors.grey.shade600
-        : AppColor().primariColor;
+    final Color selectedColor =
+        widget.isExtraScreen ? Colors.grey.shade600 : AppColor().primariColor;
     final Color unselectedColor = Colors.grey.shade600;
 
     return Container(

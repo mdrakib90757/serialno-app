@@ -129,9 +129,8 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
       email: _emailController.text,
       mobileNo: _phoneController.text,
       roleId: _selectedRole!.id!,
-      serviceCenterIds: _selectedServiceCentersForUser
-          .map((sc) => sc.id!)
-          .toList(),
+      serviceCenterIds:
+          _selectedServiceCentersForUser.map((sc) => sc.id!).toList(),
       isActive: _isActive,
     );
     final success = await updateAddUserProvider.UpdateAddUserButton(
@@ -264,7 +263,6 @@ class _EditAdduserSettingDialogState extends State<EditAdduserSettingDialog> {
                         itemAsString: (Data? item) => item?.name ?? "No name",
                         hinText: "Select Role",
                       ),
-
                       SizedBox(height: 10),
                       CustomLabeltext(
                         "Assigned Service Center",

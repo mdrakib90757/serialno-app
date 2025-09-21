@@ -90,8 +90,8 @@ class _serviceCenter_ProfileEditScreenState
                               PageRouteBuilder(
                                 pageBuilder: (_, __, ___) =>
                                     edit_profile_info_dialog(
-                                      user: authProvider.userModel!,
-                                    ),
+                                  user: authProvider.userModel!,
+                                ),
                                 transitionsBuilder: (_, anim, __, child) {
                                   return FadeTransition(
                                     opacity: anim,

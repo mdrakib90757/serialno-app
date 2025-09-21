@@ -70,8 +70,8 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
       // Set Gender
       if (profileData.gender != null &&
           genderList.contains(profileData.gender!.trim())) {
-        _selectGenter = profileData.gender!
-            .trim(); // Trim for robust comparison
+        _selectGenter =
+            profileData.gender!.trim(); // Trim for robust comparison
       }
 
       // Set Date of Birth
@@ -236,7 +236,6 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                   },
                   selectedItem: _selectGenter,
                 ),
-
                 const SizedBox(height: 10),
                 const CustomLabeltext("Date of Birth"),
                 const SizedBox(height: 10),
@@ -276,19 +275,19 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                               : () async {
                                   UpdateProfileRequest request =
                                       UpdateProfileRequest(
-                                        name: name.text,
-                                        mobileNo: mobileNo.text,
-                                        email: email.text,
-                                        gender: _selectGenter,
-                                        dateOfBirth: dateOfBirth.text.isNotEmpty
-                                            ? dateOfBirth.text
-                                            : null,
-                                      );
+                                    name: name.text,
+                                    mobileNo: mobileNo.text,
+                                    email: email.text,
+                                    gender: _selectGenter,
+                                    dateOfBirth: dateOfBirth.text.isNotEmpty
+                                        ? dateOfBirth.text
+                                        : null,
+                                  );
 
                                   final success =
                                       await UpdateProfile.updateUserProfile(
-                                        request,
-                                      );
+                                    request,
+                                  );
 
                                   if (success) {
                                     await Provider.of<Getprofileprovider>(
@@ -306,8 +305,7 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                                       SnackBar(
                                         content: CustomSnackBarWidget(
                                           title: "Error",
-                                          message:
-                                              UpdateProfile.errorMessage ??
+                                          message: UpdateProfile.errorMessage ??
                                               "Profile Update Failed",
                                           iconColor: Colors.red.shade400,
                                           icon: Icons.dangerous_outlined,

@@ -149,8 +149,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     final String? serviceCenterId = _selectedServiceCenter?.id;
     final String? serviceTypeId = _selectedServiceType?.id;
 
-    bool isIdMissing =
-        businessTypeId == null ||
+    bool isIdMissing = businessTypeId == null ||
         serviceCenterId == null ||
         serviceTypeId == null;
     if (_selectedBusinessType?.id == 1 && organizationId == null) {
@@ -370,7 +369,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                                 .fetchServiceCenters(newValue.id.toString());
                           }
                         },
-
                         itemAsString: (Businesstype type) => type.name,
                         hinText: "Select BusinessType",
                         validator: (value) {
@@ -381,7 +379,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       );
                     },
                   ),
-
                   const SizedBox(height: 10),
                   if (_selectedBusinessType?.id == 1) ...[
                     const CustomLabeltext("Organization"),
@@ -429,7 +426,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     ),
                     SizedBox(height: 10),
                   ],
-
                   const CustomLabeltext("Service Center"),
                   const SizedBox(height: 8),
                   Consumer<serviceCenter_serialBookProvider>(
@@ -442,7 +438,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                           ];
                           final bool isLoading =
                               orgServiceCenterProvider.isLoading ||
-                              typeServiceCenterProvider.isLoading;
+                                  typeServiceCenterProvider.isLoading;
 
                           return CustomDropdown<ServiceCenterModel>(
                             hinText: "select serviceCenter",
@@ -490,7 +486,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     },
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
@@ -516,7 +511,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                     },
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
                   GestureDetector(
@@ -536,7 +530,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
                   Text(
                     "For",

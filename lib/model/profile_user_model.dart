@@ -34,8 +34,8 @@ class profile_UserModel {
     return profile_UserModel(
       userCompanies: json["userCompanies"] != null
           ? (json["userCompanies"] as List)
-                .map((e) => UserCompany.fromJson(e))
-                .toList()
+              .map((e) => UserCompany.fromJson(e))
+              .toList()
           : [],
       currentCompany: json["currentCompany"] != null
           ? Company.fromJson(json["currentCompany"])

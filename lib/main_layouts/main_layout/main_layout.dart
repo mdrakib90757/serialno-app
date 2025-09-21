@@ -98,13 +98,12 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final int navBarCurrentIndex = widget.isExtraScreen
-        ? -1
-        : (widget.currentIndex ?? 0);
+    final int navBarCurrentIndex =
+        widget.isExtraScreen ? -1 : (widget.currentIndex ?? 0);
     return Scaffold(
       appBar: MyAppbar(
-        //onLogotap: () => widget.onTap(0)
-      ),
+          //onLogotap: () => widget.onTap(0)
+          ),
       body: widget.child,
       backgroundColor: widget.color,
       bottomNavigationBar: widget.userType == UserType.customer

@@ -148,7 +148,7 @@ class _Servicecenter_SettingscreenState
         final company_man = companyDetails.companyDetails!;
         final String businessTypeName =
             businessType.getBusinessTypeNameById(company_man.businessTypeId) ??
-            'N/A';
+                'N/A';
         print("businessTypeName ${businessTypeName}");
 
         return Scaffold(
@@ -188,8 +188,8 @@ class _Servicecenter_SettingscreenState
                               PageRouteBuilder(
                                 pageBuilder: (_, __, ___) =>
                                     EditOrganizationInfo(
-                                      companyDetails: company_man,
-                                    ),
+                                  companyDetails: company_man,
+                                ),
                                 transitionsBuilder: (_, anim, __, child) {
                                   return FadeTransition(
                                     opacity: anim,
@@ -373,8 +373,7 @@ class _Servicecenter_SettingscreenState
                                   context,
                                   listen: false,
                                 );
-                                bool isServiceTakerUser =
-                                    authProvider.userType
+                                bool isServiceTakerUser = authProvider.userType
                                         ?.toLowerCase()
                                         .trim() ==
                                     "customer";
@@ -510,10 +509,10 @@ class _Servicecenter_SettingscreenState
                             if (userRoleId != null &&
                                 rolesProvider.roles.isNotEmpty) {
                               try {
-                                final foundRole = rolesProvider.roles
-                                    .firstWhere(
-                                      (role) => role.id == userRoleId,
-                                    );
+                                final foundRole =
+                                    rolesProvider.roles.firstWhere(
+                                  (role) => role.id == userRoleId,
+                                );
                                 roleName = foundRole.name ?? 'N/A';
                               } catch (e) {
                                 roleName = 'Unknown Role';
@@ -561,36 +560,33 @@ class _Servicecenter_SettingscreenState
                                               onTap: () {
                                                 final allServiceCenters =
                                                     Provider.of<
-                                                          GetAddButtonProvider
-                                                        >(
-                                                          context,
-                                                          listen: false,
-                                                        )
-                                                        .serviceCenterList;
+                                                        GetAddButtonProvider>(
+                                                  context,
+                                                  listen: false,
+                                                ).serviceCenterList;
                                                 final allRoles =
                                                     Provider.of<RolesProvider>(
-                                                      context,
-                                                      listen: false,
-                                                    ).roles;
+                                                  context,
+                                                  listen: false,
+                                                ).roles;
 
                                                 Navigator.push(
                                                   context,
                                                   PageRouteBuilder(
                                                     pageBuilder: (_, __, ___) =>
                                                         EditAdduserSettingDialog(
-                                                          userModel: user,
-                                                          availableServiceCenters:
-                                                              allServiceCenters,
-                                                          availableRoles:
-                                                              allRoles,
-                                                        ),
+                                                      userModel: user,
+                                                      availableServiceCenters:
+                                                          allServiceCenters,
+                                                      availableRoles: allRoles,
+                                                    ),
                                                     transitionsBuilder:
                                                         (_, anim, __, child) {
-                                                          return FadeTransition(
-                                                            opacity: anim,
-                                                            child: child,
-                                                          );
-                                                        },
+                                                      return FadeTransition(
+                                                        opacity: anim,
+                                                        child: child,
+                                                      );
+                                                    },
                                                     fullscreenDialog: true,
                                                   ),
                                                 );
@@ -743,8 +739,7 @@ class _Servicecenter_SettingscreenState
                       } else if (mounted) {
                         CustomFlushbar.showSuccess(
                           context: context,
-                          message:
-                              deleteProvider.errorMessage ??
+                          message: deleteProvider.errorMessage ??
                               "Failed to delete user.",
                           title: 'Failed',
                         );

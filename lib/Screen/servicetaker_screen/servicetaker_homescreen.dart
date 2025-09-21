@@ -164,8 +164,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                   listen: false,
                                 );
 
-                                bool isServiceTakerUser =
-                                    authProvider.userType
+                                bool isServiceTakerUser = authProvider.userType
                                         ?.toLowerCase()
                                         .trim() ==
                                     "customer";
@@ -259,19 +258,19 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                   // S/L Time
                                   final String slTime =
                                       DateFormatter.formatForStatusTime(
-                                        bookSerial.createdTime,
-                                      );
+                                    bookSerial.createdTime,
+                                  );
                                   // Status Time
                                   final String statusTime =
                                       DateFormatter.formatForStatusTime(
-                                        bookSerial.statusTime,
-                                      );
+                                    bookSerial.statusTime,
+                                  );
 
                                   // ApproxTime
                                   final String ApproxTime =
                                       DateFormatter.formatForApproxTime(
-                                        bookSerial.approxServeTime,
-                                      );
+                                    bookSerial.approxServeTime,
+                                  );
 
                                   return Container(
                                     //padding: EdgeInsets.all(5),
@@ -322,10 +321,10 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                         .toString(),
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      color:
-                                                          AppColor.getStatusColor(
-                                                            bookSerial.status,
-                                                          ),
+                                                      color: AppColor
+                                                          .getStatusColor(
+                                                        bookSerial.status,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -339,8 +338,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                             children: [
                                               Text(
                                                 bookSerial
-                                                        .serviceCenter
-                                                        ?.name ??
+                                                        .serviceCenter?.name ??
                                                     "No serviceCenter Name",
                                                 style: TextStyle(
                                                   color:
@@ -370,8 +368,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    bookSerial
-                                                            .serviceType
+                                                    bookSerial.serviceType
                                                             ?.name ??
                                                         "No ServiceType Name",
                                                     style: TextStyle(
@@ -390,16 +387,15 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                 ],
                                               ),
                                               Visibility(
-                                                visible:
-                                                    bookSerial.status !=
+                                                visible: bookSerial.status !=
                                                         "Cancelled" &&
                                                     bookSerial.status !=
                                                         "Serving",
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                        right: 17,
-                                                      ),
+                                                    right: 17,
+                                                  ),
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       showDialog(
@@ -415,8 +411,7 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                     child: Row(
                                                       children: [
                                                         Visibility(
-                                                          visible:
-                                                              bookSerial
+                                                          visible: bookSerial
                                                                       .status !=
                                                                   "Cancelled" &&
                                                               bookSerial
@@ -424,23 +419,21 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                                   "Serving",
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets.only(
-                                                                  right: 17,
-                                                                ),
-                                                            child: GestureDetector(
+                                                                const EdgeInsets
+                                                                    .only(
+                                                              right: 17,
+                                                            ),
+                                                            child:
+                                                                GestureDetector(
                                                               onTap: () {
                                                                 final authProvider =
                                                                     Provider.of<
-                                                                      AuthProvider
-                                                                    >(
-                                                                      context,
-                                                                      listen:
-                                                                          false,
-                                                                    );
+                                                                        AuthProvider>(
+                                                                  context,
+                                                                  listen: false,
+                                                                );
 
-                                                                bool
-                                                                isServiceTakerUser =
-                                                                    authProvider
+                                                                bool isServiceTakerUser = authProvider
                                                                         .userType
                                                                         ?.toLowerCase()
                                                                         .trim() ==
@@ -449,13 +442,13 @@ class _ServicetakerHomescreenState extends State<ServicetakerHomescreen> {
                                                                 Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                    builder:
-                                                                        (
-                                                                          context,
-                                                                        ) => UpdateBookSerialDlalog(
-                                                                          bookingDetails:
-                                                                              bookSerial,
-                                                                        ),
+                                                                    builder: (
+                                                                      context,
+                                                                    ) =>
+                                                                        UpdateBookSerialDlalog(
+                                                                      bookingDetails:
+                                                                          bookSerial,
+                                                                    ),
                                                                   ),
                                                                 );
                                                               },

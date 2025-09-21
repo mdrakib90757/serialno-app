@@ -251,8 +251,7 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
       color: Colors.white,
       userType: UserType.company,
       isExtraScreen: true,
-      child:
-          companyDetailsProvider.isLoading ||
+      child: companyDetailsProvider.isLoading ||
               locationProvider.isLoading ||
               authProvider.isLoading
           ? Center(child: CustomShimmerList(itemCount: 10)) // Show loading here
@@ -322,7 +321,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         controller: phone,
                         keyboardType: TextInputType.number,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("Business Type"),
                       const SizedBox(height: 10),
@@ -351,7 +349,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         },
                       ),
                       const SizedBox(height: 10),
-
                       const CustomLabeltext("Division", showStar: false),
                       const SizedBox(height: 8),
                       CustomDropdown<LocationPart>(
@@ -379,7 +376,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         selectedItem: _selectedDivision,
                         items: locationProvider.divisions,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("District", showStar: false),
                       const SizedBox(height: 8),
@@ -407,7 +403,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         items: locationProvider.districts,
                         selectedItem: _selectedDistrict,
                       ),
-
                       const SizedBox(height: 10),
                       const CustomLabeltext("Thana", showStar: false),
                       const SizedBox(height: 8),
@@ -435,7 +430,6 @@ class _EditOrganizationInfoState extends State<EditOrganizationInfo> {
                         items: locationProvider.districts,
                         selectedItem: _selectedDistrict,
                       ),
-
                       SizedBox(height: 10),
                       const CustomLabeltext("Area", showStar: false),
                       const SizedBox(height: 8),

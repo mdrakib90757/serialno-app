@@ -9,15 +9,13 @@ class MySerialService {
     required int pageSize,
   }) async {
     try {
-      final response =
-          await ApiClient().get(
-                "/serial-no/my-services",
-                queryParameters: {
-                  'pageNo': pageNo.toString(),
-                  'pageSize': pageSize.toString(),
-                },
-              )
-              as List;
+      final response = await ApiClient().get(
+        "/serial-no/my-services",
+        queryParameters: {
+          'pageNo': pageNo.toString(),
+          'pageSize': pageSize.toString(),
+        },
+      ) as List;
 
       List<MyService> services = response
           .map((item) => MyService.fromJson(item as Map<String, dynamic>))

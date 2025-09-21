@@ -54,11 +54,11 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
 
     AddButtonServiceTypeRequest serviceTypeRequest =
         AddButtonServiceTypeRequest(
-          name: nameController.text,
-          price: priceController.text,
-          defaultAllocatedTime: timeController.text,
-          companyId: companyId,
-        );
+      name: nameController.text,
+      price: priceController.text,
+      defaultAllocatedTime: timeController.text,
+      companyId: companyId,
+    );
 
     final success = await addButtonServiceType.addButtonServiceType(
       serviceTypeRequest,
@@ -80,8 +80,7 @@ class _AddServiceTypeDialogState extends State<AddServiceTypeDialog> {
         SnackBar(
           content: CustomSnackBarWidget(
             title: "Error",
-            message:
-                addButtonServiceType.errorMessage ??
+            message: addButtonServiceType.errorMessage ??
                 "Failed to Added ServiceType",
             iconColor: Colors.red.shade400,
             icon: Icons.dangerous_outlined,

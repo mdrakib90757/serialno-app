@@ -194,8 +194,7 @@ class _EditServiceCenterDialogState extends State<EditServiceCenterDialog>
           SnackBar(
             content: CustomSnackBarWidget(
               title: "Error",
-              message:
-                  editButtonProvider.errorMessage ??
+              message: editButtonProvider.errorMessage ??
                   "Failed to Edit Service Center Update",
               iconColor: Colors.red.shade400,
               icon: Icons.dangerous_outlined,

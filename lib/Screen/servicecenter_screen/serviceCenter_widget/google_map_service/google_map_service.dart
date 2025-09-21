@@ -56,8 +56,7 @@ class GoogleMapsService {
   }
 
   Future<LatLng> getLatLngFromPlaceId(String placeId) async {
-    final request =
-        'https://maps.googleapis.com/maps/api/geocode/json'
+    final request = 'https://maps.googleapis.com/maps/api/geocode/json'
         '?place_id=$placeId'
         '&key=$_apiKey';
 
@@ -79,8 +78,7 @@ class GoogleMapsService {
   }
 
   Future<Suggestion?> getPlaceDetailsFromLatLng(LatLng position) async {
-    final request =
-        'https://maps.googleapis.com/maps/api/geocode/json'
+    final request = 'https://maps.googleapis.com/maps/api/geocode/json'
         '?latlng=${position.latitude},${position.longitude}'
         '&key=$_apiKey';
     try {

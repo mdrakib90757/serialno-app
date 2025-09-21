@@ -73,8 +73,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
         SnackBar(
           content: CustomSnackBarWidget(
             title: "Error",
-            message:
-                changePasswordProvider.errorMessage ??
+            message: changePasswordProvider.errorMessage ??
                 "Password update failed.",
             iconColor: Colors.red.shade400,
             icon: Icons.dangerous_outlined,

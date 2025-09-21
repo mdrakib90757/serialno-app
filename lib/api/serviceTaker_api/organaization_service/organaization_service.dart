@@ -10,12 +10,10 @@ class organizationService {
         'businessTypeId': businessTypeId,
       };
 
-      final response =
-          await ApiClient().get(
-                "/serial-no/organizations",
-                queryParameters: queryParameters,
-              )
-              as List;
+      final response = await ApiClient().get(
+        "/serial-no/organizations",
+        queryParameters: queryParameters,
+      ) as List;
       List<OrganizationModel> organizations = response
           .map(
             (data) => OrganizationModel.fromJson(data as Map<String, dynamic>),

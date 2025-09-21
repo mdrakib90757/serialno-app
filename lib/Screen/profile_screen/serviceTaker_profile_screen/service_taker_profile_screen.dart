@@ -51,7 +51,7 @@ class _serviceTaker_profile_screenState
                     final profile = profileProvider.profileData;
                     bool CustomeruserType =
                         authProvider.userType?.toLowerCase().trim() ==
-                        "customer";
+                            "customer";
 
                     Navigator.push(
                       context,

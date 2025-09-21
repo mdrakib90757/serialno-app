@@ -338,7 +338,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             return null;
                           },
                         ),
-
                         SizedBox(height: 10),
                         if (_selectedBusinessType?.id == 1) ...[
                           Text(
@@ -355,15 +354,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ),
                             optionsBuilder:
                                 (TextEditingValue textEditingValue) {
-                                  if (textEditingValue.text.isEmpty) {
-                                    return _saveItems;
-                                  }
-                                  return _saveItems.where((String option) {
-                                    return option.toLowerCase().contains(
+                              if (textEditingValue.text.isEmpty) {
+                                return _saveItems;
+                              }
+                              return _saveItems.where((String option) {
+                                return option.toLowerCase().contains(
                                       textEditingValue.text.toLowerCase(),
                                     );
-                                  });
-                                },
+                              });
+                            },
                             onSelected: (String selection) {
                               // _textEditingController.text = selection;
                               setState(() {
@@ -373,68 +372,66 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               debugPrint('You just selected $selection');
                               FocusScope.of(context).unfocus();
                             },
-                            fieldViewBuilder:
-                                (
-                                  BuildContext context,
-                                  TextEditingController
-                                  fieldTextEditingController,
-                                  FocusNode focusNode,
-                                  VoidCallback onFieldSubmitted,
-                                ) {
-                                  if (organization.text.isNotEmpty &&
-                                      fieldTextEditingController.text !=
-                                          organization.text) {
-                                    fieldTextEditingController.text =
-                                        organization.text;
-                                  }
+                            fieldViewBuilder: (
+                              BuildContext context,
+                              TextEditingController fieldTextEditingController,
+                              FocusNode focusNode,
+                              VoidCallback onFieldSubmitted,
+                            ) {
+                              if (organization.text.isNotEmpty &&
+                                  fieldTextEditingController.text !=
+                                      organization.text) {
+                                fieldTextEditingController.text =
+                                    organization.text;
+                              }
 
-                                  return TextField(
-                                    controller: fieldTextEditingController,
-                                    focusNode: focusNode,
-                                    cursorColor: Colors.grey.shade500,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 14,
-                                      ),
-                                      isDense: true,
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: AppColor().primariColor,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      hintText: "Organization",
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey.shade400,
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade400,
-                                        ),
-                                      ),
-                                      border: OutlineInputBorder(),
+                              return TextField(
+                                controller: fieldTextEditingController,
+                                focusNode: focusNode,
+                                cursorColor: Colors.grey.shade500,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 14,
+                                  ),
+                                  isDense: true,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: AppColor().primariColor,
+                                      width: 2,
                                     ),
-                                    onSubmitted: (String value) {
-                                      final trimmerValue = value.trim();
-                                      if (trimmerValue.isNotEmpty) {
-                                        _saveNewItem(value);
+                                  ),
+                                  hintText: "Organization",
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                  border: OutlineInputBorder(),
+                                ),
+                                onSubmitted: (String value) {
+                                  final trimmerValue = value.trim();
+                                  if (trimmerValue.isNotEmpty) {
+                                    _saveNewItem(value);
 
-                                        fieldTextEditingController.clear();
+                                    fieldTextEditingController.clear();
 
-                                        setState(() {
-                                          organization.clear();
-                                          //Organization.text = value;
-                                        });
-                                      }
-                                      onFieldSubmitted();
-                                    },
-                                    onChanged: (value) {
-                                      // _textEditingController.text = value;
-                                      organization.text = value;
-                                    },
-                                  );
+                                    setState(() {
+                                      organization.clear();
+                                      //Organization.text = value;
+                                    });
+                                  }
+                                  onFieldSubmitted();
                                 },
+                                onChanged: (value) {
+                                  // _textEditingController.text = value;
+                                  organization.text = value;
+                                },
+                              );
+                            },
                             optionsViewBuilder: (context, onSelected, options) {
                               return Align(
                                 alignment: Alignment.topLeft,
@@ -442,8 +439,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   elevation: 4.0,
                                   child: Container(
                                     height: 150,
-                                    width:
-                                        MediaQuery.of(context).size.width *
+                                    width: MediaQuery.of(context).size.width *
                                         0.86,
                                     constraints: BoxConstraints(maxWidth: 600),
                                     child: Scrollbar(
@@ -468,8 +464,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                               title: Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                      horizontal: 16.0,
-                                                    ),
+                                                  horizontal: 16.0,
+                                                ),
                                                 child: Text(option),
                                               ),
                                               hoverColor: Colors.grey.shade200,
@@ -478,12 +474,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         },
                                         separatorBuilder:
                                             (BuildContext context, int index) {
-                                              return Divider(
-                                                height: 1,
-                                                thickness: 1,
-                                                color: Colors.grey.shade200,
-                                              );
-                                            },
+                                          return Divider(
+                                            height: 1,
+                                            thickness: 1,
+                                            color: Colors.grey.shade200,
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),

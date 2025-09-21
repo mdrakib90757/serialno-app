@@ -85,17 +85,16 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
           // Ensure the widget is still in the tree
           final serviceTypeProvider =
               Provider.of<serviceTypeSerialbook_Provider>(
-                context,
-                listen: false,
-              );
+            context,
+            listen: false,
+          );
           setState(() {
             if (widget.bookingDetails.serviceType?.name != null) {
-              _selectedServiceType = serviceTypeProvider.serviceTypeList
-                  .firstWhere(
-                    (type) =>
-                        type.name == widget.bookingDetails.serviceType!.name,
-                    orElse: () => null!,
-                  );
+              _selectedServiceType =
+                  serviceTypeProvider.serviceTypeList.firstWhere(
+                (type) => type.name == widget.bookingDetails.serviceType!.name,
+                orElse: () => null!,
+              );
             } else {
               _selectedServiceType = null;
             }
@@ -254,7 +253,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     enabled: false,
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Service Type"),
                   const SizedBox(height: 8),
                   Consumer<serviceTypeSerialbook_Provider>(
@@ -262,14 +260,12 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                       return CustomDropdown<serviceTypeModel>(
                         hinText: "select serviceType",
                         items: serviceTypeProvider.serviceTypeList,
-
                         onChanged: (serviceTypeModel? newValue) {
                           setState(() {
                             _selectedServiceType = newValue;
                           });
                           print(newValue?.name);
                         },
-
                         itemAsString: (serviceTypeModel item) =>
                             item.name ?? "no data",
                         selectedItem: _selectedServiceType,
@@ -282,7 +278,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     },
                   ),
                   const SizedBox(height: 10),
-
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
                   CustomTextField(
@@ -342,7 +337,7 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Text(
+                  const Text(
                     "For",
                     style: TextStyle(
                       color: Colors.black,

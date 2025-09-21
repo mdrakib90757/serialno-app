@@ -9,7 +9,7 @@ import '../../../../providers/profile_provider/getprofile_provider.dart';
 class CustomDateDisplay extends StatefulWidget {
   final DateTime selectedDate;
   const CustomDateDisplay({Key? key, required this.selectedDate})
-    : super(key: key);
+      : super(key: key);
 
   @override
   _CustomDateDisplayState createState() => _CustomDateDisplayState();
