@@ -143,6 +143,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
       );
     }
   }
+
   //service date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? newDate = await showDatePicker(
@@ -164,8 +165,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: AppColor()
-                    .primariColor, // Button text color
+                foregroundColor: AppColor().primariColor, // Button text color
               ),
             ),
           ),
@@ -258,6 +258,7 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                         items:
                             getAddButton_serviceType_Provider.serviceTypeList,
                         value: _selectedServiceType,
+                        selectedItem: _selectedServiceType,
                         onChanged: (serviceTypeModel? newvalue) {
                           debugPrint(
                             "DROPDOWN CHANGED: User selected Service Center ID: ${newvalue?.id}",
@@ -291,7 +292,10 @@ class _NewSerialButtonDialogState extends State<NewSerialButtonDialog> {
                         isPassword: false,
                         readOnly: true,
                         controller: _serviceDateDisplayController,
-                        suffixIcon:Icon(Icons.calendar_month_outlined,color: Colors.grey.shade600,)
+                        suffixIcon: Icon(
+                          Icons.calendar_month_outlined,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ),
                   ),

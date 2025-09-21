@@ -22,7 +22,9 @@ class _CustomServicetakerNavigationbarState
   @override
   Widget build(BuildContext context) {
     // Define colors based on whether it's an extra screen
-    final Color selectedColor = widget.isExtraScreen ? Colors.grey.shade600 : AppColor().primariColor;
+    final Color selectedColor = widget.isExtraScreen
+        ? Colors.grey.shade600
+        : AppColor().primariColor;
     final Color unselectedColor = Colors.grey.shade600;
 
     return Container(
@@ -47,23 +49,55 @@ class _CustomServicetakerNavigationbarState
         iconSize: 25,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, size: 33, color: widget.isExtraScreen ? unselectedColor : null),
-            activeIcon: Icon(Icons.home, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor),
+            icon: Icon(
+              Icons.home_outlined,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ),
+            activeIcon: Icon(
+              Icons.home,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.sync, size: 33, color: widget.isExtraScreen ? unselectedColor : null),
-            activeIcon: Icon(Icons.cloud_sync, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor),
+            icon: Icon(
+              Icons.sync,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ),
+            activeIcon: Icon(
+              Icons.cloud_sync,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ),
             label: "My Serials",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined, size: 33, color: widget.isExtraScreen ? unselectedColor : null),
-            activeIcon: Icon(Icons.settings, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor),
+            icon: Icon(
+              Icons.settings_outlined,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ),
+            activeIcon: Icon(
+              Icons.settings,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ),
             label: "Settings",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline, size: 33, color: widget.isExtraScreen ? unselectedColor : null),
-            activeIcon: Icon(Icons.person, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor),
+            icon: Icon(
+              Icons.person_outline,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ),
+            activeIcon: Icon(
+              Icons.person,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ),
             label: "Profile",
           ),
         ],

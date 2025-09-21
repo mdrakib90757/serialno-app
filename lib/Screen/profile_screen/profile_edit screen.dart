@@ -97,7 +97,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 fullscreenDialog: true,
                               ),
                             );
-
                           },
                           icon: Icon(
                             Icons.edit_sharp,

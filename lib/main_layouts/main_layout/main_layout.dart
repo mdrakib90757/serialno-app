@@ -23,7 +23,6 @@ class MainLayout extends StatefulWidget {
   final UserType userType;
   final bool isExtraScreen;
 
-
   const MainLayout({
     super.key,
     required this.child,
@@ -31,7 +30,7 @@ class MainLayout extends StatefulWidget {
     required this.onTap,
     required this.color,
     required this.userType,
-    this.isExtraScreen=false,
+    this.isExtraScreen = false,
   });
 
   @override
@@ -87,7 +86,7 @@ class _MainLayoutState extends State<MainLayout> {
           child: targetScreen,
           currentIndex: index,
           userType: widget.userType,
-            isExtraScreen: false
+          isExtraScreen: false,
         ),
         transitionsBuilder: (_, anim, __, child) {
           return FadeTransition(opacity: anim, child: child);
@@ -99,7 +98,9 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final int navBarCurrentIndex = widget.isExtraScreen ? -1 : (widget.currentIndex ?? 0);
+    final int navBarCurrentIndex = widget.isExtraScreen
+        ? -1
+        : (widget.currentIndex ?? 0);
     return Scaffold(
       appBar: MyAppbar(
         //onLogotap: () => widget.onTap(0)
@@ -110,12 +111,12 @@ class _MainLayoutState extends State<MainLayout> {
           ? CustomServicetakerNavigationbar(
               currentIndex: navBarCurrentIndex,
               onTap: (i) => _onNavTapped(context, i),
-        isExtraScreen: widget.isExtraScreen,
+              isExtraScreen: widget.isExtraScreen,
             )
           : CustomServicecenterNavigationbar(
               currentIndex: navBarCurrentIndex,
               onTap: (i) => _onNavTapped(context, i),
-        isExtraScreen: widget.isExtraScreen,
+              isExtraScreen: widget.isExtraScreen,
             ),
     );
   }

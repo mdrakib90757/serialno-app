@@ -35,24 +35,54 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
   OverlayEntry? _overlayEntry;
   final GlobalKey<FormFieldState> _formFieldKey = GlobalKey<FormFieldState>();
   bool get _isPopupOpen => _overlayEntry != null;
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(_handleFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_handleFocusChange);
+    _focusNode.dispose();
+    _overlayEntry?.remove();
+    super.dispose();
+  }
+
+  void _handleFocusChange() {
+    if (!_focusNode.hasFocus && _isPopupOpen) {
+      _closePopup();
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   void _togglePopup() {
     if (_isPopupOpen) {
       _closePopup();
     } else {
       _openPopup();
+      _focusNode.requestFocus();
     }
   }
 
   void _openPopup() {
     _overlayEntry = _createOverlayEntry();
     Overlay.of(context).insert(_overlayEntry!);
+    setState(() {});
   }
 
   void _closePopup() {
     _overlayEntry?.remove();
     _overlayEntry = null;
     _formFieldKey.currentState?.validate();
+    _focusNode.unfocus();
+    setState(() {});
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -78,6 +108,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             Positioned.fill(
               child: GestureDetector(
                 onTap: _closePopup,
+                behavior: HitTestBehavior.translucent,
                 child: Container(color: Colors.transparent),
               ),
             ),
@@ -129,8 +160,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
       link: _layerLink,
       child: FormField<T>(
         key: _formFieldKey,
-        initialValue:
-            widget.value, // This is the initial value passed to FormField
+        initialValue: widget.value,
         validator: widget.validator,
         builder: (FormFieldState<T> state) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -138,36 +168,55 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
               state.didChange(widget.selectedItem);
             }
           });
-          // This rebuilds when state.value changes (e.g., via didChange)
           return GestureDetector(
             onTap: _togglePopup,
-            child: InputDecorator(
-              decoration: InputDecoration(
-                hintText: state.value == null ? widget.hinText : null,
-                hintStyle: TextStyle(color: Colors.grey.shade500, fontSize: 14),
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 8,
+            child: Focus(
+              focusNode: _focusNode,
+              autofocus: false,
+              onFocusChange: (hasFocus) {
+                if (!hasFocus && _isPopupOpen) {
+                  _closePopup();
+                }
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  hintText: state.value == null ? widget.hinText : null,
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 14,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColor().primariColor,
+                      width: 2,
+                    ),
+                  ),
+                  suffixIcon: Icon(Icons.arrow_drop_down),
+                  errorText: state.errorText,
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                isEmpty: state.value == null,
+                //isEmpty: state.value == null && state.errorText == null, // Consider errorText for isEmpty
+                isFocused: _focusNode.hasFocus || _isPopupOpen,
+                child: Text(
+                  state.value == null ? '' : widget.itemAsString(state.value!),
+                  style: TextStyle(fontSize: 14.0),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor().primariColor),
-                ),
-                suffixIcon: Icon(Icons.arrow_drop_down,),
-                errorText: state.errorText,
-              ),
-              isEmpty: state.value == null,
-              child: Text(
-                state.value == null ? '' : widget.itemAsString(state.value!),
-                style: TextStyle(fontSize: 14.0),
               ),
             ),
           );
         },
-
         autovalidateMode: AutovalidateMode.disabled,
       ),
     );

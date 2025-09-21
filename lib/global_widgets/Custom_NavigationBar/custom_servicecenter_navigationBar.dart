@@ -10,7 +10,7 @@ class CustomServicecenterNavigationbar extends StatefulWidget {
     super.key,
     required this.currentIndex,
     required this.onTap,
-     this.isExtraScreen=false,
+    this.isExtraScreen = false,
   });
 
   @override
@@ -23,7 +23,9 @@ class _CustomServicecenterNavigationbarState
   @override
   Widget build(BuildContext context) {
     // Define colors based on whether it's an extra screen
-    final Color selectedColor = widget.isExtraScreen ? Colors.grey.shade600 : AppColor().primariColor;
+    final Color selectedColor = widget.isExtraScreen
+        ? Colors.grey.shade600
+        : AppColor().primariColor;
     final Color unselectedColor = Colors.grey.shade600;
 
     return Container(
@@ -49,23 +51,55 @@ class _CustomServicecenterNavigationbarState
         elevation: 5.0,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, size: 33, color: widget.isExtraScreen ? unselectedColor : null), // Explicitly set color if extra screen
-            activeIcon: Icon(Icons.home, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor), // Active icon also grey if extra
+            icon: Icon(
+              Icons.home_outlined,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ), // Explicitly set color if extra screen
+            activeIcon: Icon(
+              Icons.home,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ), // Active icon also grey if extra
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.corporate_fare_outlined, size: 33, color: widget.isExtraScreen ? unselectedColor : null),
-            activeIcon: Icon(Icons.corporate_fare_rounded, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor),
+            icon: Icon(
+              Icons.corporate_fare_outlined,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ),
+            activeIcon: Icon(
+              Icons.corporate_fare_rounded,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ),
             label: "Service-Center",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category_outlined, size: 33, color: widget.isExtraScreen ? unselectedColor : null),
-            activeIcon: Icon(Icons.category, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor),
+            icon: Icon(
+              Icons.category_outlined,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ),
+            activeIcon: Icon(
+              Icons.category,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ),
             label: "Service-Types",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined, size: 33, color: widget.isExtraScreen ? unselectedColor : null),
-            activeIcon: Icon(Icons.settings, size: 33, color: widget.isExtraScreen ? unselectedColor : selectedColor),
+            icon: Icon(
+              Icons.settings_outlined,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : null,
+            ),
+            activeIcon: Icon(
+              Icons.settings,
+              size: 33,
+              color: widget.isExtraScreen ? unselectedColor : selectedColor,
+            ),
             label: "Settings",
           ),
         ],

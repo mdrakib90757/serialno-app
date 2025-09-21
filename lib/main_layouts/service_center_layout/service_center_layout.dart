@@ -32,9 +32,7 @@ class _ServiceCenterLayoutState extends State<ServiceCenterLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppbar(
-
-      ),
+      appBar: MyAppbar(),
       body: IndexedStack(index: _currentIndex, children: _serviceCenterScreens),
       bottomNavigationBar: CustomServicecenterNavigationbar(
         currentIndex: _currentIndex,

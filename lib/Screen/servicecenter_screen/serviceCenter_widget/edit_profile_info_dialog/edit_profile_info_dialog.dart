@@ -92,7 +92,7 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
   }
 
   Future<void> _SelectDate(BuildContext context) async {
-   final DateTime? newDate = await showDatePicker(
+    final DateTime? newDate = await showDatePicker(
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -111,8 +111,7 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: AppColor()
-                    .primariColor, // Button text color
+                foregroundColor: AppColor().primariColor, // Button text color
               ),
             ),
           ),
@@ -126,7 +125,7 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
     );
     if (newDate != null && newDate != _selectedDate) {
       setState(() {
-        _selectedDate =newDate;
+        _selectedDate = newDate;
         dateOfBirth.text = DateFormat('yyyy-MM-dd').format(newDate);
       });
     }
@@ -252,9 +251,10 @@ class _edit_profile_info_dialogState extends State<edit_profile_info_dialog> {
                       hintText: "Select Date of Birth",
                       textStyle: TextStyle(color: Colors.black),
                       isPassword: false,
-                      suffixIcon:Icon(
-                        Icons.calendar_month,color: Colors.grey.shade400,
-                      )
+                      suffixIcon: Icon(
+                        Icons.calendar_month,
+                        color: Colors.grey.shade400,
+                      ),
                     ),
                   ),
                 ),

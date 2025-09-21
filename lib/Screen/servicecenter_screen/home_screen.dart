@@ -122,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-
   //Date function
   Future<void> _SelectDate(BuildContext context) async {
     final DateTime? newDate = await showDatePicker(
@@ -144,8 +143,7 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: AppColor()
-                    .primariColor, // Button text color
+                foregroundColor: AppColor().primariColor, // Button text color
               ),
             ),
           ),
@@ -155,21 +153,16 @@ class _HomeScreenState extends State<HomeScreen>
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(2000),
-      lastDate: DateTime.now().add(
-        const Duration(days: 365),
-      ),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
     );
     if (newDate != null && newDate != _selectedDate) {
       setState(() {
         _selectedDate = newDate;
-        _dateController.text = DateFormatter.formatForApi(
-          newDate,
-        );
+        _dateController.text = DateFormatter.formatForApi(newDate);
       });
       _fetchDataForUI();
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -281,8 +274,10 @@ class _HomeScreenState extends State<HomeScreen>
                         hintText: todayString,
                         textStyle: TextStyle(color: Colors.black),
                         isPassword: false,
-                        suffixIcon: Icon(Icons.calendar_month,color: Colors.grey.shade600,),
-
+                        suffixIcon: Icon(
+                          Icons.calendar_month,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ),
                   ),

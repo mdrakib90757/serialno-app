@@ -179,7 +179,11 @@ class _add_service_center_service_type_dialogState
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          icon: Icon(Icons.close_sharp, weight: 5,color: Colors.grey.shade600,),
+                          icon: Icon(
+                            Icons.close_sharp,
+                            weight: 5,
+                            color: Colors.grey.shade600,
+                          ),
                         ),
                       ),
                     ],

@@ -135,7 +135,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     }
   }
 
-
   // save book serial request
   Future<void> _saveBookSerialRequest() async {
     if (!_dialogFormKey.currentState!.validate()) {
@@ -244,7 +243,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     super.dispose();
   }
 
-
   // date picker
   Future<void> _SelectDate(BuildContext context) async {
     final DateTime? newDate = await showDatePicker(
@@ -266,8 +264,7 @@ class _BookSerialButtonState extends State<BookSerialButton> {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: AppColor()
-                    .primariColor, // Button text color
+                foregroundColor: AppColor().primariColor, // Button text color
               ),
             ),
           ),
@@ -282,19 +279,16 @@ class _BookSerialButtonState extends State<BookSerialButton> {
     if (newDate != null) {
       setState(() {
         _selectedDate = newDate;
-        DateController.text = DateFormat(
-          "yyyy-MM-dd",
-        ).format(newDate);
+        DateController.text = DateFormat("yyyy-MM-dd").format(newDate);
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final bookProvider = Provider.of<bookSerialButton_provider>(context);
     final orgProvider = Provider.of<OrganizationProvider>(context);
     DateTime selectedDialogDate = DateTime.now();
-
-
 
     return MainLayout(
       currentIndex: 0,
@@ -523,7 +517,6 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                   ),
                   const SizedBox(height: 10),
 
-
                   const CustomLabeltext("Date"),
                   const SizedBox(height: 8),
                   GestureDetector(
@@ -537,13 +530,12 @@ class _BookSerialButtonState extends State<BookSerialButton> {
                         readOnly: true,
                         isPassword: false,
                         suffixIcon: Icon(
-                            Icons.date_range_outlined,
-                            color: Colors.grey.shade400,
-                          ),
+                          Icons.date_range_outlined,
+                          color: Colors.grey.shade400,
+                        ),
                       ),
                     ),
                   ),
-
 
                   const SizedBox(height: 10),
                   Text(

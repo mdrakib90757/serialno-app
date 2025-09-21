@@ -110,7 +110,7 @@ class _Servicecenter_SettingscreenState
             (getAdduser.isLoading && getAdduser.users.isEmpty)) {
           return Scaffold(
             backgroundColor: Colors.white,
-            body: CustomShimmerList(itemCount: 10,)
+            body: CustomShimmerList(itemCount: 10),
           );
         }
 

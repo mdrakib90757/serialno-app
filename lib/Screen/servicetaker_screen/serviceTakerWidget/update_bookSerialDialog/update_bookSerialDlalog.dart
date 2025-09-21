@@ -42,12 +42,12 @@ class UpdateBookSerialDlalog extends StatefulWidget {
 }
 
 class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
-
   final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
   final TextEditingController _contactNoController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _serviceCenterController = TextEditingController();
+  final TextEditingController _serviceCenterController =
+      TextEditingController();
 
   serviceTypeModel? _selectedServiceType;
   UserName? _selectUserName = UserName.Self;
@@ -55,7 +55,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
   bool _isInit = true;
   final Date = DateTime.now();
   DateTime _selectedDate = DateTime.now();
-
 
   // initialize fields
   void _initializeFields() {
@@ -202,7 +201,6 @@ class _UpdateBookSerialDlalogState extends State<UpdateBookSerialDlalog> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
